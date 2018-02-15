@@ -1,0 +1,3 @@
+common --color yes
+build --javacopt="-source 8 -target 8" --strategy=Scalac=worker --worker_max_instances=3
+test --strategy=Scalac=worker --worker_max_instances=3 --verbose_failures --test_output=all

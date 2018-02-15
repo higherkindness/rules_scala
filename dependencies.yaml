@@ -2,8 +2,15 @@ options:
   languages: [ "java", "scala:2.12.4" ]
   transitivity: runtime_deps
   versionConflictPolicy: highest
+  buildHeader:
+    - load("@io_bazel_rules_scala//scala:scala_import.bzl", "scala_import")
 
 dependencies:
+
+  org.scala-sbt:
+    zinc:
+      lang: scala
+      version: "1.0.0-X10"
 
   org.scala-sbt:
     test-interface:

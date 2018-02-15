@@ -1,3 +1,5 @@
+workspace(name = "blerg")
+
 rules_scala_version="24bc74b2664560fdba27b31da9e6c529dd231e1e"
 
 http_archive(
@@ -12,3 +14,6 @@ scala_repositories()
 
 load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_toolchains")
 scala_register_toolchains()
+
+load("//3rdparty:workspace.bzl", "maven_dependencies")
+maven_dependencies()
