@@ -1,0 +1,29 @@
+dist: trusty
+sudo: required
+language: scala
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - wget
+      - pkg-config
+
+env:
+  - V=0.9.0
+
+before_install:
+  - |
+    wget https://github.com/bazelbuild/bazel/releases/download/${V}/bazel_${V}-linux-x86_64.deb
+    sudo dpkg -i bazel_${V}-linux-x86_64.deb
+
+script:
+  - |
+    bazel \
+      --output_base=$HOME/.cache/bazel \
+      --batch \
+      --host_jvm_args=-Xmx500m \
+      --host_jvm_args=-Xms500m \
+      test \
+      //...
