@@ -1,4 +1,44 @@
 load("@io_bazel_rules_scala//scala:scala_import.bzl", "scala_import")
+java_library(
+    name = "fastparse_2_12",
+    exports = [
+        "//external:jar/com/lihaoyi/fastparse_2_12"
+    ],
+    runtime_deps = [
+        ":fastparse_utils_2_12",
+        ":sourcecode_2_12"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "fastparse_utils_2_12",
+    exports = [
+        "//external:jar/com/lihaoyi/fastparse_utils_2_12"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
+java_library(
+    name = "sourcecode_2_12",
+    exports = [
+        "//external:jar/com/lihaoyi/sourcecode_2_12"
+    ],
+    visibility = [
+        "//visibility:public"
+    ]
+)
+
+
+
 scala_import(
     name = "utest",
     jars = [
