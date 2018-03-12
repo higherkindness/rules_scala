@@ -17,3 +17,37 @@ scala_register_toolchains()
 
 load("//3rdparty:workspace.bzl", "maven_dependencies")
 maven_dependencies()
+
+maven_jar(
+    name = "scala_compiler_2_12_4",
+    artifact = "org.scala-lang:scala-compiler:2.12.4",
+)
+
+maven_jar(
+    name = "scala_library_2_12_4",
+    artifact = "org.scala-lang:scala-library:2.12.4",
+)
+
+maven_jar(
+    name = "scala_reflect_2_12_4",
+    artifact = "org.scala-lang:scala-reflect:2.12.4",
+)
+
+maven_jar(
+    name = "compiler_bridge_2_12",
+    artifact = "org.scala-sbt:compiler-bridge_2.12:1.1.1",
+)
+
+maven_jar(
+    name = "compiler_interface",
+    artifact = "org.scala-sbt:compiler-interface:1.1.1",
+)
+
+maven_jar(
+    name = "util_interface",
+    artifact = "org.scala-sbt:util-interface:1.1.1",
+)
+
+register_toolchains(
+    '//annex:scala_2_12_4_toolchain',
+)
