@@ -7,6 +7,7 @@ toolchain_type(
 
 scala_annex_toolchain(
         name = 'scala_2_12_4_toolchain_impl',
+        binary_version = '2.12',
         compiler_classpath = [
                 '@scala_compiler_2_12_4//jar',                
                 '@scala_reflect_2_12_4//jar',
@@ -16,8 +17,7 @@ scala_annex_toolchain(
         compiler_bridge_classpath = [
                 '@compiler_interface//jar',
                 '@util_interface//jar',
-        ],
-        binary_version = '2.12',
+        ],        
         visibility = ["//visibility:public"],
 )
 
@@ -25,5 +25,28 @@ toolchain(
         name = 'scala_2_12_4_toolchain',
         toolchain_type = ':scala_annex_toolchain_type',
         toolchain = ':scala_2_12_4_toolchain_impl',
+        visibility = ["//visibility:public"],
+)
+
+scala_annex_toolchain(
+        name = 'scala_2_11_9_toolchain_impl',
+        binary_version = '2.11',
+        compiler_classpath = [
+                '@scala_compiler_2_11_9//jar',                
+                '@scala_reflect_2_11_9//jar',
+                '@scala_library_2_11_9//jar',
+        ],
+        compiler_bridge = '@compiler_bridge_2_11//jar',
+        compiler_bridge_classpath = [
+                '@compiler_interface//jar',
+                '@util_interface//jar',
+        ],        
+        visibility = ["//visibility:public"],
+)
+
+toolchain(
+        name = 'scala_2_11_9_toolchain',
+        toolchain_type = ':scala_annex_toolchain_type',
+        toolchain = ':scala_2_11_9_toolchain_impl',
         visibility = ["//visibility:public"],
 )

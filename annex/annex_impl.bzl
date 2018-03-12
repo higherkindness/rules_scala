@@ -2,74 +2,54 @@ load(":utils.bzl", utils = "root")
 
 def scala_annex_toolchain_implementation(ctx):
 
-    compiler_bridge_dir = ctx.actions.declare_directory(
-        "compiler_bridge_%s" % ctx.attr.binary_version)
-
     compiler_bridge = ctx.actions.declare_file(
         "compiler_bridge_%s.jar" % ctx.attr.binary_version)
 
-    """
-    provider = java_common.compile(
-        ctx,
-        source_jars = ctx.attr.compiler_bridge.java.source_jars.to_list(),
-        source_files = [],
-        output = compiler_bridge_file,
-        javac_opts = [],
-        deps = [],
-        exports = [],
-        java_toolchain = ctx.attr.java_toolchain,
-        host_javabase = ctx.attr.host_javabase,
-    )
-    """
-
-    compiler_bridge_sources_jar = ctx.attr.compiler_bridge.java.source_jars.to_list()[0].path
-
     compiler_classpath = ':'.join([file.path for file in ctx.files.compiler_classpath])
-    bridge_classpath = ':'.join([file.path for file in ctx.files.compiler_bridge_classpath])
-    bridge_classpath = compiler_classpath + ':' + bridge_classpath
+    compiler_bridge_classpath = ':'.join([file.path for file in ctx.files.compiler_bridge_classpath])
+    compiler_bridge_classpath = compiler_classpath + ':' + compiler_bridge_classpath
+    compiler_bridge_sources_jar = ctx.attr.compiler_bridge.java.source_jars.to_list()[0]
 
     inputs = depset()
+    inputs += [ctx.file.jar]
+    inputs += [ctx.file.java]
     inputs += ctx.files.compiler_classpath
     inputs += ctx.files.compiler_bridge_classpath
-    inputs += [ctx.file.java]
-    inputs += [ctx.file.jar]
-    inputs += ctx.attr.compiler_bridge.java.source_jars.to_list()
+    inputs += [compiler_bridge_sources_jar]
 
     ctx.actions.run_shell(
-        inputs = inputs, #depset([ctx.file.java], transitive = [depset(ctx.files.compiler_classpath)]),
-        outputs = [compiler_bridge, compiler_bridge_dir],
+        inputs = inputs,
+        outputs = [compiler_bridge],
         command = utils.strip_margin("""
           |#!/bin/bash
           |
-          |# extract compiler bridge source
           |mkdir bridge_src
+          |mkdir bridge_bin
+          |
           |pushd bridge_src
-          |../{jar} -xvf ../{compiler_bridge_sources_jar}
+          |../{jar} xf ../{compiler_bridge_sources_jar}
           |popd
           |
-          |# compile extracted source
-          |mkdir -p '{out_dir}'
           |{java} \\
           |  -cp {compiler_classpath} \\
           |  scala.tools.nsc.Main \\
-          |  -cp {bridge_classpath} \\
-          |  -d '{out_dir}' \\
+          |  -cp {compiler_bridge_classpath} \\
+          |  -d bridge_bin \\
           |  `find bridge_src -name "*.scala"`
-          |echo "WORLD" > {out_file}
+          |
+          |{jar} cf '{out_file}' -C bridge_bin .
+          |
           |""".format(
               jar = ctx.file.jar.path,
               java = ctx.file.java.path,
-              compiler_bridge_sources_jar = compiler_bridge_sources_jar,
+              compiler_bridge_sources_jar = compiler_bridge_sources_jar.path,
               compiler_classpath = compiler_classpath,
-              bridge_classpath = bridge_classpath,
-              out_dir = compiler_bridge_dir.path,
+              compiler_bridge_classpath = compiler_bridge_classpath,
               out_file = compiler_bridge.path)),
     )
 
 
     toolchain = platform_common.ToolchainInfo(
-        binary_version = ctx.attr.binary_version,
-        #compiler = ctx.attr.compiler,
         compiler_bridge = compiler_bridge
     )
     return [toolchain]
@@ -79,18 +59,14 @@ scala_annex_toolchain_attrs = {
     'compiler_classpath': attr.label_list(allow_files=True),
     'compiler_bridge': attr.label(allow_files=True),
     'compiler_bridge_classpath': attr.label_list(allow_files=True),
-    "java": attr.label(
-        default = Label("@bazel_tools//tools/jdk:java"),
-        single_file = True,
-    ),
     "jar": attr.label(
         default = Label("@bazel_tools//tools/jdk:jar"),
         single_file = True,
     ),
-    "java_toolchain": attr.label(
-        default = Label("@bazel_tools//tools/jdk:current_java_toolchain")),
-    "host_javabase": attr.label(
-        default = Label("@bazel_tools//tools/jdk:current_java_runtime"), cfg="host"),
+    "java": attr.label(
+        default = Label("@bazel_tools//tools/jdk:java"),
+        single_file = True,
+    ),
 }
 
 common_attrs = {

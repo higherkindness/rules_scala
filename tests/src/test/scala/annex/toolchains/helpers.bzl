@@ -1,8 +1,6 @@
 load("//annex:utils.bzl", utils = "root")
 
 def _toolchain_test_rule_impl(ctx):
-    #path = ctx.actions.declare_file("%s.out" % ctx.label.name)
-
     path = ctx.outputs.out
 
     toolchain = ctx.toolchains['//annex:scala_annex_toolchain_type']
