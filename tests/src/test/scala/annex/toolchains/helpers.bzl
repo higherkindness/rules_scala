@@ -21,6 +21,6 @@ def _toolchain_test_rule_impl(ctx):
 
 toolchain_test_rule = rule(
     implementation = _toolchain_test_rule_impl,
-    toolchains = ['//annex:scala_annex_toolchain_type'],
+    toolchains = ['//annex:scala_annex_toolchain_type'],    
     outputs = {"out": "%{name}.txt"},
 )
