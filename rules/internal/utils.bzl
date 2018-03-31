@@ -29,7 +29,29 @@ def _strip_margin_line(line, delim):
     else:
         return line
 
+def _version_tuple(version):
+    return [int(n) for n in version.split("-")[0].split(".")]
+
+def require_bazel_version(
+        required_version,
+        current_version = None
+):
+    if not current_version: current_version = native.bazel_version
+
+    required_nums = _version_tuple(required_version)
+    current_nums  = _version_tuple(current_version)
+
+    for r, c in zip(required_nums, current_nums):
+        if c > r:
+            break
+        elif r == c:
+            continue
+        else:
+            fail("bazel version %s or higher required (current = %s)" %
+                 (required_version, current_version))
+
 root = struct(
     merge_dicts = merge_dicts,
     strip_margin = strip_margin,
+    require_bazel_version = require_bazel_version,
 )
