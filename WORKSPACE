@@ -30,6 +30,7 @@ annex_configure_scala(
             'org.scala-lang:2.10.5',
             'org.scala-lang:2.10.6',
             'org.scala-lang:2.10.7',
+
             'org.scala-lang:2.11.0',
             'org.scala-lang:2.11.1',
             'org.scala-lang:2.11.2',
@@ -69,30 +70,30 @@ annex_configure_scala(
 
 maven_jar(
     name = "compiler_bridge_2_10",
-    artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.1",
+    artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.3",
 )
 
 maven_jar(
     name = "compiler_bridge_2_11",
-    artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.1",
+    artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.3",
 )
 
 maven_jar(
     name = "compiler_bridge_2_12",
-    artifact = "org.scala-sbt:compiler-bridge_2.12:1.1.1",
+    artifact = "org.scala-sbt:compiler-bridge_2.12:1.1.3",
 )
 
 maven_jar(
     name = "compiler_interface",
-    artifact = "org.scala-sbt:compiler-interface:1.1.1",
+    artifact = "org.scala-sbt:compiler-interface:1.1.3",
 )
 
 maven_jar(
     name = "util_interface",
-    artifact = "org.scala-sbt:util-interface:1.1.1",
+    artifact = "org.scala-sbt:util-interface:1.1.3",
 )
 
 maven_jar(
     name = "zinc_2_12",
-    artifact = "org.scala-sbt:zinc_2.12:1.1.1",
+    artifact = "org.scala-sbt:zinc_2.12:1.1.3",
 )

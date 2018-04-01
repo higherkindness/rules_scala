@@ -25,5 +25,5 @@ script:
       --batch \
       --host_jvm_args=-Xmx500m \
       --host_jvm_args=-Xms500m \
-      test \
+      build \
       //...
