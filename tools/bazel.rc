@@ -1,0 +1,12 @@
+common --color yes
+
+common --toolchain_resolution_debug
+common --experimental_strict_action_env
+
+common --javacopt="-source 8 -target 8"
+common --strategy=Scalac=worker
+common --worker_max_instances=3
+
+common --verbose_failures
+
+test --test_output=all
