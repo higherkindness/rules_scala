@@ -12,5 +12,3 @@ scala_import(
         "//visibility:public"
     ]
 )
-
-

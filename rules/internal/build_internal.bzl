@@ -1,7 +1,6 @@
 load(":internal/utils.bzl", utils = "root")
 load(":providers.bzl",
      "ScalaConfiguration",
-     "ScalaTestingFramework",
      "ScalaInfo",
 )
 
@@ -114,13 +113,6 @@ def _compile_compiler_bridge(
 
     return compiler_bridge
 
-
-
-def annex_configure_scala_testing_framework_implementation(ctx):
-    return [ScalaTestingFramework(
-        framework_class = ctx.attr.framework_class
-    )]
-
 ###
 ######
 ###
@@ -152,18 +144,24 @@ def _zinc_runner_common(ctx):
 
     java_infos = []
     files = depset()
+    mains_files = depset()
     for entry in ctx.attr.scala:
         configuration = entry[ScalaConfiguration]
 
-        deps = universal_deps + _collect_crossed_deps(configuration.version, ctx.attr.deps)
-        compile_deps = depset(transitive = [d.transitive_deps for d in deps])
+        sdep = java_common.merge(
+            universal_deps + _collect_crossed_deps(configuration.version, ctx.attr.deps))
 
-        #print("%s[%s]: %s" %(ctx.label.name, configuration.version, deps))
+        #compile_deps = deps.transitive_deps
+        #depset(transitive = [d.transitive_deps for d in deps])
+        # runtime_deps = depset(transitive = [d.transitive_runtime_deps for d in deps])
+
+        # print("%s[%s]: %s" % (ctx.label.name, configuration.version, compile_deps))
+        # print("%s[%s]: %s" % (ctx.label.name, configuration.version, runtime_deps))
 
         inputs = depset()
         inputs += [configuration.compiler_bridge]
         inputs += configuration.compiler_classpath
-        inputs += compile_deps
+        inputs += sdep.transitive_deps
         inputs += ctx.files._zinc_runner
         inputs += ctx.files.srcs
 
@@ -171,11 +169,14 @@ def _zinc_runner_common(ctx):
             "%s/classes/%s" % (ctx.label.name, configuration.version))
         output = ctx.actions.declare_file(
             "%s/bin/%s.jar" % (ctx.label.name, configuration.version))
+        mains_file = ctx.actions.declare_file(
+            "%s/bin/%s.jar.mains.txt" % (ctx.label.name, configuration.version))        
 
         java_info = JavaInfo(
             output_jar = output,
             sources = ctx.files.srcs,
-            deps = deps,
+            deps = [sdep],
+            runtime_deps = [java_common.create_provider(runtime_jars = configuration.runtime_classpath)],
             actions = ctx.actions,
             java_toolchain = ctx.attr._java_toolchain,
         )
@@ -185,6 +186,7 @@ def _zinc_runner_common(ctx):
             inputs = inputs,
             outputs = [
                 output,
+                mains_file,
                 classes_directory
             ],
             executable = ctx.executable._zinc_runner,
@@ -195,21 +197,24 @@ def _zinc_runner_common(ctx):
                 configuration.version,
               ] +
               _filesArg(configuration.compiler_classpath) +
-              _filesArg(compile_deps) +
+              _filesArg(sdep.transitive_deps) +
               _filesArg(ctx.files.srcs) + [
                 classes_directory.path
               ] +
-              _stringsArg(frameworks)
+              _stringsArg(frameworks) +
+              _filesArg(sdep.compile_jars + configuration.runtime_classpath)
         )
 
         files += [output]
-
+        mains_files += [mains_file]
         java_infos += [(configuration.version, java_info)]
 
     return struct(
         scala_info = ScalaInfo(
             java_infos = java_infos),
-        files = files)
+        files = files,
+        mains_files = mains_files
+    )
 
 _zinc_runner_attributes = {
     "_zinc_runner": attr.label(
@@ -221,7 +226,16 @@ _zinc_runner_attributes = {
 }
 
 annex_scala_library_private_attributes = _zinc_runner_attributes
-annex_scala_binary_private_attributes = _zinc_runner_attributes
+annex_scala_binary_private_attributes = utils.merge_dicts(_zinc_runner_attributes, {
+    "_java": attr.label(
+        default     = Label("@bazel_tools//tools/jdk:java"),
+        executable  = True,
+        cfg         = "host",
+    ),
+    "_java_stub_template": attr.label(
+        default     = Label("@java_stub_template//file"),
+    ),
+})
 annex_scala_test_private_attributes = _zinc_runner_attributes
 
 def annex_scala_library_implementation(ctx):
@@ -234,10 +248,49 @@ def annex_scala_library_implementation(ctx):
 
 def annex_scala_binary_implementation(ctx):
     res = _zinc_runner_common(ctx)
+
+    # this is all super sketchy...
+    # for the time being
+
+    java_info = res.scala_info.java_infos[0][1]
+    mains_file = res.mains_files.to_list()[0]
+
+    launcher = ctx.new_file("%s_launcher.sh" % ctx.label.name)
+    utils.write_launcher(
+        ctx,
+        launcher,
+        java_info.transitive_runtime_deps,
+        main_class = "",
+        jvm_flags = ""
+    )
+
+    prelauncher = ctx.new_file("%s.sh" % ctx.label.name)
+    ctx.actions.write(
+        output = prelauncher,
+        content = utils.strip_margin("""
+          |{launcher} $(head -1 {mains_file}) "$@"
+          |""".format(
+              launcher = launcher.short_path,
+              mains_file = mains_file.short_path
+          )),
+        is_executable = True
+    )
+
     return [
         res.scala_info,
         DefaultInfo(
-            files = res.files)
+            executable = prelauncher,
+            files      = res.files,
+            runfiles   = ctx.runfiles(
+                files = [launcher, mains_file],
+                transitive_files = depset(
+                    order      = "default",
+                    direct     = [ctx.executable._java],
+                    transitive = [java_info.transitive_runtime_deps],
+                ),
+                collect_default = True
+            ),
+        )
     ]
 
 def annex_scala_test_implementation(ctx):

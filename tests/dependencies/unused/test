@@ -1,0 +1,2 @@
+> bazel build //tests/dependencies/unused:0_used
+-> bazel build //tests/dependencies/unused:0_unused

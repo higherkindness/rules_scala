@@ -8,6 +8,7 @@ basic_scala_binary(
     deps = [                  
          '//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper',
          '//3rdparty/jvm/org/scala_sbt:zinc_2_12',
+         '//3rdparty/jvm/org/scala_sbt:zinc_apiinfo_2_12',
          '//3rdparty/jvm/org/scala_sbt:zinc_core_2_12',
          '//3rdparty/jvm/org/scala_sbt:zinc_compile_core_2_12',
          '//3rdparty/jvm/org/scala_sbt:util_control_2_12',

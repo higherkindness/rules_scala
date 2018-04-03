@@ -50,8 +50,43 @@ def require_bazel_version(
             fail("bazel version %s or higher required (current = %s)" %
                  (required_version, current_version))
 
+def write_launcher(
+        ctx,
+        output,
+        runtime_classpath,
+        main_class,
+        jvm_flags,
+        args="",
+        wrapper_preamble=""
+):
+    """Macro that writes out a launcher script shell script.
+      Args:
+        runtime_classpath: All of the runtime jars required to launch this java target.
+        main_class: the main class to launch.
+        jvm_flags: The flags that should be passed to the jvm.
+        args: Args that should be passed to the Binary.
+    """
+    classpath = ":".join(["${RUNPATH}%s" % (j.short_path) for j in runtime_classpath.to_list()])
+    jvm_flags = " ".join([ctx.expand_location(f, ctx.attr.data) for f in jvm_flags])
+    template = ctx.attr._java_stub_template.files.to_list()[0]
+
+    ctx.actions.expand_template(
+        template = template,
+        output = output,
+        substitutions = {
+            "%classpath%": classpath,
+            "%java_start_class%": main_class,
+            "%javabin%": "JAVABIN=${RUNPATH}" + ctx.executable._java.short_path,
+            "%jvm_flags%": jvm_flags,
+            "%set_jacoco_metadata%": "",
+            "%workspace_prefix%": ctx.workspace_name + "/",
+        },
+        is_executable = True,
+    )
+
 root = struct(
     merge_dicts = merge_dicts,
     strip_margin = strip_margin,
     require_bazel_version = require_bazel_version,
+    write_launcher = write_launcher,
 )
