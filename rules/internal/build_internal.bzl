@@ -1,9 +1,17 @@
 load(":internal/utils.bzl", utils = "root")
-load(":providers.bzl", "ScalaConfiguration")
+load(":providers.bzl",
+     "ScalaConfiguration",
+     "ScalaTestingFramework",
+     "ScalaInfo",
+)
+
+###
+######
+###
 
 def annex_configure_scala_implementation(ctx):
 
-    compiler_bridge = compile_compiler_bridge(
+    compiler_bridge = _compile_compiler_bridge(
         ctx,
         compiler_classpath = ctx.files.compiler_classpath,
         compiler_bridge_classpath = ctx.files.compiler_bridge_classpath,
@@ -18,50 +26,32 @@ def annex_configure_scala_implementation(ctx):
         runtime_classpath = ctx.files.runtime_classpath,
     )]
 
-annex_scala_test_private_attributes = {
-    "_java_toolchain": attr.label(
-        default = Label("@bazel_tools//tools/jdk:current_java_toolchain")),
-    "_host_javabase": attr.label(
-        default = Label("@bazel_tools//tools/jdk:current_java_runtime"), cfg="host"),
+annex_configure_scala_private_attributes = {
+    "_java": attr.label(
+        default     = Label("@bazel_tools//tools/jdk:java"),
+        executable  = True,
+        cfg         = "host",
+    ),
+    "_jar": attr.label(
+        default     = Label("@bazel_tools//tools/jdk:jar"),
+        executable  = True,
+        cfg         = "host",
+    ),
+    "_jar_creator": attr.label(
+        default     = Label('//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin'),    
+        executable  = True,
+        cfg         = "host",
+    ),
 }
 
-def annex_scala_test_implementation(ctx):
-    runner = ctx.new_file("%s_annex_test_runner.sh" % ctx.label.name)
-
-    ctx.file_action(
-        output = runner,
-        content = utils.strip_margin("""
-          |#!/bin/bash
-          |echo "HELLO"
-          |sleep 1
-          |echo "WORLD"
-          |"""),
-        executable = True
-    )
-
-    configurations = depset()
-    for entry in ctx.attr.scala:
-        configuration = entry[ScalaConfiguration]
-        configurations += [configuration.compiler_bridge]
-
-    return [
-        DefaultInfo(
-            executable = runner,
-            runfiles = ctx.runfiles([
-                runner
-            ]),
-            files = configurations
-        ),
-    ]
-
-
-def compile_compiler_bridge(
+def _compile_compiler_bridge(
         ctx,
         compiler_classpath,
         compiler_bridge_classpath,
         compiler_bridge_sources_jar,
         suffix = None,
         jar = None,
+        jar_creator = None,
         java = None,
 ):
     """
@@ -69,8 +59,9 @@ def compile_compiler_bridge(
     """
 
     if suffix == None: suffix = ctx.label.name
-    if jar == None: jar = ctx.file.jar
-    if java == None: java = ctx.file.java
+    if jar == None: jar = ctx.executable._jar
+    if jar_creator == None: jar_creator = ctx.executable._jar_creator
+    if java == None: java = ctx.executable._java
 
     compiler_bridge = ctx.actions.declare_file(
         "compiler-bridge_%s.jar" % suffix)
@@ -85,6 +76,7 @@ def compile_compiler_bridge(
     inputs += compiler_classpath
     inputs += compiler_bridge_classpath
     inputs += [compiler_bridge_sources_jar]
+    inputs += [ctx.executable._jar_creator]
 
     ctx.actions.run_shell(
         progress_message = "compiling zinc compiler bridge %s" % suffix,
@@ -107,10 +99,11 @@ def compile_compiler_bridge(
           |  -d bridge_bin \\
           |  `find bridge_src -name "*.scala"`
           |
-          |{jar} cf '{out_file}' -C bridge_bin .
+          |{jar_creator} {out_file} bridge_bin 2> /dev/null
           |
           |""".format(
               jar = jar.path,
+              jar_creator = jar_creator.path,
               java = java.path,
               compiler_bridge_sources_jar = compiler_bridge_sources_jar.path,
               compiler_classpath = compiler_classpath_str,
@@ -120,3 +113,151 @@ def compile_compiler_bridge(
     )
 
     return compiler_bridge
+
+
+
+def annex_configure_scala_testing_framework_implementation(ctx):
+    return [ScalaTestingFramework(
+        framework_class = ctx.attr.framework_class
+    )]
+
+###
+######
+###
+
+def _filesArg(files):
+    return [str(len(files))] + [file.path for file in files]
+
+def _stringsArg(strings):
+    return [str(len(strings))] + [string for string in strings]
+
+def _collect_crossed_deps(current_version, deps):
+    res = []
+    for dep in deps:
+        if ScalaInfo in dep:
+            res += [
+                java_info
+                for version, java_info in dep[ScalaInfo].java_infos
+                if version == current_version]
+    return res
+
+
+def _zinc_runner_common(ctx):
+
+    universal_deps = [dep[JavaInfo] for dep in ctx.attr.deps if JavaInfo in dep]
+
+    frameworks = []
+    if hasattr(ctx.attr, 'frameworks'):
+        frameworks = ctx.attr.frameworks
+
+    java_infos = []
+    files = depset()
+    for entry in ctx.attr.scala:
+        configuration = entry[ScalaConfiguration]
+
+        deps = universal_deps + _collect_crossed_deps(configuration.version, ctx.attr.deps)
+        compile_deps = depset(transitive = [d.transitive_deps for d in deps])
+
+        #print("%s[%s]: %s" %(ctx.label.name, configuration.version, deps))
+
+        inputs = depset()
+        inputs += [configuration.compiler_bridge]
+        inputs += configuration.compiler_classpath
+        inputs += compile_deps
+        inputs += ctx.files._zinc_runner
+        inputs += ctx.files.srcs
+
+        classes_directory = ctx.actions.declare_directory(
+            "%s/classes/%s" % (ctx.label.name, configuration.version))
+        output = ctx.actions.declare_file(
+            "%s/bin/%s.jar" % (ctx.label.name, configuration.version))
+
+        java_info = JavaInfo(
+            output_jar = output,
+            sources = ctx.files.srcs,
+            deps = deps,
+            actions = ctx.actions,
+            java_toolchain = ctx.attr._java_toolchain,
+        )
+
+        ctx.actions.run(
+            mnemonic = 'ZincScalac',
+            inputs = inputs,
+            outputs = [
+                output,
+                classes_directory
+            ],
+            executable = ctx.executable._zinc_runner,
+            arguments =
+              [
+                output.path,
+                configuration.compiler_bridge.path,
+                configuration.version,
+              ] +
+              _filesArg(configuration.compiler_classpath) +
+              _filesArg(compile_deps) +
+              _filesArg(ctx.files.srcs) + [
+                classes_directory.path
+              ] +
+              _stringsArg(frameworks)
+        )
+
+        files += [output]
+
+        java_infos += [(configuration.version, java_info)]
+
+    return struct(
+        scala_info = ScalaInfo(
+            java_infos = java_infos),
+        files = files)
+
+_zinc_runner_attributes = {
+    "_zinc_runner": attr.label(
+        allow_files = True,
+        executable  = True,
+        cfg         = "host",
+        default     = Label("//runner")),
+    "_java_toolchain": attr.label(default = Label("@bazel_tools//tools/jdk:current_java_toolchain")),    
+}
+
+annex_scala_library_private_attributes = _zinc_runner_attributes
+annex_scala_binary_private_attributes = _zinc_runner_attributes
+annex_scala_test_private_attributes = _zinc_runner_attributes
+
+def annex_scala_library_implementation(ctx):
+    res = _zinc_runner_common(ctx)
+    return [
+        res.scala_info,
+        DefaultInfo(
+            files = res.files)
+    ]
+
+def annex_scala_binary_implementation(ctx):
+    res = _zinc_runner_common(ctx)
+    return [
+        res.scala_info,
+        DefaultInfo(
+            files = res.files)
+    ]
+
+def annex_scala_test_implementation(ctx):
+    res = _zinc_runner_common(ctx)
+
+    runner = ctx.new_file("%s_anx_test_all.sh" % ctx.label.name)
+
+    ctx.file_action(
+        output = runner,
+        content = utils.strip_margin("""
+          |#!/bin/bash
+          |echo OKIE DOKIE
+          |"""),
+        executable = True
+    )
+
+    return [res.scala_info] + [DefaultInfo(
+        executable = runner,
+        runfiles = ctx.runfiles([
+            runner
+        ]),
+        files = res.files
+    )]

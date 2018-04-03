@@ -4,25 +4,33 @@ load("@scala_annex//rules:internal/utils.bzl", utils = "root")
 def basic_scala_library_implementation(ctx):
 
     name = ctx.label.name
-    jar = ctx.file.jar
-    java = ctx.file.java
+    jar = ctx.executable._jar
+    java = ctx.executable._java
+    jar_creator = ctx.executable._jar_creator
 
     output = ctx.actions.declare_file("%s.jar" % name)
 
     scala = ctx.attr.scala[ScalaConfiguration]
 
+    compile_deps = depset()
+    runtime_deps = depset()
+    for dep in ctx.attr.deps:
+        compile_deps += dep[JavaInfo].transitive_deps
+        runtime_deps += dep[JavaInfo].transitive_runtime_deps
+
     compiler_classpath_str = ':'.join([file.path for file in scala.compiler_classpath])
-    compile_classpath_str = ':'.join([file.path for file in (ctx.files.deps + scala.runtime_classpath)])
+    compile_classpath_str = ':'.join([file.path for file in (compile_deps + scala.runtime_classpath)])
 
     srcs_str = ' '.join([file.path for file in ctx.files.srcs])
 
     inputs = depset()
     inputs += [jar]
     inputs += [java]
+    inputs += [jar_creator]
     inputs += ctx.files.srcs
     inputs += scala.compiler_classpath
     inputs += scala.runtime_classpath
-    inputs += ctx.files.deps
+    inputs += compile_deps
 
     ctx.actions.run_shell(
         progress_message = "compiling annex runner",
@@ -40,11 +48,12 @@ def basic_scala_library_implementation(ctx):
           |  -d bin \\
           |  {srcs}
           |
-          |{jar} cf '{output}' -C bin .
+          |{jar_creator} '{output}' bin 2> /dev/null
           |
           |""".format(
               jar = jar.path,
               java = java.path,
+              jar_creator = jar_creator.path,
               compiler_classpath = compiler_classpath_str,
               compile_classpath = compile_classpath_str,
               srcs = srcs_str,
@@ -59,7 +68,7 @@ def basic_scala_library_implementation(ctx):
         java_common.create_provider(
             use_ijar = False,
             compile_time_jars = [output],
-            runtime_jars = [output] + ctx.files.deps + scala.runtime_classpath,
+            runtime_jars = [output] + runtime_deps.to_list() + scala.runtime_classpath,
         ),
     ]
 
@@ -70,14 +79,22 @@ basic_scala_library = rule(
         "deps": attr.label_list(),
         "scala": attr.label(
             mandatory = True,
-            providers = [ScalaConfiguration]),
-        "jar": attr.label(
-            default = Label("@bazel_tools//tools/jdk:jar"),
-            single_file = True,
+            providers = [ScalaConfiguration]
         ),
-        "java": attr.label(
-            default = Label("@bazel_tools//tools/jdk:java"),
-            single_file = True,
+        "_java": attr.label(
+            default     = Label("@bazel_tools//tools/jdk:java"),
+            executable  = True,
+            cfg         = "host",
+        ),
+        "_jar": attr.label(
+            default     = Label("@bazel_tools//tools/jdk:jar"),
+            executable  = True,
+            cfg         = "host",
+        ),
+        "_jar_creator": attr.label(
+            default     = Label('//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin'),
+            executable  = True,
+            cfg         = "host",
         ),
     },
     fragments = ['java'],
@@ -105,5 +122,5 @@ def basic_scala_binary(
         name = name,
         visibility = visibility,
         runtime_deps = [":%s-lib" % name],
-        main_class = main_class
+        main_class = main_class,
     )
