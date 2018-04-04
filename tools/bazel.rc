@@ -1,12 +1,21 @@
 common --color yes
 
-common --toolchain_resolution_debug
-common --experimental_strict_action_env
+build --experimental_strict_action_env
+test  --experimental_strict_action_env
 
-common --javacopt="-source 8 -target 8"
-common --strategy=Scalac=worker
-common --worker_max_instances=3
+build --javacopt="-source 8 -target 8"
+test  --javacopt="-source 8 -target 8"
+build --strategy=Scalac=worker
+test  --strategy=Scalac=worker
+build --worker_max_instances=3
+test  --worker_max_instances=3
 
-common --verbose_failures
+build --verbose_failures
+test --verbose_failures
 
 test --test_output=all
+
+build --experimental_local_disk_cache
+test  --experimental_local_disk_cache
+build --experimental_local_disk_cache_path=.bazel_cache
+test  --experimental_local_disk_cache_path=.bazel_cache

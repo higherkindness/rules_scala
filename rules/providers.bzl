@@ -9,13 +9,6 @@ ScalaConfiguration = provider(
     },
 )
 
-ScalaTestingFramework = provider(
-    doc = "Provides basic information about a Scala Testing framework",
-    fields = {
-        "framework_class"    : "the fully qualified class implementing sbt.testing.Framework",
-    },
-)
-
 ScalaInfo = provider(
     doc = 'Provider for cross versioned scala outputs',
     fields = {
