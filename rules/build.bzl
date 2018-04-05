@@ -74,9 +74,10 @@ Args:
 annex_scala_library = rule(
     implementation = annex_scala_library_implementation,
     attrs = utils.merge_dicts(annex_scala_library_private_attributes, {
-        "srcs": attr.label_list(allow_files = [".scala", ".java"]),
-        "deps": attr.label_list(),
-        "scala": attr.label_list(
+        "srcs"       : attr.label_list(allow_files = [".scala", ".java"]),
+        "deps"       : attr.label_list(),
+        "exports"    : attr.label_list(),
+        "scala"      : attr.label_list(
             mandatory = True,
             providers = [ScalaConfiguration]),
     }),
@@ -86,10 +87,11 @@ annex_scala_library = rule(
 annex_scala_binary = rule(
     implementation = annex_scala_binary_implementation,
     attrs = utils.merge_dicts(annex_scala_binary_private_attributes, {
-        "srcs": attr.label_list(allow_files = [".scala", ".java"]),
-        "deps": attr.label_list(),
-        "main_class": attr.string(),
-        "scala": attr.label_list(
+        "srcs"       : attr.label_list(allow_files = [".scala", ".java"]),
+        "deps"       : attr.label_list(),
+        "exports"    : attr.label_list(),
+        "main_class" : attr.string(),
+        "scala"      : attr.label_list(
             mandatory = True,
             providers = [ScalaConfiguration]),
     }),
@@ -100,12 +102,13 @@ annex_scala_binary = rule(
 annex_scala_test = rule(
     implementation = annex_scala_test_implementation,
     attrs = utils.merge_dicts(annex_scala_test_private_attributes, {
-        "srcs": attr.label_list(allow_files = [".scala", ".java"]),
-        "deps": attr.label_list(),
-        "scala": attr.label_list(
+        "srcs"       : attr.label_list(allow_files = [".scala", ".java"]),
+        "deps"       : attr.label_list(),
+        "exports"    : attr.label_list(),
+        "scala"      : attr.label_list(
             mandatory = True,
             providers = [ScalaConfiguration]),
-        "frameworks": attr.string_list(
+        "frameworks" : attr.string_list(
             default = [
                 "org.scalatest.tools.Framework",
                 "org.scalacheck.ScalaCheckFramework",
