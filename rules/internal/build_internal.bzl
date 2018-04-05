@@ -133,10 +133,10 @@ def _collect_crossed_deps(current_version, deps):
                 if version == current_version]
     return res
 
-
 def _zinc_runner_common(ctx):
 
     universal_deps = [dep[JavaInfo] for dep in ctx.attr.deps if JavaInfo in dep]
+    universal_exports = [export[JavaInfo] for export in ctx.attr.exports if JavaInfo in export]
 
     frameworks = []
     if hasattr(ctx.attr, 'frameworks'):
@@ -151,12 +151,11 @@ def _zinc_runner_common(ctx):
         sdep = java_common.merge(
             universal_deps + _collect_crossed_deps(configuration.version, ctx.attr.deps))
 
-        #compile_deps = deps.transitive_deps
-        #depset(transitive = [d.transitive_deps for d in deps])
-        # runtime_deps = depset(transitive = [d.transitive_runtime_deps for d in deps])
+        sexport = java_common.merge(
+            universal_exports + _collect_crossed_deps(configuration.version, ctx.attr.exports))
 
-        # print("%s[%s]: %s" % (ctx.label.name, configuration.version, compile_deps))
-        # print("%s[%s]: %s" % (ctx.label.name, configuration.version, runtime_deps))
+        #print("%s : %s" % (ctx.label.name, sdep.compile_jars))
+        #print("%s : %s" % (ctx.label.name, sexport.compile_jars))
 
         inputs = depset()
         inputs += [configuration.compiler_bridge]
@@ -170,17 +169,22 @@ def _zinc_runner_common(ctx):
         output = ctx.actions.declare_file(
             "%s/bin/%s.jar" % (ctx.label.name, configuration.version))
         mains_file = ctx.actions.declare_file(
-            "%s/bin/%s.jar.mains.txt" % (ctx.label.name, configuration.version))        
+            "%s/bin/%s.jar.mains.txt" % (ctx.label.name, configuration.version))
 
-        java_info = JavaInfo(
-            output_jar = output,
-            sources = ctx.files.srcs,
-            deps = [sdep],
-            runtime_deps = [java_common.create_provider(runtime_jars = configuration.runtime_classpath)],
-            actions = ctx.actions,
-            java_toolchain = ctx.attr._java_toolchain,
-        )
+        if len(ctx.attr.srcs) == 0:
+            java_info = java_common.merge([sdep, sexport])
+        else:
+            java_info = JavaInfo(
+                output_jar = output,
+                sources = ctx.files.srcs,
+                deps = [sdep],
+                exports = [sexport],
+                runtime_deps = [java_common.create_provider(runtime_jars = configuration.runtime_classpath)],
+                actions = ctx.actions,
+                java_toolchain = ctx.attr._java_toolchain,
+            )
 
+        # todo: different path for nosrc jar?
         ctx.actions.run(
             mnemonic = 'ZincScalac',
             inputs = inputs,
@@ -202,7 +206,8 @@ def _zinc_runner_common(ctx):
                 classes_directory.path
               ] +
               _stringsArg(frameworks) +
-              _filesArg(sdep.compile_jars + configuration.runtime_classpath)
+              _filesArg(sdep.compile_jars + configuration.runtime_classpath) +
+              _filesArg([])
         )
 
         files += [output]
@@ -211,7 +216,8 @@ def _zinc_runner_common(ctx):
 
     return struct(
         scala_info = ScalaInfo(
-            java_infos = java_infos),
+            java_infos = java_infos,
+        ),
         files = files,
         mains_files = mains_files
     )

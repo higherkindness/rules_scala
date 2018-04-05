@@ -40,6 +40,7 @@ import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.File
 import java.io.PrintWriter
 import java.lang.management.ManagementFactory
+import java.nio.file.Files
 import java.net.URLClassLoader;
 import java.util.Optional
 import java.util.function.Supplier;
@@ -66,8 +67,13 @@ object ZincRunner {
     val n5 = args(8 + n1 + n2 + n3 + n4).toInt
     val allowedDeps = args.drop(9 + n1 + n2 + n3 + n4).take(n5)
       .map(new File(_)).toSet.map(toAbsoluteFile)
+    val n6 = args(9 + n1 + n2 + n3 + n4 + n5).toInt
+    val ignoredDeps = args.drop(10 + n1 + n2 + n3 + n4 + n5).take(n6)
+      .map(new File(_)).toSet.map(toAbsoluteFile)
 
     // end yolo
+
+    Files.createDirectories(classesDirectory.toPath)
 
     val scalaInstance = AnxScalaInstance(
       scalaVersion,
@@ -119,7 +125,7 @@ object ZincRunner {
         compiler.compile(inputs, logger)
       } catch {
         case e: CompileFailed =>
-          println("Oh no: $e")
+          println(s"Oh no: $e")
           System.exit(-1)
           null
       }
@@ -136,8 +142,13 @@ object ZincRunner {
         .getBootClassPath.split(":")
         .map(new File(_)).toSet
 
+    val usedDeps = relations.allLibraryDeps -- bootDeps
+    //println("used: " + usedDeps)
+    //println("allowed: " + allowedDeps)
+    //println("ignored: " + ignoredDeps)
+
     // dependencies we shouldn't be allowed to reference directly
-    val verbotenDeps = relations.allLibraryDeps -- allowedDeps -- bootDeps
+    val verbotenDeps = usedDeps -- allowedDeps -- ignoredDeps
     if (!verbotenDeps.isEmpty) {
       verbotenDeps.foreach(dep =>
         println(s"forbidden dep: $dep"))
@@ -146,7 +157,7 @@ object ZincRunner {
 
     // dependencies we said we'd use... but didn't
     val unusedDeps =
-      allowedDeps -- relations.allLibraryDeps - toAbsoluteFile(scalaInstance.libraryJar)
+      allowedDeps -- usedDeps - toAbsoluteFile(scalaInstance.libraryJar)
     if (!unusedDeps.isEmpty) {
       unusedDeps.foreach(dep =>
         println(s"unused dep: $dep"))

@@ -12,6 +12,6 @@ ScalaConfiguration = provider(
 ScalaInfo = provider(
     doc = 'Provider for cross versioned scala outputs',
     fields = {
-        'java_infos' : 'JavaInfo providers keyed by scala version'
+        'java_infos' : 'JavaInfo providers keyed by scala version',
     },
 )

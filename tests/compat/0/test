@@ -1,0 +1,4 @@
+> bazel build //tests/compat/0:Runtime
+> bazel build //tests/compat/0:Exported
+> bazel build //tests/compat/0:ExportOnly
+> bazel build //tests/compat/0:OtherLib
