@@ -135,6 +135,8 @@ def _collect_crossed_deps(current_version, deps):
 
 def _zinc_runner_common(ctx):
 
+
+    universal_plugins = [plugin[JavaInfo] for plugin in ctx.attr.plugins if JavaInfo in plugin]
     universal_deps = [dep[JavaInfo] for dep in ctx.attr.deps if JavaInfo in dep]
     universal_exports = [export[JavaInfo] for export in ctx.attr.exports if JavaInfo in export]
 
@@ -148,12 +150,16 @@ def _zinc_runner_common(ctx):
     for entry in ctx.attr.scala:
         configuration = entry[ScalaConfiguration]
 
+        splugin = java_common.merge(
+            universal_plugins + _collect_crossed_deps(configuration.version, ctx.attr.plugins))
+
         sdep = java_common.merge(
             universal_deps + _collect_crossed_deps(configuration.version, ctx.attr.deps))
 
         sexport = java_common.merge(
             universal_exports + _collect_crossed_deps(configuration.version, ctx.attr.exports))
 
+        #print("%s : %s" % (ctx.label.name, splugin.transitive_runtime_jars))
         #print("%s : %s" % (ctx.label.name, sdep.compile_jars))
         #print("%s : %s" % (ctx.label.name, sexport.compile_jars))
 
@@ -163,6 +169,7 @@ def _zinc_runner_common(ctx):
         inputs += sdep.transitive_deps
         inputs += ctx.files._zinc_runner
         inputs += ctx.files.srcs
+        inputs += splugin.transitive_runtime_deps
 
         classes_directory = ctx.actions.declare_directory(
             "%s/classes/%s" % (ctx.label.name, configuration.version))
@@ -208,7 +215,8 @@ def _zinc_runner_common(ctx):
               ] +
               _stringsArg(frameworks) +
               _filesArg(sdep.compile_jars) +
-              _filesArg([])
+              _filesArg([]) +
+              _filesArg(splugin.transitive_runtime_deps)
         )
 
         files += [output]

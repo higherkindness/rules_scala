@@ -70,6 +70,11 @@ object ZincRunner {
     val n6 = args(9 + n1 + n2 + n3 + n4 + n5).toInt
     val ignoredDeps = args.drop(10 + n1 + n2 + n3 + n4 + n5).take(n6)
       .map(new File(_)).toSet.map(toAbsoluteFile)
+    val n7 = args(10 + n1 + n2 + n3 + n4 + n5 + n6).toInt
+    val pluginsClasspath = args.drop(11 + n1 + n2 + n3 + n4 + n5 + n6).take(n7)
+      .map(new File(_))
+
+    println(pluginsClasspath.toList)
 
     // end yolo
 
@@ -98,8 +103,9 @@ object ZincRunner {
         .withClasspath(
           Array.concat(classpath, compilerClasspath) // err??
         )
-        .withClassesDirectory(
-          classesDirectory)
+        .withClassesDirectory(classesDirectory)
+        .withScalacOptions(
+          pluginsClasspath.map(f => s"-Xplugin:${f.getPath}"))
 
     val previousResult: PreviousResult = PreviousResult.of(
       Optional.empty[CompileAnalysis], Optional.empty[MiniSetup])
@@ -126,6 +132,7 @@ object ZincRunner {
       } catch {
         case e: CompileFailed =>
           println(s"Oh no: $e")
+          //e.printStackTrace()
           System.exit(-1)
           null
       }

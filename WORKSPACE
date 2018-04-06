@@ -97,3 +97,15 @@ maven_jar(
     name = "zinc_2_12",
     artifact = "org.scala-sbt:zinc_2.12:1.1.3",
 )
+
+# currently used in tests
+
+maven_jar(
+    name = "kind_projector_2_11",
+    artifact = "org.spire-math:kind-projector_2.12:0.9.6"
+)
+
+maven_jar(
+    name = "kind_projector_2_12",
+    artifact = "org.spire-math:kind-projector_2.12:0.9.6"
+)
