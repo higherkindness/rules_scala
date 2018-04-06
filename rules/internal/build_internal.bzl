@@ -176,6 +176,7 @@ def _zinc_runner_common(ctx):
         else:
             java_info = JavaInfo(
                 output_jar = output,
+                use_ijar = ctx.attr.use_ijar,
                 sources = ctx.files.srcs,
                 deps = [sdep],
                 exports = [sexport],
@@ -206,7 +207,7 @@ def _zinc_runner_common(ctx):
                 classes_directory.path
               ] +
               _stringsArg(frameworks) +
-              _filesArg(sdep.compile_jars + configuration.runtime_classpath) +
+              _filesArg(sdep.compile_jars) +
               _filesArg([])
         )
 

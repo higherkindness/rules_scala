@@ -147,17 +147,21 @@ object ZincRunner {
     //println("allowed: " + allowedDeps)
     //println("ignored: " + ignoredDeps)
 
-    // dependencies we shouldn't be allowed to reference directly
-    val verbotenDeps = usedDeps -- allowedDeps -- ignoredDeps
-    if (!verbotenDeps.isEmpty) {
-      verbotenDeps.foreach(dep =>
-        println(s"forbidden dep: $dep"))
+    // dependencies that we directly reference but didn't explicitly list
+    // as a compile time dep (and were potentially needed on the compilation
+    // classpath, transitively, to keep scalac happy)
+    val illicitlyUsedDeps =
+      usedDeps -- allowedDeps -- ignoredDeps -- scalaInstance.allJars.map(toAbsoluteFile)
+
+    if (!illicitlyUsedDeps.isEmpty) {
+      illicitlyUsedDeps.foreach(dep =>
+        println(s"illicitly used dep: $dep"))
       System.exit(-1)
     }
 
     // dependencies we said we'd use... but didn't
     val unusedDeps =
-      allowedDeps -- usedDeps - toAbsoluteFile(scalaInstance.libraryJar)
+      allowedDeps -- usedDeps
     if (!unusedDeps.isEmpty) {
       unusedDeps.foreach(dep =>
         println(s"unused dep: $dep"))

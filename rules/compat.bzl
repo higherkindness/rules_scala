@@ -35,6 +35,8 @@ def scala_library(
         # library only attributes
         main_class            = None,
         exports               = [],
+        # compat layer internals
+        _use_ijar             = True
 ):
 
     if plugins               != []    : print("%s: plugins unsupported")
@@ -58,4 +60,50 @@ def scala_library(
         exports = exports,
         scala = _scala,
         tags = tags,
+        use_ijar = _use_ijar
+    )
+
+def scala_macro_library(
+        # bazel rule attributes
+        name,
+        tags                  = [],
+        # rules_scala common attributes
+        srcs                  = [],
+        deps                  = [],
+        plugins               = [],
+        runtime_deps          = [],
+        data                  = [],
+        resources             = [],
+        resource_strip_prefix = None,
+        resource_jars         = [],
+        scalacopts            = [],
+        javacopts             = [],
+        jvm_flags             = [],
+        scalac_jvm_flags      = [],
+        javac_jvm_flags       = [],
+        print_compile_time    = False,
+        # library only attributes
+        main_class            = None,
+        exports               = [],
+):
+    return scala_library(
+        name,
+        tags,
+        srcs,
+        deps,
+        plugins,
+        runtime_deps,
+        data,
+        resources,
+        resource_strip_prefix,
+        resource_jars,
+        scalacopts,
+        javacopts,
+        jvm_flags,
+        scalac_jvm_flags,
+        javac_jvm_flags,
+        print_compile_time,
+        main_class,
+        exports,
+        False # _use_ijar
     )
