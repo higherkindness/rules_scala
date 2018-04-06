@@ -2,3 +2,6 @@
 > bazel build //tests/compat/0:Exported
 > bazel build //tests/compat/0:ExportOnly
 > bazel build //tests/compat/0:OtherLib
+> bazel build //tests/compat/0:MacroTest
+> bazel build //tests/compat/0:OtherJavaLib
+> bazel build //tests/compat/0:HelloLib

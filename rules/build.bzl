@@ -80,6 +80,7 @@ annex_scala_library = rule(
         "scala"      : attr.label_list(
             mandatory = True,
             providers = [ScalaConfiguration]),
+        "use_ijar"   : attr.bool(default = True),
     }),
     outputs = {},
 )
@@ -94,6 +95,7 @@ annex_scala_binary = rule(
         "scala"      : attr.label_list(
             mandatory = True,
             providers = [ScalaConfiguration]),
+        "use_ijar"   : attr.bool(default = True),
     }),
     executable = True,
     outputs = {},
@@ -108,6 +110,7 @@ annex_scala_test = rule(
         "scala"      : attr.label_list(
             mandatory = True,
             providers = [ScalaConfiguration]),
+        "use_ijar"   : attr.bool(default = True),
         "frameworks" : attr.string_list(
             default = [
                 "org.scalatest.tools.Framework",
