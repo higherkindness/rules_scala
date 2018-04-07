@@ -4,8 +4,9 @@ basic_scala_binary(
     name = "runner",
     scala = "@scalas//:scala_2_12_4",
     srcs = glob(["src/main/scala/**/*.scala"]),
-    main_class = 'annex.ZincRunner',
-    deps = [                  
+    main_class = 'annex.AnxWorker',
+    deps = [
+         '//third_party/bazel/src/main/protobuf:worker_protocol_java_proto',
          '//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper',
          '//3rdparty/jvm/org/scala_sbt:zinc_2_12',
          '//3rdparty/jvm/org/scala_sbt:zinc_apiinfo_2_12',

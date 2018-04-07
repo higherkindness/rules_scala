@@ -163,14 +163,6 @@ def _zinc_runner_common(ctx):
         #print("%s : %s" % (ctx.label.name, sdep.compile_jars))
         #print("%s : %s" % (ctx.label.name, sexport.compile_jars))
 
-        inputs = depset()
-        inputs += [configuration.compiler_bridge]
-        inputs += configuration.compiler_classpath
-        inputs += sdep.transitive_deps
-        inputs += ctx.files._zinc_runner
-        inputs += ctx.files.srcs
-        inputs += splugin.transitive_runtime_deps
-
         classes_directory = ctx.actions.declare_directory(
             "%s/classes/%s" % (ctx.label.name, configuration.version))
         output = ctx.actions.declare_file(
@@ -192,31 +184,43 @@ def _zinc_runner_common(ctx):
                 java_toolchain = ctx.attr._java_toolchain,
             )
 
+        args = ctx.actions.args()
+        args.add(False) # verbose
+        args.add(output.path) # outputJar
+        args.add(classes_directory.path) # outputDir
+        args.add(configuration.version) # scalaVersion
+        args.add(_filesArg(configuration.compiler_classpath)) # compilerClasspath
+        args.add(configuration.compiler_bridge.path) # compilerBridge
+        args.add(_filesArg(splugin.transitive_runtime_deps)) # pluginsClasspath
+        args.add(_filesArg(ctx.files.srcs)) # sources
+        args.add(_filesArg(sdep.transitive_deps)) # compilationClasspath
+        args.add(_filesArg(sdep.compile_jars)) # allowedClasspath
+        args.add(True) # toggle for testOptions
+        args.add(_stringsArg(frameworks)) # optional: testOptions
+
+        args_file = ctx.actions.declare_file(
+            "%s/bin/%s.args" % (ctx.label.name, configuration.version))
+        ctx.actions.write(args_file, args)
+
+        inputs = depset()
+        inputs += [configuration.compiler_bridge]
+        inputs += configuration.compiler_classpath
+        inputs += sdep.transitive_deps
+        inputs += ctx.files._zinc_runner
+        inputs += ctx.files.srcs
+        inputs += splugin.transitive_runtime_deps
+        inputs += [args_file]
+
+        outputs = [output, mains_file, classes_directory]
+
         # todo: different path for nosrc jar?
         ctx.actions.run(
-            mnemonic = 'ZincScalac',
+            mnemonic = 'ScalaCompile',
             inputs = inputs,
-            outputs = [
-                output,
-                mains_file,
-                classes_directory
-            ],
+            outputs = outputs,
             executable = ctx.executable._zinc_runner,
-            arguments =
-              [
-                output.path,
-                configuration.compiler_bridge.path,
-                configuration.version,
-              ] +
-              _filesArg(configuration.compiler_classpath) +
-              _filesArg(sdep.transitive_deps) +
-              _filesArg(ctx.files.srcs) + [
-                classes_directory.path
-              ] +
-              _stringsArg(frameworks) +
-              _filesArg(sdep.compile_jars) +
-              _filesArg([]) +
-              _filesArg(splugin.transitive_runtime_deps)
+            execution_requirements = { "supports-workers": "1" },
+            arguments = ["@%s" % args_file.path]
         )
 
         files += [output]

@@ -1,21 +1,20 @@
 common --color yes
 
 build --experimental_strict_action_env
-test  --experimental_strict_action_env
 
 build --javacopt="-source 8 -target 8"
-test  --javacopt="-source 8 -target 8"
-build --strategy=Scalac=worker
-test  --strategy=Scalac=worker
-build --worker_max_instances=3
-test  --worker_max_instances=3
+build --strategy=ScalaCompile=worker
+build --worker_max_instances=4
 
 build --verbose_failures
-test --verbose_failures
 
-test --test_output=all
+test  --test_output=all
 
 build --experimental_local_disk_cache
-test  --experimental_local_disk_cache
 build --experimental_local_disk_cache_path=.bazel_cache
-test  --experimental_local_disk_cache_path=.bazel_cache
+
+build --worker_sandboxing
+
+# build --worker_quit_after_build
+# build --worker_verbose
+# build --announce_rc
