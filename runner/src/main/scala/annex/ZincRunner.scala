@@ -41,50 +41,133 @@ import java.io.File
 import java.io.PrintWriter
 import java.lang.management.ManagementFactory
 import java.nio.file.Files
-import java.net.URLClassLoader;
+import java.nio.file.Paths
+import java.net.URLClassLoader
 import java.util.Optional
-import java.util.function.Supplier;
+import java.util.function.Supplier
 
 object ZincRunner {
-  def main(args: Array[String]): Unit = {
 
-    val toAbsoluteFile: File => File = f => new File(f.getAbsolutePath)
+  private final case class TestOptions(
+    frameworks: List[String]
+  )
 
-    // begin yolo
+  private final case class Options(
+    verbose: Boolean,
+    outputJar: String,
+    outputDir: String,
+    scalaVersion: String,
+    compilerClasspath: List[String],
+    compilerBridge: String,
+    pluginsClasspath: List[String],
+    sources: List[String],
+    compilationClasspath: List[String],
+    allowedClasspath: List[String],
+    testOptions: Option[TestOptions]
+  )
 
-    val output = args(0)
-    val compilerBridge = args(1)
-    val scalaVersion = args(2)
-    val n1 = args(3).toInt
-    val compilerClasspath = args.drop(4).take(n1).map(new File(_))
-    val n2 = args(4 + n1).toInt
-    val classpath = args.drop(5 + n1).take(n2).map(new File(_))
-    val n3 = args(5 + n1 + n2).toInt
-    val sources = args.drop(6 + n1 + n2).take(n3).map(new File(_))
-    val classesDirectory = new File(args(6 + n1 + n2 + n3))
-    val n4 = args(7 + n1 + n2 + n3).toInt
-    val frameworkClassNames = args.drop(8 + n1 + n2 + n3).take(n4).toList
-    val n5 = args(8 + n1 + n2 + n3 + n4).toInt
-    val allowedDeps = args.drop(9 + n1 + n2 + n3 + n4).take(n5)
-      .map(new File(_)).toSet.map(toAbsoluteFile)
-    val n6 = args(9 + n1 + n2 + n3 + n4 + n5).toInt
-    val ignoredDeps = args.drop(10 + n1 + n2 + n3 + n4 + n5).take(n6)
-      .map(new File(_)).toSet.map(toAbsoluteFile)
-    val n7 = args(10 + n1 + n2 + n3 + n4 + n5 + n6).toInt
-    val pluginsClasspath = args.drop(11 + n1 + n2 + n3 + n4 + n5 + n6).take(n7)
-      .map(new File(_))
+  private def renderList(items: List[String]): String =
+    if (items.isEmpty) "Nil"
+    else "List(\n    " + items.mkString("\n    ") + ")"
 
-    println(pluginsClasspath.toList)
+  private def render(options: Options): String = {
+    import options._
+    s"""|options:
+        |  verbose             : $verbose,
+        |  outputJar           : $outputJar,
+        |  outputDir           : $outputDir,
+        |  scalaVersion        : $scalaVersion,
+        |  compilerClasspath   : ${renderList(compilerClasspath)},
+        |  compilerBridge      : $compilerBridge,
+        |  pluginsClasspath    : ${renderList(pluginsClasspath)},
+        |  sources             : ${renderList(sources)},
+        |  compilationClasspath: ${renderList(compilationClasspath)},
+        |  allowedClasspath    : ${renderList(allowedClasspath)},
+        |  testOptions         : $testOptions""".stripMargin
+  }
 
-    // end yolo
+  private val readString: State[List[String], String] =
+    State(_ match {
+      case head :: tail => (tail, head)
+      case _ => ???
+    })
 
-    Files.createDirectories(classesDirectory.toPath)
+  private val readBoolean: State[List[String], Boolean] =
+    readString.map(_.toBoolean)
+
+  private val readStringList: State[List[String], List[String]] =
+    State(_ match {
+      case n :: tail => tail.splitAt(n.toInt).swap
+      case _ => ???
+    })
+
+  private def readOption[A](f: State[List[String], A]): State[List[String], Option[A]] =
+    readBoolean.flatMap(hasIt =>
+      if (hasIt) f.map(Some(_))
+      else State.pure(None))
+
+  private val readTestOptions: State[List[String], TestOptions] =
+    for {
+      frameworks <- readStringList
+    } yield TestOptions(frameworks)
+
+  private val readOptions: State[List[String], Options] =
+    for {
+      verbose              <- readBoolean
+      outputJar            <- readString
+      outputDir            <- readString
+      scalaVersion         <- readString
+      compilerClasspath    <- readStringList
+      compilerBridge       <- readString
+      pluginsClasspath     <- readStringList
+      sources              <- readStringList
+      compilationClasspath <- readStringList
+      allowedClasspath     <- readStringList
+      testOptions          <- readOption(readTestOptions)
+    } yield
+        Options(
+          verbose,
+          outputJar,
+          outputDir,
+          scalaVersion,
+          compilerClasspath,
+          compilerBridge,
+          pluginsClasspath,
+          sources,
+          compilationClasspath,
+          allowedClasspath,
+          testOptions)
+
+  def main(args: List[String], env: AnxWorker.Env): Unit = {
+    val options = {
+      val original = readOptions.run(args)._2
+      if (env.extraFlags.contains("--verbose"))
+        original.copy(verbose = true)
+      else
+        original
+    }
+    if (options.verbose) {
+      println("env:")
+      println(s"  isWorker            : ${env.isWorker}")
+      println(s"  extraFlags          : ${renderList(env.extraFlags)}")
+      println(render(options))
+    }
+    main(options)
+  }
+
+  val toFile: String => File = s => new File(s)
+  val toAbsolute: File => File = f => new File(f.getAbsolutePath)
+  val toAbsoluteFile: String => File = toFile andThen toAbsolute
+
+  def main(options: Options): Unit = {
+
+    Files.createDirectories(Paths.get(options.outputDir))
 
     val scalaInstance = AnxScalaInstance(
-      scalaVersion,
-      compilerClasspath)
+      options.scalaVersion,
+      options.compilerClasspath.map(toFile).toArray)
 
-    val compilerBridgeJar = new File(compilerBridge)
+    val compilerBridgeJar = new File(options.compilerBridge)
 
     val logger = new AnxLogger
 
@@ -99,13 +182,14 @@ object ZincRunner {
 
     val compileOptions: CompileOptions =
       CompileOptions.create
-        .withSources(sources.map(toAbsoluteFile))
+        .withSources(options.sources.map(toAbsoluteFile).toArray)
         .withClasspath(
-          Array.concat(classpath, compilerClasspath) // err??
-        )
-        .withClassesDirectory(classesDirectory)
+          Array.concat(
+            options.compilationClasspath.map(toFile).toArray,
+            options.compilerClasspath.map(toFile).toArray)) // err??
+        .withClassesDirectory(new File(options.outputDir))
         .withScalacOptions(
-          pluginsClasspath.map(f => s"-Xplugin:${f.getPath}"))
+          options.pluginsClasspath.map(p => s"-Xplugin:${p}").toArray)
 
     val previousResult: PreviousResult = PreviousResult.of(
       Optional.empty[CompileAnalysis], Optional.empty[MiniSetup])
@@ -142,7 +226,8 @@ object ZincRunner {
         .analysis.asInstanceOf[Analysis]
 
     val relations = analysis.relations
-    val classpathDeps = classpath.toSet.map(toAbsoluteFile)
+    val compilationDeps = options.compilationClasspath.toSet.map(toAbsoluteFile)
+    val allowedDeps = options.allowedClasspath.toSet.map(toAbsoluteFile)
 
     val bootDeps =
       ManagementFactory.getRuntimeMXBean
@@ -158,7 +243,7 @@ object ZincRunner {
     // as a compile time dep (and were potentially needed on the compilation
     // classpath, transitively, to keep scalac happy)
     val illicitlyUsedDeps =
-      usedDeps -- allowedDeps -- ignoredDeps -- scalaInstance.allJars.map(toAbsoluteFile)
+      usedDeps -- allowedDeps -- scalaInstance.allJars.map(toAbsolute)
 
     if (!illicitlyUsedDeps.isEmpty) {
       illicitlyUsedDeps.foreach(dep =>
@@ -181,16 +266,17 @@ object ZincRunner {
         .flatMap(_.getMainClasses.toList)
         .sorted
 
-    val pw = new PrintWriter(new File(output + ".mains.txt"))
+    // TODO: pass in a param for this...
+    val pw = new PrintWriter(new File(options.outputJar + ".mains.txt"))
     mains.foreach(pw.println)
     pw.close
 
-    if (!frameworkClassNames.isEmpty) {
+    options.testOptions.foreach { testOptions =>
       val loader = new URLClassLoader(
-        classpath.map(_.toURI.toURL),
+        options.compilationClasspath.map(s => new File(s).toURI.toURL).toArray,
         classOf[Framework].getClassLoader)
 
-      val frameworks = frameworkClassNames.flatMap(getFramework(loader, _))
+      val frameworks = testOptions.frameworks.flatMap(getFramework(loader, _))
       val definitions = potentialTests(analysis)
       val (subclassPrints, annotatedPrints) = getFingerprints(frameworks)
       val discovered = Discovery(subclassPrints.map(_._1), annotatedPrints.map(_._1))(definitions)
@@ -200,8 +286,8 @@ object ZincRunner {
       }
     }
 
-    val jarCreator = new JarCreator(output)
-    jarCreator.addDirectory(classesDirectory)
+    val jarCreator = new JarCreator(options.outputJar)
+    jarCreator.addDirectory(options.outputDir)
     jarCreator.setCompression(true)
     jarCreator.setNormalize(true)
     jarCreator.setVerbose(false)
@@ -344,4 +430,26 @@ final class AnxLogger extends Logger {
   def trace(err: Supplier[Throwable]): Unit =
     println(s"[trace]: ${err.get.getMessage}")
 
+}
+
+// tiny state monad
+
+final case class State[S, A](run: S => (S, A)) {
+
+  def map[B](f: A => B): State[S, B] =
+    new State(s => {
+      val res = run(s)
+      (res._1, f(res._2))
+    })
+
+  def flatMap[B](f: A => State[S, B]): State[S, B] =
+    new State(s => {
+      val res = run(s)
+      f(res._2).run(res._1)
+    })
+
+}
+
+object State {
+  def pure[S, A](a: A): State[S, A] = State(s => (s, a))
 }

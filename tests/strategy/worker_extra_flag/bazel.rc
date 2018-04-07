@@ -1,0 +1,1 @@
+build --worker_extra_flag=ScalaCompile=--verbose
