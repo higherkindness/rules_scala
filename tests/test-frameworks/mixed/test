@@ -1,1 +1,1 @@
-> bazel build //tests/test-frameworks/mixed
+> bazel build :mixed
