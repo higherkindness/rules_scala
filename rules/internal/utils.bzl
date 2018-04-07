@@ -84,9 +84,13 @@ def write_launcher(
         is_executable = True,
     )
 
+def safe_name(value):
+    return value.replace('.', '_').replace('-', '_')
+
 root = struct(
     merge_dicts = merge_dicts,
     strip_margin = strip_margin,
     require_bazel_version = require_bazel_version,
     write_launcher = write_launcher,
+    safe_name = safe_name,
 )

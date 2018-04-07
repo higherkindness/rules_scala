@@ -213,7 +213,7 @@ def _zinc_runner_common(ctx):
 
         outputs = [output, mains_file, classes_directory]
 
-        # todo: different path for nosrc jar?
+        # todo: different execution path for nosrc jar?
         ctx.actions.run(
             mnemonic = 'ScalaCompile',
             inputs = inputs,
@@ -252,7 +252,7 @@ annex_scala_binary_private_attributes = utils.merge_dicts(_zinc_runner_attribute
         cfg         = "host",
     ),
     "_java_stub_template": attr.label(
-        default     = Label("@java_stub_template//file"),
+        default     = Label("@anx_java_stub_template//file"),
     ),
 })
 annex_scala_test_private_attributes = _zinc_runner_attributes

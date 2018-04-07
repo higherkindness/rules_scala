@@ -23,14 +23,7 @@ before_install:
     sudo dpkg -i bazel_${V}-linux-x86_64.deb
 
 script:
-  - |
-    bazel \
-      --output_base=$HOME/.cache/bazel \
-      --batch \
-      --host_jvm_args=-Xmx500m \
-      --host_jvm_args=-Xms500m \
-      build \
-      //...
-  - ./scripts/test.sh
+  - bazel build //...
   - ./setup-tools.sh
   - ./format.sh -mode=check
+  - ./test.sh
