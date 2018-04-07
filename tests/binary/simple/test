@@ -1,1 +1,1 @@
-> bazel run //tests/binary/simple:one_discovered
+> bazel run :one_discovered

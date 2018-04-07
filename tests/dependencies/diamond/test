@@ -1,4 +1,3 @@
-> bazel build //tests/dependencies/diamond:A
-> bazel build //tests/dependencies/diamond:B1
-> bazel build //tests/dependencies/diamond:B2
-> bazel build //tests/dependencies/diamond:C
+> bazel build :A
+> bazel build :B1 :B2
+> bazel build :C

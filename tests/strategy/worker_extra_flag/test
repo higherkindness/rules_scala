@@ -1,1 +1,1 @@
-> bazel build //tests/strategy/worker_extra_flag:library
+> bazel build :library

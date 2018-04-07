@@ -31,4 +31,4 @@ script:
       --host_jvm_args=-Xms500m \
       build \
       //...
-  - ./bin/tests.sh
+  - ./scripts/test.sh
