@@ -22,3 +22,14 @@ config_setting(
         "define": "use_bloop=true",
     },
 )
+
+#
+# this is super sketchy but will work
+# todo: refactor worker/runner interface
+# so we can use the shared code as a proper lib
+#
+filegroup(
+    name = "shared_sources",
+    srcs = glob(["src/main/scala/**/*.scala"]),
+    visibility = ["//visibility:public"],
+)
