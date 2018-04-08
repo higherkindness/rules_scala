@@ -1,5 +1,6 @@
 load("@scala_annex//rules:internal/workspace_internal.bzl",
-     "annex_configure_scala_repository_implementation")
+     "annex_configure_scala_repository_implementation",
+)
 
 load("@scala_annex//rules:internal/utils.bzl", utils = "root")
 

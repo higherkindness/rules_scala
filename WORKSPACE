@@ -17,6 +17,8 @@ maven_dependencies()
 
 load("//rules:workspace.bzl", "annex_scala_repositories")
 
+register_toolchains("//runners/common:configurable_runner_toolchain")
+
 annex_scala_repositories(
     name = "scalas",
     versions = {

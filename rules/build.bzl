@@ -1,4 +1,5 @@
 load("@scala_annex//rules:internal/build_internal.bzl",
+     "annex_scala_runner_toolchain_implementation",
      "annex_configure_scala_implementation",
      "annex_configure_scala_private_attributes",
      "annex_scala_library_implementation",
@@ -13,6 +14,21 @@ load("@scala_annex//rules:providers.bzl",
      "ScalaConfiguration")
 
 load("@scala_annex//rules:internal/utils.bzl", utils = "root")
+
+"""
+Configures which Scala runner to use
+"""
+annex_scala_runner_toolchain = rule(
+    annex_scala_runner_toolchain_implementation,
+    attrs = {
+        "runner": attr.label(
+            allow_files = True,
+            executable  = True,
+            cfg         = "host",
+        ),
+    },
+)
+
 
 ###
 
@@ -83,6 +99,7 @@ annex_scala_library = rule(
         "plugins"    : attr.label_list(),
         "use_ijar"   : attr.bool(default = True),
     }),
+    toolchains = ['//rules:runner_toolchain_type'],
     outputs = {},
 )
 
@@ -99,6 +116,7 @@ annex_scala_binary = rule(
         "plugins"    : attr.label_list(),
         "use_ijar"   : attr.bool(default = True),
     }),
+    toolchains = ['//rules:runner_toolchain_type'],
     executable = True,
     outputs = {},
 )
@@ -123,6 +141,7 @@ annex_scala_test = rule(
                 "utest.runner.Framework",
             ]),
     }),
+    toolchains = ['//rules:runner_toolchain_type'],
     test = True,
     executable = True,
     outputs = {},
