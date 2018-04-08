@@ -1,3 +1,5 @@
+import %workspace%/tools/bazel-external-tools.rc
+
 common --color yes
 
 build --experimental_strict_action_env
