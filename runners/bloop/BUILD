@@ -2,7 +2,10 @@ load("//runners/common:build.bzl", "basic_scala_binary")
 
 basic_scala_binary(
     name = "runner",
-    srcs = glob(["src/main/scala/**/*.scala"]),
+    srcs =
+        glob(["src/main/scala/**/*.scala"]) + [
+            "//runners/common:shared_sources",
+        ],
     main_class = "annex.AnxWorker",
     scala = "@scalas//:scala_2_12_4",
     visibility = ["//visibility:public"],

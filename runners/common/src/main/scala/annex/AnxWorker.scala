@@ -34,7 +34,7 @@ object AnxWorker {
         val options = Options.read(
           Files.readAllLines(Paths.get(pathString), UTF_8).asScala.toList,
           Env(false, Nil))
-        ZincRunner.main(options)
+        AnxRunner.main(options)
       case unexpected =>
         println("Unexpected args:")
         unexpected.foreach(v => println(s"  $v"))
@@ -79,7 +79,7 @@ object AnxWorker {
     val code =
       try {
         val options = Options.read(clientArgs, env)
-        ZincRunner.main(options)
+        AnxRunner.main(options)
         0
       } catch {
         case exit: AnxExitTrappedException => exit.code
