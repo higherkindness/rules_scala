@@ -32,3 +32,5 @@ script:
       build \
       //...
   - ./scripts/test.sh
+  - ./setup-tools.sh
+  - ./format.sh -mode=check
