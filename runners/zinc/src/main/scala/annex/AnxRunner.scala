@@ -51,7 +51,7 @@ object AnxRunner {
   val toAbsolute: File => File = f => new File(f.getAbsolutePath)
   val toAbsoluteFile: String => File = toFile andThen toAbsolute
 
-  def main(options: Options): Unit = {
+  def main(options: Options): Int = {
     Files.createDirectories(Paths.get(options.outputDir))
 
     val scalaInstance = AnxScalaInstance(
@@ -192,6 +192,7 @@ object AnxRunner {
     jarCreator.execute()
 
     // end yolo for real
+    0
   }
 
   private def getFramework(

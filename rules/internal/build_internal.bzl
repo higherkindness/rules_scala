@@ -15,7 +15,6 @@ def annex_scala_runner_toolchain_implementation(ctx):
     )]
 
 def annex_configure_scala_implementation(ctx):
-
     compiler_bridge = _compile_compiler_bridge(
         ctx,
         compiler_classpath = ctx.files.compiler_classpath,
@@ -25,6 +24,7 @@ def annex_configure_scala_implementation(ctx):
 
     return [ScalaConfiguration(
         version = ctx.attr.version,
+        organization = ctx.attr.organization,
         binary_version = ctx.attr.binary_version,
         compiler_bridge = compiler_bridge,
         compiler_classpath = ctx.files.compiler_classpath,
@@ -168,13 +168,20 @@ def _runner_common(ctx):
         #print("%s : %s" % (ctx.label.name, splugin.transitive_runtime_jars))
         #print("%s : %s" % (ctx.label.name, sdep.compile_jars))
         #print("%s : %s" % (ctx.label.name, sexport.compile_jars))
+        print(configuration.version)
 
+        project_name = utils.safe_name(ctx.attr.name)
+        target_directory = ctx.actions.declare_directory(
+            "%s/%s/target" % (ctx.label.name, configuration.version))
         classes_directory = ctx.actions.declare_directory(
-            "%s/classes/%s" % (ctx.label.name, configuration.version))
+            "%s/classes" % target_directory.path)
         output = ctx.actions.declare_file(
-            "%s/bin/%s.jar" % (ctx.label.name, configuration.version))
+            "%s/bin/%s.jar" % (target_directory.path, project_name))
         mains_file = ctx.actions.declare_file(
-            "%s/bin/%s.jar.mains.txt" % (ctx.label.name, configuration.version))
+            "%s/bin/%s.jar.mains.txt" % (target_directory.path, project_name))
+        bloop_config = ctx.actions.declare_file(
+            "%s/.bloop/%s.json" % (target_directory.path, project_name))
+        print(bloop_config.path)
 
         if len(ctx.attr.srcs) == 0:
             java_info = java_common.merge([sdep, sexport])
@@ -191,10 +198,15 @@ def _runner_common(ctx):
             )
 
         args = ctx.actions.args()
-        args.add(False) # verbose
+        args.add(True) # verbose
+        args.add(bloop_config.path) # bloopConfig
+        args.add(project_name) # projectName
+        args.add(ctx.build_file_path) # buildFilePath
         args.add(output.path) # outputJar
         args.add(classes_directory.path) # outputDir
+        args.add(target_directory.path) # targetDir
         args.add(configuration.version) # scalaVersion
+        args.add(configuration.organization) # scalaOrganization
         args.add(_filesArg(configuration.compiler_classpath)) # compilerClasspath
         args.add(configuration.compiler_bridge.path) # compilerBridge
         args.add(_filesArg(splugin.transitive_runtime_deps)) # pluginsClasspath
@@ -219,7 +231,7 @@ def _runner_common(ctx):
         inputs += splugin.transitive_runtime_deps
         inputs += [args_file]
 
-        outputs = [output, mains_file, classes_directory]
+        outputs = [output, mains_file, classes_directory, bloop_config, target_directory]
 
         # todo: different execution path for nosrc jar?
         ctx.actions.run(
@@ -232,7 +244,7 @@ def _runner_common(ctx):
             arguments = ["@%s" % args_file.path]
         )
 
-        files += [output]
+        files += [output, bloop_config]
         mains_files += [mains_file]
         java_infos += [(configuration.version, java_info)]
 

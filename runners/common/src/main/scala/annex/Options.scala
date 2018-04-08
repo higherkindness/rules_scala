@@ -6,9 +6,14 @@ final case class TestOptions(
 
 final case class Options(
     verbose: Boolean,
+    bloopConfig: String,
+    projectName: String,
+    buildFilePath: String,
     outputJar: String,
     outputDir: String,
+    targetDir: String,
     scalaVersion: String,
+    scalaOrganization: String,
     compilerClasspath: List[String],
     compilerBridge: String,
     pluginsClasspath: List[String],
@@ -27,9 +32,14 @@ object Options {
     import options._
     s"""|options:
       |  verbose             : $verbose,
+      |  bloopConfig         : $bloopConfig,
+      |  projectName         : $projectName,
+      |  buildFilePath       : $buildFilePath,
       |  outputJar           : $outputJar,
       |  outputDir           : $outputDir,
+      |  targetDir           : $targetDir,
       |  scalaVersion        : $scalaVersion,
+      |  scalaOrganization   : $scalaOrganization,
       |  compilerClasspath   : ${renderList(compilerClasspath)},
       |  compilerBridge      : $compilerBridge,
       |  pluginsClasspath    : ${renderList(pluginsClasspath)},
@@ -69,9 +79,14 @@ object Options {
   private val readOptions: State[List[String], Options] =
     for {
       verbose <- readBoolean
+      bloopConfig <- readString
+      projectName <- readString
+      buildFilePath <- readString
       outputJar <- readString
       outputDir <- readString
+      targetDir <- readString
       scalaVersion <- readString
+      scalaOrganization <- readString 
       compilerClasspath <- readStringList
       compilerBridge <- readString
       pluginsClasspath <- readStringList
@@ -81,9 +96,14 @@ object Options {
       testOptions <- readOption(readTestOptions)
     } yield
       Options(verbose,
+              bloopConfig,
+              projectName,
+              buildFilePath,
               outputJar,
               outputDir,
+              targetDir,
               scalaVersion,
+              scalaOrganization,
               compilerClasspath,
               compilerBridge,
               pluginsClasspath,

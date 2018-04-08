@@ -40,6 +40,9 @@ Args:
   version:
     The full Scala version string, such as "2.12.5"
 
+  organization:
+    The Scala organization (group id) to resolve the Scala provider, such as "org.scala-sbt"
+
   binary_version:
     The binary Scala version string, such as "2.12"
 
@@ -63,6 +66,7 @@ annex_configure_scala = rule(
     implementation = annex_configure_scala_implementation,
     attrs = utils.merge_dicts(annex_configure_scala_private_attributes, {
         'version'                   : attr.string    (mandatory = True),
+        'organization'              : attr.string    (mandatory = True),
         'binary_version'            : attr.string    (mandatory = True),
         'runtime_classpath'         : attr.label_list(mandatory = True, providers = [JavaInfo]),
         'compiler_classpath'        : attr.label_list(mandatory = True, providers = [JavaInfo]),
