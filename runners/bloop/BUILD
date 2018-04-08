@@ -19,6 +19,9 @@ basic_scala_binary(
         "//runners/common",
         "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "//third_party/bazel/src/main/protobuf:worker_protocol_java_proto",
+        "//3rdparty/jvm/ch/epfl/scala:bloop_frontend",
+        "//3rdparty/jvm/ch/epfl/scala:bloop_backend",
+        "//3rdparty/jvm/ch/epfl/scala:bloop_config",
     ],
 )
 

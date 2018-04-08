@@ -1,21 +1,24 @@
 load("//rules:bazel_deps.bzl", "scala_import")
-
 java_library(
     name = "jna",
-    visibility = [
-        "//visibility:public",
-    ],
     exports = [
-        "//external:jar/net/java/dev/jna/jna",
+        "//external:jar/net/java/dev/jna/jna"
     ],
+    visibility = [
+        "//visibility:public"
+    ]
 )
+
+
 
 java_library(
     name = "jna_platform",
-    visibility = [
-        "//visibility:public",
-    ],
     exports = [
-        "//external:jar/net/java/dev/jna/jna_platform",
+        "//external:jar/net/java/dev/jna/jna_platform"
     ],
+    visibility = [
+        "//visibility:public"
+    ]
 )
+
+
