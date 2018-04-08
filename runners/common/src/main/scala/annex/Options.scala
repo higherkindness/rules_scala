@@ -11,6 +11,7 @@ final case class TestOptions(
 
 final case class Options(
     verbose: Boolean,
+    persistenceDir: Option[String],
     outputJar: String,
     outputDir: String,
     scalaVersion: String,
@@ -20,6 +21,7 @@ final case class Options(
     sources: List[String],
     compilationClasspath: List[String],
     allowedClasspath: List[String],
+    label: String,
     testOptions: Option[TestOptions]
 )
 
@@ -74,6 +76,7 @@ object Options {
   private val readOptions: State[List[String], Options] =
     for {
       verbose <- readBoolean
+      persistenceDir       <- readString
       outputJar <- readString
       outputDir <- readString
       scalaVersion <- readString
@@ -83,9 +86,13 @@ object Options {
       sources <- readStringList
       compilationClasspath <- readStringList
       allowedClasspath <- readStringList
+      label                <- readString
       testOptions <- readOption(readTestOptions)
-    } yield
+    } yield {
+      // TODO: why do quotes appear?
+      val realPersistenceDir = persistenceDir.replace("'", "")
       Options(verbose,
+              if (realPersistenceDir.nonEmpty) Some(realPersistenceDir) else None,
               outputJar,
               outputDir,
               scalaVersion,
@@ -95,15 +102,19 @@ object Options {
               sources,
               compilationClasspath,
               allowedClasspath,
+              label,
               testOptions)
+    }
 
   def read(args: List[String], env: Env): Options = {
     val options = {
-      val original = readOptions.run(args)._2
-      if (env.extraFlags.contains("--verbose"))
-        original.copy(verbose = true)
-      else
-        original
+     val original = readOptions.run(args)._2
+     val verbose = if (env.extraFlags.contains("--verbose")) Some(true) else None
+     val persistenceDir = env.extraFlags.map(_.split("=", 2)).collectFirst { case Array("--persistenceDir", dir) => Some(dir) }
+     original.copy(
+       verbose = verbose.getOrElse(original.verbose),
+       persistenceDir = persistenceDir.getOrElse(original.persistenceDir)
+     )
     }
     if (options.verbose) {
       println("env:")
