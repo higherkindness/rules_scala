@@ -20,6 +20,7 @@ def _entry(ctx, prefix, raw_version):
       |annex_configure_scala(
       |    name = '{name}',
       |    version = '{version}',
+      |    organization = '{saniorganization}',
       |    binary_version = '{binary_version}',
       |    compiler_classpath = [
       |        '@{saniorganization}_scala_compiler_{saniversion}//jar',
