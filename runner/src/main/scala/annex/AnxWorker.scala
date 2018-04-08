@@ -31,9 +31,10 @@ object AnxWorker {
       case "--persistent_worker" :: extraFlags =>
         persistentWorkerMain(Env(true, extraFlags))
       case ArgsPathString(pathString) :: Nil =>
-        ZincRunner.main(
+        val options = Options.read(
           Files.readAllLines(Paths.get(pathString), UTF_8).asScala.toList,
           Env(false, Nil))
+        ZincRunner.main(options)
       case unexpected =>
         println("Unexpected args:")
         unexpected.foreach(v => println(s"  $v"))
@@ -73,10 +74,12 @@ object AnxWorker {
   ): Unit = {
 
     val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(in)
+    val clientArgs =  request.getArgumentsList.asScala.toList
 
     val code =
       try {
-        ZincRunner.main(request.getArgumentsList.asScala.toList, env)
+        val options = Options.read(clientArgs, env)
+        ZincRunner.main(options)
         0
       } catch {
         case exit: AnxExitTrappedException => exit.code
