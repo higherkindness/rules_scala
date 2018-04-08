@@ -1,6 +1,8 @@
-load("//rules:compat.bzl",
-        "scala_library",
-        "scala_macro_library")
+load(
+    "//rules:compat.bzl",
+    "scala_library",
+    "scala_macro_library",
+)
 
 scala_library(
     name = "Runtime",
@@ -11,21 +13,21 @@ scala_library(
 scala_library(
     name = "Exported",
     srcs = ["Exported.scala"],
-    runtime_deps = [":Runtime"],
     tags = ["manual"],
+    runtime_deps = [":Runtime"],
 )
 
 scala_library(
     name = "ExportOnly",
-    exports = [":Exported"],
     tags = ["manual"],
+    exports = [":Exported"],
 )
 
 scala_library(
     name = "OtherLib",
     srcs = ["OtherLib.scala"],
-    deps = [":ExportOnly"],
     tags = ["manual"],
+    deps = [":ExportOnly"],
 )
 
 scala_macro_library(
@@ -42,11 +44,11 @@ java_library(
 
 scala_library(
     name = "HelloLib",
-    srcs = ["HelloLib.scala"],    
+    srcs = ["HelloLib.scala"],
     deps = [
+        ":Exported",
+        ":MacroTest",
         ":OtherJavaLib",
         ":OtherLib",
-        ":MacroTest",
-        ":Exported"
     ],
 )

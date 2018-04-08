@@ -1,4 +1,4 @@
- licenses(["notice"])
+licenses(["notice"])
 # Copyright 2014 The Bazel Authors. Licensed under Apache License, Version 2.0
 
 java_library(
@@ -12,8 +12,7 @@ java_library(
 
 java_binary(
     name = "jarcreator_bin",
-    runtime_deps = [":jarhelper"],
     main_class = "com.google.devtools.build.buildjar.jarhelper.JarCreator",
     visibility = ["//visibility:public"],
+    runtime_deps = [":jarhelper"],
 )
-

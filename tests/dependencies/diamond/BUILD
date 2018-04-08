@@ -1,9 +1,9 @@
 load("//rules:build.bzl", "annex_scala_library")
 
 scala = [
-      # "@scalas//:scala_2_10_7",
-      "@scalas//:scala_2_11_0",      
-      "@scalas//:scala_2_12_0",      
+    # "@scalas//:scala_2_10_7",
+    "@scalas//:scala_2_11_0",
+    "@scalas//:scala_2_12_0",
 ]
 
 #
@@ -24,23 +24,26 @@ annex_scala_library(
 annex_scala_library(
     name = "B1",
     srcs = ["B1.scala"],
-    deps = [":A"],
     scala = scala,
     tags = ["manual"],
+    deps = [":A"],
 )
 
 annex_scala_library(
     name = "B2",
     srcs = ["B2.scala"],
-    deps = [":A"],
     scala = scala,
     tags = ["manual"],
+    deps = [":A"],
 )
 
 annex_scala_library(
     name = "C",
     srcs = ["C.scala"],
-    deps = [":B1", ":B2"],
     scala = scala,
     tags = ["manual"],
+    deps = [
+        ":B1",
+        ":B2",
+    ],
 )
