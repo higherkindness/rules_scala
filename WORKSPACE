@@ -102,3 +102,15 @@ maven_jar(
     name = "kind_projector_2_12",
     artifact = "org.spire-math:kind-projector_2.12:0.9.6",
 )
+
+
+INTELLIJ_ASPECT_COMMIT = "7801ae72aa44d4057f4ff88f9774efc1c81d791e"
+
+new_http_archive(
+    name = "intellij_aspect",
+    strip_prefix = "intellij-%s/aspect" % INTELLIJ_ASPECT_COMMIT,
+    urls = [
+        "https://github.com/bazelbuild/intellij/archive/%s.tar.gz" % INTELLIJ_ASPECT_COMMIT
+    ],
+    build_file_content = """exports_files(glob(["*.bzl"]))\""",
+)

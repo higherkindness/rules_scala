@@ -1,0 +1,2 @@
+build --aspects=@intellij_aspect//:intellij_info_bzl%intellij_info_aspect
+build --aspects=@intellij_aspect//:java_classpath.bzl%java_classpath_aspect
