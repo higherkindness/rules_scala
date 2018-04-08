@@ -4,8 +4,21 @@ options:
   versionConflictPolicy: highest
   buildHeader:
     - load("//rules:bazel_deps.bzl", "scala_import")
+  resolvers:
+    - id: "central"
+      type: "default"
+      url: http://central.maven.org/maven2/
+    - id: "scalameta"
+      type: "default"
+      url: https://dl.bintray.com/scalameta/maven/
 
 dependencies:
+
+  ch.epfl.scala:
+    bloop:
+      lang: scala
+      modules: ["frontend", "backend", "config"]
+      version: "1.0.0-M9"
 
   org.scala-sbt:
     test-interface:
