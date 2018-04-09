@@ -2,10 +2,8 @@ load("//rules:bazel_deps.bzl", "scala_import")
 java_library(
     name = "okhttp",
     exports = [
+        "//3rdparty/jvm/com/squareup/okio:okio",
         "//external:jar/com/squareup/okhttp3/okhttp"
-    ],
-    runtime_deps = [
-        "//3rdparty/jvm/com/squareup/okio:okio"
     ],
     visibility = [
         "//visibility:public"

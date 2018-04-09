@@ -14,9 +14,7 @@ java_library(
 java_library(
     name = "fastparse_2_12",
     exports = [
-        "//external:jar/com/lihaoyi/fastparse_2_12"
-    ],
-    runtime_deps = [
+        "//external:jar/com/lihaoyi/fastparse_2_12",
         ":fastparse_utils_2_12"
     ],
     visibility = [
@@ -41,9 +39,7 @@ java_library(
 java_library(
     name = "pprint_2_12",
     exports = [
-        "//external:jar/com/lihaoyi/pprint_2_12"
-    ],
-    runtime_deps = [
+        "//external:jar/com/lihaoyi/pprint_2_12",
         ":fansi_2_12",
         ":sourcecode_2_12"
     ],
@@ -80,13 +76,13 @@ java_library(
 
 scala_import(
     name = "utest",
-    jars = [
-        "//external:jar/com/lihaoyi/utest_2_12"
-    ],
-    runtime_deps = [
+    exports = [
         "//3rdparty/jvm/org/scala_lang:scala_library",
         "//3rdparty/jvm/org/scala_lang:scala_reflect",
         "//3rdparty/jvm/org/scala_sbt:test_interface"
+    ],
+    jars = [
+        "//external:jar/com/lihaoyi/utest_2_12"
     ],
     visibility = [
         "//visibility:public"

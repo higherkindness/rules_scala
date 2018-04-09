@@ -14,9 +14,7 @@ java_library(
 java_library(
     name = "ssl_config_core_2_12",
     exports = [
-        "//external:jar/com/typesafe/ssl_config_core_2_12"
-    ],
-    runtime_deps = [
+        "//external:jar/com/typesafe/ssl_config_core_2_12",
         ":config"
     ],
     visibility = [

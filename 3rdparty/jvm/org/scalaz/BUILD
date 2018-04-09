@@ -2,9 +2,7 @@ load("//rules:bazel_deps.bzl", "scala_import")
 java_library(
     name = "scalaz_concurrent_2_12",
     exports = [
-        "//external:jar/org/scalaz/scalaz_concurrent_2_12"
-    ],
-    runtime_deps = [
+        "//external:jar/org/scalaz/scalaz_concurrent_2_12",
         ":scalaz_effect_2_12"
     ],
     visibility = [

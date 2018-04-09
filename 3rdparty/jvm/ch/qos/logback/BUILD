@@ -2,9 +2,7 @@ load("//rules:bazel_deps.bzl", "scala_import")
 java_library(
     name = "logback_classic",
     exports = [
-        "//external:jar/ch/qos/logback/logback_classic"
-    ],
-    runtime_deps = [
+        "//external:jar/ch/qos/logback/logback_classic",
         ":logback_core"
     ],
     visibility = [

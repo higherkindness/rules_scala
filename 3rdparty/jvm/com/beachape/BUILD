@@ -2,9 +2,7 @@ load("//rules:bazel_deps.bzl", "scala_import")
 java_library(
     name = "enumeratum_2_12",
     exports = [
-        "//external:jar/com/beachape/enumeratum_2_12"
-    ],
-    runtime_deps = [
+        "//external:jar/com/beachape/enumeratum_2_12",
         ":enumeratum_macros_2_12"
     ],
     visibility = [
