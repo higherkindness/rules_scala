@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/slf4j/slf4j_api",
+        "//external:jar/scala_annex_org/slf4j/slf4j_api",
     ],
 )

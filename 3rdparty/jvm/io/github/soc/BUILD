@@ -7,6 +7,6 @@ java_library(
     ],
     exports = [
         "//3rdparty/jvm/org/junit/jupiter:junit_jupiter_api",
-        "//external:jar/io/github/soc/directories",
+        "//external:jar/scala_annex_io/github/soc/directories",
     ],
 )

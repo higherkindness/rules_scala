@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/chuusai/shapeless_2_12",
+        "//external:jar/scala_annex_com/chuusai/shapeless_2_12",
     ],
 )

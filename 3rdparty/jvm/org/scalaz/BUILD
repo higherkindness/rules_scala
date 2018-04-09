@@ -7,7 +7,7 @@ java_library(
     ],
     exports = [
         ":scalaz_effect_2_12",
-        "//external:jar/org/scalaz/scalaz_concurrent_2_12",
+        "//external:jar/scala_annex_org/scalaz/scalaz_concurrent_2_12",
     ],
 )
 
@@ -17,7 +17,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/scalaz/scalaz_core_2_12",
+        "//external:jar/scala_annex_org/scalaz/scalaz_core_2_12",
     ],
 )
 
@@ -27,6 +27,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/scalaz/scalaz_effect_2_12",
+        "//external:jar/scala_annex_org/scalaz/scalaz_effect_2_12",
     ],
 )

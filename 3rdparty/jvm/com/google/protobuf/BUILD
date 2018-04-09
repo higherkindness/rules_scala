@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/google/protobuf/protobuf_java",
+        "//external:jar/scala_annex_com/google/protobuf/protobuf_java",
     ],
 )

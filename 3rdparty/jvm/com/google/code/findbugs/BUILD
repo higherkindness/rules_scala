@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/google/code/findbugs/jsr305",
+        "//external:jar/scala_annex_com/google/code/findbugs/jsr305",
     ],
 )

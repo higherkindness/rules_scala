@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/reactivestreams/reactive_streams",
+        "//external:jar/scala_annex_org/reactivestreams/reactive_streams",
     ],
 )

@@ -8,7 +8,7 @@ java_library(
     exports = [
         ":circe_numbers_2_12",
         "//3rdparty/jvm/org/typelevel:cats_core_2_12",
-        "//external:jar/io/circe/circe_core_2_12",
+        "//external:jar/scala_annex_io/circe/circe_core_2_12",
     ],
 )
 
@@ -19,7 +19,7 @@ java_library(
     ],
     exports = [
         ":circe_core_2_12",
-        "//external:jar/io/circe/circe_derivation_2_12",
+        "//external:jar/scala_annex_io/circe/circe_derivation_2_12",
     ],
 )
 
@@ -29,7 +29,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/io/circe/circe_generic_2_12",
+        "//external:jar/scala_annex_io/circe/circe_generic_2_12",
     ],
 )
 
@@ -39,7 +39,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/io/circe/circe_generic_extras_2_12",
+        "//external:jar/scala_annex_io/circe/circe_generic_extras_2_12",
     ],
 )
 
@@ -50,7 +50,7 @@ java_library(
     ],
     exports = [
         "//3rdparty/jvm/org/spire_math:jawn_parser_2_12",
-        "//external:jar/io/circe/circe_jawn_2_12",
+        "//external:jar/scala_annex_io/circe/circe_jawn_2_12",
     ],
 )
 
@@ -60,7 +60,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/io/circe/circe_numbers_2_12",
+        "//external:jar/scala_annex_io/circe/circe_numbers_2_12",
     ],
 )
 
@@ -71,6 +71,6 @@ java_library(
     ],
     exports = [
         ":circe_jawn_2_12",
-        "//external:jar/io/circe/circe_parser_2_12",
+        "//external:jar/scala_annex_io/circe/circe_parser_2_12",
     ],
 )

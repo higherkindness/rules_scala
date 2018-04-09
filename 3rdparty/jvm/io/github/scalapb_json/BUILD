@@ -8,7 +8,7 @@ java_library(
     exports = [
         ":scalapb_json_common_2_12",
         "//3rdparty/jvm/io/circe:circe_parser_2_12",
-        "//external:jar/io/github/scalapb_json/scalapb_circe_2_12",
+        "//external:jar/scala_annex_io/github/scalapb_json/scalapb_circe_2_12",
     ],
 )
 
@@ -18,6 +18,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/io/github/scalapb_json/scalapb_json_common_2_12",
+        "//external:jar/scala_annex_io/github/scalapb_json/scalapb_json_common_2_12",
     ],
 )

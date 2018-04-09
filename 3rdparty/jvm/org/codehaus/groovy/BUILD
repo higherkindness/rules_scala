@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/codehaus/groovy/groovy",
+        "//external:jar/scala_annex_org/codehaus/groovy/groovy",
     ],
 )

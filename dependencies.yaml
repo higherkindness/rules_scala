@@ -1,6 +1,7 @@
 options:
   languages: [ "java", "scala:2.12.4" ]
   transitivity: exports
+  namePrefix: scala_annex_
   versionConflictPolicy: highest
   buildHeader:
     - load("//rules:bazel_deps.bzl", "scala_import")

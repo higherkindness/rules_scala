@@ -8,6 +8,6 @@ java_library(
     exports = [
         "//3rdparty/jvm/org/junit/platform:junit_platform_commons",
         "//3rdparty/jvm/org/opentest4j",
-        "//external:jar/org/junit/jupiter/junit_jupiter_api",
+        "//external:jar/scala_annex_org/junit/jupiter/junit_jupiter_api",
     ],
 )

@@ -9,7 +9,7 @@ java_library(
         ":cats_kernel_2_12",
         ":cats_macros_2_12",
         ":machinist_2_12",
-        "//external:jar/org/typelevel/cats_core_2_12",
+        "//external:jar/scala_annex_org/typelevel/cats_core_2_12",
     ],
 )
 
@@ -19,7 +19,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/typelevel/cats_kernel_2_12",
+        "//external:jar/scala_annex_org/typelevel/cats_kernel_2_12",
     ],
 )
 
@@ -29,7 +29,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/typelevel/cats_macros_2_12",
+        "//external:jar/scala_annex_org/typelevel/cats_macros_2_12",
     ],
 )
 
@@ -40,7 +40,7 @@ java_library(
     ],
     exports = [
         "//3rdparty/jvm/org/scala_lang:scala_reflect",
-        "//external:jar/org/typelevel/machinist_2_12",
+        "//external:jar/scala_annex_org/typelevel/machinist_2_12",
     ],
 )
 
@@ -50,7 +50,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/typelevel/macro_compat_2_12",
+        "//external:jar/scala_annex_org/typelevel/macro_compat_2_12",
     ],
 )
 
@@ -60,6 +60,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/typelevel/paiges_core_2_12",
+        "//external:jar/scala_annex_org/typelevel/paiges_core_2_12",
     ],
 )

@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/jcraft/jsch",
+        "//external:jar/scala_annex_com/jcraft/jsch",
     ],
 )

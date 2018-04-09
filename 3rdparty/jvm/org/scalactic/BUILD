@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/scalactic/scalactic_2_12",
+        "//external:jar/scala_annex_org/scalactic/scalactic_2_12",
     ],
 )

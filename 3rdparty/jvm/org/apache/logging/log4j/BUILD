@@ -6,7 +6,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/apache/logging/log4j/log4j_api",
+        "//external:jar/scala_annex_org/apache/logging/log4j/log4j_api",
     ],
 )
 
@@ -16,6 +16,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/apache/logging/log4j/log4j_core",
+        "//external:jar/scala_annex_org/apache/logging/log4j/log4j_core",
     ],
 )

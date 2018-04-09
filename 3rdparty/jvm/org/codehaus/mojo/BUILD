@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/codehaus/mojo/animal_sniffer_annotations",
+        "//external:jar/scala_annex_org/codehaus/mojo/animal_sniffer_annotations",
     ],
 )

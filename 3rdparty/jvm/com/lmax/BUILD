@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/lmax/disruptor",
+        "//external:jar/scala_annex_com/lmax/disruptor",
     ],
 )

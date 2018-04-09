@@ -6,7 +6,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/typesafe/config",
+        "//external:jar/scala_annex_com/typesafe/config",
     ],
 )
 
@@ -17,6 +17,6 @@ java_library(
     ],
     exports = [
         ":config",
-        "//external:jar/com/typesafe/ssl_config_core_2_12",
+        "//external:jar/scala_annex_com/typesafe/ssl_config_core_2_12",
     ],
 )

@@ -8,7 +8,7 @@ java_library(
     exports = [
         ":case_app_annotations_2_12",
         ":case_app_util_2_12",
-        "//external:jar/com/github/alexarchambault/case_app_2_12",
+        "//external:jar/scala_annex_com/github/alexarchambault/case_app_2_12",
     ],
 )
 
@@ -18,7 +18,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/github/alexarchambault/case_app_annotations_2_12",
+        "//external:jar/scala_annex_com/github/alexarchambault/case_app_annotations_2_12",
     ],
 )
 
@@ -30,6 +30,6 @@ java_library(
     exports = [
         "//3rdparty/jvm/com/chuusai:shapeless_2_12",
         "//3rdparty/jvm/org/typelevel:macro_compat_2_12",
-        "//external:jar/com/github/alexarchambault/case_app_util_2_12",
+        "//external:jar/scala_annex_com/github/alexarchambault/case_app_util_2_12",
     ],
 )

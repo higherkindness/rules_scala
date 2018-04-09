@@ -7,7 +7,7 @@ java_library(
     ],
     exports = [
         ":logback_core",
-        "//external:jar/ch/qos/logback/logback_classic",
+        "//external:jar/scala_annex_ch/qos/logback/logback_classic",
     ],
 )
 
@@ -17,6 +17,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/ch/qos/logback/logback_core",
+        "//external:jar/scala_annex_ch/qos/logback/logback_core",
     ],
 )

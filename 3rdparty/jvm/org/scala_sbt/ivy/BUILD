@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/scala_sbt/ivy/ivy",
+        "//external:jar/scala_annex_org/scala_sbt/ivy/ivy",
     ],
 )

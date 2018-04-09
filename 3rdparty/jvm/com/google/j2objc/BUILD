@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/google/j2objc/j2objc_annotations",
+        "//external:jar/scala_annex_com/google/j2objc/j2objc_annotations",
     ],
 )
