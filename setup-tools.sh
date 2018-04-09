@@ -1,7 +1,7 @@
 #!/bin/sh -e
 cd "$(dirname "$0")"
 
-rm -fr external-tools
+rm -fr external-tools/buildtools
 
 mkdir -p external-tools/buildtools
 echo Downloading buildtools
@@ -9,7 +9,7 @@ curl -L -sS https://github.com/bazelbuild/buildtools/archive/a8cd34f034f2ae1e206
 
 PACKAGES="$(find external-tools -iname BUILD -o -iname BUILD.bazel | xargs dirname | tr '\n' ,)"
 
-if [ -z "$PACKAGES"]; then
+if [ -z "$PACKAGES" ]; then
   echo Updating tools/bazel-external-tools.rc
   (
     echo '# generated';
