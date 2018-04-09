@@ -46,12 +46,16 @@ import java.net.URLClassLoader
 import java.util.Optional
 import java.util.function.Supplier
 
-object AnxRunner {
+object BloopRunner {
+
   val toFile: String => File = s => new File(s)
   val toAbsolute: File => File = f => new File(f.getAbsolutePath)
   val toAbsoluteFile: String => File = toFile andThen toAbsolute
 
-  def main(options: Options): Unit = {
+  def main(args: Array[String]): Unit =
+    AnxWorker.main(process)(args)
+
+  def process(options: Options): Unit = {
     Files.createDirectories(Paths.get(options.outputDir))
 
     val scalaInstance = AnxScalaInstance(

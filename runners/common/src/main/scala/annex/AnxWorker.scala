@@ -17,31 +17,42 @@ import java.security.Permission
 
 object AnxWorker {
 
-  final case class Env(
-    isWorker  : Boolean,
-    extraFlags: List[String]
-  )
-
   private final class AnxExitTrappedException(val code: Int) extends Throwable
 
   private val ArgsPathString = raw"\@(.+)".r
 
-  def main(args: Array[String]): Unit =
+  def main(f: Options => Unit)(args: Array[String]): Unit =
+    mainWithState[Unit](
+      _ => (),
+      (_, options) => f(options)
+    )(args)
+
+  def mainWithState[S](
+    fi: (Env) => S,
+    ff: (S, Options) => S
+  )(args: Array[String]): Unit =
     args.toList match {
       case "--persistent_worker" :: extraFlags =>
-        persistentWorkerMain(Env(true, extraFlags))
+        val env = Env(true, extraFlags)
+        persistentWorkerMain(env, fi, ff)
       case ArgsPathString(pathString) :: Nil =>
+        val env = Env(false, Nil)
         val options = Options.read(
           Files.readAllLines(Paths.get(pathString), UTF_8).asScala.toList,
-          Env(false, Nil))
-        AnxRunner.main(options)
+          env)
+        ff(fi(env), options)
       case unexpected =>
         println("Unexpected args:")
         unexpected.foreach(v => println(s"  $v"))
         System.exit(-1)
     }
 
-  private def persistentWorkerMain(env: Env): Unit = {
+  private def persistentWorkerMain[S](
+    env: Env,
+    fi: (Env) => S,
+    ff: (S, Options) => S
+  ): Unit = {
+
     val realIn = System.in
     val realOut = System.out
     val realErr = System.err
@@ -63,11 +74,13 @@ object AnxWorker {
     System.setOut(out)
     System.setErr(out)
 
-    persistentWorkerLoop(env, realIn, realOut, buffer)
+    persistentWorkerLoop(env, fi(env), ff, realIn, realOut, buffer)
   }
 
-  @tailrec private def persistentWorkerLoop(
+  @tailrec private def persistentWorkerLoop[S](
     env: Env,
+    s: S,
+    ff: (S, Options) => S,
     in: InputStream,
     out: PrintStream,
     buf: ByteArrayOutputStream
@@ -76,17 +89,15 @@ object AnxWorker {
     val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(in)
     val clientArgs =  request.getArgumentsList.asScala.toList
 
-    val code =
+    val (s0, code) =
       try {
-        val options = Options.read(clientArgs, env)
-        AnxRunner.main(options)
-        0
+        (ff(s, Options.read(clientArgs, env)), 0)
       } catch {
-        case exit: AnxExitTrappedException => exit.code
+        case exit: AnxExitTrappedException => (s, exit.code)
         case e: Throwable =>
           println("The worker's task crashed!")
           e.printStackTrace()
-          -1
+          (s, -1)
       }
 
     WorkerProtocol.WorkResponse.newBuilder()
@@ -98,7 +109,7 @@ object AnxWorker {
 
     buf.reset()
 
-    persistentWorkerLoop(env, in, out, buf)
+    persistentWorkerLoop(env, s0, ff, in, out, buf)
   }
 
 }

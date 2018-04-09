@@ -1,4 +1,5 @@
 load("//rules:build.bzl", "annex_scala_runner_toolchain")
+load(":build.bzl", "basic_scala_library")
 
 annex_scala_runner_toolchain(
     name = "toolchain_implementation",
@@ -23,13 +24,12 @@ config_setting(
     },
 )
 
-#
-# this is super sketchy but will work
-# todo: refactor worker/runner interface
-# so we can use the shared code as a proper lib
-#
-filegroup(
-    name = "shared_sources",
+basic_scala_library(
+    name = "common",
     srcs = glob(["src/main/scala/**/*.scala"]),
+    scala = "@scalas//:scala_2_12_4",
     visibility = ["//visibility:public"],
+    deps = [
+        "//third_party/bazel/src/main/protobuf:worker_protocol_java_proto",
+    ],
 )

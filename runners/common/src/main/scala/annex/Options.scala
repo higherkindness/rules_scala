@@ -1,7 +1,12 @@
 package annex
 
+final case class Env(
+  isWorker  : Boolean,
+  extraFlags: List[String]
+)
+
 final case class TestOptions(
-    frameworks: List[String]
+  frameworks: List[String]
 )
 
 final case class Options(
@@ -92,7 +97,7 @@ object Options {
               allowedClasspath,
               testOptions)
 
-  def read(args: List[String], env: AnxWorker.Env): Options = {
+  def read(args: List[String], env: Env): Options = {
     val options = {
       val original = readOptions.run(args)._2
       if (env.extraFlags.contains("--verbose"))
