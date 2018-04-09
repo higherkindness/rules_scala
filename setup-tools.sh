@@ -9,9 +9,12 @@ curl -L -sS https://github.com/bazelbuild/buildtools/archive/a8cd34f034f2ae1e206
 
 PACKAGES="$(find external-tools -iname BUILD -o -iname BUILD.bazel | xargs dirname | tr '\n' ,)"
 
-(
-  echo '# generated';
-  echo build "--deleted_packages=$PACKAGES"
-  echo query "--deleted_packages=$PACKAGES"
-  echo test "--delete_packages=$PACKAGES"
-) > tools/bazel-external-tools.rc
+if [ -z "$PACKAGES"]; then
+  echo Updating tools/bazel-external-tools.rc
+  (
+    echo '# generated';
+    echo build "--deleted_packages=$PACKAGES"
+    echo query "--deleted_packages=$PACKAGES"
+    echo test "--delete_packages=$PACKAGES"
+  ) > tools/bazel-external-tools.rc
+fi
