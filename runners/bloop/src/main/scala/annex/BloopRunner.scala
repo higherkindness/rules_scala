@@ -71,7 +71,6 @@ object BloopRunner {
 
     val compilers: Compilers = ZincUtil.compilers(
       scalaInstance,
-      ClasspathOptionsUtil.boot,
       None,
       scalaCompiler)
 
