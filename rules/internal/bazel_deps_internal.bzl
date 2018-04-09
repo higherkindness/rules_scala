@@ -1,25 +1,45 @@
 def scala_import_implementation(ctx):
-    if (ctx.attr.exports != []): fail("exports not supported yet")
 
-    compile_time_jars = depset(transitive = [
+    _compile_time_jars_direct = [
         depset(direct = [
             file for file in jar.files
             if not file.basename.endswith("-sources.jar")
         ])
-        for jar in ctx.attr.jars
-    ])
+        for jar in ctx.attr.jars]
+    _compile_time_jars_exported = [
+        entry[JavaInfo].compile_jars
+        for entry in ctx.attr.exports
+        if JavaInfo in entry]
+    compile_time_jars = depset(
+        transitive =
+        _compile_time_jars_direct +
+        _compile_time_jars_exported)
 
-    transitive_compile_time_jars = depset(transitive = [
+    _transitive_compile_time_jars_direct = [
         entry[JavaInfo].transitive_compile_time_jars
         for entry in ctx.attr.deps
-        if JavaInfo in entry
-    ])
+        if JavaInfo in entry]
+    _transitive_compile_time_jars_exported = [
+        entry[JavaInfo].transitive_compile_time_jars
+        for entry in ctx.attr.exports
+        if JavaInfo in entry]
+    transitive_compile_time_jars = depset(
+        transitive =
+        _transitive_compile_time_jars_direct +
+        _transitive_compile_time_jars_exported)
 
-    runtime_jars = depset(transitive = [
+    _transitive_runtime_jars_direct = [
         entry[JavaInfo].transitive_runtime_jars
         for entry in ctx.attr.runtime_deps
-        if JavaInfo in entry
-    ])
+        if JavaInfo in entry]
+    _transitive_runtime_jars_exported = [
+        entry[JavaInfo].transitive_runtime_jars
+        for entry in ctx.attr.exports
+        if JavaInfo in entry]
+    transitive_runtime_jars = depset(
+        transitive =
+        _transitive_runtime_jars_direct +
+        _transitive_runtime_jars_exported)
 
     # TODO:
     # consider exposing a ScalaInfo provider here too
@@ -30,5 +50,5 @@ def scala_import_implementation(ctx):
         use_ijar = False,
         compile_time_jars = compile_time_jars,
         transitive_compile_time_jars = transitive_compile_time_jars,
-        runtime_jars = runtime_jars,
+        transitive_runtime_jars = transitive_runtime_jars,
     )]
