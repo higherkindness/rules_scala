@@ -7,9 +7,9 @@ basic_scala_binary(
     scala = "@scalas//:scala_2_12_4",
     visibility = ["//visibility:public"],
     deps = [
-        "//runners/common",        
         "//3rdparty/jvm/org/scala_sbt:test_interface",
-        "//3rdparty/jvm/org/scala_sbt:zinc",        
+        "//3rdparty/jvm/org/scala_sbt:zinc",
+        "//runners/common",
         "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
     ],
 )
