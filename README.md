@@ -76,6 +76,16 @@ $ ./setup-tools.sh # first time
 $ ./format.sh
 ```
 
+#### Maven deps
+
+[Bazel-deps](https://github.com/johnynek/bazel-deps) is used to generate maven deps. If you need to change
+dependencies, modify dependencies.yaml and
+
+```
+$ ./setup-tools.sh # first time
+$ ./gen-deps.sh
+```
+
 #### Tests
 
 ```
