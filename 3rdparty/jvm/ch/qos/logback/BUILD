@@ -1,22 +1,22 @@
 load("//rules:bazel_deps.bzl", "scala_import")
 
 java_library(
-    name = "config",
+    name = "logback_classic",
     visibility = [
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/typesafe/config",
+        ":logback_core",
+        "//external:jar/ch/qos/logback/logback_classic",
     ],
 )
 
 java_library(
-    name = "ssl_config_core_2_12",
+    name = "logback_core",
     visibility = [
         "//visibility:public",
     ],
     exports = [
-        ":config",
-        "//external:jar/com/typesafe/ssl_config_core_2_12",
+        "//external:jar/ch/qos/logback/logback_core",
     ],
 )

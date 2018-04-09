@@ -1,19 +1,32 @@
 options:
   languages: [ "java", "scala:2.12.4" ]
-  transitivity: runtime_deps
+  transitivity: exports
   versionConflictPolicy: highest
   buildHeader:
     - load("//rules:bazel_deps.bzl", "scala_import")
+  resolvers:
+    - id: "central"
+      type: "default"
+      url: http://central.maven.org/maven2/
+    - id: "scalameta"
+      type: "default"
+      url: https://dl.bintray.com/scalameta/maven/
 
 dependencies:
+
+  ch.epfl.scala:
+    bloop:
+      lang: scala
+      modules: ["frontend", "backend", "config"]
+      version: "1.0.0-M9"
 
   org.scala-sbt:
     test-interface:
       lang: java
       version: "1.0"
 
-    'zinc_2.12':
-      lang: java
+    zinc:
+      lang: scala
       version: "1.1.3"
 
   org.scalacheck:

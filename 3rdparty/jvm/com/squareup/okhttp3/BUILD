@@ -6,10 +6,8 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/squareup/okhttp3/okhttp",
-    ],
-    runtime_deps = [
         "//3rdparty/jvm/com/squareup/okio",
+        "//external:jar/com/squareup/okhttp3/okhttp",
     ],
 )
 

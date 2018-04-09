@@ -12,11 +12,16 @@ def basic_scala_library_implementation(ctx):
 
     scala = ctx.attr.scala[ScalaConfiguration]
 
-    compile_deps = depset()
-    runtime_deps = depset()
-    for dep in ctx.attr.deps:
-        compile_deps += dep[JavaInfo].transitive_deps
-        runtime_deps += dep[JavaInfo].transitive_runtime_deps
+    s_dep = java_common.merge([
+        dep[JavaInfo]
+        for dep in ctx.attr.deps
+        if JavaInfo in dep])
+
+    # Note: we pull in transitive_compile_time_jars for the time being
+    # to make development of runners way easier (bloop/zinc have big dep graphs).
+    # Consider removing transitive_compile_time_jars in the future.
+    compile_deps = s_dep.full_compile_jars + s_dep.transitive_compile_time_jars
+    runtime_deps = s_dep.transitive_runtime_jars
 
     compiler_classpath_str = ':'.join([file.path for file in scala.compiler_classpath])
     compile_classpath_str = ':'.join([file.path for file in (compile_deps + scala.runtime_classpath)])
@@ -46,7 +51,7 @@ def basic_scala_library_implementation(ctx):
           |  scala.tools.nsc.Main \\
           |  -cp {compile_classpath} \\
           |  -d bin \\
-          |  {srcs}
+          |  {srcs} || exit $?
           |
           |{jar_creator} '{output}' bin 2> /dev/null
           |

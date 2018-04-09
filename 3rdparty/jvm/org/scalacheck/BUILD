@@ -8,7 +8,7 @@ scala_import(
     visibility = [
         "//visibility:public",
     ],
-    runtime_deps = [
+    exports = [
         "//3rdparty/jvm/org/scala_lang:scala_library",
         "//3rdparty/jvm/org/scala_sbt:test_interface",
     ],
