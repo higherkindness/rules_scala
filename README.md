@@ -1,5 +1,7 @@
 # Bazel Scala Annex
 
+[![Build Status](https://travis-ci.org/andyscott/rules_scala_annex.svg?branch=master)](https://travis-ci.org/andyscott/rules_scala_annex)
+
 The Bazel Scala Annex is a prototyping area for [bazelbuild/rules_scala](https://github.com/bazelbuild/rules_scala) focused on exploring design changes required to support big and challenging feature asks.
 
 At this time there isn't a formal plan on how to incorporate changes upstream other than: we want to!
