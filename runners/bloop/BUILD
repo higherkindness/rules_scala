@@ -2,11 +2,8 @@ load("//runners/common:build.bzl", "basic_scala_binary")
 
 basic_scala_binary(
     name = "runner",
-    srcs =
-        glob(["src/main/scala/**/*.scala"]) + [
-            "//runners/common:shared_sources",
-        ],
-    main_class = "annex.AnxWorker",
+    srcs = glob(["src/main/scala/**/*.scala"]),
+    main_class = "annex.BloopRunner",
     scala = "@scalas//:scala_2_12_4",
     visibility = ["//visibility:public"],
     deps = [
@@ -19,6 +16,7 @@ basic_scala_binary(
         "//3rdparty/jvm/org/scala_sbt:zinc_apiinfo_2_12",
         "//3rdparty/jvm/org/scala_sbt:zinc_compile_core_2_12",
         "//3rdparty/jvm/org/scala_sbt:zinc_core_2_12",
+        "//runners/common",
         "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "//third_party/bazel/src/main/protobuf:worker_protocol_java_proto",
     ],
