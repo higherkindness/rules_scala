@@ -7,7 +7,7 @@ java_library(
     ],
     exports = [
         "//3rdparty/jvm/com/squareup/okio",
-        "//external:jar/com/squareup/okhttp3/okhttp",
+        "//external:jar/scala_annex_com/squareup/okhttp3/okhttp",
     ],
 )
 
@@ -17,6 +17,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/squareup/okhttp3/okhttp_urlconnection",
+        "//external:jar/scala_annex_com/squareup/okhttp3/okhttp_urlconnection",
     ],
 )

@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/jline/jline",
+        "//external:jar/scala_annex_jline/jline",
     ],
 )

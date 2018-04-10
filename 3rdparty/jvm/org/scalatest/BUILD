@@ -3,7 +3,7 @@ load("//rules:bazel_deps.bzl", "scala_import")
 scala_import(
     name = "scalatest",
     jars = [
-        "//external:jar/org/scalatest/scalatest_2_12",
+        "//external:jar/scala_annex_org/scalatest/scalatest_2_12",
     ],
     visibility = [
         "//visibility:public",

@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/spire_math/jawn_parser_2_12",
+        "//external:jar/scala_annex_org/spire_math/jawn_parser_2_12",
     ],
 )

@@ -10,7 +10,7 @@ java_library(
         ":monix_execution_2_12",
         ":monix_reactive_2_12",
         ":monix_types_2_12",
-        "//external:jar/io/monix/monix_2_12",
+        "//external:jar/scala_annex_io/monix/monix_2_12",
     ],
 )
 
@@ -20,7 +20,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/io/monix/monix_eval_2_12",
+        "//external:jar/scala_annex_io/monix/monix_eval_2_12",
     ],
 )
 
@@ -31,7 +31,7 @@ java_library(
     ],
     exports = [
         "//3rdparty/jvm/org/reactivestreams:reactive_streams",
-        "//external:jar/io/monix/monix_execution_2_12",
+        "//external:jar/scala_annex_io/monix/monix_execution_2_12",
     ],
 )
 
@@ -42,7 +42,7 @@ java_library(
     ],
     exports = [
         "//3rdparty/jvm/org/jctools:jctools_core",
-        "//external:jar/io/monix/monix_reactive_2_12",
+        "//external:jar/scala_annex_io/monix/monix_reactive_2_12",
     ],
 )
 
@@ -52,6 +52,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/io/monix/monix_types_2_12",
+        "//external:jar/scala_annex_io/monix/monix_types_2_12",
     ],
 )

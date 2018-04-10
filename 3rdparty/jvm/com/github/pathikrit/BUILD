@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/github/pathikrit/better_files_2_12",
+        "//external:jar/scala_annex_com/github/pathikrit/better_files_2_12",
     ],
 )

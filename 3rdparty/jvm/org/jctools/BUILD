@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/jctools/jctools_core",
+        "//external:jar/scala_annex_org/jctools/jctools_core",
     ],
 )

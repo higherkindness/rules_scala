@@ -6,7 +6,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/scala_lang/scala_compiler",
+        "//external:jar/scala_annex_org/scala_lang/scala_compiler",
     ],
 )
 
@@ -16,7 +16,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/scala_lang/scala_library",
+        "//external:jar/scala_annex_org/scala_lang/scala_library",
     ],
 )
 
@@ -26,6 +26,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/scala_lang/scala_reflect",
+        "//external:jar/scala_annex_org/scala_lang/scala_reflect",
     ],
 )

@@ -9,7 +9,7 @@ java_library(
         "//3rdparty/jvm/com/typesafe:ssl_config_core_2_12",
         "//3rdparty/jvm/org/reactivestreams:reactive_streams",
         "//3rdparty/jvm/org/slf4j:slf4j_api",
-        "//external:jar/com/eed3si9n/gigahorse_core_2_12",
+        "//external:jar/scala_annex_com/eed3si9n/gigahorse_core_2_12",
     ],
 )
 
@@ -21,7 +21,7 @@ java_library(
     exports = [
         ":gigahorse_core_2_12",
         "//3rdparty/jvm/com/squareup/okhttp3:okhttp",
-        "//external:jar/com/eed3si9n/gigahorse_okhttp_2_12",
+        "//external:jar/scala_annex_com/eed3si9n/gigahorse_okhttp_2_12",
     ],
 )
 
@@ -31,7 +31,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/eed3si9n/shaded_scalajson_2_12",
+        "//external:jar/scala_annex_com/eed3si9n/shaded_scalajson_2_12",
     ],
 )
 
@@ -41,7 +41,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/eed3si9n/sjson_new_core_2_12",
+        "//external:jar/scala_annex_com/eed3si9n/sjson_new_core_2_12",
     ],
 )
 
@@ -51,7 +51,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/eed3si9n/sjson_new_murmurhash_2_12",
+        "//external:jar/scala_annex_com/eed3si9n/sjson_new_murmurhash_2_12",
     ],
 )
 
@@ -63,6 +63,6 @@ java_library(
     exports = [
         ":shaded_scalajson_2_12",
         "//3rdparty/jvm/org/spire_math:jawn_parser_2_12",
-        "//external:jar/com/eed3si9n/sjson_new_scalajson_2_12",
+        "//external:jar/scala_annex_com/eed3si9n/sjson_new_scalajson_2_12",
     ],
 )

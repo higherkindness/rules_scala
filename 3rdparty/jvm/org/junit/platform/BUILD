@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/org/junit/platform/junit_platform_commons",
+        "//external:jar/scala_annex_org/junit/platform/junit_platform_commons",
     ],
 )

@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/trueaccord/lenses/lenses_2_12",
+        "//external:jar/scala_annex_com/trueaccord/lenses/lenses_2_12",
     ],
 )

@@ -6,6 +6,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/squareup/okio/okio",
+        "//external:jar/scala_annex_com/squareup/okio/okio",
     ],
 )

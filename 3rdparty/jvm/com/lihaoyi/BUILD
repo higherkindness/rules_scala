@@ -6,7 +6,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/lihaoyi/fansi_2_12",
+        "//external:jar/scala_annex_com/lihaoyi/fansi_2_12",
     ],
 )
 
@@ -17,7 +17,7 @@ java_library(
     ],
     exports = [
         ":fastparse_utils_2_12",
-        "//external:jar/com/lihaoyi/fastparse_2_12",
+        "//external:jar/scala_annex_com/lihaoyi/fastparse_2_12",
     ],
 )
 
@@ -27,7 +27,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/lihaoyi/fastparse_utils_2_12",
+        "//external:jar/scala_annex_com/lihaoyi/fastparse_utils_2_12",
     ],
 )
 
@@ -39,7 +39,7 @@ java_library(
     exports = [
         ":fansi_2_12",
         ":sourcecode_2_12",
-        "//external:jar/com/lihaoyi/pprint_2_12",
+        "//external:jar/scala_annex_com/lihaoyi/pprint_2_12",
     ],
 )
 
@@ -49,7 +49,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/lihaoyi/scalatags_2_12",
+        "//external:jar/scala_annex_com/lihaoyi/scalatags_2_12",
     ],
 )
 
@@ -59,14 +59,14 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/lihaoyi/sourcecode_2_12",
+        "//external:jar/scala_annex_com/lihaoyi/sourcecode_2_12",
     ],
 )
 
 scala_import(
     name = "utest",
     jars = [
-        "//external:jar/com/lihaoyi/utest_2_12",
+        "//external:jar/scala_annex_com/lihaoyi/utest_2_12",
     ],
     visibility = [
         "//visibility:public",

@@ -6,7 +6,7 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/net/java/dev/jna/jna",
+        "//external:jar/scala_annex_net/java/dev/jna/jna",
     ],
 )
 
@@ -16,6 +16,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/net/java/dev/jna/jna_platform",
+        "//external:jar/scala_annex_net/java/dev/jna/jna_platform",
     ],
 )

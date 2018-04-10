@@ -9,7 +9,7 @@ java_library(
         "//3rdparty/jvm/com/lihaoyi:pprint_2_12",
         "//3rdparty/jvm/org/scalameta:inputs_2_12",
         "//3rdparty/jvm/org/typelevel:paiges_core_2_12",
-        "//external:jar/com/geirsson/metaconfig_core_2_12",
+        "//external:jar/scala_annex_com/geirsson/metaconfig_core_2_12",
     ],
 )
 
@@ -20,7 +20,7 @@ java_library(
     ],
     exports = [
         "//3rdparty/jvm/com/lihaoyi:scalatags_2_12",
-        "//external:jar/com/geirsson/metaconfig_docs_2_12",
+        "//external:jar/scala_annex_com/geirsson/metaconfig_docs_2_12",
     ],
 )
 
@@ -30,6 +30,6 @@ java_library(
         "//visibility:public",
     ],
     exports = [
-        "//external:jar/com/geirsson/metaconfig_typesafe_config_2_12",
+        "//external:jar/scala_annex_com/geirsson/metaconfig_typesafe_config_2_12",
     ],
 )
