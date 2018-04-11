@@ -13,6 +13,8 @@ import sbt.testing.Framework
 import sbt.testing.AnnotatedFingerprint
 import sbt.testing.SubclassFingerprint
 
+import scala.util.control.NonFatal
+
 import xsbt.api.Discovery
 
 import xsbti.Logger
@@ -20,6 +22,7 @@ import xsbti.T2
 import xsbti.Reporter
 import xsbti.api.AnalyzedClass
 import xsbti.api.ClassLike
+import xsbti.compile.AnalysisContents
 import xsbti.compile.ClasspathOptionsUtil
 import xsbti.compile.Compilers
 import xsbti.compile.CompileAnalysis
@@ -58,6 +61,12 @@ object ZincRunner {
   def process(options: Options): Unit = {
     Files.createDirectories(Paths.get(options.outputDir))
 
+    val persistence = options.persistenceDir.fold[Persistence](NullPersistence) { dir =>
+      val rootDir = Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
+      val path = options.label.replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_")
+      new FilePersistence(rootDir.resolve(path), Paths.get(options.outputDir))
+    }
+
     val scalaInstance = AnxScalaInstance(
       options.scalaVersion,
       options.compilerClasspath.map(toFile).toArray)
@@ -80,26 +89,32 @@ object ZincRunner {
         .withSources(options.sources.map(toAbsoluteFile).toArray)
         .withClasspath(
           Array.concat(
+            Array(toFile(options.outputDir)),
             options.compilationClasspath.map(toFile).toArray,
             options.compilerClasspath.map(toFile).toArray)) // err??
         .withClassesDirectory(new File(options.outputDir))
         .withScalacOptions(
           options.pluginsClasspath.map(p => s"-Xplugin:${p}").toArray)
 
-    val previousResult: PreviousResult = PreviousResult.of(
-      Optional.empty[CompileAnalysis], Optional.empty[MiniSetup])
+    val loadedContents = try persistence.load() catch {
+      case NonFatal(e) =>
+        logger.warn(() => "Failed to load analysis: $e")
+        None
+    }
+    val previousResult = persistence.load().fold(PreviousResult.of(Optional.empty(), Optional.empty())) { contents =>
+      PreviousResult.of(Optional.of(contents.getAnalysis), Optional.of(contents.getMiniSetup))
+    }
 
     val skip = false
     val empty = Array.empty[T2[String, String]]
     val lookup: PerClasspathEntryLookup = new AnxPerClasspathEntryLookup
     val reporter: Reporter = new LoggedReporter(10, logger)
     val compilerCache = new FreshCompilerCache
-    val cacheFile = new File(".anxcache")
     val incOptions = IncOptions.create()
     val progress = Optional.empty[CompileProgress]
 
     val setup: Setup = Setup.create(
-      lookup, skip, cacheFile, compilerCache, incOptions, reporter, progress, empty)
+      lookup, skip, null, compilerCache, incOptions, reporter, progress, empty)
 
     val inputs: Inputs = Inputs.of(
       compilers, compileOptions, setup, previousResult)
@@ -115,6 +130,10 @@ object ZincRunner {
           System.exit(-1)
           null
       }
+
+    try persistence.save(AnalysisContents.create(compileResult.analysis, compileResult.setup)) catch {
+      case NonFatal(e) => logger.warn(() => "Failed to save analysis: $e")
+    }
 
     val analysis: Analysis =
       compileResult
