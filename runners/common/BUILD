@@ -1,11 +1,11 @@
-load("//rules:build.bzl", "annex_scala_runner_toolchain")
+load("@rules_scala_annex//rules:build.bzl", "annex_scala_runner_toolchain")
 load(":build.bzl", "basic_scala_library")
 
 annex_scala_runner_toolchain(
     name = "toolchain_implementation",
     runner = select({
-        ":config_use_bloop": "//runners/bloop:runner",
-        "//conditions:default": "//runners/zinc:runner",
+        ":config_use_bloop": "@rules_scala_annex//runners/bloop:runner",
+        "//conditions:default": "@rules_scala_annex//runners/zinc:runner",
     }),
     visibility = ["//visibility:public"],
 )
@@ -13,7 +13,7 @@ annex_scala_runner_toolchain(
 toolchain(
     name = "configurable_runner_toolchain",
     toolchain = ":toolchain_implementation",
-    toolchain_type = "//rules:runner_toolchain_type",
+    toolchain_type = "@rules_scala_annex//rules:runner_toolchain_type",
     visibility = ["//visibility:public"],
 )
 

@@ -146,7 +146,7 @@ def _collect_crossed_deps(current_version, deps):
     return res
 
 def _runner_common(ctx):
-    runner = ctx.toolchains["//rules:runner_toolchain_type"].runner
+    runner = ctx.toolchains["@rules_scala_annex//rules:runner_toolchain_type"].runner
 
     universal_plugins = [plugin[JavaInfo] for plugin in ctx.attr.plugins if JavaInfo in plugin]
     universal_deps = [dep[JavaInfo] for dep in ctx.attr.deps if JavaInfo in dep]

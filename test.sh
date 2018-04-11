@@ -7,11 +7,20 @@
 # https://www.scala-sbt.org/1.0/docs/Testing-sbt-plugins.html
 #
 
+set -a
+
 if [ -z "$1" ]; then
     location=.
 else
     location=$1
 fi
+
+echo $location
+location="${location##/}"
+echo $location
+location="${location##tests/}"
+echo $location
+cd tests
 
 for file in $(find $location -name 'test' | sort); do
 

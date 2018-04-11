@@ -1,5 +1,5 @@
-load("@scala_annex//rules:providers.bzl", "ScalaConfiguration")
-load("@scala_annex//rules:internal/utils.bzl", "strip_margin")
+load("@rules_scala_annex//rules:providers.bzl", "ScalaConfiguration")
+load("@rules_scala_annex//rules:internal/utils.bzl", "strip_margin")
 
 def basic_scala_library_implementation(ctx):
     name = ctx.label.name

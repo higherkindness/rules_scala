@@ -1,4 +1,4 @@
-workspace(name = "scala_annex")
+workspace(name = "rules_scala_annex")
 
 load("//rules:internal/utils.bzl", "require_bazel_version")
 
@@ -61,46 +61,4 @@ annex_scala_repositories(
         #    'ch.epfl.lamp:0.7.0-RC1',
         #],
     },
-)
-
-maven_jar(
-    name = "compiler_bridge_2_10",
-    artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.3",
-)
-
-maven_jar(
-    name = "compiler_bridge_2_11",
-    artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.3",
-)
-
-maven_jar(
-    name = "compiler_bridge_2_12",
-    artifact = "org.scala-sbt:compiler-bridge_2.12:1.1.3",
-)
-
-maven_jar(
-    name = "compiler_interface",
-    artifact = "org.scala-sbt:compiler-interface:1.1.3",
-)
-
-maven_jar(
-    name = "util_interface",
-    artifact = "org.scala-sbt:util-interface:1.1.3",
-)
-
-maven_jar(
-    name = "zinc_2_12",
-    artifact = "org.scala-sbt:zinc_2.12:1.1.3",
-)
-
-# currently used in tests
-
-maven_jar(
-    name = "kind_projector_2_11",
-    artifact = "org.spire-math:kind-projector_2.12:0.9.6",
-)
-
-maven_jar(
-    name = "kind_projector_2_12",
-    artifact = "org.spire-math:kind-projector_2.12:0.9.6",
 )

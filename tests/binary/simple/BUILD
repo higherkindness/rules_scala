@@ -1,7 +1,7 @@
-load("//rules:build.bzl", "annex_scala_binary")
+load("@rules_scala_annex//rules:build.bzl", "annex_scala_binary")
 
 scala = [
-    "@scalas//:scala_2_11_12",
+    "@scalas//:scala_2_11_11",
     "@scalas//:scala_2_12_4",
 ]
 

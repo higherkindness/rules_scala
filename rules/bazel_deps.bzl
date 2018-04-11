@@ -1,7 +1,5 @@
-###
-
 load(
-    "@scala_annex//rules:internal/bazel_deps_internal.bzl",
+    "@rules_scala_annex//rules:internal/bazel_deps_internal.bzl",
     "scala_import_implementation",
 )
 
