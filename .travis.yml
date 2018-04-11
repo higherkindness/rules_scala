@@ -1,6 +1,6 @@
 dist: trusty
 sudo: required
-language: scala
+language: java
 
 addons:
   apt:
@@ -9,6 +9,8 @@ addons:
     packages:
       - wget
       - pkg-config
+
+osx_image: code8
 
 env:
   - V=0.11.0
@@ -19,12 +21,27 @@ cache:
      - tests/.bazel_cache
 
 before_install:
-  - |
-    wget https://github.com/bazelbuild/bazel/releases/download/${V}/bazel_${V}-linux-x86_64.deb
-    sudo dpkg -i bazel_${V}-linux-x86_64.deb
+  - ./travis.sh install-bazel
 
-script:
-  - bazel build //...
-  - ./setup-tools.sh
-  - ./format.sh -mode=check
-  - ./test.sh
+jobs:
+  include:
+    - stage: annex
+      script: ./travis.sh lint
+      os: osx
+    - stage: annex
+      script: ./travis.sh lint
+      os: linux
+
+    - stage: annex
+      script: ./travis.sh build
+      os: osx
+    - stage: annex
+      script: ./travis.sh build
+      os: linux
+
+    - stage: annex
+      script: ./travis.sh test
+      os: osx
+    - stage: annex
+      script: ./travis.sh test
+      os: linux
