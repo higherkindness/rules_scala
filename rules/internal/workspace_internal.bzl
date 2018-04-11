@@ -1,16 +1,15 @@
 load(":internal/utils.bzl", utils = "root")
 
 def _entry(ctx, prefix, raw_version):
-
-    organization, version = raw_version.split(':')
+    organization, version = raw_version.split(":")
     saniorganization = utils.safe_name(organization)
     saniversion = utils.safe_name(version)
 
-    name = '%s_%s' % (prefix, version.replace('.', '_'))
-    binary_version = '_'.join(version.split('.')[0:2])
+    name = "%s_%s" % (prefix, version.replace(".", "_"))
+    binary_version = "_".join(version.split(".")[0:2])
 
     compiler_bridge = ctx.attr.compiler_bridge_label_pattern[prefix].format(binary_version = binary_version)
-    compiler_bridge_classpath = '[]'
+    compiler_bridge_classpath = "[]"
 
     return utils.strip_margin("""
       |#
@@ -44,7 +43,7 @@ def _entry(ctx, prefix, raw_version):
         name = name,
         compiler_bridge = compiler_bridge,
         saniversion = saniversion,
-        saniorganization = saniorganization
+        saniorganization = saniorganization,
     ))
 
 def annex_configure_scala_repository_implementation(ctx):
