@@ -1,5 +1,5 @@
 load(
-    "@scala_annex//rules:internal/build_internal.bzl",
+    "@rules_scala_annex//rules:internal/build_internal.bzl",
     "annex_scala_runner_toolchain_implementation",
     "annex_configure_scala_implementation",
     "annex_configure_scala_private_attributes",
@@ -11,7 +11,7 @@ load(
     "annex_scala_test_private_attributes",
 )
 load(
-    "@scala_annex//rules:providers.bzl",
+    "@rules_scala_annex//rules:providers.bzl",
     "ScalaConfiguration",
 )
 
@@ -99,7 +99,7 @@ annex_scala_library = rule(
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
     },
-    toolchains = ["//rules:runner_toolchain_type"],
+    toolchains = ["@rules_scala_annex//rules:runner_toolchain_type"],
     outputs = {},
 )
 
@@ -117,7 +117,7 @@ annex_scala_binary = rule(
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
     },
-    toolchains = ["//rules:runner_toolchain_type"],
+    toolchains = ["@rules_scala_annex//rules:runner_toolchain_type"],
     executable = True,
     outputs = {},
 )
@@ -144,7 +144,7 @@ annex_scala_test = rule(
             ],
         ),
     },
-    toolchains = ["//rules:runner_toolchain_type"],
+    toolchains = ["@rules_scala_annex//rules:runner_toolchain_type"],
     test = True,
     executable = True,
     outputs = {},

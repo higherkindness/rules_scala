@@ -1,4 +1,4 @@
-load("//runners/common:build.bzl", "basic_scala_binary")
+load("@rules_scala_annex//runners/common:build.bzl", "basic_scala_binary")
 
 basic_scala_binary(
     name = "runner",

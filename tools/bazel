@@ -1,0 +1,3 @@
+
+./gen-ignores.sh &> /dev/null
+$BAZEL_REAL $@

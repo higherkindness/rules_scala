@@ -16,6 +16,7 @@ env:
 cache:
     directories:
      - .bazel_cache
+     - tests/.bazel_cache
 
 before_install:
   - |

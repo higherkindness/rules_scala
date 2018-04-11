@@ -1,9 +1,8 @@
-load("//rules:build.bzl", "annex_scala_library")
+load("@rules_scala_annex//rules:compat.bzl", "annex_scala_library")
 
 scala = [
-    # "@scalas//:scala_2_10_7",
-    "@scalas//:scala_2_11_0",
-    "@scalas//:scala_2_12_0",
+    "@scalas//:scala_2_11_11",
+    "@scalas//:scala_2_12_4",
 ]
 
 #

@@ -1,8 +1,8 @@
 load(
-    "@scala_annex//rules:internal/workspace_internal.bzl",
+    "@rules_scala_annex//rules:internal/workspace_internal.bzl",
     "annex_configure_scala_repository_implementation",
 )
-load("@scala_annex//rules:internal/utils.bzl", "safe_name")
+load("@rules_scala_annex//rules:internal/utils.bzl", "safe_name")
 
 annex_configure_scala_repository = repository_rule(
     implementation = annex_configure_scala_repository_implementation,
@@ -62,4 +62,24 @@ def annex_scala_repositories(
             "https://%s" % java_stub_template_url,
         ],
         sha256 = "2cbba7c512e400df0e7d4376e667724a38d1155db5baaa81b72ad785c6d761d1",
+    )
+
+    native.maven_jar(
+        name = "compiler_bridge_2_11",
+        artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.3",
+    )
+
+    native.maven_jar(
+        name = "compiler_bridge_2_12",
+        artifact = "org.scala-sbt:compiler-bridge_2.12:1.1.3",
+    )
+
+    native.maven_jar(
+        name = "compiler_interface",
+        artifact = "org.scala-sbt:compiler-interface:1.1.3",
+    )
+
+    native.maven_jar(
+        name = "util_interface",
+        artifact = "org.scala-sbt:util-interface:1.1.3",
     )
