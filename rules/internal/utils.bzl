@@ -18,7 +18,8 @@ def strip_margin(str, delim = "|"):
     This is extremely similar to Scala's .stripMargin
     """
     return "\n".join([
-        _strip_margin_line(line, delim) for line in str.splitlines()
+        _strip_margin_line(line, delim)
+        for line in str.splitlines()
     ])
 
 def _strip_margin_line(line, delim):
@@ -34,12 +35,12 @@ def _version_tuple(version):
 
 def require_bazel_version(
         required_version,
-        current_version = None
-):
-    if not current_version: current_version = native.bazel_version
+        current_version = None):
+    if not current_version:
+        current_version = native.bazel_version
 
     required_nums = _version_tuple(required_version)
-    current_nums  = _version_tuple(current_version)
+    current_nums = _version_tuple(current_version)
 
     for r, c in zip(required_nums, current_nums):
         if c > r:
@@ -56,9 +57,8 @@ def write_launcher(
         runtime_classpath,
         main_class,
         jvm_flags,
-        args="",
-        wrapper_preamble=""
-):
+        args = "",
+        wrapper_preamble = ""):
     """Macro that writes out a launcher script shell script.
       Args:
         runtime_classpath: All of the runtime jars required to launch this java target.
@@ -85,7 +85,7 @@ def write_launcher(
     )
 
 def safe_name(value):
-    return value.replace('.', '_').replace('-', '_')
+    return value.replace(".", "_").replace("-", "_")
 
 root = struct(
     merge_dicts = merge_dicts,

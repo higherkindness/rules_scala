@@ -2,7 +2,6 @@ load("@scala_annex//rules:providers.bzl", "ScalaConfiguration")
 load("@scala_annex//rules:internal/utils.bzl", utils = "root")
 
 def basic_scala_library_implementation(ctx):
-
     name = ctx.label.name
     jar = ctx.executable._jar
     java = ctx.executable._java
@@ -15,7 +14,8 @@ def basic_scala_library_implementation(ctx):
     s_dep = java_common.merge([
         dep[JavaInfo]
         for dep in ctx.attr.deps
-        if JavaInfo in dep])
+        if JavaInfo in dep
+    ])
 
     # Note: we pull in transitive_compile_time_jars for the time being
     # to make development of runners way easier (bloop/zinc have big dep graphs).
@@ -23,10 +23,10 @@ def basic_scala_library_implementation(ctx):
     compile_deps = s_dep.full_compile_jars + s_dep.transitive_compile_time_jars
     runtime_deps = s_dep.transitive_runtime_jars
 
-    compiler_classpath_str = ':'.join([file.path for file in scala.compiler_classpath])
-    compile_classpath_str = ':'.join([file.path for file in (compile_deps + scala.runtime_classpath)])
+    compiler_classpath_str = ":".join([file.path for file in scala.compiler_classpath])
+    compile_classpath_str = ":".join([file.path for file in (compile_deps + scala.runtime_classpath)])
 
-    srcs_str = ' '.join([file.path for file in ctx.files.srcs])
+    srcs_str = " ".join([file.path for file in ctx.files.srcs])
 
     inputs = depset()
     inputs += [jar]
@@ -41,7 +41,8 @@ def basic_scala_library_implementation(ctx):
         progress_message = "compiling annex runner",
         inputs = inputs,
         outputs = [output],
-        command = utils.strip_margin("""
+        command = utils.strip_margin(
+            """
           |#!/bin/bash
           |
           |mkdir bin
@@ -56,13 +57,14 @@ def basic_scala_library_implementation(ctx):
           |{jar_creator} '{output}' bin 2> /dev/null
           |
           |""".format(
-              jar = jar.path,
-              java = java.path,
-              jar_creator = jar_creator.path,
-              compiler_classpath = compiler_classpath_str,
-              compile_classpath = compile_classpath_str,
-              srcs = srcs_str,
-              output = output.path)
+                jar = jar.path,
+                java = java.path,
+                jar_creator = jar_creator.path,
+                compiler_classpath = compiler_classpath_str,
+                compile_classpath = compile_classpath_str,
+                srcs = srcs_str,
+                output = output.path,
+            ),
         ),
     )
 
@@ -84,25 +86,25 @@ basic_scala_library = rule(
         "deps": attr.label_list(),
         "scala": attr.label(
             mandatory = True,
-            providers = [ScalaConfiguration]
+            providers = [ScalaConfiguration],
         ),
         "_java": attr.label(
-            default     = Label("@bazel_tools//tools/jdk:java"),
-            executable  = True,
-            cfg         = "host",
+            default = Label("@bazel_tools//tools/jdk:java"),
+            executable = True,
+            cfg = "host",
         ),
         "_jar": attr.label(
-            default     = Label("@bazel_tools//tools/jdk:jar"),
-            executable  = True,
-            cfg         = "host",
+            default = Label("@bazel_tools//tools/jdk:jar"),
+            executable = True,
+            cfg = "host",
         ),
         "_jar_creator": attr.label(
-            default     = Label('//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin'),
-            executable  = True,
-            cfg         = "host",
+            default = Label("//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin"),
+            executable = True,
+            cfg = "host",
         ),
     },
-    fragments = ['java'],
+    fragments = ["java"],
 )
 
 def basic_scala_binary(
@@ -111,8 +113,7 @@ def basic_scala_binary(
         deps,
         main_class,
         scala,
-        visibility
-):
+        visibility):
     basic_scala_library(
         name = "%s-lib" % name,
         srcs = srcs,
