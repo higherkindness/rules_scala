@@ -2,7 +2,7 @@ load(
     "@scala_annex//rules:internal/workspace_internal.bzl",
     "annex_configure_scala_repository_implementation",
 )
-load("@scala_annex//rules:internal/utils.bzl", utils = "root")
+load("@scala_annex//rules:internal/utils.bzl", "safe_name")
 
 annex_configure_scala_repository = repository_rule(
     implementation = annex_configure_scala_repository_implementation,
@@ -23,8 +23,8 @@ def annex_scala_repositories(
     for prefix, raw_versions in versions.items():
         for raw_version in raw_versions:
             organization, version = raw_version.split(":")
-            saniorganization = utils.safe_name(organization)
-            saniversion = utils.safe_name(version)
+            saniorganization = safe_name(organization)
+            saniversion = safe_name(version)
 
             native.maven_jar(
                 name = "%s_scala_compiler_%s" % (saniorganization, saniversion),

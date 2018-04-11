@@ -1,5 +1,5 @@
 load("@scala_annex//rules:providers.bzl", "ScalaConfiguration")
-load("@scala_annex//rules:internal/utils.bzl", utils = "root")
+load("@scala_annex//rules:internal/utils.bzl", "strip_margin")
 
 def basic_scala_library_implementation(ctx):
     name = ctx.label.name
@@ -41,7 +41,7 @@ def basic_scala_library_implementation(ctx):
         progress_message = "compiling annex runner",
         inputs = inputs,
         outputs = [output],
-        command = utils.strip_margin(
+        command = strip_margin(
             """
           |#!/bin/bash
           |
