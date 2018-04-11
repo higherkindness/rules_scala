@@ -1,7 +1,8 @@
 #!/bin/sh -e
 rm -fr 3rdparty
 
-cd "$(dirname "$0")"/external-tools/bazel-deps
-bazel run parse -- generate -r "$(realpath ../..)" -s 3rdparty/workspace.bzl -d dependencies.yaml
+cd "$(dirname "$0")"
 
-exec ../../format.sh
+external-tools/bazel-deps.sh generate -r "$(pwd)" -s 3rdparty/workspace.bzl -d dependencies.yaml
+
+./format.sh
