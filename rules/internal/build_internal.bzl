@@ -1,4 +1,4 @@
-load(":internal/utils.bzl", utils = "root")
+load(":internal/utils.bzl", "strip_margin", "write_launcher")
 load(
     ":providers.bzl",
     "ScalaConfiguration",
@@ -90,7 +90,7 @@ def _compile_compiler_bridge(
         progress_message = "compiling zinc compiler bridge %s" % suffix,
         inputs = inputs,
         outputs = [compiler_bridge],
-        command = utils.strip_margin(
+        command = strip_margin(
             """
           |#!/bin/bash
           |
@@ -293,7 +293,7 @@ def annex_scala_binary_implementation(ctx):
     mains_file = res.mains_files.to_list()[0]
 
     launcher = ctx.new_file("%s_launcher.sh" % ctx.label.name)
-    utils.write_launcher(
+    write_launcher(
         ctx,
         launcher,
         java_info.transitive_runtime_deps,
@@ -304,7 +304,7 @@ def annex_scala_binary_implementation(ctx):
     prelauncher = ctx.new_file("%s.sh" % ctx.label.name)
     ctx.actions.write(
         output = prelauncher,
-        content = utils.strip_margin("""
+        content = strip_margin("""
           |{launcher} $(head -1 {mains_file}) "$@"
           |""".format(
             launcher = launcher.short_path,
@@ -337,7 +337,7 @@ def annex_scala_test_implementation(ctx):
 
     ctx.file_action(
         output = runner,
-        content = utils.strip_margin("""
+        content = strip_margin("""
           |#!/bin/bash
           |echo OKIE DOKIE
           |"""),

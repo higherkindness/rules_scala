@@ -77,10 +77,3 @@ def write_launcher(
 
 def safe_name(value):
     return value.replace(".", "_").replace("-", "_")
-
-root = struct(
-    strip_margin = strip_margin,
-    require_bazel_version = require_bazel_version,
-    write_launcher = write_launcher,
-    safe_name = safe_name,
-)
