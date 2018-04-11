@@ -2,15 +2,6 @@
 # Helper utilities
 #
 
-def merge_dicts(*args):
-    """
-    Merges any number of dictionaries
-    """
-    res = {}
-    for arg in args:
-        res.update(arg)
-    return res
-
 def strip_margin(str, delim = "|"):
     """
     For every line in str:
@@ -88,7 +79,6 @@ def safe_name(value):
     return value.replace(".", "_").replace("-", "_")
 
 root = struct(
-    merge_dicts = merge_dicts,
     strip_margin = strip_margin,
     require_bazel_version = require_bazel_version,
     write_launcher = write_launcher,

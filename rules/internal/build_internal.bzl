@@ -262,7 +262,7 @@ _runner_common_attributes = {
 }
 
 annex_scala_library_private_attributes = _runner_common_attributes
-annex_scala_binary_private_attributes = utils.merge_dicts(_runner_common_attributes, {
+annex_scala_binary_private_attributes = _runner_common_attributes + {
     "_java": attr.label(
         default = Label("@bazel_tools//tools/jdk:java"),
         executable = True,
@@ -271,7 +271,7 @@ annex_scala_binary_private_attributes = utils.merge_dicts(_runner_common_attribu
     "_java_stub_template": attr.label(
         default = Label("@anx_java_stub_template//file"),
     ),
-})
+}
 annex_scala_test_private_attributes = _runner_common_attributes
 
 def annex_scala_library_implementation(ctx):
