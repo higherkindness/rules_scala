@@ -1,3 +1,2 @@
 mkdir -p .bazel_cache
-./gen-ignores.sh &> /dev/null
 exec $BAZEL_REAL "$@"
