@@ -13,7 +13,7 @@ addons:
 osx_image: code8
 
 env:
-  - V=0.11.0
+  - V=0.12.0
 
 cache:
     directories:
@@ -23,12 +23,17 @@ cache:
 before_install:
   - ./travis.sh install-bazel
 
+stages:
+  - lint
+  - annex
+
 jobs:
   include:
-    - stage: annex
+
+    - stage: lint
       script: ./travis.sh lint
       os: osx
-    - stage: annex
+    - stage: lint
       script: ./travis.sh lint
       os: linux
 

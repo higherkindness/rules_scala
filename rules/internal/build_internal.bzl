@@ -200,6 +200,7 @@ def _runner_common(ctx):
                 runtime_deps = [java_common.create_provider(runtime_jars = configuration.runtime_classpath)],
                 actions = ctx.actions,
                 java_toolchain = ctx.attr._java_toolchain,
+                host_javabase = ctx.attr._host_javabase,
             )
 
         args = ctx.actions.args()
@@ -260,7 +261,13 @@ def _runner_common(ctx):
     )
 
 _runner_common_attributes = {
-    "_java_toolchain": attr.label(default = Label("@bazel_tools//tools/jdk:current_java_toolchain")),
+    "_java_toolchain": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_toolchain"),
+    ),
+    "_host_javabase": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
+        cfg = "host",
+    ),
 }
 
 annex_scala_library_private_attributes = _runner_common_attributes
