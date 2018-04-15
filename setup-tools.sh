@@ -13,7 +13,8 @@ rm -fr external-tools/bazel-deps
 
 mkdir -p external-tools/bazel-deps
 echo Downloading bazel-deps
-curl -L -sS https://github.com/johnynek/bazel-deps/archive/529298cd9af9b7dfcb225fd0f4f271d4da869acc.tar.gz | tar zxf - --strip 1 -C external-tools/bazel-deps
+# TODO: move back to johnynek/bazel-deps when it supports scala_import_external
+curl -L -sS https://github.com/lucidsoftware/bazel-deps/archive/5b52be9ad309f4eb82b063ec61819d5fb86d7d77.tar.gz | tar zxf - --strip 1 -C external-tools/bazel-deps
 
 echo Building bazel-deps
 (cd external-tools/bazel-deps; bazel run --script_path=../bazel-deps.sh parse)

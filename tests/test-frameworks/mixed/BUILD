@@ -8,6 +8,6 @@ annex_scala_test(
     ],
     tags = ["manual"],
     deps = [
-        "//3rdparty/jvm/org/scalacheck",
+        "@org_scalacheck_scalacheck_2_12",
     ],
 )

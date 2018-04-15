@@ -1,32 +1,232 @@
 # Do not edit. bazel-deps autogenerates this file from dependencies.yaml.
+load("@rules_scala_annex//rules/bazel:jvm_external.bzl", "java_import_external")
+load("@rules_scala_annex//rules:external.bzl", "scala_import_external")
 
 def declare_maven(hash):
-    native.maven_jar(
-        name = hash["name"],
-        artifact = hash["artifact"],
-        sha1 = hash["sha1"],
-        repository = hash["repository"],
-    )
-    native.bind(
-        name = hash["bind"],
-        actual = hash["actual"],
-    )
+    lang = hash.pop("lang")
+    import_args = hash["import_args"]
+
+    if lang == "java":
+        java_import_external(**import_args)
+    elif lang.startswith("scala"):
+        # TODO: What attributes does scala_import support? Include only those here.
+        if "srcjar_sha256" in import_args:
+            import_args.pop("srcjar_sha256")
+        if "srcjar_urls" in import_args:
+            import_args.pop("srcjar_urls")
+        if "testonly_" in import_args:
+            import_args.pop("testonly_")
+        if "neverlink" in import_args:
+            import_args.pop("neverlink")
+        if "srcjar_urls" in import_args:
+            import_args.pop("srcjar_urls")
+
+        scala_import_external(**import_args)
+
+    native.bind(**hash["bind_args"])
 
 def list_dependencies():
     return [
-        {"artifact": "com.lihaoyi:utest_2.12:0.6.0", "lang": "scala", "sha1": "85298cdef85af13edd24f4c6a08af593023af4de", "repository": "http://central.maven.org/maven2/", "name": "com_lihaoyi_utest_2_12", "actual": "@com_lihaoyi_utest_2_12//jar:file", "bind": "jar/com/lihaoyi/utest_2_12"},
-        {"artifact": "org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4", "lang": "java", "sha1": "7c5f25a2d40ea7651452f0f0d1d4c12dabffcb8b", "repository": "http://central.maven.org/maven2/", "name": "org_scala_lang_modules_scala_parser_combinators_2_12", "actual": "@org_scala_lang_modules_scala_parser_combinators_2_12//jar", "bind": "jar/org/scala_lang/modules/scala_parser_combinators_2_12"},
-        {"artifact": "org.scala-lang.modules:scala-xml_2.12:1.0.5", "lang": "java", "sha1": "a2b2afbeea86818a911b05851bb11d7d4840bb75", "repository": "http://central.maven.org/maven2/", "name": "org_scala_lang_modules_scala_xml_2_12", "actual": "@org_scala_lang_modules_scala_xml_2_12//jar", "bind": "jar/org/scala_lang/modules/scala_xml_2_12"},
+        {
+            "bind_args": {
+                "actual": "@com_lihaoyi_utest_2_12",
+                "name": "jar/com/lihaoyi/utest_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@org_scala_lang_scala_library",
+                    "@org_scala_lang_scala_reflect",
+                    "@org_scala_sbt_test_interface",
+                ],
+                "jar_sha256": "1bc91780bf810e0a86343a899095ba8afe3dee3c422695ca2b6f9f5299c2879a",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/com/lihaoyi/utest_2.12/0.6.0/utest_2.12-0.6.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "com_lihaoyi_utest_2_12",
+                "srcjar_sha256": "0fa42f3133a6a1931f6bc53823fc3621b045638ae1b7d78df929be2b11dcfb0a",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/com/lihaoyi/utest_2.12/0.6.0/utest_2.12-0.6.0-sources.jar",
+                ],
+            },
+            "lang": "scala",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_scala_lang_modules_scala_parser_combinators_2_12",
+                "name": "jar/org/scala_lang/modules/scala_parser_combinators_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "282c78d064d3e8f09b3663190d9494b85e0bb7d96b0da05994fe994384d96111",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.0.4/scala-parser-combinators_2.12-1.0.4.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scala_lang_modules_scala_parser_combinators_2_12",
+                "srcjar_sha256": "cb4ba7b7e598530faec863e5069864a28268ee4c636b0c46443884dcc4e07ac6",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.0.4/scala-parser-combinators_2.12-1.0.4-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_scala_lang_modules_scala_xml_2_12",
+                "name": "jar/org/scala_lang/modules/scala_xml_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "035015366f54f403d076d95f4529ce9eeaf544064dbc17c2d10e4f5908ef4256",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.5/scala-xml_2.12-1.0.5.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scala_lang_modules_scala_xml_2_12",
+                "srcjar_sha256": "b852d7d7c4321fe745db9189a0c9e905099871129352cd0da7cc78ac02b06318",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.5/scala-xml_2.12-1.0.5-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
         # duplicates in org.scala-lang:scala-library promoted to 2.12.3
         # - com.lihaoyi:utest_2.12:0.6.0 wanted version 2.12.3
         # - org.scalacheck:scalacheck_2.12:1.13.4 wanted version 2.12.0
         # - org.scalatest:scalatest_2.12:3.0.4 wanted version 2.12.3
-        {"artifact": "org.scala-lang:scala-library:2.12.3", "lang": "java", "sha1": "f2e496f21af2d80b48e0a61773f84c3a76a0d06f", "repository": "http://central.maven.org/maven2/", "name": "org_scala_lang_scala_library", "actual": "@org_scala_lang_scala_library//jar", "bind": "jar/org/scala_lang/scala_library"},
-        {"artifact": "org.scala-lang:scala-reflect:2.12.3", "lang": "java", "sha1": "a017f8f606e5f433df4f8d5efc20ce39c2fe8330", "repository": "http://central.maven.org/maven2/", "name": "org_scala_lang_scala_reflect", "actual": "@org_scala_lang_scala_reflect//jar", "bind": "jar/org/scala_lang/scala_reflect"},
-        {"artifact": "org.scala-sbt:test-interface:1.0", "lang": "java", "sha1": "0a3f14d010c4cb32071f863d97291df31603b521", "repository": "http://central.maven.org/maven2/", "name": "org_scala_sbt_test_interface", "actual": "@org_scala_sbt_test_interface//jar", "bind": "jar/org/scala_sbt/test_interface"},
-        {"artifact": "org.scalacheck:scalacheck_2.12:1.13.4", "lang": "scala", "sha1": "1982eef19118794a31b178022fb80257a5bb985e", "repository": "http://central.maven.org/maven2/", "name": "org_scalacheck_scalacheck_2_12", "actual": "@org_scalacheck_scalacheck_2_12//jar:file", "bind": "jar/org/scalacheck/scalacheck_2_12"},
-        {"artifact": "org.scalactic:scalactic_2.12:3.0.4", "lang": "java", "sha1": "e75f0f9c77aa391e01797cfc42fb82fd7c7d59a5", "repository": "http://central.maven.org/maven2/", "name": "org_scalactic_scalactic_2_12", "actual": "@org_scalactic_scalactic_2_12//jar", "bind": "jar/org/scalactic/scalactic_2_12"},
-        {"artifact": "org.scalatest:scalatest_2.12:3.0.4", "lang": "scala", "sha1": "87d68f3d06dbf698fd0084c0a8b8996864d15465", "repository": "http://central.maven.org/maven2/", "name": "org_scalatest_scalatest_2_12", "actual": "@org_scalatest_scalatest_2_12//jar:file", "bind": "jar/org/scalatest/scalatest_2_12"},
+        {
+            "bind_args": {
+                "actual": "@org_scala_lang_scala_library",
+                "name": "jar/org/scala_lang/scala_library",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "a8dd181a996dcc53a8c0bbb554bef7a1a9017ca09a377603167cf15444a85404",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scala_lang_scala_library",
+                "srcjar_sha256": "625126c241e93801cd2f293aafa60670b196cf93dc740e18ab324af18b3de5c7",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_scala_lang_scala_reflect",
+                "name": "jar/org/scala_lang/scala_reflect",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "93db412846912a1c212dd83c36dd51aa0adb9f39bfa6c4c3d65682afc94366c4",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scala_lang_scala_reflect",
+                "srcjar_sha256": "91080d2a59586b4d6322c99808321aed31f76d1b6f04d1966ddeb5d912825605",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_scala_sbt_test_interface",
+                "name": "jar/org/scala_sbt/test_interface",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "15f70b38bb95f3002fec9aea54030f19bb4ecfbad64c67424b5e5fea09cd749e",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scala_sbt_test_interface",
+                "srcjar_sha256": "c314491c9df4f0bd9dd125ef1d51228d70bd466ee57848df1cd1b96aea18a5ad",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_scalacheck_scalacheck_2_12",
+                "name": "jar/org/scalacheck/scalacheck_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@org_scala_lang_scala_library",
+                    "@org_scala_sbt_test_interface",
+                ],
+                "jar_sha256": "4526e6640fa10d9d790fa19df803dfcaaf7f13e3ed627c5bf727fd5efadf0187",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scalacheck/scalacheck_2.12/1.13.4/scalacheck_2.12-1.13.4.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scalacheck_scalacheck_2_12",
+                "srcjar_sha256": "eb895700dec4ad77155677750a9e91c108fd69d31f4a54af2ee7da7aa6e4e680",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scalacheck/scalacheck_2.12/1.13.4/scalacheck_2.12-1.13.4-sources.jar",
+                ],
+            },
+            "lang": "scala",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_scalactic_scalactic_2_12",
+                "name": "jar/org/scalactic/scalactic_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "9b28aa46faaa666a8a10a5173fb72975d59c363c31c3e5f6a27eacc2e654cdfa",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scalactic/scalactic_2.12/3.0.4/scalactic_2.12-3.0.4.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scalactic_scalactic_2_12",
+                "srcjar_sha256": "400ffb8b621cef428ea3a790c96d766c75c1cf18f5809ff8c90c14e2776b88f7",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scalactic/scalactic_2.12/3.0.4/scalactic_2.12-3.0.4-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_scalatest_scalatest_2_12",
+                "name": "jar/org/scalatest/scalatest_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@org_scala_lang_modules_scala_parser_combinators_2_12",
+                    "@org_scala_lang_modules_scala_xml_2_12",
+                    "@org_scala_lang_scala_library",
+                    "@org_scala_lang_scala_reflect",
+                    "@org_scalactic_scalactic_2_12",
+                ],
+                "jar_sha256": "cf2a7999681567e0f0e0166756356ae4ab0cd6c83f3f1d70225d25bb87d26070",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scalatest/scalatest_2.12/3.0.4/scalatest_2.12-3.0.4.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_scalatest_scalatest_2_12",
+                "srcjar_sha256": "e1031e8e04258a56de5543517839c97f31fe53a3c3529440358b5cfbff4e93f7",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scalatest/scalatest_2.12/3.0.4/scalatest_2.12-3.0.4-sources.jar",
+                ],
+            },
+            "lang": "scala",
+        },
     ]
 
 def maven_dependencies(callback = declare_maven):

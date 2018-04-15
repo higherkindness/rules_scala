@@ -1,9 +1,7 @@
 options:
   languages: [ "java", "scala:2.12.4" ]
-  transitivity: runtime_deps
+  transitivity: deps
   versionConflictPolicy: highest
-  buildHeader:
-    - load("@rules_scala_annex//rules:bazel_deps.bzl", "scala_import")
 
 dependencies:
 
