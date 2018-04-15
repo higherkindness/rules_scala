@@ -52,6 +52,9 @@ def list_dependencies():
             },
             "lang": "scala",
         },
+        # duplicates in org.scala-lang.modules:scala-parser-combinators_2.12 promoted to 1.1.0
+        # - org.scalatest:scalatest_2.12:3.0.4 wanted version 1.0.4
+        # - org.specs2:specs2-common_2.12:4.0.3 wanted version 1.1.0
         {
             "bind_args": {
                 "actual": "@org_scala_lang_modules_scala_parser_combinators_2_12",
@@ -59,19 +62,22 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "282c78d064d3e8f09b3663190d9494b85e0bb7d96b0da05994fe994384d96111",
+                "jar_sha256": "102f2a13efae9486cb4fc01aa4eb92c0543dbd8403f825041746c689f80556e3",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.0.4/scala-parser-combinators_2.12-1.0.4.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.0/scala-parser-combinators_2.12-1.1.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "org_scala_lang_modules_scala_parser_combinators_2_12",
-                "srcjar_sha256": "cb4ba7b7e598530faec863e5069864a28268ee4c636b0c46443884dcc4e07ac6",
+                "srcjar_sha256": "08d173ec107691c45a2cddf698df21600dea1c720ef3b0dbeb84b42d133d7290",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.0.4/scala-parser-combinators_2.12-1.0.4-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.0/scala-parser-combinators_2.12-1.1.0-sources.jar",
                 ],
             },
             "lang": "java",
         },
+        # duplicates in org.scala-lang.modules:scala-xml_2.12 promoted to 1.0.6
+        # - org.scalatest:scalatest_2.12:3.0.4 wanted version 1.0.5
+        # - org.specs2:specs2-common_2.12:4.0.3 wanted version 1.0.6
         {
             "bind_args": {
                 "actual": "@org_scala_lang_modules_scala_xml_2_12",
@@ -79,15 +85,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "035015366f54f403d076d95f4529ce9eeaf544064dbc17c2d10e4f5908ef4256",
+                "jar_sha256": "7cc3b6ceb56e879cb977e8e043f4bfe2e062f78795efd7efa09f85003cb3230a",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.5/scala-xml_2.12-1.0.5.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.6/scala-xml_2.12-1.0.6.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "org_scala_lang_modules_scala_xml_2_12",
-                "srcjar_sha256": "b852d7d7c4321fe745db9189a0c9e905099871129352cd0da7cc78ac02b06318",
+                "srcjar_sha256": "a7e8aac79394df396afda98b35537791809d815ce15ab2224f7d31e50c753922",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.5/scala-xml_2.12-1.0.5-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.6/scala-xml_2.12-1.0.6-sources.jar",
                 ],
             },
             "lang": "java",
@@ -96,6 +102,7 @@ def list_dependencies():
         # - com.lihaoyi:utest_2.12:0.6.0 wanted version 2.12.3
         # - org.scalacheck:scalacheck_2.12:1.13.4 wanted version 2.12.0
         # - org.scalatest:scalatest_2.12:3.0.4 wanted version 2.12.3
+        # - org.specs2:specs2-core_2.12:4.0.3 wanted version 2.12.3
         {
             "bind_args": {
                 "actual": "@org_scala_lang_scala_library",
@@ -226,6 +233,98 @@ def list_dependencies():
                 ],
             },
             "lang": "scala",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_specs2_specs2_common_2_12",
+                "name": "jar/org/specs2/specs2_common_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@org_scala_lang_modules_scala_parser_combinators_2_12",
+                    "@org_scala_lang_modules_scala_xml_2_12",
+                    "@org_scala_lang_scala_reflect",
+                    "@org_specs2_specs2_fp_2_12",
+                ],
+                "jar_sha256": "c578382294efed2afa756aab4f678e7b2d7891348ce2232ccfca374941032afc",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-common_2.12/4.0.3/specs2-common_2.12-4.0.3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_specs2_specs2_common_2_12",
+                "srcjar_sha256": "23ce078b8584a04cbe2f58fd59d603d4d335a1c56c9ddcfbdd059bd54af69fe3",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-common_2.12/4.0.3/specs2-common_2.12-4.0.3-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_specs2_specs2_core_2_12",
+                "name": "jar/org/specs2/specs2_core_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@org_scala_lang_scala_library",
+                    "@org_scala_sbt_test_interface",
+                    "@org_specs2_specs2_matcher_2_12",
+                ],
+                "jar_sha256": "4dd794e893d0b6e2361e83f83142de9f2b51a4fde865d2dfdb65d59448ebfeda",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-core_2.12/4.0.3/specs2-core_2.12-4.0.3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_specs2_specs2_core_2_12",
+                "srcjar_sha256": "950fb30746ef13cdf09388b7f509d38be17bd2558c5f794f368ec8f3f4b1db9b",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-core_2.12/4.0.3/specs2-core_2.12-4.0.3-sources.jar",
+                ],
+            },
+            "lang": "scala",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_specs2_specs2_fp_2_12",
+                "name": "jar/org/specs2/specs2_fp_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "16109da4e0bdeda8bd39e53a71aed6f5b0bae2813e03cc62dd30eb96c862dee1",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-fp_2.12/4.0.3/specs2-fp_2.12-4.0.3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_specs2_specs2_fp_2_12",
+                "srcjar_sha256": "8386c472cab9430861c9242411bc077d3c06d243e3d8d02a8fc17350e0e2b375",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-fp_2.12/4.0.3/specs2-fp_2.12-4.0.3-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_specs2_specs2_matcher_2_12",
+                "name": "jar/org/specs2/specs2_matcher_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": ["@org_specs2_specs2_common_2_12"],
+                "jar_sha256": "2831edbe7feefe1ec67f101a3491ca835adaeafd5cad32df63b816c821a97c3e",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-matcher_2.12/4.0.3/specs2-matcher_2.12-4.0.3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_specs2_specs2_matcher_2_12",
+                "srcjar_sha256": "b05e4c5bcf19d4d321c2f579334013266a35f52ea56cd64f36ac0e01d203316f",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/specs2/specs2-matcher_2.12/4.0.3/specs2-matcher_2.12-4.0.3-sources.jar",
+                ],
+            },
+            "lang": "java",
         },
     ]
 

@@ -15,6 +15,11 @@ dependencies:
       lang: scala
       version: "3.0.4"
 
+  org.specs2:
+    specs2-core:
+      lang: scala
+      version: 4.0.3
+
   com.lihaoyi:
     utest:
       lang: scala
