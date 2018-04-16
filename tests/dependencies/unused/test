@@ -1,2 +1,3 @@
 > bazel build :0_used
 -> bazel build :0_unused
+> bazel build :indirect_unused

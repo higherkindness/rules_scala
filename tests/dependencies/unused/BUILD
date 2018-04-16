@@ -10,7 +10,7 @@ annex_scala_library(
     scala = scala,
     tags = ["manual"],
     deps = [
-        "//3rdparty/jvm/org/scalacheck",
+        "@org_scalacheck_scalacheck_2_12",
     ],
 )
 
@@ -20,6 +20,18 @@ annex_scala_library(
     scala = scala,
     tags = ["manual"],
     deps = [
-        "//3rdparty/jvm/org/scalacheck",
+        "@org_scalacheck_scalacheck_2_12",
+    ],
+)
+
+annex_scala_library(
+    name = "indirect_unused",
+    srcs = ["indirect_unused.scala"],
+    scala = scala,
+    tags = ["manual"],
+    deps = [
+        "@org_specs2_specs2_common_2_12",
+        "@org_specs2_specs2_core_2_12",
+        "@org_specs2_specs2_matcher_2_12",
     ],
 )
