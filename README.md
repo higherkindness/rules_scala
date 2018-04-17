@@ -64,6 +64,49 @@ Don't.
 
 Eventually (we hope) useful and proven functionality will wind up in [bazelbuild/rules_scala](https://github.com/bazelbuild/rules_scala). Use rules_scala.
 
+### Tests
+
+annex_scala_test supports
+
+* Any test framework that implements the [sbt.testing.Framework interface](https://github.com/sbt/test-interface),
+e.g. ScalaTest, specs2, ScalaCheck, utest.
+
+* The [`shard_count`](https://docs.bazel.build/versions/master/be/common-definitions.html#common-attributes-tests) attribute.
+
+* The [`--test_filter`](https://docs.bazel.build/versions/master/user-manual.html#flag--test_filter) option.
+
+* [java_stub_template](https://github.com/bazelbuild/bazel/blob/0.12.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/java_stub_template.txt) options.
+
+* Additional options: ANSI color codes and verbosity
+
+* TODO: pass arguments to underlying test frameworks
+
+```
+# Run tests
+$ bazel test :mytest
+
+# Run a single test
+$ bazel test --test_filter=my.test.Example :mytest
+
+# Run all tests with Java/Scala package prefix
+$ bazel test --test_filter='my.test.*' :mytest
+
+# Debug JVM on port 5005
+$ bazel test --test_arg=--debug=5005 :mytest
+
+# Limit heap space to 1GB
+$ bazel test --test_arg=--jvm_arg='-Xmx 1G' :mytest
+
+# Don't use ANSI color codes
+$ bazel test --test_arg=--color=false
+
+# Reduce logs
+$ bazel test --test_arg=--verbosity=LOW
+
+# Generate local script to run tests
+$ bazel run --script_path=script :mytest
+```
+
 ## Contributing
 
 #### Buildifier

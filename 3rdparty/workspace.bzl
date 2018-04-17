@@ -1731,6 +1731,26 @@ def list_dependencies():
         },
         {
             "bind_args": {
+                "actual": "@scala_annex_net_sourceforge_argparse4j_argparse4j",
+                "name": "jar/scala_annex_net/sourceforge/argparse4j/argparse4j",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "98cb5468cac609f3bc07856f2e34088f50dc114181237c48d20ca69c3265d044",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/net/sourceforge/argparse4j/argparse4j/0.8.1/argparse4j-0.8.1.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_net_sourceforge_argparse4j_argparse4j",
+                "srcjar_sha256": "6baf8893d69bf3b8cac582de8b6407ebfeac992b1694b11897a9a614fb4b892f",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/net/sourceforge/argparse4j/argparse4j/0.8.1/argparse4j-0.8.1-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
                 "actual": "@scala_annex_org_apache_logging_log4j_log4j_api",
                 "name": "jar/scala_annex_org/apache/logging/log4j/log4j_api",
             },

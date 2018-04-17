@@ -143,6 +143,7 @@ annex_scala_test = rule(
                 "utest.runner.Framework",
             ],
         ),
+        "runner": attr.label(default = Label("@rules_scala_annex//runners/test:runner")),
     },
     toolchains = ["@rules_scala_annex//rules:runner_toolchain_type"],
     test = True,

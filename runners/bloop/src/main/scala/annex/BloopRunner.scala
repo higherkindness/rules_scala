@@ -165,6 +165,10 @@ object BloopRunner {
     mains.foreach(pw.println)
     pw.close
 
+    // TODO
+    Files.createFile(Paths.get(options.analysisPath))
+
+    /*
     options.testOptions.foreach { testOptions =>
       val loader = new URLClassLoader(
         options.compilationClasspath.map(s => new File(s).toURI.toURL).toArray,
@@ -179,6 +183,7 @@ object BloopRunner {
           //println(">> " + defn)
       }
     }
+    */
 
     val jarCreator = new JarCreator(options.outputJar)
     jarCreator.addDirectory(options.outputDir)
