@@ -6,11 +6,11 @@ annex_scala_test(
     scala = [
         "@scalas//:scala_2_12_4",
     ],
+    shard_count = 2,
     tags = ["manual"],
     deps = [
         "@org_scalacheck_scalacheck_2_12",
         "@org_scalactic_scalactic_2_12",
         "@org_scalatest_scalatest_2_12",
     ],
-    shard_count = 2,
 )
