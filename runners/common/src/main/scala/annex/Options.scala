@@ -102,7 +102,7 @@ object Options {
               sources,
               compilationClasspath,
               allowedClasspath,
-              label,
+              label.tail,
               testOptions)
     }
 

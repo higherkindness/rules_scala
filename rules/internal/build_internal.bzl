@@ -215,7 +215,7 @@ def _runner_common(ctx):
         args.add(_filesArg(ctx.files.srcs))  # sources
         args.add(_filesArg(sdep.transitive_deps))  # compilationClasspath
         args.add(_filesArg(sdep.compile_jars))  # allowedClasspath
-        args.add(str(ctx.label))  # label
+        args.add("_{}".format(ctx.label))  # label
         args.add(True)  # toggle for testOptions
         args.add(_stringsArg(frameworks))  # optional: testOptions
 
