@@ -12,4 +12,5 @@ annex_scala_test(
         "@org_scalactic_scalactic_2_12",
         "@org_scalatest_scalatest_2_12",
     ],
+    shard_count = 2,
 )

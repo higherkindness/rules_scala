@@ -1,6 +1,6 @@
 common --color yes
 
-build --experimental_strict_action_env
+#build --experimental_strict_action_env
 
 build --javacopt="-source 8 -target 8"
 build --strategy=ScalaCompile=worker
@@ -10,7 +10,7 @@ build --verbose_failures
 
 test  --test_output=all
 
-build --experimental_local_disk_cache
-build --experimental_local_disk_cache_path=.bazel_cache
+#build --experimental_local_disk_cache
+#build --experimental_local_disk_cache_path=.bazel_cache
 
-build --worker_sandboxing
+#build --worker_sandboxing

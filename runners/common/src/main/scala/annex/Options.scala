@@ -22,7 +22,7 @@ final case class Options(
     compilationClasspath: List[String],
     allowedClasspath: List[String],
     label: String,
-    testOptions: Option[TestOptions]
+    analysisPath: String,
 )
 
 object Options {
@@ -43,7 +43,7 @@ object Options {
       |  sources             : ${renderList(sources)},
       |  compilationClasspath: ${renderList(compilationClasspath)},
       |  allowedClasspath    : ${renderList(allowedClasspath)},
-      |  testOptions         : $testOptions""".stripMargin
+      |  analysisPath        : $analysisPath""".stripMargin
   }
 
   private val readString: State[List[String], String] =
@@ -87,7 +87,7 @@ object Options {
       compilationClasspath <- readStringList
       allowedClasspath <- readStringList
       label                <- readString
-      testOptions <- readOption(readTestOptions)
+      analysisPath <- readString
     } yield {
       // TODO: why do quotes appear?
       val realPersistenceDir = persistenceDir.replace("'", "")
@@ -103,7 +103,7 @@ object Options {
               compilationClasspath,
               allowedClasspath,
               label.tail,
-              testOptions)
+              analysisPath)
     }
 
   def read(args: List[String], env: Env): Options = {

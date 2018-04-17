@@ -58,8 +58,12 @@ def write_launcher(
         args: Args that should be passed to the Binary.
     """
     classpath = ":".join(["${RUNPATH}%s" % (j.short_path) for j in runtime_classpath.to_list()])
-    jvm_flags = " ".join([ctx.expand_location(f, ctx.attr.data) for f in jvm_flags])
+
+    #jvm_flags = " ".join([ctx.expand_location(f, ctx.attr.data) for f in jvm_flags])
+    jvm_flags = " ".join(jvm_flags)
     template = ctx.attr._java_stub_template.files.to_list()[0]
+
+    runfiles_enabled = False
 
     ctx.actions.expand_template(
         template = template,
@@ -67,9 +71,13 @@ def write_launcher(
         substitutions = {
             "%classpath%": classpath,
             "%java_start_class%": main_class,
-            "%javabin%": "JAVABIN=${RUNPATH}" + ctx.executable._java.short_path,
+            "%javabin%": "JAVABIN=${{RUNPATH}}{}".format(ctx.executable._java.short_path),
             "%jvm_flags%": jvm_flags,
+            "%needs_runfiles%": "1" if runfiles_enabled else "",
+            "%runfiles_manifest_only%": "1" if runfiles_enabled else "",
             "%set_jacoco_metadata%": "",
+            "%set_jacoco_main_class%": "",
+            "%set_jacoco_java_runfiles_root%": "",
             "%workspace_prefix%": ctx.workspace_name + "/",
         },
         is_executable = True,

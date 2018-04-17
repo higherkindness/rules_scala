@@ -1,1 +1,1 @@
-> bazel build :mixed
+> bazel test :mixed
