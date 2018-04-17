@@ -101,6 +101,7 @@ def list_dependencies():
         # duplicates in org.scala-lang:scala-library promoted to 2.12.3
         # - com.lihaoyi:utest_2.12:0.6.0 wanted version 2.12.3
         # - org.scalacheck:scalacheck_2.12:1.13.4 wanted version 2.12.0
+        # - org.scalactic:scalactic_2.12:3.0.4 wanted version 2.12.3
         # - org.scalatest:scalatest_2.12:3.0.4 wanted version 2.12.3
         # - org.specs2:specs2-core_2.12:4.0.3 wanted version 2.12.3
         {
@@ -194,6 +195,10 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@org_scala_lang_scala_library",
+                    "@org_scala_lang_scala_reflect",
+                ],
                 "jar_sha256": "9b28aa46faaa666a8a10a5173fb72975d59c363c31c3e5f6a27eacc2e654cdfa",
                 "jar_urls": [
                     "http://central.maven.org/maven2/org/scalactic/scalactic_2.12/3.0.4/scalactic_2.12-3.0.4.jar",
@@ -205,7 +210,7 @@ def list_dependencies():
                     "http://central.maven.org/maven2/org/scalactic/scalactic_2.12/3.0.4/scalactic_2.12-3.0.4-sources.jar",
                 ],
             },
-            "lang": "java",
+            "lang": "scala",
         },
         {
             "bind_args": {

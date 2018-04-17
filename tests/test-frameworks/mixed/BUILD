@@ -9,5 +9,7 @@ annex_scala_test(
     tags = ["manual"],
     deps = [
         "@org_scalacheck_scalacheck_2_12",
+        "@org_scalactic_scalactic_2_12",
+        "@org_scalatest_scalatest_2_12",
     ],
 )
