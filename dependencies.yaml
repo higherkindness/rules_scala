@@ -19,6 +19,11 @@ dependencies:
       modules: ["frontend", "backend", "config"]
       version: "1.0.0-M9"
 
+  net.sourceforge.argparse4j:
+    argparse4j:
+      lang: java
+      version: 0.8.1
+
   org.scala-sbt:
     test-interface:
       lang: java

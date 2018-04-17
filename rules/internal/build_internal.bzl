@@ -140,7 +140,7 @@ def _collect_crossed_deps(current_version, deps):
         if ScalaInfo in dep:
             res += [
                 java_info
-                for version, java_info in dep[ScalaInfo].java_infos
+                for version, java_info, _ in dep[ScalaInfo].java_infos
                 if version == current_version
             ]
     return res
@@ -203,6 +203,10 @@ def _runner_common(ctx):
                 host_javabase = ctx.attr._host_javabase,
             )
 
+        analysis = ctx.actions.declare_file("{}/analysis/{}.proto.gz".format(ctx.label.name, configuration.version))
+
+        runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
+
         args = ctx.actions.args()
         args.add(False)  # verbose
         args.add("")  # persistenceDir
@@ -216,9 +220,8 @@ def _runner_common(ctx):
         args.add(_filesArg(sdep.transitive_deps))  # compilationClasspath
         args.add(_filesArg(sdep.compile_jars))  # allowedClasspath
         args.add("_{}".format(ctx.label))  # label
-        args.add(True)  # toggle for testOptions
-        args.add(_stringsArg(frameworks))  # optional: testOptions
-
+        args.add(analysis.path)  # analysisPath
+        args.set_param_file_format("multiline")
         args_file = ctx.actions.declare_file(
             "%s/bin/%s.args" % (ctx.label.name, configuration.version),
         )
@@ -235,7 +238,7 @@ def _runner_common(ctx):
         inputs += splugin.transitive_runtime_deps
         inputs += [args_file]
 
-        outputs = [output, mains_file, classes_directory]
+        outputs = [output, mains_file, classes_directory, analysis]
 
         # todo: different execution path for nosrc jar?
         ctx.actions.run(
@@ -250,9 +253,10 @@ def _runner_common(ctx):
 
         files += [output]
         mains_files += [mains_file]
-        java_infos += [(configuration.version, java_info)]
+        java_infos += [(configuration.version, java_info, analysis)]
 
     return struct(
+        analysis = analysis,
         scala_info = ScalaInfo(
             java_infos = java_infos,
         ),
@@ -281,7 +285,7 @@ annex_scala_binary_private_attributes = _runner_common_attributes + {
         default = Label("@anx_java_stub_template//file"),
     ),
 }
-annex_scala_test_private_attributes = _runner_common_attributes
+annex_scala_test_private_attributes = annex_scala_binary_private_attributes
 
 def annex_scala_library_implementation(ctx):
     res = _runner_common(ctx)
@@ -307,7 +311,7 @@ def annex_scala_binary_implementation(ctx):
         launcher,
         java_info.transitive_runtime_deps,
         main_class = "",
-        jvm_flags = "",
+        jvm_flags = [],
     )
 
     prelauncher = ctx.new_file("%s.sh" % ctx.label.name)
@@ -342,21 +346,39 @@ def annex_scala_binary_implementation(ctx):
 def annex_scala_test_implementation(ctx):
     res = _runner_common(ctx)
 
-    runner = ctx.new_file("%s_anx_test_all.sh" % ctx.label.name)
+    result = [res.scala_info]
+    for scala, java_info, analysis in res.scala_info.java_infos:
+        runner = ctx.actions.declare_file("test")
 
-    ctx.file_action(
-        output = runner,
-        content = strip_margin("""
-          |#!/bin/bash
-          |echo OKIE DOKIE
-          |"""),
-        executable = True,
-    )
+        files = ctx.files._java + [res.analysis]
 
-    return ([res.scala_info] + [DefaultInfo(
-        executable = runner,
-        runfiles = ctx.runfiles([
+        frameworks_file = ctx.actions.declare_file("test_frameworks.txt")
+        ctx.actions.write(frameworks_file, "\n".join(ctx.attr.frameworks))
+        files.append(frameworks_file)
+
+        classpath_file = ctx.actions.declare_file("test_classpath.txt")
+        ctx.actions.write(classpath_file, "\n".join([jar.short_path for jar in java_info.transitive_runtime_jars]))
+        files.append(classpath_file)
+
+        test_jars = [java_info for s, java_info, _ in res.scala_info.java_infos if s == scala][0].transitive_runtime_deps
+        runner_jars = [java_info for s, java_info, _ in ctx.attr.runner[ScalaInfo].java_infos if s == scala][0].transitive_runtime_deps
+
+        write_launcher(
+            ctx,
             runner,
-        ]),
-        files = res.files,
-    )])
+            runner_jars,
+            "annex.TestRunner",
+            [
+                "-Dbazel.runPath=$RUNPATH",
+                "-DscalaAnnex.analysis={}".format(res.analysis.short_path),
+                "-DscalaAnnex.test.frameworks={}".format(frameworks_file.short_path),
+                "-DscalaAnnex.test.classpath={}".format(classpath_file.short_path),
+            ],
+        )
+
+        test_info = DefaultInfo(
+            executable = runner,
+            runfiles = ctx.runfiles(collect_default = True, collect_data = True, files = files, transitive_files = depset(direct = runner_jars.to_list(), transitive = [test_jars])),
+        )
+        result.append(test_info)
+    return result

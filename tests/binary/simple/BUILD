@@ -2,8 +2,8 @@ load("@rules_scala_annex//rules:build.bzl", "annex_scala_binary")
 
 scala = [
     "@scalas//:scala_2_11_11",
-#    remove cross-building, for now
-#    "@scalas//:scala_2_12_4",
+    #    remove cross-building, for now
+    #    "@scalas//:scala_2_12_4",
 ]
 
 annex_scala_binary(

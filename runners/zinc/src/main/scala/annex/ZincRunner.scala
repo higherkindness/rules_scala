@@ -8,14 +8,8 @@ import sbt.internal.inc.IncrementalCompilerImpl
 import sbt.internal.inc.Locate
 import sbt.internal.inc.LoggedReporter
 import sbt.internal.inc.ZincUtil
-import sbt.testing.Fingerprint
-import sbt.testing.Framework
-import sbt.testing.AnnotatedFingerprint
-import sbt.testing.SubclassFingerprint
 
 import scala.util.control.NonFatal
-
-import xsbt.api.Discovery
 
 import xsbti.Logger
 import xsbti.T2
@@ -30,6 +24,7 @@ import xsbti.compile.CompileOptions
 import xsbti.compile.CompileProgress
 import xsbti.compile.CompileResult
 import xsbti.compile.DefinesClass
+import xsbti.compile.FileAnalysisStore
 import xsbti.compile.IncOptions
 import xsbti.compile.Inputs
 import xsbti.compile.MiniSetup
@@ -131,15 +126,16 @@ object ZincRunner {
           null
       }
 
-    try persistence.save(AnalysisContents.create(compileResult.analysis, compileResult.setup)) catch {
+    val analysisContents = AnalysisContents.create(compileResult.analysis, compileResult.setup)
+
+    try persistence.save(analysisContents) catch {
       case NonFatal(e) => logger.warn(() => "Failed to save analysis: $e")
     }
 
-    val analysis: Analysis =
-      compileResult
-        .analysis.asInstanceOf[Analysis]
+    FileAnalysisStore.getDefault(new File(options.analysisPath)).set(analysisContents)
 
-    val relations = analysis.relations
+    val analysis = compileResult.analysis.asInstanceOf[Analysis]
+
     val compilationDeps = options.compilationClasspath.toSet.map(toAbsoluteFile)
     val allowedDeps = options.allowedClasspath.toSet.map(toAbsoluteFile)
 
@@ -148,7 +144,7 @@ object ZincRunner {
         .getBootClassPath.split(":")
         .map(new File(_)).toSet
 
-    val usedDeps = relations.allLibraryDeps -- bootDeps
+    val usedDeps = analysis.relations.allLibraryDeps -- bootDeps
     //println("used: " + usedDeps)
     //println("allowed: " + allowedDeps)
     //println("ignored: " + ignoredDeps)
@@ -185,21 +181,6 @@ object ZincRunner {
     mains.foreach(pw.println)
     pw.close
 
-    options.testOptions.foreach { testOptions =>
-      val loader = new URLClassLoader(
-        options.compilationClasspath.map(s => new File(s).toURI.toURL).toArray,
-        classOf[Framework].getClassLoader)
-
-      val frameworks = testOptions.frameworks.flatMap(getFramework(loader, _))
-      val definitions = potentialTests(analysis)
-      val (subclassPrints, annotatedPrints) = getFingerprints(frameworks)
-      val discovered = Discovery(subclassPrints.map(_._1), annotatedPrints.map(_._1))(definitions)
-      discovered.foreach {
-        case (defn, discovered) =>
-          //println(">> " + defn)
-      }
-    }
-
     val jarCreator = new JarCreator(options.outputJar)
     jarCreator.addDirectory(options.outputDir)
     jarCreator.setCompression(true)
@@ -215,74 +196,8 @@ object ZincRunner {
     jarCreator.execute()
 
     // end yolo for real
-  }
-
-  private def getFramework(
-    loader: ClassLoader,
-    className: String
-  ): Option[Framework] =
-    try {
-      Class.forName(className, true, loader)
-        .getDeclaredConstructor().newInstance() match {
-          case framework: Framework =>
-            Some(framework)
-          case other =>
-            println(s"Framework not supported: $className")
-            None
-        }
-    } catch {
-      case _: ClassNotFoundException => None
-      case ex: Throwable =>
-        println(s"Couldn't initialize framework: $className")
-        ex.printStackTrace()
-        None
     }
-
-  private def potentialTests(analysis: CompileAnalysis): Seq[ClassLike] = {
-    val all = allDefs(analysis)
-    all.collect {
-      case cl: ClassLike if cl.topLevel => cl
     }
-  }
-
-  private def allDefs(analysis: CompileAnalysis) = analysis match {
-    case analysis: Analysis =>
-      val acs: Seq[AnalyzedClass] = analysis.apis.internal.values.toVector
-      acs.flatMap { ac =>
-        val companions = ac.api
-        val all =
-          Seq(companions.classApi, companions.objectApi) ++
-        companions.classApi.structure.declared ++ companions.classApi.structure.inherited ++
-        companions.objectApi.structure.declared ++ companions.objectApi.structure.inherited
-
-        all
-      }
-  }
-
-  // todo: a bunch of this is ripped from:
-  // - sbt
-  // - bloop
-
-  private type PrintInfo[F <: Fingerprint] = (String, Boolean, Framework, F)
-
-  def getFingerprints(
-    frameworks: List[Framework]
-  ): (Set[PrintInfo[SubclassFingerprint]], Set[PrintInfo[AnnotatedFingerprint]]) = {
-    import scala.collection.mutable
-    val subclasses = mutable.Set.empty[PrintInfo[SubclassFingerprint]]
-    val annotated = mutable.Set.empty[PrintInfo[AnnotatedFingerprint]]
-    for {
-      framework <- frameworks
-      fingerprint <- framework.fingerprints()
-    } fingerprint match {
-      case sub: SubclassFingerprint =>
-        subclasses += ((sub.superclassName, sub.isModule, framework, sub))
-      case ann: AnnotatedFingerprint =>
-        annotated += ((ann.annotationName, ann.isModule, framework, ann))
-    }
-    (subclasses.toSet, annotated.toSet)
-  }
-}
 
 final class AnxPerClasspathEntryLookup extends PerClasspathEntryLookup {
   override def analysis(classpathEntry: File): Optional[CompileAnalysis] =
