@@ -12,16 +12,12 @@ import sbt.internal.inc.ZincUtil
 import scala.util.control.NonFatal
 
 import xsbti.Logger
-import xsbti.T2
 import xsbti.Reporter
-import xsbti.api.AnalyzedClass
-import xsbti.api.ClassLike
 import xsbti.compile.AnalysisContents
 import xsbti.compile.ClasspathOptionsUtil
 import xsbti.compile.Compilers
 import xsbti.compile.CompileAnalysis
 import xsbti.compile.CompileOptions
-import xsbti.compile.CompileProgress
 import xsbti.compile.CompileResult
 import xsbti.compile.DefinesClass
 import xsbti.compile.FileAnalysisStore
@@ -42,6 +38,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.net.URLClassLoader
 import java.util.Optional
+import java.util.Properties
 import java.util.function.Supplier
 
 object ZincRunner {
@@ -101,15 +98,13 @@ object ZincRunner {
     }
 
     val skip = false
-    val empty = Array.empty[T2[String, String]]
     val lookup: PerClasspathEntryLookup = new AnxPerClasspathEntryLookup
     val reporter: Reporter = new LoggedReporter(10, logger)
     val compilerCache = new FreshCompilerCache
     val incOptions = IncOptions.create()
-    val progress = Optional.empty[CompileProgress]
 
     val setup: Setup = Setup.create(
-      lookup, skip, null, compilerCache, incOptions, reporter, progress, empty)
+      lookup, skip, null, compilerCache, incOptions, reporter, Optional.empty(), Array.empty)
 
     val inputs: Inputs = Inputs.of(
       compilers, compileOptions, setup, previousResult)
@@ -122,8 +117,7 @@ object ZincRunner {
         case e: CompileFailed =>
           println(s"Oh no: $e")
           //e.printStackTrace()
-          System.exit(-1)
-          null
+          sys.exit(-1)
       }
 
     val analysisContents = AnalysisContents.create(compileResult.analysis, compileResult.setup)
@@ -139,10 +133,7 @@ object ZincRunner {
     val compilationDeps = options.compilationClasspath.toSet.map(toAbsoluteFile)
     val allowedDeps = options.allowedClasspath.toSet.map(toAbsoluteFile)
 
-    val bootDeps =
-      ManagementFactory.getRuntimeMXBean
-        .getBootClassPath.split(":")
-        .map(new File(_)).toSet
+    val bootDeps = ManagementFactory.getRuntimeMXBean.getBootClassPath.split(sys.props("path.separator")).map(toFile)
 
     val usedDeps = analysis.relations.allLibraryDeps -- bootDeps
     //println("used: " + usedDeps)
@@ -152,22 +143,18 @@ object ZincRunner {
     // dependencies that we directly reference but didn't explicitly list
     // as a compile time dep (and were potentially needed on the compilation
     // classpath, transitively, to keep scalac happy)
-    val illicitlyUsedDeps =
-      usedDeps -- allowedDeps -- scalaInstance.allJars.map(toAbsolute)
+    val illicitlyUsedDeps = usedDeps -- allowedDeps -- scalaInstance.allJars.map(toAbsolute)
 
-    if (!illicitlyUsedDeps.isEmpty) {
-      illicitlyUsedDeps.foreach(dep =>
-        println(s"illicitly used dep: $dep"))
-      System.exit(-1)
+    if (illicitlyUsedDeps.nonEmpty) {
+      illicitlyUsedDeps.foreach(dep => logger.error(() => s"illicitly used dep: $dep"))
+      sys.exit(-1)
     }
 
     // dependencies we said we'd use... but didn't
-    val unusedDeps =
-      allowedDeps -- usedDeps
-    if (!unusedDeps.isEmpty) {
-      unusedDeps.foreach(dep =>
-        println(s"unused dep: $dep"))
-      System.exit(-1)
+    val unusedDeps = allowedDeps -- usedDeps
+    if (unusedDeps.nonEmpty) {
+      unusedDeps.foreach(dep => logger.error(() => s"unused dep: $dep"))
+      sys.exit(-1)
     }
 
     val mains =
@@ -194,8 +181,6 @@ object ZincRunner {
     }
 
     jarCreator.execute()
-
-    // end yolo for real
     }
     }
 
@@ -220,18 +205,17 @@ final case class AnxScalaInstance(
   lazy val actualVersion: String = {
     val stream = loader.getResourceAsStream("compiler.properties")
     try {
-      val props = new java.util.Properties
+      val props = new Properties
       props.load(stream)
       props.getProperty("version.number")
     } finally stream.close()
   }
 
-  private[this] def unused: Nothing = sys.error("deprecated/unused")
-
   lazy val libraryJar: File =
     allJars
       .find(f => f.getName.endsWith(".jar") && f.getName.startsWith("scala-library"))
       .orNull
+
   lazy val compilerJar: File =
     allJars
       .find(f => f.getName.endsWith(".jar") && f.getName.startsWith("scala-compiler"))
