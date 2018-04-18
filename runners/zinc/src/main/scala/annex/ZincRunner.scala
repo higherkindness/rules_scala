@@ -1,5 +1,7 @@
 package annex
 
+import annex.worker.WorkerMain
+
 import sbt.internal.inc.Analysis
 import sbt.internal.inc.AnalyzingCompiler
 import sbt.internal.inc.CompileFailed
@@ -9,6 +11,7 @@ import sbt.internal.inc.Locate
 import sbt.internal.inc.LoggedReporter
 import sbt.internal.inc.ZincUtil
 
+import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
 
 import xsbti.Logger
@@ -41,16 +44,21 @@ import java.util.Optional
 import java.util.Properties
 import java.util.function.Supplier
 
-object ZincRunner {
+object ZincRunner extends WorkerMain[Env] {
 
   val toFile: String => File = s => new File(s)
   val toAbsolute: File => File = f => new File(f.getAbsolutePath)
   val toAbsoluteFile: String => File = toFile andThen toAbsolute
 
-  def main(args: Array[String]): Unit =
-    AnxWorker.main(process)(args)
+  protected[this] def init(args: Option[Array[String]]) = Env.read(args.map(_.toSeq))
 
-  def process(options: Options): Unit = {
+  protected[this] def work(env: Env, args: Array[String]) = {
+    val finalArgs = args.flatMap {
+      case arg if arg.startsWith("@") => Files.readAllLines(Paths.get(arg.tail)).asScala
+      case arg => Seq(arg)
+    }
+    val options = Options.read(finalArgs.toList, env)
+
     Files.createDirectories(Paths.get(options.outputDir))
 
     val persistence = options.persistenceDir.fold[Persistence](NullPersistence) { dir =>
@@ -59,9 +67,7 @@ object ZincRunner {
       new FilePersistence(rootDir.resolve(path), Paths.get(options.outputDir))
     }
 
-    val scalaInstance = AnxScalaInstance(
-      options.scalaVersion,
-      options.compilerClasspath.map(toFile).toArray)
+    val scalaInstance = AnxScalaInstance(options.scalaVersion, options.compilerClasspath.map(toFile).toArray)
 
     val compilerBridgeJar = new File(options.compilerBridge)
 
@@ -70,11 +76,7 @@ object ZincRunner {
     val scalaCompiler: AnalyzingCompiler =
       ZincUtil.scalaCompiler(scalaInstance, compilerBridgeJar)
 
-    val compilers: Compilers = ZincUtil.compilers(
-      scalaInstance,
-      ClasspathOptionsUtil.boot,
-      None,
-      scalaCompiler)
+    val compilers: Compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
     val compileOptions: CompileOptions =
       CompileOptions.create
@@ -83,12 +85,14 @@ object ZincRunner {
           Array.concat(
             Array(toFile(options.outputDir)),
             options.compilationClasspath.map(toFile).toArray,
-            options.compilerClasspath.map(toFile).toArray)) // err??
+            options.compilerClasspath.map(toFile).toArray
+          )
+        ) // err??
         .withClassesDirectory(new File(options.outputDir))
-        .withScalacOptions(
-          options.pluginsClasspath.map(p => s"-Xplugin:${p}").toArray)
+        .withScalacOptions(options.pluginsClasspath.map(p => s"-Xplugin:${p}").toArray)
 
-    val loadedContents = try persistence.load() catch {
+    val loadedContents = try persistence.load()
+    catch {
       case NonFatal(e) =>
         logger.warn(() => "Failed to load analysis: $e")
         None
@@ -103,11 +107,10 @@ object ZincRunner {
     val compilerCache = new FreshCompilerCache
     val incOptions = IncOptions.create()
 
-    val setup: Setup = Setup.create(
-      lookup, skip, null, compilerCache, incOptions, reporter, Optional.empty(), Array.empty)
+    val setup: Setup =
+      Setup.create(lookup, skip, null, compilerCache, incOptions, reporter, Optional.empty(), Array.empty)
 
-    val inputs: Inputs = Inputs.of(
-      compilers, compileOptions, setup, previousResult)
+    val inputs: Inputs = Inputs.of(compilers, compileOptions, setup, previousResult)
 
     val compiler: IncrementalCompilerImpl = new IncrementalCompilerImpl()
     val compileResult: CompileResult =
@@ -122,7 +125,8 @@ object ZincRunner {
 
     val analysisContents = AnalysisContents.create(compileResult.analysis, compileResult.setup)
 
-    try persistence.save(analysisContents) catch {
+    try persistence.save(analysisContents)
+    catch {
       case NonFatal(e) => logger.warn(() => "Failed to save analysis: $e")
     }
 
@@ -158,8 +162,7 @@ object ZincRunner {
     }
 
     val mains =
-      analysis
-        .infos.allInfos.values.toList
+      analysis.infos.allInfos.values.toList
         .flatMap(_.getMainClasses.toList)
         .sorted
 
@@ -181,8 +184,10 @@ object ZincRunner {
     }
 
     jarCreator.execute()
-    }
-    }
+
+    env
+  }
+}
 
 final class AnxPerClasspathEntryLookup extends PerClasspathEntryLookup {
   override def analysis(classpathEntry: File): Optional[CompileAnalysis] =

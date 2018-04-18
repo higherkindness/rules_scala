@@ -1,0 +1,26 @@
+options:
+  languages:
+    - java
+    - scala:2.12.4
+  transitivity: deps
+  namePrefix: scalafmt_
+  versionConflictPolicy: highest
+  resolvers:
+    - id: central
+      type: default
+      url: http://central.maven.org/maven2/
+    - id: scalameta
+      type: default
+      url: https://dl.bintray.com/scalameta/maven/
+
+dependencies:
+
+  com.geirsson:
+    scalafmt-core:
+      lang: scala
+      version: 1.2.0
+
+  net.sourceforge.argparse4j:
+    argparse4j:
+      lang: java
+      version: 0.8.1

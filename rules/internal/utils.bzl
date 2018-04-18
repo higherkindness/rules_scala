@@ -71,7 +71,7 @@ def write_launcher(
         substitutions = {
             "%classpath%": classpath,
             "%java_start_class%": main_class,
-            "%javabin%": "JAVABIN=${{RUNPATH}}{}".format(ctx.executable._java.short_path),
+            "%javabin%": "JAVABIN=\"$JAVA_RUNFILES/{}/{}\"".format(ctx.workspace_name, ctx.executable._java.short_path),
             "%jvm_flags%": jvm_flags,
             "%needs_runfiles%": "1" if runfiles_enabled else "",
             "%runfiles_manifest_only%": "1" if runfiles_enabled else "",

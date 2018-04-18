@@ -1,0 +1,2 @@
+> bazel test :formatted
+-> bazel test :unformatted

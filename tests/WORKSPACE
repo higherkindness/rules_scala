@@ -10,17 +10,9 @@ local_repository(
     path = "../",
 )
 
-load("@rules_scala_annex//rules:workspace.bzl", "annex_scala_repositories")
+load("@rules_scala_annex//rules:workspace.bzl", "annex_scala_repositories", "scalafmt_default_config")
 
 register_toolchains("@rules_scala_annex//runners/common:configurable_runner_toolchain")
-
-# todo: migrate this loading into annex
-load(
-    "@rules_scala_annex//3rdparty:workspace.bzl",
-    annex_maven_dependencies = "maven_dependencies",
-)
-
-annex_maven_dependencies()
 
 annex_scala_repositories(
     name = "scalas",
@@ -31,6 +23,8 @@ annex_scala_repositories(
         ],
     },
 )
+
+scalafmt_default_config()
 
 load("//3rdparty:workspace.bzl", "maven_dependencies")
 
