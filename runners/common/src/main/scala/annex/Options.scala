@@ -1,7 +1,7 @@
 package annex
 
 final case class Env(
-  isWorker  : Boolean,
+  isWorker: Boolean,
   extraFlags: List[String]
 )
 
@@ -14,19 +14,19 @@ final case class TestOptions(
 )
 
 final case class Options(
-    verbose: Boolean,
-    persistenceDir: Option[String],
-    outputJar: String,
-    outputDir: String,
-    scalaVersion: String,
-    compilerClasspath: List[String],
-    compilerBridge: String,
-    pluginsClasspath: List[String],
-    sources: List[String],
-    compilationClasspath: List[String],
-    allowedClasspath: List[String],
-    label: String,
-    analysisPath: String,
+  verbose: Boolean,
+  persistenceDir: Option[String],
+  outputJar: String,
+  outputDir: String,
+  scalaVersion: String,
+  compilerClasspath: List[String],
+  compilerBridge: String,
+  pluginsClasspath: List[String],
+  sources: List[String],
+  compilationClasspath: List[String],
+  allowedClasspath: List[String],
+  label: String,
+  analysisPath: String,
 )
 
 object Options {
@@ -65,12 +65,12 @@ object Options {
       case _         => ???
     })
 
-  private def readOption[A](
-      f: State[List[String], A]): State[List[String], Option[A]] =
+  private def readOption[A](f: State[List[String], A]): State[List[String], Option[A]] =
     readBoolean.flatMap(
       hasIt =>
         if (hasIt) f.map(Some(_))
-        else State.pure(None))
+        else State.pure(None)
+    )
 
   private val readTestOptions: State[List[String], TestOptions] =
     for {
@@ -80,7 +80,7 @@ object Options {
   private val readOptions: State[List[String], Options] =
     for {
       verbose <- readBoolean
-      persistenceDir       <- readString
+      persistenceDir <- readString
       outputJar <- readString
       outputDir <- readString
       scalaVersion <- readString
@@ -90,35 +90,38 @@ object Options {
       sources <- readStringList
       compilationClasspath <- readStringList
       allowedClasspath <- readStringList
-      label                <- readString
+      label <- readString
       analysisPath <- readString
     } yield {
       // TODO: why do quotes appear?
       val realPersistenceDir = persistenceDir.replace("'", "")
-      Options(verbose,
-              if (realPersistenceDir.nonEmpty) Some(realPersistenceDir) else None,
-              outputJar,
-              outputDir,
-              scalaVersion,
-              compilerClasspath,
-              compilerBridge,
-              pluginsClasspath,
-              sources,
-              compilationClasspath,
-              allowedClasspath,
-              label.tail,
-              analysisPath)
+      Options(
+        verbose,
+        if (realPersistenceDir.nonEmpty) Some(realPersistenceDir) else None,
+        outputJar,
+        outputDir,
+        scalaVersion,
+        compilerClasspath,
+        compilerBridge,
+        pluginsClasspath,
+        sources,
+        compilationClasspath,
+        allowedClasspath,
+        label.tail,
+        analysisPath
+      )
     }
 
   def read(args: List[String], env: Env): Options = {
     val options = {
-     val original = readOptions.run(args)._2
-     val verbose = if (env.extraFlags.contains("--verbose")) Some(true) else None
-     val persistenceDir = env.extraFlags.map(_.split("=", 2)).collectFirst { case Array("--persistenceDir", dir) => Some(dir) }
-     original.copy(
-       verbose = verbose.getOrElse(original.verbose),
-       persistenceDir = persistenceDir.getOrElse(original.persistenceDir)
-     )
+      val original = readOptions.run(args)._2
+      val verbose = if (env.extraFlags.contains("--verbose")) Some(true) else None
+      val persistenceDir =
+        env.extraFlags.map(_.split("=", 2)).collectFirst { case Array("--persistenceDir", dir) => Some(dir) }
+      original.copy(
+        verbose = verbose.getOrElse(original.verbose),
+        persistenceDir = persistenceDir.getOrElse(original.persistenceDir)
+      )
     }
     if (options.verbose) {
       println("env:")

@@ -11,7 +11,8 @@ import java.nio.file.SimpleFileVisitor
 
 class CopyFileVisitor(source: Path, target: Path) extends SimpleFileVisitor[Path] {
   override def preVisitDirectory(directory: Path, attributes: BasicFileAttributes) = {
-    try Files.createDirectory(target.resolve(source.relativize(directory))) catch { case _: FileAlreadyExistsException => }
+    try Files.createDirectory(target.resolve(source.relativize(directory)))
+    catch { case _: FileAlreadyExistsException => }
     FileVisitResult.CONTINUE
   }
 

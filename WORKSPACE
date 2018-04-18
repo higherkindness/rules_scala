@@ -23,3 +23,5 @@ annex_scala_repositories(
         ],
     },
 )
+
+scalafmt_default_config(".scalafmt.conf")

@@ -15,7 +15,12 @@ basic_scala_binary(
     ],
 )
 
-load("//rules:build.bzl", "annex_scala_runner_toolchain")
+load("//rules:build.bzl", "annex_scala_format_test", "annex_scala_runner_toolchain")
+
+annex_scala_format_test(
+    name = "format",
+    srcs = glob(["**/*.scala"]),
+)
 
 annex_scala_runner_toolchain(
     name = "toolchain_implementation",

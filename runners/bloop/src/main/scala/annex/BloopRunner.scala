@@ -67,9 +67,7 @@ object BloopRunner extends WorkerMain[Env] {
 
     Files.createDirectories(Paths.get(options.outputDir))
 
-    val scalaInstance = AnxScalaInstance(
-      options.scalaVersion,
-      options.compilerClasspath.map(toFile).toArray)
+    val scalaInstance = AnxScalaInstance(options.scalaVersion, options.compilerClasspath.map(toFile).toArray)
 
     val compilerBridgeJar = new File(options.compilerBridge)
 
@@ -78,24 +76,18 @@ object BloopRunner extends WorkerMain[Env] {
     val scalaCompiler: AnalyzingCompiler =
       ZincUtil.scalaCompiler(scalaInstance, compilerBridgeJar)
 
-    val compilers: Compilers = ZincUtil.compilers(
-      scalaInstance,
-      None,
-      scalaCompiler)
+    val compilers: Compilers = ZincUtil.compilers(scalaInstance, None, scalaCompiler)
 
     val compileOptions: CompileOptions =
       CompileOptions.create
         .withSources(options.sources.map(toAbsoluteFile).toArray)
         .withClasspath(
-          Array.concat(
-            options.compilationClasspath.map(toFile).toArray,
-            options.compilerClasspath.map(toFile).toArray)) // err??
+          Array.concat(options.compilationClasspath.map(toFile).toArray, options.compilerClasspath.map(toFile).toArray)
+        ) // err??
         .withClassesDirectory(new File(options.outputDir))
-        .withScalacOptions(
-          options.pluginsClasspath.map(p => s"-Xplugin:${p}").toArray)
+        .withScalacOptions(options.pluginsClasspath.map(p => s"-Xplugin:${p}").toArray)
 
-    val previousResult: PreviousResult = PreviousResult.of(
-      Optional.empty[CompileAnalysis], Optional.empty[MiniSetup])
+    val previousResult: PreviousResult = PreviousResult.of(Optional.empty[CompileAnalysis], Optional.empty[MiniSetup])
 
     val skip = false
     val empty = Array.empty[T2[String, String]]
@@ -106,11 +98,9 @@ object BloopRunner extends WorkerMain[Env] {
     val incOptions = IncOptions.create()
     val progress = Optional.empty[CompileProgress]
 
-    val setup: Setup = Setup.create(
-      lookup, skip, cacheFile, compilerCache, incOptions, reporter, progress, empty)
+    val setup: Setup = Setup.create(lookup, skip, cacheFile, compilerCache, incOptions, reporter, progress, empty)
 
-    val inputs: Inputs = Inputs.of(
-      compilers, compileOptions, setup, previousResult)
+    val inputs: Inputs = Inputs.of(compilers, compileOptions, setup, previousResult)
 
     val compiler: IncrementalCompilerImpl = new IncrementalCompilerImpl()
     val compileResult: CompileResult =
@@ -125,17 +115,17 @@ object BloopRunner extends WorkerMain[Env] {
       }
 
     val analysis: Analysis =
-      compileResult
-        .analysis.asInstanceOf[Analysis]
+      compileResult.analysis.asInstanceOf[Analysis]
 
     val relations = analysis.relations
     val compilationDeps = options.compilationClasspath.toSet.map(toAbsoluteFile)
     val allowedDeps = options.allowedClasspath.toSet.map(toAbsoluteFile)
 
     val bootDeps =
-      ManagementFactory.getRuntimeMXBean
-        .getBootClassPath.split(":")
-        .map(new File(_)).toSet
+      ManagementFactory.getRuntimeMXBean.getBootClassPath
+        .split(":")
+        .map(new File(_))
+        .toSet
 
     val usedDeps = relations.allLibraryDeps -- bootDeps
     //println("used: " + usedDeps)
@@ -149,8 +139,7 @@ object BloopRunner extends WorkerMain[Env] {
       usedDeps -- allowedDeps -- scalaInstance.allJars.map(toAbsolute)
 
     if (!illicitlyUsedDeps.isEmpty) {
-      illicitlyUsedDeps.foreach(dep =>
-        println(s"illicitly used dep: $dep"))
+      illicitlyUsedDeps.foreach(dep => println(s"illicitly used dep: $dep"))
       System.exit(-1)
     }
 
@@ -158,14 +147,12 @@ object BloopRunner extends WorkerMain[Env] {
     val unusedDeps =
       allowedDeps -- usedDeps
     if (!unusedDeps.isEmpty) {
-      unusedDeps.foreach(dep =>
-        println(s"unused dep: $dep"))
+      unusedDeps.foreach(dep => println(s"unused dep: $dep"))
       System.exit(-1)
     }
 
     val mains =
-      analysis
-        .infos.allInfos.values.toList
+      analysis.infos.allInfos.values.toList
         .flatMap(_.getMainClasses.toList)
         .sorted
 
@@ -192,7 +179,7 @@ object BloopRunner extends WorkerMain[Env] {
           //println(">> " + defn)
       }
     }
-    */
+     */
 
     val jarCreator = new JarCreator(options.outputJar)
     jarCreator.addDirectory(options.outputDir)
@@ -216,14 +203,16 @@ object BloopRunner extends WorkerMain[Env] {
     className: String
   ): Option[Framework] =
     try {
-      Class.forName(className, true, loader)
-        .getDeclaredConstructor().newInstance() match {
-          case framework: Framework =>
-            Some(framework)
-          case other =>
-            println(s"Framework not supported: $className")
-            None
-        }
+      Class
+        .forName(className, true, loader)
+        .getDeclaredConstructor()
+        .newInstance() match {
+        case framework: Framework =>
+          Some(framework)
+        case other =>
+          println(s"Framework not supported: $className")
+          None
+      }
     } catch {
       case _: ClassNotFoundException => None
       case ex: Throwable =>
@@ -246,8 +235,8 @@ object BloopRunner extends WorkerMain[Env] {
         val companions = ac.api
         val all =
           Seq(companions.classApi, companions.objectApi) ++
-        companions.classApi.structure.declared ++ companions.classApi.structure.inherited ++
-        companions.objectApi.structure.declared ++ companions.objectApi.structure.inherited
+            companions.classApi.structure.declared ++ companions.classApi.structure.inherited ++
+            companions.objectApi.structure.declared ++ companions.objectApi.structure.inherited
 
         all
       }
