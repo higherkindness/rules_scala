@@ -8,6 +8,7 @@ basic_scala_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//runners/common",
+        "//runners/worker",
         "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "@scala_annex_org_scala_sbt_test_interface",
         "@scala_annex_org_scala_sbt_zinc_2_12",

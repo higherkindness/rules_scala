@@ -5,6 +5,10 @@ final case class Env(
   extraFlags: List[String]
 )
 
+object Env {
+  def read(args: Option[Seq[String]]) = args.fold(Env(false, Nil))(args => Env(true, args.toList))
+}
+
 final case class TestOptions(
   frameworks: List[String]
 )

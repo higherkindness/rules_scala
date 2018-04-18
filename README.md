@@ -17,6 +17,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [ ] buildozer suggestions to fix unused dependency errors
 - [ ] IntelliJ support
 - [ ] tests for IntelliJ support
+- [x] scalafmt support
 
 ### rules_scala compatibility
 
@@ -64,6 +65,20 @@ Don't.
 
 Eventually (we hope) useful and proven functionality will wind up in [bazelbuild/rules_scala](https://github.com/bazelbuild/rules_scala). Use rules_scala.
 
+### WORKSPACE
+
+```python
+http_archive(
+  name = "rules_scala_annex",
+  sha256 = "<hash>",
+  strip_prefix = "rules_scala_annex-<commit>",
+  url = "https://github.com/andyscott/rules_scala_annex/archive/<commit>.zip",
+)
+
+load("@rules_scala_annex//rules:workspace.bzl", "annex_scala_repositories")
+annex_scala_repositories()
+```
+
 ### Tests
 
 annex_scala_test supports
@@ -105,6 +120,32 @@ $ bazel test --test_arg=--verbosity=LOW
 
 # Generate local script to run tests
 $ bazel run --script_path=script :mytest
+```
+
+### Scalafmt
+
+Create .scalafmt.conf at the repo root (may be empty). And add to the WORKSPACE
+
+```python
+load("@rules_scala_annex//rules:workspace.bzl", "scalafmt_default")
+scalafmt_default()
+```
+
+And in BUILD
+
+```python
+load("@rules_scala_annex//rules:build.bzl", "annex_scala_format_test")
+annex_scala_format_test(
+    name = "format",
+    srcs = glob(["**/*.scala"]),
+)
+```
+
+```
+# format files
+$ bazel run :format "$(bazel info | grep workspace: | cut -d' ' -f2)"
+# check format
+$ bazel test :format
 ```
 
 ## Contributing

@@ -3,6 +3,8 @@ load(
     "annex_configure_scala_repository_implementation",
 )
 load("@rules_scala_annex//rules:internal/utils.bzl", "safe_name")
+load("//3rdparty:workspace.bzl", "maven_dependencies")
+load("//3rdparty:scalafmt_workspace.bzl", scalafmt_maven_dependencies = "maven_dependencies")
 
 annex_configure_scala_repository = repository_rule(
     implementation = annex_configure_scala_repository_implementation,
@@ -20,6 +22,9 @@ def annex_scala_repositories(
             "typelevel_scala": "@compiler_bridge_{binary_version}//jar",
             "dotty": "@compiler_bridge_2_12//jar",
         }):
+    maven_dependencies()
+    scalafmt_maven_dependencies()
+
     for prefix, raw_versions in versions.items():
         for raw_version in raw_versions:
             organization, version = raw_version.split(":")
@@ -83,3 +88,12 @@ def annex_scala_repositories(
         name = "util_interface",
         artifact = "org.scala-sbt:util-interface:1.1.3",
     )
+
+def scalafmt_default_config(path = ".scalafmt.conf"):
+    build = []
+    build.append("filegroup(")
+    build.append("    name = \"config\",")
+    build.append("    srcs = [\"{}\"],".format(path))
+    build.append("    visibility = [\"//visibility:public\"],")
+    build.append(")")
+    native.new_local_repository(name = "scalafmt_default", build_file_content = "\n".join(build), path = "")

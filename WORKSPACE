@@ -11,11 +11,7 @@ http_archive(
     urls = ["https://github.com/google/protobuf/archive/v3.5.2.zip"],
 )
 
-load("//3rdparty:workspace.bzl", "maven_dependencies")
-
-maven_dependencies()
-
-load("//rules:workspace.bzl", "annex_scala_repositories")
+load("//rules:workspace.bzl", "annex_scala_repositories", "scalafmt_default_config")
 
 register_toolchains("//runners/common:configurable_runner_toolchain")
 

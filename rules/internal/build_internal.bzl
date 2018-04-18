@@ -174,9 +174,9 @@ def _runner_common(ctx):
             universal_exports + _collect_crossed_deps(configuration.version, ctx.attr.exports),
         )
 
-        #print("%s : %s" % (ctx.label.name, splugin.transitive_runtime_jars))
-        #print("%s : %s" % (ctx.label.name, sdep.compile_jars))
-        #print("%s : %s" % (ctx.label.name, sexport.compile_jars))
+        #annex_scala_format_test"%s : %s" % (ctx.label.name, splugin.transitive_runtime_jars))
+        #annex_scala_format_test"%s : %s" % (ctx.label.name, sdep.compile_jars))
+        #annex_scala_format_test"%s : %s" % (ctx.label.name, sexport.compile_jars))
 
         classes_directory = ctx.actions.declare_directory(
             "%s/classes/%s" % (ctx.label.name, configuration.version),
@@ -305,34 +305,22 @@ def annex_scala_binary_implementation(ctx):
     java_info = res.scala_info.java_infos[0][1]
     mains_file = res.mains_files.to_list()[0]
 
-    launcher = ctx.new_file("%s_launcher.sh" % ctx.label.name)
+    launcher = ctx.new_file("%s.sh" % ctx.label.name)
     write_launcher(
         ctx,
         launcher,
         java_info.transitive_runtime_deps,
-        main_class = "",
+        main_class = "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
         jvm_flags = [],
-    )
-
-    prelauncher = ctx.new_file("%s.sh" % ctx.label.name)
-    ctx.actions.write(
-        output = prelauncher,
-        content = strip_margin("""
-          |{launcher} $(head -1 {mains_file}) "$@"
-          |""".format(
-            launcher = launcher.short_path,
-            mains_file = mains_file.short_path,
-        )),
-        is_executable = True,
     )
 
     return [
         res.scala_info,
         DefaultInfo(
-            executable = prelauncher,
+            executable = launcher,
             files = res.files,
             runfiles = ctx.runfiles(
-                files = [launcher, mains_file],
+                files = [mains_file],
                 transitive_files = depset(
                     order = "default",
                     direct = [ctx.executable._java],
@@ -382,3 +370,31 @@ def annex_scala_test_implementation(ctx):
         )
         result.append(test_info)
     return result
+
+def annex_scala_format_test_implementation(ctx):
+    files = []
+    runner_inputs, _, runner_manifests = ctx.resolve_command(tools = [ctx.attr._format])
+
+    manifest_content = []
+    for src in ctx.files.srcs:
+        file = ctx.actions.declare_file(src.short_path)
+        files.append(file)
+        ctx.actions.run(
+            arguments = ["--config", ctx.file.config.path, src.path, file.path],
+            executable = ctx.executable._format,
+            outputs = [file],
+            input_manifests = runner_manifests,
+            inputs = runner_inputs + [ctx.file.config, src],
+        )
+        manifest_content.append("{} {}".format(src.short_path, file.short_path))
+
+    manifest = ctx.actions.declare_file("manifest.txt")
+    ctx.actions.write(manifest, "\n".join(manifest_content) + "\n")
+
+    ctx.actions.expand_template(template = ctx.file._runner, output = ctx.outputs.runner, substitutions = {"%workspace%": ctx.workspace_name, "%manifest%": manifest.short_path}, is_executable = True)
+
+    return DefaultInfo(
+        executable = ctx.outputs.runner,
+        files = depset([ctx.outputs.runner, manifest] + files),
+        runfiles = ctx.runfiles(files = [manifest] + files + ctx.files.srcs),
+    )

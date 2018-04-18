@@ -30,6 +30,6 @@ basic_scala_library(
     scala = "@scalas//:scala_2_12_4",
     visibility = ["//visibility:public"],
     deps = [
-        "//third_party/bazel/src/main/protobuf:worker_protocol_java_proto",
+        "//runners/worker",
     ],
 )

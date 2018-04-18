@@ -9,6 +9,7 @@ load(
     "annex_scala_binary_private_attributes",
     "annex_scala_test_implementation",
     "annex_scala_test_private_attributes",
+    "annex_scala_format_test_implementation",
 )
 load(
     "@rules_scala_annex//rules:providers.bzl",
@@ -149,4 +150,25 @@ annex_scala_test = rule(
     test = True,
     executable = True,
     outputs = {},
+)
+
+annex_scala_format_test = rule(
+    implementation = annex_scala_format_test_implementation,
+    attrs = {
+        "_format": attr.label(
+            cfg = "host",
+            default = "@rules_scala_annex//runners/scalafmt:runner",
+            executable = True,
+        ),
+        "_runner": attr.label(
+            allow_single_file = True,
+            default = "@rules_scala_annex//rules/internal:format",
+        ),
+        "config": attr.label(allow_single_file = [".conf"], default = "@scalafmt_default//:config"),
+        "srcs": attr.label_list(allow_files = [".scala"]),
+    },
+    test = True,
+    outputs = {
+        "runner": "%{name}-format",
+    },
 )
