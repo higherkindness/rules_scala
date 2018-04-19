@@ -8,6 +8,15 @@ ScalaConfiguration = provider(
     },
 )
 
+BasicScalaConfiguration = provider(
+    doc = "Provides access to the Scala compiler",
+    fields = {
+        "version": "the Scala full version",
+        "compiler_classpath": "the compiler classpath",
+        "runtime_classpath": "the minimal runtime classpath",
+    },
+)
+
 ScalaInfo = provider(
     doc = "Provider for cross versioned scala outputs",
     fields = {

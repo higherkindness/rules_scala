@@ -17,19 +17,19 @@ annex_scala_repositories()
 annex_scala_repository(
     "scala_2_11",
     ("org.scala-lang", "2.11.11"),
-    "@compiler_bridge_2_11//jar",
+    "@compiler_bridge_2_11//:src",
 )
 
 annex_scala_repository(
     "scala_2_12",
     ("org.scala-lang", "2.12.4"),
-    "@compiler_bridge_2_12//jar",
+    "@compiler_bridge_2_12//:src",
 )
 
 annex_scala_repository(
     "typelevel_2_12",
     ("org.typelevel", "2.12.1"),
-    "@compiler_bridge_2_12//jar",
+    "@compiler_bridge_2_12//:src",
 )
 
 register_toolchains("@rules_scala_annex//runners/common:configurable_runner_toolchain")

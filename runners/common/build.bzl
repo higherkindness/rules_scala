@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:providers.bzl", "ScalaConfiguration")
+load("@rules_scala_annex//rules:providers.bzl", "BasicScalaConfiguration")
 load("@rules_scala_annex//rules:internal/utils.bzl", "strip_margin")
 
 def basic_scala_library_implementation(ctx):
@@ -9,7 +9,7 @@ def basic_scala_library_implementation(ctx):
 
     output = ctx.actions.declare_file("%s.jar" % name)
 
-    scala = ctx.attr.scala[ScalaConfiguration]
+    scala = ctx.attr.scala[BasicScalaConfiguration]
 
     s_dep = java_common.merge([
         dep[JavaInfo]
@@ -26,8 +26,6 @@ def basic_scala_library_implementation(ctx):
     compiler_classpath_str = ":".join([file.path for file in scala.compiler_classpath])
     compile_classpath_str = ":".join([file.path for file in (compile_deps + scala.runtime_classpath)])
 
-    srcs_str = " ".join([file.path for file in ctx.files.srcs])
-
     inputs = depset()
     inputs += [jar]
     inputs += [java]
@@ -38,31 +36,30 @@ def basic_scala_library_implementation(ctx):
     inputs += compile_deps
 
     ctx.actions.run_shell(
-        progress_message = "compiling annex runner",
         inputs = inputs,
         outputs = [output],
         command = strip_margin(
             """
-          |#!/bin/bash
+          |set -x
+          |set -eo pipefail
           |
-          |mkdir bin
+          |mkdir tmp/classes
           |
           |{java} \\
           |  -cp {compiler_classpath} \\
           |  scala.tools.nsc.Main \\
           |  -cp {compile_classpath} \\
-          |  -d bin \\
-          |  {srcs} || exit $?
+          |  -d tmp/classes \\
+          |  {srcs}
           |
-          |{jar_creator} '{output}' bin 2> /dev/null
-          |
+          |{jar_creator} {output} tmp/classes 2> /dev/null
           |""".format(
                 jar = jar.path,
                 java = java.path,
                 jar_creator = jar_creator.path,
                 compiler_classpath = compiler_classpath_str,
                 compile_classpath = compile_classpath_str,
-                srcs = srcs_str,
+                srcs = " ".join([file.path for file in ctx.files.srcs]),
                 output = output.path,
             ),
         ),
@@ -86,7 +83,7 @@ basic_scala_library = rule(
         "deps": attr.label_list(),
         "scala": attr.label(
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [BasicScalaConfiguration],
         ),
         "_java": attr.label(
             default = Label("@bazel_tools//tools/jdk:java"),

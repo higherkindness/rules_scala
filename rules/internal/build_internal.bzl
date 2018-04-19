@@ -1,6 +1,7 @@
 load(":internal/utils.bzl", "strip_margin", "write_launcher")
 load(
     ":providers.bzl",
+    "BasicScalaConfiguration",
     "ScalaConfiguration",
     "ScalaInfo",
 )
@@ -14,118 +15,20 @@ def annex_scala_runner_toolchain_implementation(ctx):
         runner = ctx.attr.runner,
     )]
 
-def annex_configure_scala_implementation(ctx):
-    compiler_bridge = _compile_compiler_bridge(
-        ctx,
-        compiler_classpath = ctx.files.compiler_classpath,
-        compiler_bridge_classpath = ctx.files.compiler_bridge_classpath,
-        compiler_bridge_sources_jar = ctx.attr.compiler_bridge.java.source_jars.to_list()[0],
-    )
-
-    return [ScalaConfiguration(
+def annex_configure_basic_scala_implementation(ctx):
+    return [BasicScalaConfiguration(
         version = ctx.attr.version,
-        compiler_bridge = compiler_bridge,
         compiler_classpath = ctx.files.compiler_classpath,
         runtime_classpath = ctx.files.runtime_classpath,
     )]
 
-annex_configure_scala_private_attributes = {
-    "_java": attr.label(
-        default = Label("@bazel_tools//tools/jdk:java"),
-        executable = True,
-        cfg = "host",
-    ),
-    "_jar": attr.label(
-        default = Label("@bazel_tools//tools/jdk:jar"),
-        executable = True,
-        cfg = "host",
-    ),
-    "_jar_creator": attr.label(
-        default = Label("//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin"),
-        executable = True,
-        cfg = "host",
-    ),
-}
-
-def _compile_compiler_bridge(
-        ctx,
-        compiler_classpath,
-        compiler_bridge_classpath,
-        compiler_bridge_sources_jar,
-        suffix = None,
-        jar = None,
-        jar_creator = None,
-        java = None):
-    """
-    compiles the zinc compiler bridge for a specific version of Scala
-    """
-
-    if suffix == None:
-        suffix = ctx.label.name
-    if jar == None:
-        jar = ctx.executable._jar
-    if jar_creator == None:
-        jar_creator = ctx.executable._jar_creator
-    if java == None:
-        java = ctx.executable._java
-
-    compiler_bridge = ctx.actions.declare_file(
-        "compiler-bridge_%s.jar" % suffix,
-    )
-
-    compiler_classpath_str = ":".join([file.path for file in compiler_classpath])
-    compiler_bridge_classpath_str = ":".join([file.path for file in compiler_bridge_classpath])
-    compiler_bridge_classpath_str = compiler_classpath_str + ":" + compiler_bridge_classpath_str
-
-    inputs = depset()
-    inputs += [jar]
-    inputs += [java]
-    inputs += compiler_classpath
-    inputs += compiler_bridge_classpath
-    inputs += [compiler_bridge_sources_jar]
-    inputs += [ctx.executable._jar_creator]
-
-    ctx.actions.run_shell(
-        progress_message = "compiling zinc compiler bridge %s" % suffix,
-        inputs = inputs,
-        outputs = [compiler_bridge],
-        command = strip_margin(
-            """
-          |#!/bin/bash
-          |
-          |mkdir bridge_src
-          |mkdir bridge_bin
-          |
-          |pushd bridge_src
-          |../{jar} xf ../{compiler_bridge_sources_jar}
-          |popd
-          |
-          |{java} \\
-          |  -cp {compiler_classpath} \\
-          |  scala.tools.nsc.Main \\
-          |  -cp {compiler_bridge_classpath} \\
-          |  -d bridge_bin \\
-          |  `find bridge_src -name "*.scala"`
-          |
-          |{jar_creator} {out_file} bridge_bin 2> /dev/null
-          |
-          |""".format(
-                jar = jar.path,
-                jar_creator = jar_creator.path,
-                java = java.path,
-                compiler_bridge_sources_jar = compiler_bridge_sources_jar.path,
-                compiler_classpath = compiler_classpath_str,
-                compiler_bridge_classpath = compiler_bridge_classpath_str,
-                out_file = compiler_bridge.path,
-            ),
-        ),
-    )
-
-    return compiler_bridge
-
-    ###
-    ######
-    ###
+def annex_configure_scala_implementation(ctx):
+    return [ScalaConfiguration(
+        version = ctx.attr.version,
+        compiler_bridge = ctx.file.compiler_bridge,
+        compiler_classpath = ctx.files.compiler_classpath,
+        runtime_classpath = ctx.files.runtime_classpath,
+    )]
 
 def _filesArg(files):
     return ([str(len(files))] + [file.path for file in files])
