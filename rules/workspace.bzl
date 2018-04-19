@@ -9,48 +9,15 @@ load("//3rdparty:scalafmt_workspace.bzl", scalafmt_maven_dependencies = "maven_d
 annex_configure_scala_repository = repository_rule(
     implementation = annex_configure_scala_repository_implementation,
     attrs = {
-        "versions": attr.string_list_dict(),
-        "compiler_bridge_label_pattern": attr.string_dict(),
+        "compiler_bridge": attr.string(),
+        "organization": attr.string(),
+        "version": attr.string(),
     },
 )
 
-def annex_scala_repositories(
-        name,
-        versions,
-        compiler_bridge_label_pattern = {
-            "scala": "@compiler_bridge_{binary_version}//jar",
-            "typelevel_scala": "@compiler_bridge_{binary_version}//jar",
-            "dotty": "@compiler_bridge_2_12//jar",
-        }):
+def annex_scala_repositories():
     maven_dependencies()
     scalafmt_maven_dependencies()
-
-    for prefix, raw_versions in versions.items():
-        for raw_version in raw_versions:
-            organization, version = raw_version.split(":")
-            saniorganization = safe_name(organization)
-            saniversion = safe_name(version)
-
-            native.maven_jar(
-                name = "%s_scala_compiler_%s" % (saniorganization, saniversion),
-                artifact = "%s:scala-compiler:%s" % (organization, version),
-            )
-
-            native.maven_jar(
-                name = "%s_scala_library_%s" % (saniorganization, saniversion),
-                artifact = "%s:scala-library:%s" % (organization, version),
-            )
-
-            native.maven_jar(
-                name = "%s_scala_reflect_%s" % (saniorganization, saniversion),
-                artifact = "%s:scala-reflect:%s" % (organization, version),
-            )
-
-    annex_configure_scala_repository(
-        name = name,
-        versions = versions,
-        compiler_bridge_label_pattern = compiler_bridge_label_pattern,
-    )
 
     BAZEL_JAVA_LAUNCHER_VERSION = "0.11.1"
     java_stub_template_url = (
@@ -79,14 +46,28 @@ def annex_scala_repositories(
         artifact = "org.scala-sbt:compiler-bridge_2.12:1.1.3",
     )
 
+def annex_scala_repository(name, coordinates, compiler_bridge):
+    annex_configure_scala_repository(
+        name = name,
+        compiler_bridge = compiler_bridge,
+        version = coordinates[1],
+    )
+
+    organization, version = coordinates
+
     native.maven_jar(
-        name = "compiler_interface",
-        artifact = "org.scala-sbt:compiler-interface:1.1.3",
+        name = "{}_scala_compiler".format(name),
+        artifact = "%s:scala-compiler:%s" % (organization, version),
     )
 
     native.maven_jar(
-        name = "util_interface",
-        artifact = "org.scala-sbt:util-interface:1.1.3",
+        name = "{}_scala_library".format(name),
+        artifact = "%s:scala-library:%s" % (organization, version),
+    )
+
+    native.maven_jar(
+        name = "{}_scala_reflect".format(name),
+        artifact = "%s:scala-reflect:%s" % (organization, version),
     )
 
 def scalafmt_default_config(path = ".scalafmt.conf"):

@@ -55,7 +55,7 @@ object ZincRunner extends WorkerMain[Env] {
   protected[this] def work(env: Env, args: Array[String]) = {
     val finalArgs = args.flatMap {
       case arg if arg.startsWith("@") => Files.readAllLines(Paths.get(arg.tail)).asScala
-      case arg => Seq(arg)
+      case arg                        => Seq(arg)
     }
     val options = Options.read(finalArgs.toList, env)
 

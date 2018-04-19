@@ -4,7 +4,7 @@ basic_scala_binary(
     name = "runner",
     srcs = glob(["src/main/scala/**/*.scala"]),
     main_class = "annex.BloopRunner",
-    scala = "@scalas//:scala_2_12_4",
+    scala = "@scala_2_12",
     visibility = ["//visibility:public"],
     deps = [
         "//runners/common",

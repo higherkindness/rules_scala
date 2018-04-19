@@ -12,7 +12,7 @@ load(
 )
 
 # use the same fixed version as rules_scala
-_scala = ["@scalas//:scala_2_11_11"]
+_scala = "@scala_2_11"
 
 def scala_library(
         # bazel rule attributes

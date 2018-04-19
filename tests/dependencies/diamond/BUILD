@@ -1,9 +1,6 @@
 load("@rules_scala_annex//rules:compat.bzl", "annex_scala_library")
 
-scala = [
-    "@scalas//:scala_2_11_11",
-    "@scalas//:scala_2_12_4",
-]
+scala = "@scala_2_11"
 
 #
 # diamond dep DAG:

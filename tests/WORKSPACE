@@ -10,19 +10,23 @@ local_repository(
     path = "../",
 )
 
-load("@rules_scala_annex//rules:workspace.bzl", "annex_scala_repositories", "scalafmt_default_config")
+load("@rules_scala_annex//rules:workspace.bzl", "annex_scala_repository", "annex_scala_repositories", "scalafmt_default_config")
+
+annex_scala_repositories()
+
+annex_scala_repository(
+    "scala_2_11",
+    ("org.scala-lang", "2.11.11"),
+    "@compiler_bridge_2_11//jar",
+)
+
+annex_scala_repository(
+    "scala_2_12",
+    ("org.scala-lang", "2.12.4"),
+    "@compiler_bridge_2_12//jar",
+)
 
 register_toolchains("@rules_scala_annex//runners/common:configurable_runner_toolchain")
-
-annex_scala_repositories(
-    name = "scalas",
-    versions = {
-        "scala": [
-            "org.scala-lang:2.11.11",
-            "org.scala-lang:2.12.4",
-        ],
-    },
-)
 
 scalafmt_default_config()
 

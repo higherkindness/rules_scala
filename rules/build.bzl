@@ -40,9 +40,6 @@ Args:
   version:
     The full Scala version string, such as "2.12.5"
 
-  binary_version:
-    The binary Scala version string, such as "2.12"
-
   runtime_classpath:
     The full Scala runtime classpath for use in library, binary, and test rules;
     i.e. scala-library + scala-reflect + ...
@@ -63,7 +60,6 @@ annex_configure_scala = rule(
     implementation = annex_configure_scala_implementation,
     attrs = annex_configure_scala_private_attributes + {
         "version": attr.string(mandatory = True),
-        "binary_version": attr.string(mandatory = True),
         "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
         "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
         "compiler_bridge": attr.label(mandatory = True, providers = [JavaInfo]),
@@ -93,7 +89,8 @@ annex_scala_library = rule(
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
         "exports": attr.label_list(),
-        "scala": attr.label_list(
+        "scala": attr.label(
+            default = "@scala_default",
             mandatory = True,
             providers = [ScalaConfiguration],
         ),
@@ -111,7 +108,8 @@ annex_scala_binary = rule(
         "deps": attr.label_list(),
         "exports": attr.label_list(),
         "main_class": attr.string(),
-        "scala": attr.label_list(
+        "scala": attr.label(
+            default = "@scala_default",
             mandatory = True,
             providers = [ScalaConfiguration],
         ),
@@ -129,7 +127,8 @@ annex_scala_test = rule(
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
         "exports": attr.label_list(),
-        "scala": attr.label_list(
+        "scala": attr.label(
+            default = "@scala_default",
             mandatory = True,
             providers = [ScalaConfiguration],
         ),
