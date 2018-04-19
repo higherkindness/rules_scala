@@ -4,7 +4,7 @@ annex_scala_binary(
     name = "runner",
     srcs = glob(["src/main/scala/**/*.scala"]),
     main_class = "annex.scalafmt.ScalamftRunner",
-    scala = "@scala_2_12",
+    scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
         "//runners/worker",

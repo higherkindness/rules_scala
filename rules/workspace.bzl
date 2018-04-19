@@ -52,6 +52,11 @@ def annex_scala_repositories():
         url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.1.3/compiler-bridge_2.12-1.1.3-sources.jar",
     )
 
+    annex_scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
+
+    native.bind(name = "scala_annex_scala", actual = "@scala_annex_scala_2_12")
+    native.bind(name = "scala_annex_scala_basic", actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic")
+
 def annex_scala_repository(name, coordinates, compiler_bridge):
     annex_configure_scala_repository(
         name = name,

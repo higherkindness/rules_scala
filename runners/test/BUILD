@@ -3,7 +3,7 @@ load("//rules:build.bzl", "annex_scala_library")
 annex_scala_library(
     name = "runner",
     srcs = glob(["src/main/scala/**/*.scala"]),
-    scala = "@scala_2_12",
+    scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",

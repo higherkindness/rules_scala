@@ -40,7 +40,6 @@ def basic_scala_library_implementation(ctx):
         outputs = [output],
         command = strip_margin(
             """
-          |set -x
           |set -eo pipefail
           |
           |mkdir tmp/classes
@@ -82,6 +81,7 @@ basic_scala_library = rule(
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
         "scala": attr.label(
+            default = "@scala//:scala_basic",
             mandatory = True,
             providers = [BasicScalaConfiguration],
         ),

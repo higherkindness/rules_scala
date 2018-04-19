@@ -65,7 +65,9 @@ Don't.
 
 Eventually (we hope) useful and proven functionality will wind up in [bazelbuild/rules_scala](https://github.com/bazelbuild/rules_scala). Use rules_scala.
 
-### WORKSPACE
+### Basic
+
+WORKSPACE
 
 ```python
 http_archive(
@@ -77,6 +79,20 @@ http_archive(
 
 load("@rules_scala_annex//rules:workspace.bzl", "annex_scala_repositories")
 annex_scala_repositories()
+
+# Add a @scala repo, which is the default scala provider used by annex_scala_*
+annex_scala_repository("scala", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
+```
+
+BUILD
+
+```python
+load("@rules_scala_annex//rules:build.bzl", "annex_scala_library")
+
+annex_scala_libray(
+  name = "example",
+  src = glob(["**/*.scala"])
+)
 ```
 
 ### Tests

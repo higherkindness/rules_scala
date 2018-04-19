@@ -4,7 +4,7 @@ basic_scala_binary(
     name = "runner",
     srcs = glob(["src/main/scala/**/*.scala"]),
     main_class = "annex.ZincRunner",
-    scala = "@scala_2_12//:scala_2_12_basic",
+    scala = "//external:scala_annex_scala_basic",
     visibility = ["//visibility:public"],
     deps = [
         "//runners/common",
