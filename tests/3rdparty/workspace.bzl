@@ -1,5 +1,5 @@
 # Do not edit. bazel-deps autogenerates this file from dependencies.yaml.
-load("@rules_scala_annex//rules/bazel:jvm_external.bzl", "java_import_external")
+load("@rules_scala_annex//rules/external/third_party/bazel/tools/build_defs/repo:java.bzl", "java_import_external")
 load("@rules_scala_annex//rules:external.bzl", "scala_import_external")
 
 def declare_maven(hash):

@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:build.bzl", "annex_scala_binary")
+load("@rules_scala_annex//rules:scala.bzl", "annex_scala_binary")
 
 scala = "@scala_2_11"
 
