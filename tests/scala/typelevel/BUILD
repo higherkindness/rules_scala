@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:build.bzl", "annex_scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "annex_scala_library")
 
 annex_scala_library(
     name = "example",

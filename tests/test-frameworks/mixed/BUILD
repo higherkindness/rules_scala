@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:build.bzl", "annex_scala_test")
+load("@rules_scala_annex//rules:scala.bzl", "annex_scala_test")
 
 annex_scala_test(
     name = "mixed",

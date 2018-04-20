@@ -1,5 +1,5 @@
 load(
-    "@rules_scala_annex//rules:compat.bzl",
+    "@rules_scala_annex//rules/scala:compat.bzl",
     "scala_library",
     "scala_macro_library",
 )
