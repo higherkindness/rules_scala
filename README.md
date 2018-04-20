@@ -77,7 +77,7 @@ http_archive(
   url = "https://github.com/andyscott/rules_scala_annex/archive/<commit>.zip",
 )
 
-load("@rules_scala_annex//rules:workspace.bzl", "annex_scala_repositories")
+load("@rules_scala_annex//rules/scala:workspace.bzl", "annex_scala_repositories")
 annex_scala_repositories()
 
 # Add a @scala repo, which is the default scala provider used by annex_scala_*
@@ -87,7 +87,7 @@ annex_scala_repository("scala", ("org.scala-lang", "2.12.4"), "@compiler_bridge_
 BUILD
 
 ```python
-load("@rules_scala_annex//rules:build.bzl", "annex_scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "annex_scala_library")
 
 annex_scala_libray(
   name = "example",
@@ -143,14 +143,14 @@ $ bazel run --script_path=script :mytest
 Create .scalafmt.conf at the repo root (may be empty). And add to the WORKSPACE
 
 ```python
-load("@rules_scala_annex//rules:workspace.bzl", "scalafmt_default")
+load("@rules_scala_annex//rules/scalafmt:workspace.bzl", "scalafmt_default")
 scalafmt_default()
 ```
 
 And in BUILD
 
 ```python
-load("@rules_scala_annex//rules:build.bzl", "annex_scala_format_test")
+load("@rules_scala_annex//rules:scalafmt.bzl", "annex_scala_format_test")
 annex_scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),

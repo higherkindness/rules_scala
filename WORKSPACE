@@ -1,6 +1,6 @@
 workspace(name = "rules_scala_annex")
 
-load("//rules:internal/utils.bzl", "require_bazel_version")
+load("//rules/common:private/utils.bzl", "require_bazel_version")
 
 require_bazel_version("0.11.0")
 
@@ -11,10 +11,14 @@ http_archive(
     urls = ["https://github.com/google/protobuf/archive/v3.5.2.zip"],
 )
 
-load("//rules:workspace.bzl", "annex_scala_repositories", "scalafmt_default_config")
+load("//rules/scala:workspace.bzl", "annex_scala_repositories")
 
 annex_scala_repositories()
 
-register_toolchains("//runners/common:configurable_runner_toolchain")
+register_toolchains("//rules/scala:config_runner_toolchain")
+
+load("//rules/scalafmt:workspace.bzl", "annex_scalafmt_repositories", "scalafmt_default_config")
+
+annex_scalafmt_repositories()
 
 scalafmt_default_config(".scalafmt.conf")
