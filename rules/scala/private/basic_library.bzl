@@ -1,7 +1,12 @@
 load("@rules_scala_annex//rules/scala:provider.bzl", "BasicScalaConfiguration")
 load("//rules/common:private/utils.bzl", "strip_margin")
+load(":private/import.bzl", "create_intellij_info")
 
 basic_scala_library_private_attributes = {
+    "_host_javabase": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
+        cfg = "host",
+    ),
     "_java": attr.label(
         default = Label("@bazel_tools//tools/jdk:java"),
         executable = True,
@@ -17,6 +22,9 @@ basic_scala_library_private_attributes = {
         executable = True,
         cfg = "host",
     ),
+    "_java_toolchain": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_toolchain"),
+    ),
 }
 
 def basic_scala_library_implementation(ctx):
@@ -29,20 +37,18 @@ def basic_scala_library_implementation(ctx):
 
     scala = ctx.attr.scala[BasicScalaConfiguration]
 
-    s_dep = java_common.merge([
-        dep[JavaInfo]
-        for dep in ctx.attr.deps
-        if JavaInfo in dep
-    ])
+    deps = [dep[JavaInfo] for dep in scala.runtime_classpath + ctx.attr.deps]
+
+    sdep = java_common.merge(deps)
 
     # Note: we pull in transitive_compile_time_jars for the time being
     # to make development of runners way easier (bloop/zinc have big dep graphs).
     # Consider removing transitive_compile_time_jars in the future.
-    compile_deps = s_dep.full_compile_jars + s_dep.transitive_compile_time_jars
-    runtime_deps = s_dep.transitive_runtime_jars
+    compile_deps = sdep.transitive_compile_time_jars
+    runtime_deps = sdep.transitive_runtime_jars
 
     compiler_classpath_str = ":".join([file.path for file in scala.compiler_classpath])
-    compile_classpath_str = ":".join([file.path for file in (compile_deps + scala.runtime_classpath)])
+    compile_classpath_str = ":".join([file.path for file in compile_deps])
 
     inputs = depset()
     inputs += [jar]
@@ -50,7 +56,6 @@ def basic_scala_library_implementation(ctx):
     inputs += [jar_creator]
     inputs += ctx.files.srcs
     inputs += scala.compiler_classpath
-    inputs += scala.runtime_classpath
     inputs += compile_deps
 
     ctx.actions.run_shell(
@@ -83,13 +88,25 @@ def basic_scala_library_implementation(ctx):
         ),
     )
 
-    return [
-        DefaultInfo(
-            files = depset([output]),
-        ),
-        java_common.create_provider(
-            use_ijar = False,
-            compile_time_jars = [output],
-            runtime_jars = [output] + runtime_deps.to_list() + scala.runtime_classpath,
-        ),
-    ]
+    java_info = JavaInfo(
+        output_jar = output,
+        use_ijar = False,
+        sources = ctx.files.srcs,
+        deps = deps,
+        actions = ctx.actions,
+        host_javabase = ctx.attr._host_javabase,
+        java_toolchain = ctx.attr._java_toolchain,
+    )
+
+    intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info)
+
+    return struct(
+        providers = [
+            DefaultInfo(
+                files = depset([output]),
+            ),
+            java_info,
+            intellij_info,
+        ],
+        java = java_info,
+    )

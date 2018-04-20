@@ -6,20 +6,16 @@ def declare_maven(hash):
     lang = hash.pop("lang")
     import_args = hash["import_args"]
 
-    if lang == "java":
+    # TODO: Change this back once java_import works again
+    # if lang == "java":
+    if False:
         java_import_external(**import_args)
-    elif lang.startswith("scala"):
-        # TODO: What attributes does scala_import support? Include only those here.
-        if "srcjar_sha256" in import_args:
-            import_args.pop("srcjar_sha256")
-        if "srcjar_urls" in import_args:
-            import_args.pop("srcjar_urls")
+    else:
+        #elif lang.startswith("scala"):
         if "testonly_" in import_args:
             import_args.pop("testonly_")
         if "neverlink" in import_args:
             import_args.pop("neverlink")
-        if "srcjar_urls" in import_args:
-            import_args.pop("srcjar_urls")
 
         scala_import_external(**import_args)
 
