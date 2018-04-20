@@ -30,20 +30,24 @@ def annex_scala_binary_implementation(ctx):
         jvm_flags = [],
     )
 
-    return [
-        res.java_info,
-        res.scala_info,
-        DefaultInfo(
-            executable = launcher,
-            files = res.files,
-            runfiles = ctx.runfiles(
-                files = [mains_file],
-                transitive_files = depset(
-                    order = "default",
-                    direct = [ctx.executable._java],
-                    transitive = [java_info.transitive_runtime_deps],
+    return struct(
+        providers = [
+            res.java_info,
+            res.scala_info,
+            res.intellij_info,
+            DefaultInfo(
+                executable = launcher,
+                files = res.files,
+                runfiles = ctx.runfiles(
+                    files = [mains_file],
+                    transitive_files = depset(
+                        order = "default",
+                        direct = [ctx.executable._java],
+                        transitive = [java_info.transitive_runtime_deps],
+                    ),
+                    collect_default = True,
                 ),
-                collect_default = True,
             ),
-        ),
-    ]
+        ],
+        java = res.intellij_info,
+    )

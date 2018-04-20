@@ -15,7 +15,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [x] automatic main method detection
 - [x] errors on unused dependencies
 - [ ] buildozer suggestions to fix unused dependency errors
-- [ ] IntelliJ support
+- [x] IntelliJ support
 - [ ] tests for IntelliJ support
 - [x] scalafmt support
 

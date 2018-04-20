@@ -1,4 +1,5 @@
 load("@rules_scala_annex//rules/scala:provider.bzl", "ScalaConfiguration", "ScalaInfo")
+load(":private/import.bzl", "create_intellij_info")
 
 def _filesArg(files):
     return ([str(len(files))] + [file.path for file in files])
@@ -16,29 +17,15 @@ runner_common_attributes = {
 def runner_common(ctx):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"].runner
 
-    universal_plugins = [plugin[JavaInfo] for plugin in ctx.attr.plugins if JavaInfo in plugin]
-    universal_deps = [dep[JavaInfo] for dep in ctx.attr.deps if JavaInfo in dep]
-    universal_exports = [export[JavaInfo] for export in ctx.attr.exports if JavaInfo in export]
-
-    frameworks = []
-    if hasattr(ctx.attr, "frameworks"):
-        frameworks = ctx.attr.frameworks
-
-    files = depset()
-    mains_files = depset()
     configuration = ctx.attr.scala[ScalaConfiguration]
 
-    splugin = java_common.merge(
-        universal_plugins + [plugin[JavaInfo] for plugin in ctx.attr.plugins],
-    )
+    splugin = java_common.merge([plugin[JavaInfo] for plugin in ctx.attr.plugins])
 
-    sdep = java_common.merge(
-        universal_deps + [dep[JavaInfo] for dep in ctx.attr.deps],
-    )
+    deps = [dep[JavaInfo] for dep in configuration.runtime_classpath + ctx.attr.deps]
+    sdep = java_common.merge([dep[JavaInfo] for dep in ctx.attr.deps])
 
-    sexport = java_common.merge(
-        universal_exports + [export[JavaInfo] for export in ctx.attr.exports],
-    )
+    exports = [export[JavaInfo] for export in ctx.attr.exports]
+    sexport = java_common.merge(exports)
 
     #annex_scala_format_test"%s : %s" % (ctx.label.name, splugin.transitive_runtime_jars))
     #annex_scala_format_test"%s : %s" % (ctx.label.name, sdep.compile_jars))
@@ -61,9 +48,8 @@ def runner_common(ctx):
             output_jar = output,
             use_ijar = ctx.attr.use_ijar,
             sources = ctx.files.srcs,
-            deps = [sdep],
-            exports = [sexport],
-            runtime_deps = [java_common.create_provider(runtime_jars = configuration.runtime_classpath)],
+            deps = deps,
+            exports = exports,
             actions = ctx.actions,
             java_toolchain = ctx.attr._java_toolchain,
             host_javabase = ctx.attr._host_javabase,
@@ -117,25 +103,27 @@ def runner_common(ctx):
         arguments = ["@%s" % args_file.path],
     )
 
-    files += [output]
-    mains_files += [mains_file]
-
     return struct(
         analysis = analysis,
         java_info = java_info,
         scala_info = ScalaInfo(analysis = analysis),
-        files = files,
-        mains_files = mains_files,
+        intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
+        files = depset([output]),
+        mains_files = depset([mains_file]),
     )
 
 annex_scala_library_private_attributes = runner_common_attributes
 
 def annex_scala_library_implementation(ctx):
     res = runner_common(ctx)
-    return [
-        res.java_info,
-        res.scala_info,
-        DefaultInfo(
-            files = res.files,
-        ),
-    ]
+    return struct(
+        providers = [
+            res.java_info,
+            res.scala_info,
+            res.intellij_info,
+            DefaultInfo(
+                files = res.files,
+            ),
+        ],
+        java = res.intellij_info,
+    )
