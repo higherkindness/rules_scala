@@ -1,8 +1,8 @@
 load(
     "@rules_scala_annex//rules:internal/build_internal.bzl",
     "annex_scala_runner_toolchain_implementation",
+    "annex_configure_basic_scala_implementation",
     "annex_configure_scala_implementation",
-    "annex_configure_scala_private_attributes",
     "annex_scala_library_implementation",
     "annex_scala_library_private_attributes",
     "annex_scala_binary_implementation",
@@ -15,6 +15,7 @@ load(
     "@rules_scala_annex//rules:providers.bzl",
     "ScalaConfiguration",
 )
+load("//runners/common:build.bzl", "basic_scala_library")
 
 """
 Configures which Scala runner to use
@@ -32,6 +33,15 @@ annex_scala_runner_toolchain = rule(
 
 ###
 
+_annex_configure_basic_scala = rule(
+    implementation = annex_configure_basic_scala_implementation,
+    attrs = {
+        "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
+        "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
+        "version": attr.string(mandatory = True),
+    },
+)
+
 """
 Configures a Scala provider for use by library, binary, and test rules.
 
@@ -39,9 +49,6 @@ Args:
 
   version:
     The full Scala version string, such as "2.12.5"
-
-  binary_version:
-    The binary Scala version string, such as "2.12"
 
   runtime_classpath:
     The full Scala runtime classpath for use in library, binary, and test rules;
@@ -54,22 +61,28 @@ Args:
   compiler_bridge:
     The Zinc compiler bridge with attached sources.
 
-  compiler_bridge_classpath:
-    The Zinc classpath entries required to compile the compiler_bridge sources
-    against Scala's compiler_classpath.
-
 """
-annex_configure_scala = rule(
+_annex_configure_scala = rule(
     implementation = annex_configure_scala_implementation,
-    attrs = annex_configure_scala_private_attributes + {
+    attrs = {
         "version": attr.string(mandatory = True),
-        "binary_version": attr.string(mandatory = True),
         "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
         "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
-        "compiler_bridge": attr.label(mandatory = True, providers = [JavaInfo]),
-        "compiler_bridge_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
+        "compiler_bridge": attr.label(allow_single_file = True, mandatory = True),
     },
 )
+
+def annex_configure_scala(name, compiler_bridge, compiler_bridge_classpath, compiler_classpath, **kwargs):
+    _annex_configure_basic_scala(name = "{}_basic".format(name), compiler_classpath = compiler_classpath, **kwargs)
+
+    basic_scala_library(
+        name = "{}_compiler_bridge".format(name),
+        deps = compiler_classpath + compiler_bridge_classpath,
+        scala = ":{}_basic".format(name),
+        srcs = [compiler_bridge],
+    )
+
+    _annex_configure_scala(name = name, compiler_bridge = ":{}_compiler_bridge".format(name), compiler_classpath = compiler_classpath, **kwargs)
 
 """
 Compiles and links Scala/Java sources into a .jar file.
@@ -93,7 +106,8 @@ annex_scala_library = rule(
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
         "exports": attr.label_list(),
-        "scala": attr.label_list(
+        "scala": attr.label(
+            default = "@scala",
             mandatory = True,
             providers = [ScalaConfiguration],
         ),
@@ -111,7 +125,8 @@ annex_scala_binary = rule(
         "deps": attr.label_list(),
         "exports": attr.label_list(),
         "main_class": attr.string(),
-        "scala": attr.label_list(
+        "scala": attr.label(
+            default = "@scala",
             mandatory = True,
             providers = [ScalaConfiguration],
         ),
@@ -129,7 +144,8 @@ annex_scala_test = rule(
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
         "exports": attr.label_list(),
-        "scala": attr.label_list(
+        "scala": attr.label(
+            default = "@scala",
             mandatory = True,
             providers = [ScalaConfiguration],
         ),

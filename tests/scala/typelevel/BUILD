@@ -1,10 +1,8 @@
 load("@rules_scala_annex//rules:build.bzl", "annex_scala_library")
 
-scala = "@scala_2_12"
-
 annex_scala_library(
-    name = "welcome_to_bloop",
-    srcs = ["welcome_to_bloop.scala"],
-    scala = scala,
+    name = "example",
+    srcs = ["Example.scala"],
+    scala = "@typelevel_2_12",
     tags = ["manual"],
 )

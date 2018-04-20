@@ -9,48 +9,15 @@ load("//3rdparty:scalafmt_workspace.bzl", scalafmt_maven_dependencies = "maven_d
 annex_configure_scala_repository = repository_rule(
     implementation = annex_configure_scala_repository_implementation,
     attrs = {
-        "versions": attr.string_list_dict(),
-        "compiler_bridge_label_pattern": attr.string_dict(),
+        "compiler_bridge": attr.string(),
+        "organization": attr.string(),
+        "version": attr.string(),
     },
 )
 
-def annex_scala_repositories(
-        name,
-        versions,
-        compiler_bridge_label_pattern = {
-            "scala": "@compiler_bridge_{binary_version}//jar",
-            "typelevel_scala": "@compiler_bridge_{binary_version}//jar",
-            "dotty": "@compiler_bridge_2_12//jar",
-        }):
+def annex_scala_repositories():
     maven_dependencies()
     scalafmt_maven_dependencies()
-
-    for prefix, raw_versions in versions.items():
-        for raw_version in raw_versions:
-            organization, version = raw_version.split(":")
-            saniorganization = safe_name(organization)
-            saniversion = safe_name(version)
-
-            native.maven_jar(
-                name = "%s_scala_compiler_%s" % (saniorganization, saniversion),
-                artifact = "%s:scala-compiler:%s" % (organization, version),
-            )
-
-            native.maven_jar(
-                name = "%s_scala_library_%s" % (saniorganization, saniversion),
-                artifact = "%s:scala-library:%s" % (organization, version),
-            )
-
-            native.maven_jar(
-                name = "%s_scala_reflect_%s" % (saniorganization, saniversion),
-                artifact = "%s:scala-reflect:%s" % (organization, version),
-            )
-
-    annex_configure_scala_repository(
-        name = name,
-        versions = versions,
-        compiler_bridge_label_pattern = compiler_bridge_label_pattern,
-    )
 
     BAZEL_JAVA_LAUNCHER_VERSION = "0.11.1"
     java_stub_template_url = (
@@ -69,24 +36,49 @@ def annex_scala_repositories(
         sha256 = "2cbba7c512e400df0e7d4376e667724a38d1155db5baaa81b72ad785c6d761d1",
     )
 
-    native.maven_jar(
+    scala_src_build = """filegroup(name = "src", srcs = glob(["**/*.scala", "**/*.java"]), visibility=["//visibility:public"])"""
+
+    native.new_http_archive(
         name = "compiler_bridge_2_11",
-        artifact = "org.scala-sbt:compiler-bridge_2.11:1.1.3",
+        build_file_content = scala_src_build,
+        sha256 = "a3fda3b74ad549e5234ecad73847856607d42f3866890fa8f2b48130eaf303ce",
+        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.1.3/compiler-bridge_2.11-1.1.3-sources.jar",
     )
 
-    native.maven_jar(
+    native.new_http_archive(
         name = "compiler_bridge_2_12",
-        artifact = "org.scala-sbt:compiler-bridge_2.12:1.1.3",
+        build_file_content = scala_src_build,
+        sha256 = "cec8a3423b04c1ac8060a7de21ca14fb0461186aa0256ddf0602f4f8fcb6c6d0",
+        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.1.3/compiler-bridge_2.12-1.1.3-sources.jar",
+    )
+
+    annex_scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
+
+    native.bind(name = "scala_annex_scala", actual = "@scala_annex_scala_2_12")
+    native.bind(name = "scala_annex_scala_basic", actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic")
+
+def annex_scala_repository(name, coordinates, compiler_bridge):
+    annex_configure_scala_repository(
+        name = name,
+        compiler_bridge = compiler_bridge,
+        version = coordinates[1],
+    )
+
+    organization, version = coordinates
+
+    native.maven_jar(
+        name = "{}_scala_compiler".format(name),
+        artifact = "%s:scala-compiler:%s" % (organization, version),
     )
 
     native.maven_jar(
-        name = "compiler_interface",
-        artifact = "org.scala-sbt:compiler-interface:1.1.3",
+        name = "{}_scala_library".format(name),
+        artifact = "%s:scala-library:%s" % (organization, version),
     )
 
     native.maven_jar(
-        name = "util_interface",
-        artifact = "org.scala-sbt:util-interface:1.1.3",
+        name = "{}_scala_reflect".format(name),
+        artifact = "%s:scala-reflect:%s" % (organization, version),
     )
 
 def scalafmt_default_config(path = ".scalafmt.conf"):

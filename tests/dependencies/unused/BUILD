@@ -1,8 +1,6 @@
 load("@rules_scala_annex//rules:compat.bzl", "annex_scala_library")
 
-scala = [
-    "@scalas//:scala_2_12_4",
-]
+scala = "@scala_2_12"
 
 annex_scala_library(
     name = "0_used",

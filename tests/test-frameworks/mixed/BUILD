@@ -3,9 +3,7 @@ load("@rules_scala_annex//rules:build.bzl", "annex_scala_test")
 annex_scala_test(
     name = "mixed",
     srcs = glob(["*.scala"]),
-    scala = [
-        "@scalas//:scala_2_12_4",
-    ],
+    scala = "@scala_2_12",
     shard_count = 2,
     tags = ["manual"],
     deps = [
