@@ -18,6 +18,7 @@ env:
 cache:
     directories:
      - .bazel_cache
+     - external_tools/.bazel_cache
      - tests/.bazel_cache
 
 before_install:
