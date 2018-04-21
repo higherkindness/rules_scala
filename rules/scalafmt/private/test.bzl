@@ -1,5 +1,17 @@
 load("//rules/common:private/utils.bzl", "write_launcher")
 
+annex_scala_format_private_attributes = {
+    "_format": attr.label(
+        cfg = "host",
+        default = "@rules_scala_annex//rules/scalafmt",
+        executable = True,
+    ),
+    "_runner": attr.label(
+        allow_single_file = True,
+        default = "@rules_scala_annex//rules/scalafmt:runner",
+    ),
+}
+
 def annex_scala_format_test_implementation(ctx):
     files = []
     runner_inputs, _, runner_manifests = ctx.resolve_command(tools = [ctx.attr._format])
@@ -20,7 +32,15 @@ def annex_scala_format_test_implementation(ctx):
     manifest = ctx.actions.declare_file("manifest.txt")
     ctx.actions.write(manifest, "\n".join(manifest_content) + "\n")
 
-    ctx.actions.expand_template(template = ctx.file._runner, output = ctx.outputs.runner, substitutions = {"%workspace%": ctx.workspace_name, "%manifest%": manifest.short_path}, is_executable = True)
+    ctx.actions.expand_template(
+        template = ctx.file._runner,
+        output = ctx.outputs.runner,
+        substitutions = {
+            "%workspace%": ctx.workspace_name,
+            "%manifest%": manifest.short_path,
+        },
+        is_executable = True,
+    )
 
     return DefaultInfo(
         executable = ctx.outputs.runner,

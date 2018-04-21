@@ -14,7 +14,7 @@ scala_library(
     name = "Exported",
     srcs = ["Exported.scala"],
     tags = ["manual"],
-    runtime_deps = [":Runtime"],
+    #runtime_deps = [":Runtime"],
 )
 
 scala_library(

@@ -36,31 +36,31 @@ def scala_library(
         # compat layer internals
         _use_ijar = True):
     if plugins != []:
-        print("%s: plugins unsupported")
+        fail("%s: plugins unsupported" % name)
     if runtime_deps != []:
-        print("%s: runtime_deps unsupported")
+        fail("%s: runtime_deps unsupported" % name)
     if data != []:
-        print("%s: data unsupported")
+        fail("%s: data unsupported" % name)
     if resources != []:
-        print("%s: resources unsupported")
+        fail("%s: resources unsupported" % name)
     if resource_strip_prefix != None:
-        print("%s: resource_strip_prefix unsupported")
+        fail("%s: resource_strip_prefix unsupported" % name)
     if resource_jars != []:
-        print("%s: resource_jars unsupported")
+        fail("%s: resource_jars unsupported" % name)
     if scalacopts != []:
-        print("%s: scalacopts unsupported")
+        fail("%s: scalacopts unsupported" % name)
     if javacopts != []:
-        print("%s: javacopts unsupported")
+        fail("%s: javacopts unsupported" % name)
     if jvm_flags != []:
-        print("%s: jvm_flags unsupported")
+        fail("%s: jvm_flags unsupported" % name)
     if scalac_jvm_flags != []:
-        print("%s: scalac_jvm_flags unsupported")
+        fail("%s: scalac_jvm_flags unsupported" % name)
     if javac_jvm_flags != []:
-        print("%s: javac_jvm_flags unsupported")
+        fail("%s: javac_jvm_flags unsupported" % name)
     if print_compile_time != False:
-        print("%s: print_compile_time unsupported")
+        fail("%s: print_compile_time unsupported" % name)
     if main_class != None:
-        print("%s: main_class unsupported")
+        fail("%s: main_class unsupported" % name)
 
     annex_scala_library(
         name = name,
