@@ -18,38 +18,30 @@ def runner_common(ctx):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"].runner
 
     configuration = ctx.attr.scala[ScalaConfiguration]
+    configuration_runtime_deps = _collect(JavaInfo, configuration.runtime_classpath)
 
-    splugin = java_common.merge([plugin[JavaInfo] for plugin in ctx.attr.plugins])
-
-    deps = [dep[JavaInfo] for dep in configuration.runtime_classpath + ctx.attr.deps]
-    sdep = java_common.merge([dep[JavaInfo] for dep in ctx.attr.deps])
-
-    exports = [export[JavaInfo] for export in ctx.attr.exports]
-    sexport = java_common.merge(exports)
-
-    #annex_scala_format_test"%s : %s" % (ctx.label.name, splugin.transitive_runtime_jars))
-    #annex_scala_format_test"%s : %s" % (ctx.label.name, sdep.compile_jars))
-    #annex_scala_format_test"%s : %s" % (ctx.label.name, sexport.compile_jars))
+    sdeps = java_common.merge(_collect(JavaInfo, ctx.attr.deps))
+    sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
+    sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
+    splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins))
 
     classes_directory = ctx.actions.declare_directory(
-        "%s/classes/%s" % (ctx.label.name, configuration.version),
-    )
+        "%s/classes/%s" % (ctx.label.name, configuration.version))
     output = ctx.actions.declare_file(
-        "%s/bin/%s.jar" % (ctx.label.name, configuration.version),
-    )
+        "%s/bin/%s.jar" % (ctx.label.name, configuration.version))
     mains_file = ctx.actions.declare_file(
-        "%s/bin/%s.jar.mains.txt" % (ctx.label.name, configuration.version),
-    )
+        "%s/bin/%s.jar.mains.txt" % (ctx.label.name, configuration.version))
 
     if len(ctx.attr.srcs) == 0:
-        java_info = java_common.merge([sdep, sexport])
+        java_info = java_common.merge([sdeps, sexports])
     else:
         java_info = JavaInfo(
             output_jar = output,
             use_ijar = ctx.attr.use_ijar,
             sources = ctx.files.srcs,
-            deps = deps,
-            exports = exports,
+            deps = [sdeps],
+            runtime_deps = [sruntime_deps] + configuration_runtime_deps,
+            exports = [sexports],
             actions = ctx.actions,
             java_toolchain = ctx.attr._java_toolchain,
             host_javabase = ctx.attr._host_javabase,
@@ -67,10 +59,10 @@ def runner_common(ctx):
     args.add(configuration.version)  # scalaVersion
     args.add(_filesArg(configuration.compiler_classpath))  # compilerClasspath
     args.add(configuration.compiler_bridge.path)  # compilerBridge
-    args.add(_filesArg(splugin.transitive_runtime_deps))  # pluginsClasspath
+    args.add(_filesArg(splugins.transitive_runtime_deps))  # pluginsClasspath
     args.add(_filesArg(ctx.files.srcs))  # sources
-    args.add(_filesArg(sdep.transitive_deps))  # compilationClasspath
-    args.add(_filesArg(sdep.compile_jars))  # allowedClasspath
+    args.add(_filesArg(sdeps.transitive_deps))  # compilationClasspath
+    args.add(_filesArg(sdeps.compile_jars))  # allowedClasspath
     args.add("_{}".format(ctx.label))  # label
     args.add(analysis.path)  # analysisPath
     args.set_param_file_format("multiline")
@@ -85,9 +77,10 @@ def runner_common(ctx):
     inputs += runner_inputs
     inputs += [configuration.compiler_bridge]
     inputs += configuration.compiler_classpath
-    inputs += sdep.transitive_deps
+    inputs += sdeps.transitive_deps
+    inputs += sruntime_deps.transitive_runtime_deps
     inputs += ctx.files.srcs
-    inputs += splugin.transitive_runtime_deps
+    inputs += splugins.transitive_runtime_deps
     inputs += [args_file]
 
     outputs = [output, mains_file, classes_directory, analysis]
@@ -127,3 +120,10 @@ def annex_scala_library_implementation(ctx):
         ],
         java = res.intellij_info,
     )
+
+def _collect(index, iterable):
+    return [
+        entry[index]
+        for entry in iterable
+        if index in entry
+    ]
