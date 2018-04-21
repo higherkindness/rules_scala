@@ -5,3 +5,4 @@
 > bazel build :MacroTest
 > bazel build :OtherJavaLib
 > bazel build :HelloLib
+> bazel run :ScalaBinary

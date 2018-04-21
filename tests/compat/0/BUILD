@@ -2,6 +2,7 @@ load(
     "@rules_scala_annex//rules/scala:compat.bzl",
     "scala_library",
     "scala_macro_library",
+    "scala_binary",
 )
 
 scala_library(
@@ -14,7 +15,7 @@ scala_library(
     name = "Exported",
     srcs = ["Exported.scala"],
     tags = ["manual"],
-    #runtime_deps = [":Runtime"],
+    runtime_deps = [":Runtime"],
 )
 
 scala_library(
@@ -51,4 +52,12 @@ scala_library(
         ":OtherJavaLib",
         ":OtherLib",
     ],
+)
+
+scala_binary(
+    name = "ScalaBinary",
+    srcs = ["ScalaBinary.scala"],
+    main_class = "scala.test.ScalaBinary",
+    #print_compile_time = True,
+    deps = [":HelloLib", ":MacroTest"],
 )

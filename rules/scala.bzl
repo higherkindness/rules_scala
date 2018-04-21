@@ -35,6 +35,7 @@ annex_scala_library = rule(
     attrs = _annex_scala_library_private_attributes + {
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
+        "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "scala": attr.label(
             default = "@scala",
@@ -63,6 +64,7 @@ annex_scala_binary = rule(
     attrs = _annex_scala_binary_private_attributes + {
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
+        "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "main_class": attr.string(),
         "scala": attr.label(
@@ -93,6 +95,7 @@ annex_scala_test = rule(
     attrs = _annex_scala_test_private_attributes + {
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(),
+        "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "scala": attr.label(
             default = "@scala",
