@@ -1,0 +1,2 @@
+> bazel build :hello_world_lib
+> bazel run :hello_world_bin
