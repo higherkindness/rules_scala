@@ -26,6 +26,8 @@ def runner_common(ctx):
     splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins))
 
     mains_file = ctx.actions.declare_file("{}.jar.mains.txt".format(ctx.label.name))
+    analysis = ctx.actions.declare_file("{}/analysis.gz".format(ctx.label.name))
+    apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
 
     if len(ctx.attr.srcs) == 0:
         java_info = java_common.merge([sdeps, sexports])
@@ -41,11 +43,6 @@ def runner_common(ctx):
             java_toolchain = ctx.attr._java_toolchain,
             host_javabase = ctx.attr._host_javabase,
         )
-
-    analysis = ctx.actions.declare_file("{}/analysis.gz".format(ctx.label.name))
-    apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
-
-    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
 
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
@@ -91,7 +88,6 @@ def runner_common(ctx):
     args.use_param_file("@%s", use_always = True)
 
     runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
-
     inputs = depset(
         [configuration.compiler_bridge] + configuration.compiler_classpath + ctx.files.srcs + runner_inputs,
         transitive = [
@@ -99,7 +95,6 @@ def runner_common(ctx):
             splugins.transitive_runtime_deps,
         ],
     )
-
     outputs = [ctx.outputs.jar, mains_file, analysis, apis]
 
     # todo: different execution path for nosrc jar?

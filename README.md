@@ -11,7 +11,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [x] Scala cross compilation
 - [x] Zinc based backend
 - [ ] Bloop based backend
-- [ ] testing framework support (**WIP**)
+- [x] testing framework support (parity with SBT)
 - [x] automatic main method detection
 - [x] errors on unused dependencies
 - [ ] buildozer suggestions to fix unused dependency errors
@@ -25,7 +25,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [x] scala_macro_library (partial)
 - [x] scala_binary (partial)
 - [x] scala_import (partial)
-- [ ] scala_test
+- [x] scala_test
 - [ ] scala_test_suite
 - [ ] scala_library_suite
 - [ ] thrift_library
@@ -181,5 +181,3 @@ $ ./test.sh
 $ # runs all tests in tests/dependencies/
 $ ./test.sh tests/dependencies/
 ```
-
-
