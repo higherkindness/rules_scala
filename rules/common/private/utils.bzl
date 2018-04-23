@@ -52,12 +52,22 @@ def write_launcher(
         wrapper_preamble = ""):
     """Macro that writes out a launcher script shell script.
       Args:
-        runtime_classpath: All of the runtime jars required to launch this java target.
+        runtime_classpath: File containing the classpath required to launch this java target.
         main_class: the main class to launch.
         jvm_flags: The flags that should be passed to the jvm.
         args: Args that should be passed to the Binary.
     """
-    classpath = ":".join(["${RUNPATH}%s" % (j.short_path) for j in runtime_classpath.to_list()])
+
+    classpath_args = ctx.actions.args()
+    if hasattr(classpath_args, "add_all"):  # Bazel 0.13.0+
+        classpath_args.add_all(runtime_classpath, format_each = "${RUNPATH}%s", join_with = ":", map_each = _short_path)
+    else:
+        classpath_args.add(runtime_classpath, format = "${RUNPATH}%s", join_with = ":", map_fn = _short_paths)
+    classpath_args.set_param_file_format("multiline")
+    classpath_file = ctx.actions.declare_file("{}/classpath.params".format(ctx.label.name))
+    ctx.actions.write(classpath_file, classpath_args)
+
+    classpath = "\"$(eval echo \"$(cat ${{RUNPATH}}{})\")\"".format(classpath_file.short_path)
 
     #jvm_flags = " ".join([ctx.expand_location(f, ctx.attr.data) for f in jvm_flags])
     jvm_flags = " ".join(jvm_flags)
@@ -83,5 +93,13 @@ def write_launcher(
         is_executable = True,
     )
 
+    return [classpath_file]
+
 def safe_name(value):
     return value.replace(".", "_").replace("-", "_")
+
+def _short_path(file):
+    return file.short_path
+
+def _short_paths(files):
+    return [file.short_path for file in files]
