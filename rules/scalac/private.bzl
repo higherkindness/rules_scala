@@ -97,7 +97,7 @@ def _scalac_common(ctx):
         if file.path.endswith(".srcjar")
     ]
 
-    if len(src_jars) > 0:
+    if src_jars:
         fail("source jars aren't yet supported for direct scalac rules")
 
     srcs_string = " ".join(srcs)
