@@ -1,5 +1,6 @@
 package annex
 
+import java.io.File
 import java.net.URLClassLoader
 import java.nio.file.attribute.FileTime
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
@@ -8,6 +9,7 @@ import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
+import net.sourceforge.argparse4j.inf.Argument
 import org.scalatools.testing.Framework
 import sbt.internal.inc.binary.converters.ProtobufReaders
 import sbt.internal.inc.schema
@@ -17,23 +19,50 @@ import scala.util.control.NonFatal
 import xsbti.compile.analysis.ReadMapper
 
 object TestRunner {
-  private[this] val argParser = {
+  implicit class SetDefault(argument: Argument) {
+    import scala.language.reflectiveCalls
     // https://issues.scala-lang.org/browse/SI-2991
-    type SetDefault = { def setDefault(value: AnyRef) }
-    val parser = ArgumentParsers.newFor("test-runner").fromFilePrefix("@").build()
+    private[this] type SetDefault = { def setDefault(value: AnyRef) }
+    def setDefault_[A](value: A) = argument.asInstanceOf[SetDefault].setDefault(value.asInstanceOf[AnyRef])
+  }
+
+  private[this] val argParser = {
+    val parser = ArgumentParsers.newFor("test-runner").addHelp(true).fromFilePrefix("@").build()
     parser.description("Run tests")
     parser
       .addArgument("--color")
       .help("ANSI color")
+      .metavar("class")
       .`type`(Arguments.booleanType)
-      .asInstanceOf[SetDefault]
-      .setDefault(true.asInstanceOf[AnyRef])
+      .setDefault_(true)
     parser
       .addArgument("--verbosity")
       .help("Verbosity")
       .choices("HIGH", "MEDIUM", "LOW")
-      .asInstanceOf[SetDefault]
-      .setDefault("MEDIUM": AnyRef)
+      .setDefault_("MEDIUM")
+    parser
+  }
+
+  private[this] val testArgParser = {
+    val parser = ArgumentParsers.newFor("test").addHelp(true).build()
+    parser
+      .addArgument("--apis")
+      .help("APIs file")
+      .metavar("class")
+      .`type`(Arguments.fileType.verifyCanRead().verifyExists())
+      .required(true)
+    parser
+      .addArgument("--frameworks")
+      .help("Class names of sbt.testing.Framework implementations")
+      .metavar("class")
+      .nargs("*")
+      .required(true)
+    parser
+      .addArgument("classpath")
+      .help("Testing classpath")
+      .metavar("path")
+      .nargs("*")
+      .`type`(Arguments.fileType.verifyCanRead())
     parser
   }
 
@@ -51,18 +80,18 @@ object TestRunner {
     }
 
     val runPath = Paths.get(sys.props("bazel.runPath"))
-    val apisFile = runPath.resolve(sys.props("scalaAnnex.apis"))
-    val classpathFile = runPath.resolve(sys.props("scalaAnnex.test.classpath"))
-    val frameworksFile = runPath.resolve(sys.props("scalaAnnex.test.frameworks"))
+
+    val testArgFile = Paths.get(sys.props("scalaAnnex.test.args"))
+    val testNamespace = testArgParser.parseArgsOrFail(Files.readAllLines(testArgFile).asScala.toArray)
 
     val logger = new AnxLogger(namespace.getBoolean("color"), namespace.getString("verbosity"))
 
     val classLoader = new URLClassLoader(
-      Files.readAllLines(classpathFile).asScala.map(runPath.resolve(_).toUri.toURL).toArray,
+      testNamespace.getList[File]("classpath").asScala.map(file => runPath.resolve(file.toPath).toUri.toURL).toArray,
       classOf[Framework].getClassLoader,
     )
 
-    val apisStream = Files.newInputStream(apisFile)
+    val apisStream = Files.newInputStream(runPath.resolve(testNamespace.get[File]("apis").toPath))
     val apis = try {
       val raw = try schema.APIsFile.parseFrom(new GZIPInputStream(apisStream))
       finally apisStream.close()
@@ -72,7 +101,7 @@ object TestRunner {
     }
 
     val loader = new TestFrameworkLoader(classLoader, logger)
-    val frameworks = Files.readAllLines(frameworksFile).asScala.flatMap(loader.load)
+    val frameworks = testNamespace.getList[String]("frameworks").asScala.flatMap(loader.load)
 
     val testPattern = sys.env
       .get("TESTBRIDGE_TEST_ONLY")

@@ -9,34 +9,42 @@ def annex_scala_test_implementation(ctx):
 
     files = ctx.files._java + [res.apis]
 
-    frameworks_file = ctx.actions.declare_file("test_frameworks.txt")
-    ctx.actions.write(frameworks_file, "\n".join(ctx.attr.frameworks))
-    files.append(frameworks_file)
-
-    classpath_file = ctx.actions.declare_file("test_classpath.txt")
-    ctx.actions.write(classpath_file, "\n".join([jar.short_path for jar in res.java_info.transitive_runtime_jars]))
-    files.append(classpath_file)
-
     test_jars = res.java_info.transitive_runtime_deps
     runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps
 
-    write_launcher(
+    args = ctx.actions.args()
+    if hasattr(args, "add_all"):  # Bazel 0.13.0+
+        args.add("--apis", res.apis.short_path)
+        args.add("--frameworks", ctx.attr.frameworks)
+        args.add("--")
+        args.add_all(res.java_info.transitive_runtime_jars, map_each = _short_path)
+    else:
+        args.add("--apis")
+        args.add(res.apis.short_path)
+        args.add("--frameworks")
+        args.add(ctx.attr.frameworks)
+        args.add("--")
+        args.add(res.java_info.transitive_runtime_jars, map_fn = _short_paths)
+    args.set_param_file_format("multiline")
+    args_file = ctx.actions.declare_file("{}/test.params".format(ctx.label.name))
+    ctx.actions.write(args_file, args)
+    files.append(args_file)
+
+    files += write_launcher(
         ctx,
         ctx.outputs.bin,
         runner_jars,
         "annex.TestRunner",
         [
             "-Dbazel.runPath=$RUNPATH",
-            "-DscalaAnnex.apis={}".format(res.apis.short_path),
-            "-DscalaAnnex.test.frameworks={}".format(frameworks_file.short_path),
-            "-DscalaAnnex.test.classpath={}".format(classpath_file.short_path),
+            "-DscalaAnnex.test.args=${{RUNPATH}}{}".format(args_file.short_path),
         ],
     )
 
     test_info = DefaultInfo(
         executable = ctx.outputs.bin,
         files = res.files,
-        runfiles = ctx.runfiles(collect_default = True, collect_data = True, files = files, transitive_files = depset(direct = runner_jars.to_list(), transitive = [test_jars])),
+        runfiles = ctx.runfiles(collect_default = True, collect_data = True, files = files, transitive_files = depset([], transitive = [runner_jars, test_jars])),
     )
     return struct(
         providers = [
@@ -50,3 +58,9 @@ def annex_scala_test_implementation(ctx):
         ],
         java = res.intellij_info,
     )
+
+def _short_path(file):
+    return file.short_path
+
+def _short_paths(files):
+    return [file.short_path for file in files]

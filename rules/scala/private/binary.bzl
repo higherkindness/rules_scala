@@ -21,7 +21,7 @@ def annex_scala_binary_implementation(ctx):
     java_info = res.java_info
     mains_file = res.mains_files.to_list()[0]
 
-    write_launcher(
+    files = write_launcher(
         ctx,
         ctx.outputs.bin,
         java_info.transitive_runtime_deps,
@@ -36,9 +36,9 @@ def annex_scala_binary_implementation(ctx):
             res.intellij_info,
             DefaultInfo(
                 executable = ctx.outputs.bin,
-                files = res.files,
+                files = depset(files, transitive = [res.files]),
                 runfiles = ctx.runfiles(
-                    files = [mains_file],
+                    files = files + [mains_file],
                     transitive_files = depset(
                         order = "default",
                         direct = [ctx.executable._java],
