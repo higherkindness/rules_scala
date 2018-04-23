@@ -1,1 +1,2 @@
-> bazel test :mixed
+> bazel test :mixed_2_12
+> bazel test :mixed_2_11

@@ -53,3 +53,8 @@ maven_jar(
     name = "kind_projector_2_12",
     artifact = "org.spire-math:kind-projector_2.12:0.9.6",
 )
+
+maven_jar(
+    name = "org_scalacheck_scalacheck_2_11",
+    artifact = "org.scalacheck:scalacheck_2.11:1.14.0",
+)
