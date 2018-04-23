@@ -59,5 +59,8 @@ scala_binary(
     srcs = ["ScalaBinary.scala"],
     main_class = "scala.test.ScalaBinary",
     #print_compile_time = True,
-    deps = [":HelloLib", ":MacroTest"],
+    deps = [
+        ":HelloLib",
+        ":MacroTest",
+    ],
 )

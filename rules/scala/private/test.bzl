@@ -7,9 +7,7 @@ annex_scala_test_private_attributes = annex_scala_binary_private_attributes
 def annex_scala_test_implementation(ctx):
     res = runner_common(ctx)
 
-    runner = ctx.actions.declare_file("test")
-
-    files = ctx.files._java + [res.analysis]
+    files = ctx.files._java + [res.apis]
 
     frameworks_file = ctx.actions.declare_file("test_frameworks.txt")
     ctx.actions.write(frameworks_file, "\n".join(ctx.attr.frameworks))
@@ -24,22 +22,31 @@ def annex_scala_test_implementation(ctx):
 
     write_launcher(
         ctx,
-        runner,
+        ctx.outputs.bin,
         runner_jars,
         "annex.TestRunner",
         [
             "-Dbazel.runPath=$RUNPATH",
-            "-DscalaAnnex.analysis={}".format(res.analysis.short_path),
+            "-DscalaAnnex.apis={}".format(res.apis.short_path),
             "-DscalaAnnex.test.frameworks={}".format(frameworks_file.short_path),
             "-DscalaAnnex.test.classpath={}".format(classpath_file.short_path),
         ],
     )
 
     test_info = DefaultInfo(
-        executable = runner,
+        executable = ctx.outputs.bin,
+        files = res.files,
         runfiles = ctx.runfiles(collect_default = True, collect_data = True, files = files, transitive_files = depset(direct = runner_jars.to_list(), transitive = [test_jars])),
     )
     return struct(
-        providers = [res.java_info, res.scala_info, res.intellij_info, test_info],
+        providers = [
+            res.java_info,
+            res.scala_info,
+            res.intellij_info,
+            test_info,
+            OutputGroupInfo(
+                analysis = depset([res.analysis, res.apis]),
+            ),
+        ],
         java = res.intellij_info,
     )

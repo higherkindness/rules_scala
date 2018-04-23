@@ -31,34 +31,6 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [ ] thrift_library
 - [ ] scalapb_proto_library
 
-## Options
-
-#### Verbose Scala worker output
-Add `--worker_extra_flag=ScalaCompile=--verbose` to your build options. The worker will print a formatted version of all inputs being passed from Bazel.
-
-```
-env:
-  isWorker            : true
-  extraFlags          : List(
-    --verbose)
-options:
-  verbose             : true,
-  outputJar           : bazel-out/darwin-fastbuild/bin/tests/strategy/worker_extra_flag/library/bin/2.11.0.jar,
-  outputDir           : bazel-out/darwin-fastbuild/bin/tests/strategy/worker_extra_flag/library/classes/2.11.0,
-  scalaVersion        : 2.11.0,
-  compilerClasspath   : List(
-    external/org_scala_lang_scala_compiler_2_11_0/jar/scala-compiler-2.11.0.jar
-    external/org_scala_lang_scala_reflect_2_11_0/jar/scala-reflect-2.11.0.jar
-    external/org_scala_lang_scala_library_2_11_0/jar/scala-library-2.11.0.jar),
-  compilerBridge      : bazel-out/darwin-fastbuild/bin/external/scalas/compiler-bridge_scala_2_11_0.jar,
-  pluginsClasspath    : Nil,
-  sources             : List(
-    tests/strategy/worker_extra_flag/code.scala),
-  compilationClasspath: Nil,
-  allowedClasspath    : Nil,
-  testOptions         : Some(TestOptions(List()))
-```
-
 ## Usage
 
 Don't.
@@ -163,6 +135,18 @@ $ bazel run :format "$(bazel info | grep workspace: | cut -d' ' -f2)"
 # check format
 $ bazel test :format
 ```
+
+### Stateful compilation
+
+Beyond the normal per-target incremental compilation, [Zinc](https://github.com/sbt/zinc) can achieve even finer-grained
+compilation by reusing dependency information collected on previous runs.
+
+Stateful compilers like Zinc [operate outside](https://groups.google.com/forum/#!topic/bazel-discuss/3iUy5jxS3S0) the
+Bazel paradigm, and Bazel cannot enforce correctness. Technically, this caveat applies to all worker strategies:
+performance is improving by maintaining state, but improper state may be shared across actions. In Zinc's case, the risk
+is higher, because the sharing is (intentionally) aggressive.
+
+To enable Zinc's stateful compilation, add `--worker_extra_flag=ScalaCompile=--persistent_dir=~/.cache/bazel-zinc`.
 
 ## Contributing
 

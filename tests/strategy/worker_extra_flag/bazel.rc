@@ -1,1 +1,1 @@
-build --worker_extra_flag=ScalaCompile=--verbose
+build --worker_extra_flag=ScalaCompile=--persistence_dir=~/.cache/bazel-zinc

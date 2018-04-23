@@ -25,18 +25,13 @@ def runner_common(ctx):
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
     splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins))
 
-    classes_directory = ctx.actions.declare_directory(
-        "%s/classes/%s" % (ctx.label.name, configuration.version))
-    output = ctx.actions.declare_file(
-        "%s/bin/%s.jar" % (ctx.label.name, configuration.version))
-    mains_file = ctx.actions.declare_file(
-        "%s/bin/%s.jar.mains.txt" % (ctx.label.name, configuration.version))
+    mains_file = ctx.actions.declare_file("{}.jar.mains.txt".format(ctx.label.name))
 
     if len(ctx.attr.srcs) == 0:
         java_info = java_common.merge([sdeps, sexports])
     else:
         java_info = JavaInfo(
-            output_jar = output,
+            output_jar = ctx.outputs.jar,
             use_ijar = ctx.attr.use_ijar,
             sources = ctx.files.srcs,
             deps = [sdeps],
@@ -47,43 +42,65 @@ def runner_common(ctx):
             host_javabase = ctx.attr._host_javabase,
         )
 
-    analysis = ctx.actions.declare_file("{}/analysis/{}.proto.gz".format(ctx.label.name, configuration.version))
+    analysis = ctx.actions.declare_file("{}/analysis.gz".format(ctx.label.name))
+    apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
 
     runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
 
     args = ctx.actions.args()
-    args.add(False)  # verbose
-    args.add("")  # persistenceDir
-    args.add(output.path)  # outputJar
-    args.add(classes_directory.path)  # outputDir
-    args.add(configuration.version)  # scalaVersion
-    args.add(_filesArg(configuration.compiler_classpath))  # compilerClasspath
-    args.add(configuration.compiler_bridge.path)  # compilerBridge
-    args.add(_filesArg(splugins.transitive_runtime_deps))  # pluginsClasspath
-    args.add(_filesArg(ctx.files.srcs))  # sources
-    args.add(_filesArg(sdeps.transitive_deps))  # compilationClasspath
-    args.add(_filesArg(sdeps.compile_jars))  # allowedClasspath
-    args.add("_{}".format(ctx.label))  # label
-    args.add(analysis.path)  # analysisPath
+    if hasattr(args, "add_all"):  # Bazel 0.13.0+
+        args.add("--compiler_bridge", configuration.compiler_bridge)
+        args.add_all("--compiler_classpath", configuration.compiler_classpath)
+        args.add_all("--classpath", sdeps.transitive_deps)
+        args.add_all("--direct_classpath", sdeps.compile_jars)
+        args.add("--label={}".format(ctx.label))
+        args.add("--main_manifest", mains_file)
+        args.add("--output_analysis", analysis)
+        args.add("--output_apis", apis)
+        args.add("--output_jar", ctx.outputs.jar)
+        args.add("--plugins", splugins.transitive_runtime_deps)
+        args.add("--require_direct", "true")
+        args.add("--require_used", "true")
+        args.add("--")
+        args.add_all(ctx.files.srcs)
+    else:
+        args.add("--compiler_bridge")
+        args.add(configuration.compiler_bridge)
+        args.add("--compiler_classpath")
+        args.add(configuration.compiler_classpath)
+        args.add("--classpath")
+        args.add(sdeps.transitive_deps)
+        args.add("--direct_classpath")
+        args.add(sdeps.compile_jars)
+        args.add("--label={}".format(ctx.label))
+        args.add("--main_manifest")
+        args.add(mains_file)
+        args.add("--output_analysis")
+        args.add(analysis)
+        args.add("--output_apis")
+        args.add(apis)
+        args.add("--output_jar")
+        args.add(ctx.outputs.jar)
+        args.add("--plugin")
+        args.add(splugins.transitive_runtime_deps)
+        args.add("--require_direct=true")
+        args.add("--require_used=true")
+        args.add("--")
+        args.add(ctx.files.srcs)
     args.set_param_file_format("multiline")
-    args_file = ctx.actions.declare_file(
-        "%s/bin/%s.args" % (ctx.label.name, configuration.version),
-    )
-    ctx.actions.write(args_file, args)
+    args.use_param_file("@%s", use_always = True)
 
     runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
 
-    inputs = depset()
-    inputs += runner_inputs
-    inputs += [configuration.compiler_bridge]
-    inputs += configuration.compiler_classpath
-    inputs += sdeps.transitive_deps
-    inputs += sruntime_deps.transitive_runtime_deps
-    inputs += ctx.files.srcs
-    inputs += splugins.transitive_runtime_deps
-    inputs += [args_file]
+    inputs = depset(
+        [configuration.compiler_bridge] + configuration.compiler_classpath + ctx.files.srcs + runner_inputs,
+        transitive = [
+            sdeps.transitive_deps,
+            splugins.transitive_runtime_deps,
+        ],
+    )
 
-    outputs = [output, mains_file, classes_directory, analysis]
+    outputs = [ctx.outputs.jar, mains_file, analysis, apis]
 
     # todo: different execution path for nosrc jar?
     ctx.actions.run(
@@ -93,15 +110,16 @@ def runner_common(ctx):
         executable = runner.files_to_run.executable,
         input_manifests = input_manifests,
         execution_requirements = {"supports-workers": "1"},
-        arguments = ["@%s" % args_file.path],
+        arguments = [args],
     )
 
     return struct(
         analysis = analysis,
+        apis = apis,
         java_info = java_info,
         scala_info = ScalaInfo(analysis = analysis),
         intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
-        files = depset([output]),
+        files = depset([ctx.outputs.jar]),
         mains_files = depset([mains_file]),
     )
 
@@ -116,6 +134,9 @@ def annex_scala_library_implementation(ctx):
             res.intellij_info,
             DefaultInfo(
                 files = res.files,
+            ),
+            OutputGroupInfo(
+                analysis = depset([res.analysis, res.apis]),
             ),
         ],
         java = res.intellij_info,

@@ -5,12 +5,16 @@ import java.nio.file.attribute.FileTime
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
 import java.time.Instant
 import java.util.regex.Pattern
+import java.util.zip.GZIPInputStream
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
 import org.scalatools.testing.Framework
-import sbt.internal.inc.{Analysis, FileAnalysisStore}
+import sbt.internal.inc.binary.converters.ProtobufReaders
+import sbt.internal.inc.schema
 import sbt.testing.Logger
 import scala.collection.JavaConverters._
+import scala.util.control.NonFatal
+import xsbti.compile.analysis.ReadMapper
 
 object TestRunner {
   private[this] val argParser = {
@@ -47,7 +51,7 @@ object TestRunner {
     }
 
     val runPath = Paths.get(sys.props("bazel.runPath"))
-    val analysisFile = runPath.resolve(sys.props("scalaAnnex.analysis"))
+    val apisFile = runPath.resolve(sys.props("scalaAnnex.apis"))
     val classpathFile = runPath.resolve(sys.props("scalaAnnex.test.classpath"))
     val frameworksFile = runPath.resolve(sys.props("scalaAnnex.test.frameworks"))
 
@@ -58,12 +62,14 @@ object TestRunner {
       classOf[Framework].getClassLoader,
     )
 
-    val analysis = FileAnalysisStore
-      .binary(analysisFile.toFile)
-      .get()
-      .orElseGet(() => throw new Exception("Failed to load analysis"))
-      .getAnalysis
-      .asInstanceOf[Analysis]
+    val apisStream = Files.newInputStream(apisFile)
+    val apis = try {
+      val raw = try schema.APIsFile.parseFrom(new GZIPInputStream(apisStream))
+      finally apisStream.close()
+      new ProtobufReaders(ReadMapper.getEmptyMapper).fromApisFile(raw)._1
+    } catch {
+      case NonFatal(e) => throw new Exception("Failed to load APIs", e)
+    }
 
     val loader = new TestFrameworkLoader(classLoader, logger)
     val frameworks = Files.readAllLines(frameworksFile).asScala.flatMap(loader.load)
@@ -74,7 +80,7 @@ object TestRunner {
 
     var count = 0
     val passed = frameworks.forall { framework =>
-      val tests = framework.discover(analysis.apis.internal.values.toSet).sortBy(_.name)
+      val tests = framework.discover(apis.internal.values.toSet).sortBy(_.name)
       val filter = for {
         index <- sys.env.get("TEST_SHARD_INDEX").map(_.toInt)
         total <- sys.env.get("TEST_TOTAL_SHARDS").map(_.toInt)

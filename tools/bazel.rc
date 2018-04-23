@@ -7,7 +7,7 @@ build --experimental_strict_action_env
 build --javacopt="-source 8 -target 8"
 build --strategy=ScalaCompile=worker
 build --worker_max_instances=4
-# build --worker_extra_flag=ScalaCompile=--persistenceDir=~/.cache/bazel-zinc
+# build --worker_extra_flag=ScalaCompile=--persistence_dir=~/.cache/bazel-zinc
 
 build --verbose_failures
 
