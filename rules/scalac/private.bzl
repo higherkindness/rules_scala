@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules/scala:provider.bzl", "BasicScalaConfiguration")
+load("@rules_scala_annex//rules:providers.bzl", "ScalaConfiguration")
 load("//rules/common:private/utils.bzl", "strip_margin")
 load("//rules/common:private/utils.bzl", "write_launcher")
 load("//rules/scala:private/import.bzl", "create_intellij_info")
@@ -38,15 +38,16 @@ scalac_binary_private_attributes = _common_private_attributes + {
 def scalac_binary_implementation(ctx):
     res = _scalac_common(ctx)
     launcher = ctx.new_file("%s.sh" % ctx.label.name)
-    write_launcher(
+    files = write_launcher(
         ctx,
         launcher,
-        res['java_info'].transitive_runtime_deps,
+        res["java_info"].transitive_runtime_deps,
         main_class = ctx.attr.main_class,
         jvm_flags = [],
     )
     return _format_providers(ctx, res + {
-        'executable': launcher
+        "executable": launcher,
+        "files": files,
     })
 
 def scalac_library_implementation(ctx):
@@ -61,7 +62,7 @@ def _scalac_common(ctx):
 
     output_jar = ctx.actions.declare_file("%s.jar" % name)
 
-    scala = ctx.attr.scala[BasicScalaConfiguration]
+    scala = ctx.attr.scala[ScalaConfiguration]
 
     deps = [dep[JavaInfo] for dep in scala.runtime_classpath + ctx.attr.deps]
 
@@ -143,38 +144,41 @@ def _scalac_common(ctx):
     )
 
     return {
-        'output_jar': output_jar,
-        'java_info': java_info,
+        "output_jar": output_jar,
+        "java_info": java_info,
     }
 
-
-# TODO: put me in a common place?
+    # TODO: put me in a common place?
 
 def _create_default_info(ctx, blob):
     args = {}
-    if 'executable' in blob:
+
+    files = []
+    if "output_jar" in blob:
+        files += [blob["output_jar"]]
+    if "files" in blob:
+        files += blob["files"]
+    args += {"files": depset(files)}
+
+    if "executable" in blob:
         args += {
-            'executable': blob['executable'],
-            'runfiles': ctx.runfiles(
+            "executable": blob["executable"],
+            "runfiles": ctx.runfiles(
+                files = files,
                 transitive_files = depset(
                     order = "default",
                     direct = [ctx.executable._java],
-                    transitive = [blob['java_info'].transitive_runtime_deps],
+                    transitive = [blob["java_info"].transitive_runtime_deps],
                 ),
                 collect_default = True,
-            )
+            ),
         }
 
-    files = []
-    if 'output_jar' in blob:
-        files += [blob['output_jar']]
-    args += { 'files': depset(files) }
     return DefaultInfo(**args)
 
 def _format_providers(ctx, blob):
-
     default_info = _create_default_info(ctx, blob)
-    java_info = blob['java_info']
+    java_info = blob["java_info"]
     intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info)
 
     return struct(

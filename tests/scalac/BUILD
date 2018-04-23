@@ -1,7 +1,7 @@
 load(
-        "@rules_scala_annex//rules:scalac.bzl",
-        "scalac_library",
-        "scalac_binary",
+    "@rules_scala_annex//rules:scalac.bzl",
+    "scalac_library",
+    "scalac_binary",
 )
 
 scalac_library(
@@ -13,7 +13,7 @@ scalac_library(
 scalac_binary(
     name = "hello_world_bin",
     srcs = ["HelloWorldBin.scala"],
-    deps = [":hello_world_lib"],
     main_class = "anx.HelloWorld",
     scala = "@scala_2_12",
+    deps = [":hello_world_lib"],
 )
