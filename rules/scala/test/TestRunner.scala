@@ -10,7 +10,6 @@ import java.util.zip.GZIPInputStream
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
 import net.sourceforge.argparse4j.inf.Argument
-import org.scalatools.testing.Framework
 import sbt.internal.inc.binary.converters.ProtobufReaders
 import sbt.internal.inc.schema
 import sbt.testing.Logger
@@ -86,10 +85,14 @@ object TestRunner {
 
     val logger = new AnxLogger(namespace.getBoolean("color"), namespace.getString("verbosity"))
 
-    val classLoader = new URLClassLoader(
-      testNamespace.getList[File]("classpath").asScala.map(file => runPath.resolve(file.toPath).toUri.toURL).toArray,
-      classOf[Framework].getClassLoader,
-    )
+    val classpath = testNamespace.getList[File]("classpath").asScala
+    val classLoader =
+      new URLClassLoader(classpath.map(file => runPath.resolve(file.toPath).toUri.toURL).toArray, null) {
+        private[this] val shared = getClass.getClassLoader
+        protected override def findClass(name: String) =
+          if (name.startsWith("sbt.testing.")) shared.loadClass(name)
+          else super.findClass(name)
+      }
 
     val apisStream = Files.newInputStream(runPath.resolve(testNamespace.get[File]("apis").toPath))
     val apis = try {
