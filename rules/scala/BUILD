@@ -71,6 +71,20 @@ toolchain_type(
     visibility = ["//visibility:public"],
 )
 
+# Deps
+
+scalac_binary(
+    name = "deps",
+    srcs = glob(["deps/**/*.scala"]),
+    main_class = "annex.deps.DepsRunner",
+    scala = "//external:scala_annex_scala_basic",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//rules/common:worker",
+        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
+    ],
+)
+
 # Test
 
 annex_scala_binary(

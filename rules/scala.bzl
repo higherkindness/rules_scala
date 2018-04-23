@@ -2,6 +2,7 @@
 ## top level rules
 ##
 
+load("@rules_scala_annex//rules:jvm.bzl", "labeled_jars")
 load(
     "@rules_scala_annex//rules:providers.bzl",
     "ScalaConfiguration",
@@ -38,7 +39,7 @@ annex_scala_library = rule(
     implementation = _annex_scala_library_implementation,
     attrs = _annex_scala_library_private_attributes + {
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
-        "deps": attr.label_list(),
+        "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "scala": attr.label(
@@ -69,7 +70,7 @@ annex_scala_binary = rule(
     implementation = _annex_scala_binary_implementation,
     attrs = _annex_scala_binary_private_attributes + {
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
-        "deps": attr.label_list(),
+        "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "main_class": attr.string(),
@@ -103,7 +104,7 @@ annex_scala_test = rule(
     implementation = _annex_scala_test_implementation,
     attrs = _annex_scala_test_private_attributes + {
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
-        "deps": attr.label_list(),
+        "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "scala": attr.label(

@@ -93,17 +93,17 @@ join_configurations = rule(
 # TODO: move these to another file?
 # TODO: implement these with an aspect?
 
-JarsToLabels = provider(
-    doc = "provides a mapping from jar files to defining labels for improved end user experience",
-    fields = {
-        "lookup": "dictionary with jar files as keys and labels as values",
-    },
-)
-
 IntellijInfo = provider(
     doc = "Provider for IntelliJ",
     fields = {
         "outputs": "java_output_jars",
         "transitive_exports": "labels of transitive dependencies",
+    },
+)
+
+LabeledJars = provider(
+    doc = "Exported jars and their labels",
+    fields = {
+        "values": "Preorder depset of label and jars",
     },
 )

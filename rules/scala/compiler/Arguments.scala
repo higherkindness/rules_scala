@@ -48,12 +48,6 @@ object Arguments {
       .`type`(ArgumentsImpl.booleanType)
       .setDefault_(false)
     parser
-      .addArgument("--direct_classpath")
-      .help("Classpath of direct dependencies")
-      .metavar("path")
-      .nargs("*")
-      .`type`(ArgumentsImpl.fileType.verifyCanRead.verifyIsFile)
-    parser
       .addArgument("--label")
       .help("Bazel label")
       .metavar("label")
@@ -86,21 +80,16 @@ object Arguments {
       .metavar("path")
       .`type`(ArgumentsImpl.fileType.verifyCanCreate)
     parser
+      .addArgument("--output_used")
+      .help("Output list of used jars")
+      .metavar("path")
+      .`type`(ArgumentsImpl.fileType.verifyCanCreate)
+    parser
       .addArgument("--plugins")
       .help("Compiler plugins")
       .metavar("path")
       .nargs("*")
       .`type`(ArgumentsImpl.fileType.verifyCanCreate)
-    parser
-      .addArgument("--require_direct")
-      .help("Fail if indirect dependencies are used by sources")
-      .`type`(ArgumentsImpl.booleanType)
-      .setDefault_(false)
-    parser
-      .addArgument("--require_used")
-      .help("Fail if direct dependencies are unused")
-      .`type`(ArgumentsImpl.booleanType)
-      .setDefault_(false)
     parser
       .addArgument("sources")
       .help("Source files")

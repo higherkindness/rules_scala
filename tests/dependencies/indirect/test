@@ -1,0 +1,5 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+! bazel build :c
+bazel build :c | grep "buildozer 'add deps //dependencies/indirect:a' //dependencies/indirect:c"

@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:providers.bzl", "IntellijInfo", "JarsToLabels")
+load("@rules_scala_annex//rules:providers.bzl", "IntellijInfo")
 
 def scala_import_implementation(ctx):
     default_info = DefaultInfo(
@@ -21,7 +21,6 @@ def scala_import_implementation(ctx):
         providers = [
             intellij_info,
             java_info,
-            _scala_import_jars_to_labels(ctx, ctx.files.jars),
         ],
     )
 
@@ -34,27 +33,3 @@ def create_intellij_info(label, deps, java_info):
             transitive = [(dep[IntellijInfo] if IntellijInfo in dep else dep[JavaInfo]).transitive_exports for dep in deps],
         ),
     )
-
-def _scala_import_jars_to_labels(ctx, direct_binary_jars):
-    # build up JarsToLabels
-    # note: consider moving this to an aspect
-
-    lookup = {}
-    for jar in direct_binary_jars:
-        lookup[jar.path] = ctx.label
-
-    for entry in ctx.attr.deps:
-        if JavaInfo in entry:
-            for jar in entry[JavaInfo].compile_jars:
-                lookup[jar.path] = entry.label
-        if JarsToLabels in entry:
-            lookup.update(entry[JarsToLabels].lookup)
-
-    for entry in ctx.attr.exports:
-        if JavaInfo in entry:
-            for jar in entry[JavaInfo].compile_jars.to_list():
-                lookup[jar.path] = entry.label
-        if JarsToLabels in entry:
-            lookup.update(entry[JarsToLabels].lookup)
-
-    return JarsToLabels(lookup = lookup)

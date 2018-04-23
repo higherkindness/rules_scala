@@ -14,7 +14,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [x] testing framework support (parity with SBT)
 - [x] automatic main method detection
 - [x] errors on unused dependencies
-- [ ] buildozer suggestions to fix unused dependency errors
+- [x] buildozer suggestions to fix unused dependency errors
 - [x] IntelliJ support
 - [ ] tests for IntelliJ support
 - [x] scalafmt support
@@ -135,6 +135,25 @@ $ bazel run :format "$(bazel info | grep workspace: | cut -d' ' -f2)"
 # check format
 $ bazel test :format
 ```
+
+### Strict & unused deps
+
+This feature shares concepts with
+[Java strict and unused deps](https://blog.bazel.build/2017/06/28/sjd-unused_deps.html). The Scala checks are controlled
+by two defines:
+
+* `scala_require_direct` - Require that direct usages of libraries come only from immediately declared deps
+* `scala_require_used` - Require that any immediate deps are deps are directly used.
+
+Each define may have a value of:
+
+* `check` - Check deps as a default output for the rule, but not a prerequisite to producing the jar.
+* `off` - Do not check deps.
+
+`check` is the default, as it promoting precise dependencies, while still allowing for easy experimentation, while still
+allowing for easy experimentation.
+
+Failed checks emit suggested [buildozer](https://github.com/bazelbuild/buildtools/tree/master/buildozer) commands.
 
 ### Stateful compilation
 

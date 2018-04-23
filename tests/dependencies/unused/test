@@ -3,4 +3,5 @@
 
 bazel build :0_used
 ! bazel build :0_unused
+bazel build :0_unused | grep "buildozer 'remove deps @org_scalacheck_scalacheck_2_12//:org_scalacheck_scalacheck_2_12' //dependencies/unused:0_unused"
 bazel build :indirect_unused
