@@ -1,4 +1,4 @@
-package annex
+package annex.zinc
 
 import java.io.IOException
 import java.nio.file.attribute.BasicFileAttributes

@@ -93,6 +93,7 @@ def basic_scala_library_implementation(ctx):
         use_ijar = False,
         sources = ctx.files.srcs,
         deps = deps,
+        runtime_deps = [dep[JavaInfo] for dep in ctx.attr.runtime_deps],
         actions = ctx.actions,
         host_javabase = ctx.attr._host_javabase,
         java_toolchain = ctx.attr._java_toolchain,

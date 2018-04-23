@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "annex_scala_library", "annex_scala_runner_toolchain", "basic_scala_binary", "basic_scala_library")
+load("//rules:scala.bzl", "annex_scala_library", "annex_scala_binary", "annex_scala_runner_toolchain", "basic_scala_binary", "basic_scala_library")
 load("//rules:scalafmt.bzl", "annex_scala_format_test")
 
 # Bloop
@@ -61,7 +61,7 @@ basic_scala_library(
     srcs = glob(["compiler/**/*.scala"]),
     scala = "//external:scala_annex_scala_basic",
     deps = [
-        "//rules/common:worker",
+        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
     ],
 )
 
@@ -72,12 +72,13 @@ toolchain_type(
 
 # Test
 
-annex_scala_library(
+annex_scala_binary(
     name = "test",
     srcs = glob(["test/**/*.scala"]),
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
+        "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_test_interface",
@@ -89,12 +90,25 @@ annex_scala_library(
 
 # Zinc
 
+proto_library(
+    name = "zinc_options_proto",
+    srcs = glob(["zinc/**/*.proto"]),
+)
+
+java_proto_library(
+    name = "zinc_options_proto_java",
+    deps = [":zinc_options_proto"],
+)
+
 basic_scala_binary(
     name = "zinc",
     srcs = glob(["zinc/**/*.scala"]),
-    main_class = "annex.ZincRunner",
+    main_class = "annex.zinc.ZincRunner",
     scala = "//external:scala_annex_scala_basic",
     visibility = ["//visibility:public"],
+    runtime_deps = [
+        "@scala_annex_com_lihaoyi_sourcecode_2_12",
+    ],
     deps = [
         ":compiler",
         "//rules/common:worker",

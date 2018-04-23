@@ -6,9 +6,11 @@ can be used to expand macro usage and provide a seamless transition to
 newer rules.
 """
 
-load("//rules:scala.bzl",
-     "annex_scala_library",
-     "annex_scala_binary")
+load(
+    "//rules:scala.bzl",
+    "annex_scala_library",
+    "annex_scala_binary",
+)
 
 # use the same fixed version as rules_scala
 _scala = "@scala_2_11"

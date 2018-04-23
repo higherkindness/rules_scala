@@ -21,10 +21,9 @@ def annex_scala_binary_implementation(ctx):
     java_info = res.java_info
     mains_file = res.mains_files.to_list()[0]
 
-    launcher = ctx.new_file("%s.sh" % ctx.label.name)
     write_launcher(
         ctx,
-        launcher,
+        ctx.outputs.bin,
         java_info.transitive_runtime_deps,
         main_class = "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
         jvm_flags = [],
@@ -36,7 +35,7 @@ def annex_scala_binary_implementation(ctx):
             res.scala_info,
             res.intellij_info,
             DefaultInfo(
-                executable = launcher,
+                executable = ctx.outputs.bin,
                 files = res.files,
                 runfiles = ctx.runfiles(
                     files = [mains_file],
@@ -47,6 +46,9 @@ def annex_scala_binary_implementation(ctx):
                     ),
                     collect_default = True,
                 ),
+            ),
+            OutputGroupInfo(
+                analysis = depset([res.analysis, res.apis]),
             ),
         ],
         java = res.intellij_info,

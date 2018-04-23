@@ -1,105 +1,93 @@
-package annex
+package annex.zinc
 
+import annex.compiler.Arguments
+import annex.compiler.Arguments.LogLevel
 import annex.worker.WorkerMain
-
-import sbt.internal.inc.Analysis
-import sbt.internal.inc.AnalyzingCompiler
-import sbt.internal.inc.CompileFailed
-import sbt.internal.inc.FreshCompilerCache
-import sbt.internal.inc.IncrementalCompilerImpl
-import sbt.internal.inc.Locate
-import sbt.internal.inc.LoggedReporter
-import sbt.internal.inc.ZincUtil
-
-import scala.collection.JavaConverters._
-import scala.util.control.NonFatal
-
-import xsbti.Logger
-import xsbti.Reporter
-import xsbti.compile.AnalysisContents
-import xsbti.compile.ClasspathOptionsUtil
-import xsbti.compile.Compilers
-import xsbti.compile.CompileAnalysis
-import xsbti.compile.CompileOptions
-import xsbti.compile.CompileResult
-import xsbti.compile.DefinesClass
-import xsbti.compile.FileAnalysisStore
-import xsbti.compile.IncOptions
-import xsbti.compile.Inputs
-import xsbti.compile.MiniSetup
-import xsbti.compile.PerClasspathEntryLookup
-import xsbti.compile.PreviousResult
-import xsbti.compile.ScalaInstance
-import xsbti.compile.Setup
-
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
-
-import java.io.File
-import java.io.PrintWriter
+import java.io.{File, PrintWriter}
 import java.lang.management.ManagementFactory
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.net.URLClassLoader
-import java.util.Optional
-import java.util.Properties
+import java.nio.file.{Files, Paths}
 import java.util.function.Supplier
+import java.util.{Optional, Properties}
+import net.sourceforge.argparse4j.ArgumentParsers
+import net.sourceforge.argparse4j.inf.Namespace
+import sbt.internal.inc.{Hash => _, ScalaInstance => _, _}
+import sbt.io.Hash
+import scala.collection.JavaConverters._
+import scala.util.Try
+import scala.util.control.NonFatal
+import xsbti.compile.{FileAnalysisStore => _, _}
+import xsbti.{Logger, Reporter}
 
-object ZincRunner extends WorkerMain[Env] {
+object ZincRunner extends WorkerMain[Namespace] {
 
-  val toFile: String => File = s => new File(s)
-  val toAbsolute: File => File = f => new File(f.getAbsolutePath)
-  val toAbsoluteFile: String => File = toFile andThen toAbsolute
+  protected[this] def init(args: Option[Array[String]]) = {
+    val parser = ArgumentParsers.newFor("zinc-worker").addHelp(true).build
+    parser.addArgument("--persistence_dir", /* deprecated */ "--persistenceDir").metavar("path")
+    parser.parseArgsOrFail(args.getOrElse(Array.empty))
+  }
 
-  protected[this] def init(args: Option[Array[String]]) = Env.read(args.map(_.toSeq))
+  protected[this] def work(worker: Namespace, args: Array[String]) = {
+    val parser = ArgumentParsers.newFor("zinc").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
+    Arguments.add(parser)
+    val namespace = parser.parseArgsOrFail(args)
 
-  protected[this] def work(env: Env, args: Array[String]) = {
-    val finalArgs = args.flatMap {
-      case arg if arg.startsWith("@") => Files.readAllLines(Paths.get(arg.tail)).asScala
-      case arg                        => Seq(arg)
-    }
-    val options = Options.read(finalArgs.toList, env)
+    val debug = namespace.getBoolean("debug")
 
-    Files.createDirectories(Paths.get(options.outputDir))
+    val path = namespace.getString("label").replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_")
+    val classesDir = Paths.get("tmp", "classes")
+    Files.createDirectories(classesDir)
 
-    val persistence = options.persistenceDir.fold[Persistence](NullPersistence) { dir =>
+    // https://github.com/sbt/zinc/pull/532
+    val analysisFiles = AnalysisFiles(
+      namespace.get[File]("output_analysis").toPath,
+      namespace.get[File]("output_apis").toPath,
+    )
+    val analysisStore =
+      new AnxAnalysisStore(analysisFiles, if (debug) AnxAnalysisStore.TextFormat else AnxAnalysisStore.BinaryFormat)
+
+    val persistence = Option(worker.getString("persistence_dir")).fold[ZincPersistence](NullPersistence) { dir =>
       val rootDir = Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
-      val path = options.label.replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_")
-      new FilePersistence(rootDir.resolve(path), Paths.get(options.outputDir))
+      new FilePersistence(rootDir.resolve(path), analysisFiles, classesDir)
     }
 
-    val scalaInstance = AnxScalaInstance(options.scalaVersion, options.compilerClasspath.map(toFile).toArray)
+    val scalaInstance = new AnxScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
 
-    val compilerBridgeJar = new File(options.compilerBridge)
+    val logger = new AnxLogger(namespace.getString("log_level"))
 
-    val logger = new AnxLogger
+    val scalaCompiler = ZincUtil.scalaCompiler(scalaInstance, namespace.get[File]("compiler_bridge"))
 
-    val scalaCompiler: AnalyzingCompiler =
-      ZincUtil.scalaCompiler(scalaInstance, compilerBridgeJar)
+    val compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
-    val compilers: Compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
-
-    val compileOptions: CompileOptions =
+    val compileOptions =
       CompileOptions.create
-        .withSources(options.sources.map(toAbsoluteFile).toArray)
+        .withSources(namespace.getList[File]("sources").asScala.map(_.getAbsoluteFile).toArray)
         .withClasspath(
           Array.concat(
-            Array(toFile(options.outputDir)),
-            options.compilationClasspath.map(toFile).toArray,
-            options.compilerClasspath.map(toFile).toArray
+            Array(classesDir.toFile),
+            namespace.getList[File]("classpath").asScala.toArray,
+            namespace.getList[File]("compiler_classpath").asScala.toArray
           )
         ) // err??
-        .withClassesDirectory(new File(options.outputDir))
-        .withScalacOptions(options.pluginsClasspath.map(p => s"-Xplugin:${p}").toArray)
+        .withClassesDirectory(classesDir.toFile)
+        .withScalacOptions(namespace.getList[File]("plugins").asScala.map(p => s"-Xplugin:$p").toArray)
 
-    val loadedContents = try persistence.load()
+    try persistence.load()
     catch {
       case NonFatal(e) =>
-        logger.warn(() => "Failed to load analysis: $e")
+        logger.warn(() => s"Failed to load cached analysis: $e".toString)
         None
     }
-    val previousResult = persistence.load().fold(PreviousResult.of(Optional.empty(), Optional.empty())) { contents =>
-      PreviousResult.of(Optional.of(contents.getAnalysis), Optional.of(contents.getMiniSetup))
-    }
+    val previousResult = Try(analysisStore.get())
+      .fold({ e =>
+        logger.warn(() => s"Failed to load previous analysis: $e")
+        Optional.empty[AnalysisContents]()
+      }, identity)
+      .map[PreviousResult](
+        contents => PreviousResult.of(Optional.of(contents.getAnalysis), Optional.of(contents.getMiniSetup))
+      )
+      .orElseGet(() => PreviousResult.of(Optional.empty(), Optional.empty()))
 
     val skip = false
     val lookup: PerClasspathEntryLookup = new AnxPerClasspathEntryLookup
@@ -114,51 +102,40 @@ object ZincRunner extends WorkerMain[Env] {
 
     val compiler: IncrementalCompilerImpl = new IncrementalCompilerImpl()
     val compileResult: CompileResult =
-      try {
-        compiler.compile(inputs, logger)
-      } catch {
-        case e: CompileFailed =>
-          println(s"Oh no: $e")
-          //e.printStackTrace()
-          sys.exit(-1)
+      try compiler.compile(inputs, logger)
+      catch {
+        case _: CompileFailed => sys.exit(-1)
       }
 
-    val analysisContents = AnalysisContents.create(compileResult.analysis, compileResult.setup)
+    analysisStore.set(AnalysisContents.create(compileResult.analysis, compileResult.setup))
 
-    try persistence.save(analysisContents)
+    try persistence.save()
     catch {
-      case NonFatal(e) => logger.warn(() => "Failed to save analysis: $e")
+      case NonFatal(e) => logger.warn(() => s"Failed to save cached analysis: $e")
     }
-
-    FileAnalysisStore.getDefault(new File(options.analysisPath)).set(analysisContents)
 
     val analysis = compileResult.analysis.asInstanceOf[Analysis]
 
-    val compilationDeps = options.compilationClasspath.toSet.map(toAbsoluteFile)
-    val allowedDeps = options.allowedClasspath.toSet.map(toAbsoluteFile)
+    val directDeps = namespace.getList[File]("direct_classpath").asScala.map(_.getAbsoluteFile).toSet
 
-    val bootDeps = ManagementFactory.getRuntimeMXBean.getBootClassPath.split(sys.props("path.separator")).map(toFile)
-
+    val bootDeps =
+      ManagementFactory.getRuntimeMXBean.getBootClassPath.split(sys.props("path.separator")).map(new File(_))
     val usedDeps = analysis.relations.allLibraryDeps -- bootDeps
-    //println("used: " + usedDeps)
-    //println("allowed: " + allowedDeps)
-    //println("ignored: " + ignoredDeps)
 
-    // dependencies that we directly reference but didn't explicitly list
-    // as a compile time dep (and were potentially needed on the compilation
-    // classpath, transitively, to keep scalac happy)
-    val illicitlyUsedDeps = usedDeps -- allowedDeps -- scalaInstance.allJars.map(toAbsolute)
-
-    if (illicitlyUsedDeps.nonEmpty) {
-      illicitlyUsedDeps.foreach(dep => logger.error(() => s"illicitly used dep: $dep"))
-      sys.exit(-1)
+    if (namespace.getBoolean("require_direct")) {
+      val deps = usedDeps -- directDeps -- scalaInstance.allJars.map(_.getAbsoluteFile)
+      if (deps.nonEmpty) {
+        deps.foreach(dep => logger.error(() => s"illicitly used dep: $dep"))
+        sys.exit(-1)
+      }
     }
 
-    // dependencies we said we'd use... but didn't
-    val unusedDeps = allowedDeps -- usedDeps
-    if (unusedDeps.nonEmpty) {
-      unusedDeps.foreach(dep => logger.error(() => s"unused dep: $dep"))
-      sys.exit(-1)
+    if (namespace.getBoolean("require_used")) {
+      val deps = directDeps -- usedDeps
+      if (deps.nonEmpty) {
+        deps.foreach(dep => logger.error(() => s"unused dep: $dep"))
+        sys.exit(-1)
+      }
     }
 
     val mains =
@@ -166,13 +143,12 @@ object ZincRunner extends WorkerMain[Env] {
         .flatMap(_.getMainClasses.toList)
         .sorted
 
-    // TODO: pass in a param for this...
-    val pw = new PrintWriter(new File(options.outputJar + ".mains.txt"))
-    mains.foreach(pw.println)
-    pw.close
+    val pw = new PrintWriter(namespace.get[File]("main_manifest"))
+    try mains.foreach(pw.println)
+    finally pw.close()
 
-    val jarCreator = new JarCreator(options.outputJar)
-    jarCreator.addDirectory(options.outputDir)
+    val jarCreator = new JarCreator(namespace.get[File]("output_jar").toPath)
+    jarCreator.addDirectory(classesDir)
     jarCreator.setCompression(true)
     jarCreator.setNormalize(true)
     jarCreator.setVerbose(false)
@@ -185,7 +161,7 @@ object ZincRunner extends WorkerMain[Env] {
 
     jarCreator.execute()
 
-    env
+    worker
   }
 }
 
@@ -196,18 +172,8 @@ final class AnxPerClasspathEntryLookup extends PerClasspathEntryLookup {
     Locate.definesClass(classpathEntry)
 }
 
-final case class AnxScalaInstance(
-  version: String,
-  allJars: Array[File]
-) extends ScalaInstance {
-
-  lazy val loader: ClassLoader =
-    new URLClassLoader(allJars.map(_.toURI.toURL), null)
-
-  lazy val loaderLibraryOnly: ClassLoader =
-    new URLClassLoader(Array(libraryJar.toURI.toURL), null)
-
-  lazy val actualVersion: String = {
+final class AnxScalaInstance(val allJars: Array[File]) extends ScalaInstance {
+  lazy val actualVersion = {
     val stream = loader.getResourceAsStream("compiler.properties")
     try {
       val props = new Properties
@@ -216,36 +182,46 @@ final case class AnxScalaInstance(
     } finally stream.close()
   }
 
-  lazy val libraryJar: File =
-    allJars
-      .find(f => f.getName.endsWith(".jar") && f.getName.startsWith("scala-library"))
-      .orNull
+  def compilerJar = null
 
-  lazy val compilerJar: File =
-    allJars
-      .find(f => f.getName.endsWith(".jar") && f.getName.startsWith("scala-compiler"))
-      .orNull
+  lazy val libraryJar = allJars
+    .find(f => new URLClassLoader(Array(f.toURI.toURL)).findResource("library.properties") != null)
+    .get
 
-  lazy val otherJars: Array[File] =
-    allJars
-      .filterNot(f => f == libraryJar || f == compilerJar)
+  lazy val loader = new URLClassLoader(allJars.map(_.toURI.toURL), null)
+
+  def loaderLibraryOnly = null
+
+  def otherJars = null
+
+  def version = actualVersion
 }
 
-final class AnxLogger extends Logger {
+final class AnxLogger(level: String) extends Logger {
 
-  def error(msg: Supplier[String]): Unit =
-    println(s"[error]: ${msg.get}")
+  def debug(msg: Supplier[String]) = level match {
+    case LogLevel.Debug => System.err.println(msg.get)
+    case _              => Hash
+  }
 
-  def warn(msg: Supplier[String]): Unit =
-    println(s"[warn ]: ${msg.get}")
+  def error(msg: Supplier[String]) = level match {
+    case LogLevel.Debug | LogLevel.Error | LogLevel.Info | LogLevel.Warn => println(msg.get)
+    case _                                                               =>
+  }
 
-  def info(msg: Supplier[String]): Unit =
-    println(s"[info ]: ${msg.get}")
+  def info(msg: Supplier[String]) = level match {
+    case LogLevel.Debug | LogLevel.Info => System.err.println(msg.get)
+    case _                              =>
+  }
 
-  def debug(msg: Supplier[String]): Unit =
-    println(s"[debug]: ${msg.get}")
+  def trace(err: Supplier[Throwable]) = level match {
+    case LogLevel.Debug | LogLevel.Error | LogLevel.Info | LogLevel.Warn => err.get.printStackTrace()
+    case _                                                               =>
+  }
 
-  def trace(err: Supplier[Throwable]): Unit =
-    println(s"[trace]: ${err.get.getMessage}")
+  def warn(msg: Supplier[String]) = level match {
+    case LogLevel.Debug | LogLevel.Info | LogLevel.Warn => System.err.println(msg.get)
+    case _                                              =>
+  }
 
 }

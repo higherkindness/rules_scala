@@ -1,36 +1,35 @@
-package annex
+package annex.zinc
 
-import java.nio.file.Files
-import java.nio.file.Path
+import java.nio.file.{Files, Path}
 
-import xsbti.compile.AnalysisContents
-import xsbti.compile.FileAnalysisStore
-
-trait Persistence {
-  def load(): Option[AnalysisContents]
-  def save(contents: AnalysisContents)
+trait ZincPersistence {
+  def load(): Unit
+  def save(): Unit
 }
 
-class FilePersistence(cacheDir: Path, outputDir: Path) extends Persistence {
-  private[this] val classDir = cacheDir.resolve("classes")
-  private[this] val analysisStore = FileAnalysisStore.getDefault(cacheDir.resolve("analysis.gz").toFile)
+class FilePersistence(cacheDir: Path, analysisFiles: AnalysisFiles, classDir: Path) extends ZincPersistence {
+  private[this] val cacheAnalysisFiles =
+    AnalysisFiles(cacheDir.resolve("analysis.gz"), cacheDir.resolve("apis.gz"))
+  private[this] val cacheClassDir = cacheDir.resolve("classes")
   def load() = {
-    if (Files.exists(classDir)) {
-      FileUtil.copy(classDir, outputDir)
+    if (Files.exists(cacheDir)) {
+      Files.copy(cacheAnalysisFiles.analysis, analysisFiles.analysis)
+      Files.copy(cacheAnalysisFiles.apis, analysisFiles.apis)
+      FileUtil.copy(cacheClassDir, classDir)
     }
-    analysisStore.get().map[Option[AnalysisContents]](Some(_)).orElse(None)
   }
-  def save(contents: AnalysisContents) = {
+  def save() = {
     if (Files.exists(cacheDir)) {
       FileUtil.delete(cacheDir)
     }
     Files.createDirectories(cacheDir)
-    FileUtil.copy(outputDir, classDir)
-    analysisStore.set(contents)
+    Files.copy(analysisFiles.analysis, cacheAnalysisFiles.analysis)
+    Files.copy(analysisFiles.apis, cacheAnalysisFiles.apis)
+    FileUtil.copy(classDir, cacheClassDir)
   }
 }
 
-object NullPersistence extends Persistence {
-  def load() = None
-  def save(contents: AnalysisContents) = ()
+object NullPersistence extends ZincPersistence {
+  def load() = ()
+  def save() = ()
 }

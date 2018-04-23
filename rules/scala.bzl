@@ -46,7 +46,9 @@ annex_scala_library = rule(
         "use_ijar": attr.bool(default = True),
     },
     toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
-    outputs = {},
+    outputs = {
+        "jar": "%{name}.jar",
+    },
 )
 
 # scala_binary
@@ -77,7 +79,10 @@ annex_scala_binary = rule(
     },
     toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
     executable = True,
-    outputs = {},
+    outputs = {
+        "bin": "%{name}-bin",
+        "jar": "%{name}.jar",
+    },
 )
 
 # scala_test
@@ -118,7 +123,10 @@ annex_scala_test = rule(
     toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
     test = True,
     executable = True,
-    outputs = {},
+    outputs = {
+        "bin": "%{name}-bin",
+        "jar": "%{name}.jar",
+    },
 )
 
 # scala_import
@@ -186,6 +194,7 @@ basic_scala_library = rule(
     attrs = _basic_scala_library_private_attributes + {
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
         "deps": attr.label_list(),
+        "runtime_deps": attr.label_list(),
         "scala": attr.label(
             default = "@scala//:scala_basic",
             mandatory = True,
@@ -203,11 +212,13 @@ def basic_scala_binary(
         deps,
         main_class,
         scala,
-        visibility):
+        visibility,
+        runtime_deps = []):
     basic_scala_library(
         name = "%s-lib" % name,
         srcs = srcs,
         deps = deps,
+        runtime_deps = runtime_deps,
         scala = scala,
     )
 
