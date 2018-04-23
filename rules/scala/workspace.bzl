@@ -1,4 +1,4 @@
-load("//rules/common:private/utils.bzl", "safe_name")
+load("//rules/common:private/utils.bzl", "safe_name", "strip_margin")
 load("//rules/scala:private/workspace.bzl", "annex_configure_scala_repository_implementation")
 load("//3rdparty:maven.bzl", "maven_dependencies")
 
@@ -31,7 +31,12 @@ def annex_scala_repositories():
         sha256 = "2cbba7c512e400df0e7d4376e667724a38d1155db5baaa81b72ad785c6d761d1",
     )
 
-    scala_src_build = """filegroup(name = "src", srcs = glob(["**/*.scala", "**/*.java"]), visibility=["//visibility:public"])"""
+    scala_src_build = strip_margin("""
+      |filegroup(
+      |    name = "src",
+      |    srcs = glob(["**/*.scala", "**/*.java"]),
+      |    visibility = ["//visibility:public"]
+      |)""")
 
     native.new_http_archive(
         name = "compiler_bridge_2_11",
@@ -49,8 +54,14 @@ def annex_scala_repositories():
 
     annex_scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
 
-    native.bind(name = "scala_annex_scala", actual = "@scala_annex_scala_2_12")
-    native.bind(name = "scala_annex_scala_basic", actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic")
+    native.bind(
+        name = "scala_annex_scala",
+        actual = "@scala_annex_scala_2_12",
+    )
+    native.bind(
+        name = "scala_annex_scala_basic",
+        actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic",
+    )
 
 def annex_scala_repository(name, coordinates, compiler_bridge):
     annex_configure_scala_repository(
