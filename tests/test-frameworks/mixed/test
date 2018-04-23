@@ -1,2 +1,5 @@
-> bazel test :mixed_2_12
-> bazel test :mixed_2_11
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel test :mixed_2_12
+bazel test :mixed_2_11

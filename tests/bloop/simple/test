@@ -1,1 +1,5 @@
-# now work has been done on this; disable for now > bazel build :welcome_to_bloop
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+# no work has been done on this; disable for now
+# bazel build :welcome_to_bloop

@@ -1,8 +1,11 @@
-> bazel build :Runtime
-> bazel build :Exported
-> bazel build :ExportOnly
-> bazel build :OtherLib
-> bazel build :MacroTest
-> bazel build :OtherJavaLib
-> bazel build :HelloLib
-> bazel run :ScalaBinary
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :Runtime
+bazel build :Exported
+bazel build :ExportOnly
+bazel build :OtherLib
+bazel build :MacroTest
+bazel build :OtherJavaLib
+bazel build :HelloLib
+bazel run :ScalaBinary

@@ -1,3 +1,6 @@
-> bazel build :A
-> bazel build :B1 :B2
-> bazel build :C
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :A
+bazel build :B1 :B2
+bazel build :C
