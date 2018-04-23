@@ -96,7 +96,7 @@ def write_launcher(
     return [classpath_file]
 
 def safe_name(value):
-    return value.replace(".", "_").replace("-", "_")
+    return "".join([c if c.isalnum() or c == "." else "_" for c in value])
 
 def _short_path(file):
     return file.short_path

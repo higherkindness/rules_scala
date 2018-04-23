@@ -63,6 +63,18 @@ def annex_scala_repositories():
         actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic",
     )
 
+    # for rules_scala compat
+    native.http_jar(
+        name = "scalatest_2_11",
+        url = "https://mirror.bazel.build/oss.sonatype.org/content/groups/public/org/scalatest/scalatest_2.11/2.2.6/scalatest_2.11-2.2.6.jar",
+        sha256 = "f198967436a5e7a69cfd182902adcfbcb9f2e41b349e1a5c8881a2407f615962",
+    )
+
+    native.bind(
+        name = "scala_annex_dependency/scalatest/scalatest_2_11",
+        actual = "@rules_scala_annex//rules/scala:scalatest_2_11_no_ijar",
+    )
+
 def annex_scala_repository(name, coordinates, compiler_bridge):
     annex_configure_scala_repository(
         name = name,

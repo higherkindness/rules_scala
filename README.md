@@ -26,7 +26,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [x] scala_binary (partial)
 - [x] scala_import (partial)
 - [x] scala_test
-- [ ] scala_test_suite
+- [x] scala_test_suite
 - [ ] scala_library_suite
 - [ ] thrift_library
 - [ ] scalapb_proto_library
