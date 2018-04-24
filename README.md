@@ -49,8 +49,9 @@ http_archive(
   url = "https://github.com/andyscott/rules_scala_annex/archive/<commit>.zip",
 )
 
-load("@rules_scala_annex//rules/scala:workspace.bzl", "annex_scala_repositories")
+load("@rules_scala_annex//rules/scala:workspace.bzl", "annex_scala_repositories", "annex_scala_register_toolchains")
 annex_scala_repositories()
+annex_scala_register_toolchains()
 
 # Add a @scala repo, which is the default scala provider used by annex_scala_*
 annex_scala_repository("scala", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
@@ -139,11 +140,11 @@ $ bazel test :format
 ### Strict & unused deps
 
 This feature shares concepts with
-[Java strict and unused deps](https://blog.bazel.build/2017/06/28/sjd-unused_deps.html). The Scala checks are controlled
-by two defines:
+[Java strict and unused deps](https://blog.bazel.build/2017/06/28/sjd-unused_deps.html). The default toolchain uses two
+defines:
 
-* `scala_require_direct` - Require that direct usages of libraries come only from immediately declared deps
-* `scala_require_used` - Require that any immediate deps are deps are directly used.
+* `scala_deps_direct` - Require that direct usages of libraries come only from immediately declared deps
+* `scala_deps_used` - Require that any immediate deps are deps are directly used.
 
 Each define may have a value of:
 

@@ -12,11 +12,6 @@ def _filesArg(files):
     return ([str(len(files))] + [file.path for file in files])
 
 runner_common_attributes = {
-    "_check_deps": attr.label(
-        cfg = "host",
-        default = "@rules_scala_annex//rules/scala:deps",
-        executable = True,
-    ),
     "_java_toolchain": attr.label(
         default = Label("@bazel_tools//tools/jdk:current_java_toolchain"),
     ),
@@ -125,40 +120,43 @@ def runner_common(ctx):
         arguments = [args],
     )
 
-    success = ctx.actions.declare_file("{}/deps.check".format(ctx.label.name))
+    files = [ctx.outputs.jar]
 
-    labeled_jars = depset(transitive = [dep[LabeledJars].values for dep in ctx.attr.deps])
-    deps_args = ctx.actions.args()
-    if hasattr(deps_args, "add_all"):  # Bazel 0.13.0+
-        deps_args.add_all("--direct", [dep.label for dep in ctx.attr.deps], format_each = "_%s")
-        deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
-        deps_args.add("--label", ctx.label, format = "_%s")
-        deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
-        deps_args.add("--")
-        deps_args.add(used)
-        deps_args.add(success)
-    else:
-        deps_args.add("--direct")
-        deps_args.add([dep.label for dep in ctx.attr.deps], format = "_%s")
-        deps_args.add(labeled_jars, before_each = "--group", map_fn = _labeled_groups)
-        deps_args.add("--label")
-        deps_args.add(ctx.label, format = "_%s")
-        deps_args.add("--")
-        deps_args.add(used)
-        deps_args.add(success)
-    deps_args.set_param_file_format("multiline")
-    deps_args.use_param_file("@%s", use_always = True)
-
-    deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [ctx.attr._check_deps])
-    ctx.actions.run(
-        mnemonic = "ScalaCheckDeps",
-        inputs = [used] + deps_inputs,
-        outputs = [success],
-        executable = ctx.executable._check_deps,
-        input_manifests = deps_input_manifests,
-        execution_requirements = {"supports-workers": "1"},
-        arguments = [deps_args],
-    )
+    deps_runner = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"].runner
+    if deps_runner:
+        deps_check = ctx.actions.declare_file("{}/deps.check".format(ctx.label.name))
+        labeled_jars = depset(transitive = [dep[LabeledJars].values for dep in ctx.attr.deps])
+        deps_args = ctx.actions.args()
+        if hasattr(deps_args, "add_all"):  # Bazel 0.13.0+
+            deps_args.add_all("--direct", [dep.label for dep in ctx.attr.deps], format_each = "_%s")
+            deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
+            deps_args.add("--label", ctx.label, format = "_%s")
+            deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
+            deps_args.add("--")
+            deps_args.add(used)
+            deps_args.add(deps_check)
+        else:
+            deps_args.add("--direct")
+            deps_args.add([dep.label for dep in ctx.attr.deps], format = "_%s")
+            deps_args.add(labeled_jars, before_each = "--group", map_fn = _labeled_groups)
+            deps_args.add("--label")
+            deps_args.add(ctx.label, format = "_%s")
+            deps_args.add("--")
+            deps_args.add(used)
+            deps_args.add(deps_check)
+        deps_args.set_param_file_format("multiline")
+        deps_args.use_param_file("@%s", use_always = True)
+        deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_runner])
+        ctx.actions.run(
+            mnemonic = "ScalaCheckDeps",
+            inputs = [used] + deps_inputs,
+            outputs = [deps_check],
+            executable = deps_runner.files_to_run.executable,
+            input_manifests = deps_input_manifests,
+            execution_requirements = {"supports-workers": "1"},
+            arguments = [deps_args],
+        )
+        files.append(deps_check)
 
     return struct(
         analysis = analysis,
@@ -167,7 +165,7 @@ def runner_common(ctx):
         scala_info = ScalaInfo(scala_configuration = scala_configuration),
         zinc_info = ZincInfo(analysis = analysis),
         intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
-        files = depset([ctx.outputs.jar, success]),
+        files = depset(files),
         mains_files = depset([mains_file]),
     )
 

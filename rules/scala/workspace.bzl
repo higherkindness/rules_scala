@@ -75,6 +75,10 @@ def annex_scala_repositories():
         actual = "@rules_scala_annex//rules/scala:scalatest_2_11_no_ijar",
     )
 
+def annex_scala_register_toolchains():
+    native.register_toolchains("@rules_scala_annex//rules/scala:config_runner_toolchain")
+    native.register_toolchains("@rules_scala_annex//rules/scala:config_deps_toolchain")
+
 def annex_scala_repository(name, coordinates, compiler_bridge):
     annex_configure_scala_repository(
         name = name,

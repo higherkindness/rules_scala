@@ -49,7 +49,10 @@ annex_scala_library = rule(
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
     },
-    toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
+    toolchains = [
+        "@rules_scala_annex//rules/scala:deps_toolchain_type",
+        "@rules_scala_annex//rules/scala:runner_toolchain_type",
+    ],
     outputs = {
         "jar": "%{name}.jar",
     },
@@ -80,7 +83,10 @@ annex_scala_binary = rule(
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
     },
-    toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
+    toolchains = [
+        "@rules_scala_annex//rules/scala:deps_toolchain_type",
+        "@rules_scala_annex//rules/scala:runner_toolchain_type",
+    ],
     executable = True,
     outputs = {
         "bin": "%{name}-bin",
@@ -122,7 +128,10 @@ annex_scala_test = rule(
         ),
         "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
     },
-    toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
+    toolchains = [
+        "@rules_scala_annex//rules/scala:deps_toolchain_type",
+        "@rules_scala_annex//rules/scala:runner_toolchain_type",
+    ],
     test = True,
     executable = True,
     outputs = {
@@ -158,11 +167,14 @@ scala_import = rule(
 ##
 
 # scala_runner_toolchain
+# scala_deps_toolchain
 
 load(
     "//rules/scala:private/toolchain.bzl",
     _annex_scala_runner_toolchain_implementation =
         "annex_scala_runner_toolchain_implementation",
+    _annex_scala_deps_toolchain_implementation =
+        "annex_scala_deps_toolchain_implementation",
 )
 
 """
@@ -179,7 +191,16 @@ annex_scala_runner_toolchain = rule(
     },
 )
 
-# configure_scala
+"""
+Configures the deps checker and options to use
+"""
+annex_scala_deps_toolchain = rule(
+    implementation = _annex_scala_runner_toolchain_implementation,
+    attrs = {
+        "flags": attr.string_list(default = []),
+        "runner": attr.label(allow_files = True, executable = True, cfg = "host"),
+    },
+)
 
 load(
     "//rules/scala:private/provider.bzl",
