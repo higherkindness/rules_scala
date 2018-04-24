@@ -92,11 +92,11 @@ class TestFrameworkLoader(loader: ClassLoader, logger: Logger) {
       Some(Class.forName(className, true, loader).getDeclaredConstructor().newInstance())
     } catch {
       case _: ClassNotFoundException => None
-      case NonFatal(e)               => throw new Exception("Failed to load framework $className", e)
+      case NonFatal(e)               => throw new Exception(s"Failed to load framework $className", e)
     }
     framework.map {
       case framework: Framework => new TestFramework(loader, framework, logger)
-      case _                    => throw new Exception("$className does not implement ${classOf[Framework].getName}")
+      case _                    => throw new Exception(s"$className does not implement ${classOf[Framework].getName}")
     }
 
   }

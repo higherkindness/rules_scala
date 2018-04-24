@@ -3,6 +3,8 @@ load(
     "scala_library",
     "scala_macro_library",
     "scala_binary",
+    "scala_test",
+    "scala_test_suite",
 )
 
 scala_library(
@@ -62,5 +64,23 @@ scala_binary(
     deps = [
         ":HelloLib",
         ":MacroTest",
+    ],
+)
+
+scala_test(
+    name = "HelloLibTest",
+    size = "small",  # Not a macro, can pass test-specific attributes.
+    srcs = ["HelloLibTest.scala"],
+    deps = [
+        ":HelloLib",
+    ],
+)
+
+scala_test_suite(
+    name = "HelloLibTestSuite",
+    size = "small",  # Not a macro, can pass test-specific attributes.
+    srcs = glob(["HelloLibTest*.scala"]),
+    deps = [
+        ":HelloLib",
     ],
 )
