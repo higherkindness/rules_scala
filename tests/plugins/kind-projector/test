@@ -1,1 +1,4 @@
-> bazel build :kind-projector
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :kind-projector

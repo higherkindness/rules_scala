@@ -1,1 +1,4 @@
-> bazel run :one_discovered
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel run :one_discovered

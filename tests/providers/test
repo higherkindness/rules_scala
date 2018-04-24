@@ -1,7 +1,10 @@
-> bazel build :consume_scala_configuration
--> bazel build :consume_scala_as_zinc_configuration
-> bazel build :consume_zinc_configuration
--> bazel build :consume_zinc_as_scala_configuration
-> bazel build :consume_scala_and_zinc_configuration
-> bazel build :consume_scala_and_zinc_as_scala_configuration
-> bazel build :consume_scala_and_zinc_as_zinc_configuration
+#!/bin/bash -e
+. "$(dirname "$0")"/../common.sh
+
+bazel build :consume_scala_configuration
+! bazel build :consume_scala_as_zinc_configuration
+bazel build :consume_zinc_configuration
+! bazel build :consume_zinc_as_scala_configuration
+bazel build :consume_scala_and_zinc_configuration
+bazel build :consume_scala_and_zinc_as_scala_configuration
+bazel build :consume_scala_and_zinc_as_zinc_configuration
