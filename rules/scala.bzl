@@ -2,7 +2,11 @@
 ## top level rules
 ##
 
-load("@rules_scala_annex//rules/scala:provider.bzl", "ScalaConfiguration")
+load(
+    "@rules_scala_annex//rules:providers.bzl",
+    "ScalaConfiguration",
+    "ZincConfiguration",
+)
 
 # scala_library
 
@@ -40,7 +44,7 @@ annex_scala_library = rule(
         "scala": attr.label(
             default = "@scala",
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
@@ -72,7 +76,7 @@ annex_scala_binary = rule(
         "scala": attr.label(
             default = "@scala",
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
@@ -105,7 +109,7 @@ annex_scala_test = rule(
         "scala": attr.label(
             default = "@scala",
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
@@ -155,8 +159,6 @@ scala_import = rule(
 ## core/underlying rules and configuration ##
 ##
 
-load("@rules_scala_annex//rules/scala:provider.bzl", "BasicScalaConfiguration")
-
 # scala_runner_toolchain
 
 load(
@@ -198,7 +200,7 @@ basic_scala_library = rule(
         "scala": attr.label(
             default = "@scala//:scala_basic",
             mandatory = True,
-            providers = [BasicScalaConfiguration],
+            providers = [ScalaConfiguration],
         ),
     },
     fragments = ["java"],

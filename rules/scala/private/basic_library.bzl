@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules/scala:provider.bzl", "BasicScalaConfiguration")
+load("@rules_scala_annex//rules:providers.bzl", "ScalaConfiguration")
 load("//rules/common:private/utils.bzl", "strip_margin")
 load(":private/import.bzl", "create_intellij_info")
 
@@ -35,7 +35,7 @@ def basic_scala_library_implementation(ctx):
 
     output = ctx.actions.declare_file("%s.jar" % name)
 
-    scala = ctx.attr.scala[BasicScalaConfiguration]
+    scala = ctx.attr.scala[ScalaConfiguration]
 
     deps = [dep[JavaInfo] for dep in scala.runtime_classpath + ctx.attr.deps]
 
