@@ -2,7 +2,11 @@
 ## top level rules
 ##
 
-load("@rules_scala_annex//rules/scala:provider.bzl", "ScalaConfiguration")
+load(
+    "@rules_scala_annex//rules:providers.bzl",
+    "ScalaConfiguration",
+    "ZincConfiguration",
+)
 
 # scala_library
 
@@ -40,7 +44,7 @@ annex_scala_library = rule(
         "scala": attr.label(
             default = "@scala",
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
@@ -72,7 +76,7 @@ annex_scala_binary = rule(
         "scala": attr.label(
             default = "@scala",
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
@@ -105,7 +109,7 @@ annex_scala_test = rule(
         "scala": attr.label(
             default = "@scala",
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
@@ -155,8 +159,6 @@ scala_import = rule(
 ## core/underlying rules and configuration ##
 ##
 
-load("@rules_scala_annex//rules/scala:provider.bzl", "BasicScalaConfiguration")
-
 # scala_runner_toolchain
 
 load(
@@ -179,60 +181,7 @@ annex_scala_runner_toolchain = rule(
     },
 )
 
-# basic_scala_library
-
-load(
-    "//rules/scala:private/basic_library.bzl",
-    _basic_scala_library_implementation =
-        "basic_scala_library_implementation",
-    _basic_scala_library_private_attributes =
-        "basic_scala_library_private_attributes",
-)
-
-basic_scala_library = rule(
-    implementation = _basic_scala_library_implementation,
-    attrs = _basic_scala_library_private_attributes + {
-        "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "deps": attr.label_list(),
-        "runtime_deps": attr.label_list(),
-        "scala": attr.label(
-            default = "@scala//:scala_basic",
-            mandatory = True,
-            providers = [BasicScalaConfiguration],
-        ),
-    },
-    fragments = ["java"],
-)
-
-# basic_scala_binary
-
-def basic_scala_binary(
-        name,
-        srcs,
-        deps,
-        main_class,
-        scala,
-        visibility,
-        runtime_deps = []):
-    basic_scala_library(
-        name = "%s-lib" % name,
-        srcs = srcs,
-        deps = deps,
-        runtime_deps = runtime_deps,
-        scala = scala,
-    )
-
-    # being lazy: use java_binary to write a launcher
-    # instead of figuring out how to write it directly
-
-    native.java_binary(
-        name = name,
-        visibility = visibility,
-        runtime_deps = [":%s-lib" % name],
-        main_class = main_class,
-    )
-
-    # configure_basic_scala
+# configure_scala
 
 load(
     "//rules/scala:private/provider.bzl",
@@ -249,8 +198,6 @@ _annex_configure_basic_scala = rule(
     },
 )
 
-# configure_scala
-
 load(
     "//rules/scala:private/provider.bzl",
     _annex_configure_scala_implementation =
@@ -265,6 +212,12 @@ _annex_configure_scala = rule(
         "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
         "compiler_bridge": attr.label(allow_single_file = True, mandatory = True),
     },
+)
+
+load(
+    "//rules:scalac.bzl",
+    _scalac_library =
+        "scalac_library",
 )
 
 """
@@ -296,7 +249,7 @@ def annex_configure_scala(
         **kwargs):
     _annex_configure_basic_scala(name = "{}_basic".format(name), compiler_classpath = compiler_classpath, **kwargs)
 
-    basic_scala_library(
+    _scalac_library(
         name = "{}_compiler_bridge".format(name),
         deps = compiler_classpath + compiler_bridge_classpath,
         scala = ":{}_basic".format(name),

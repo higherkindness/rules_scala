@@ -1,4 +1,10 @@
-load("@rules_scala_annex//rules/scala:provider.bzl", "ScalaConfiguration", "ScalaInfo")
+load(
+    "@rules_scala_annex//rules:providers.bzl",
+    "ScalaConfiguration",
+    "ScalaInfo",
+    "ZincConfiguration",
+    "ZincInfo",
+)
 load(":private/import.bzl", "create_intellij_info")
 
 def _filesArg(files):
@@ -17,8 +23,10 @@ runner_common_attributes = {
 def runner_common(ctx):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"].runner
 
-    configuration = ctx.attr.scala[ScalaConfiguration]
-    configuration_runtime_deps = _collect(JavaInfo, configuration.runtime_classpath)
+    scala_configuration = ctx.attr.scala[ScalaConfiguration]
+    scala_configuration_runtime_deps = _collect(JavaInfo, scala_configuration.runtime_classpath)
+
+    zinc_configuration = ctx.attr.scala[ZincConfiguration]
 
     sdeps = java_common.merge(_collect(JavaInfo, ctx.attr.deps))
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
@@ -37,7 +45,7 @@ def runner_common(ctx):
             use_ijar = ctx.attr.use_ijar,
             sources = ctx.files.srcs,
             deps = [sdeps],
-            runtime_deps = [sruntime_deps] + configuration_runtime_deps,
+            runtime_deps = [sruntime_deps] + scala_configuration_runtime_deps,
             exports = [sexports],
             actions = ctx.actions,
             java_toolchain = ctx.attr._java_toolchain,
@@ -46,8 +54,8 @@ def runner_common(ctx):
 
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
-        args.add("--compiler_bridge", configuration.compiler_bridge)
-        args.add_all("--compiler_classpath", configuration.compiler_classpath)
+        args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
+        args.add_all("--compiler_classpath", scala_configuration.compiler_classpath)
         args.add_all("--classpath", sdeps.transitive_deps)
         args.add_all("--direct_classpath", sdeps.compile_jars)
         args.add("--label={}".format(ctx.label))
@@ -62,9 +70,9 @@ def runner_common(ctx):
         args.add_all(ctx.files.srcs)
     else:
         args.add("--compiler_bridge")
-        args.add(configuration.compiler_bridge)
+        args.add(zinc_configuration.compiler_bridge)
         args.add("--compiler_classpath")
-        args.add(configuration.compiler_classpath)
+        args.add(scala_configuration.compiler_classpath)
         args.add("--classpath")
         args.add(sdeps.transitive_deps)
         args.add("--direct_classpath")
@@ -89,7 +97,7 @@ def runner_common(ctx):
 
     runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
     inputs = depset(
-        [configuration.compiler_bridge] + configuration.compiler_classpath + ctx.files.srcs + runner_inputs,
+        [zinc_configuration.compiler_bridge] + scala_configuration.compiler_classpath + ctx.files.srcs + runner_inputs,
         transitive = [
             sdeps.transitive_deps,
             splugins.transitive_runtime_deps,
@@ -112,7 +120,8 @@ def runner_common(ctx):
         analysis = analysis,
         apis = apis,
         java_info = java_info,
-        scala_info = ScalaInfo(analysis = analysis),
+        scala_info = ScalaInfo(scala_configuration = scala_configuration),
+        zinc_info = ZincInfo(analysis = analysis),
         intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
         files = depset([ctx.outputs.jar]),
         mains_files = depset([mains_file]),
@@ -126,6 +135,7 @@ def annex_scala_library_implementation(ctx):
         providers = [
             res.java_info,
             res.scala_info,
+            res.zinc_info,
             res.intellij_info,
             DefaultInfo(
                 files = res.files,

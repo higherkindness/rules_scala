@@ -1,7 +1,7 @@
 load("//rules:scalafmt.bzl", "annex_scala_format_test")
-load("//rules:scala.bzl", "basic_scala_library")
+load("//rules:scalac.bzl", "scalac_library")
 
-basic_scala_library(
+scalac_library(
     name = "worker",
     srcs = glob(["worker/**/*.scala"]),
     scala = "//external:scala_annex_scala_basic",

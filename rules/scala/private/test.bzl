@@ -50,6 +50,7 @@ def annex_scala_test_implementation(ctx):
         providers = [
             res.java_info,
             res.scala_info,
+            res.zinc_info,
             res.intellij_info,
             test_info,
             OutputGroupInfo(

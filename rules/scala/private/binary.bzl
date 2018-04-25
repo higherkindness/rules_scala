@@ -33,6 +33,7 @@ def annex_scala_binary_implementation(ctx):
         providers = [
             res.java_info,
             res.scala_info,
+            res.zinc_info,
             res.intellij_info,
             DefaultInfo(
                 executable = ctx.outputs.bin,

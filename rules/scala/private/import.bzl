@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules/scala:provider.bzl", "IntellijInfo", "JarsToLabels")
+load("@rules_scala_annex//rules:providers.bzl", "IntellijInfo", "JarsToLabels")
 
 def scala_import_implementation(ctx):
     default_info = DefaultInfo(

@@ -1,9 +1,10 @@
-load("//rules:scala.bzl", "annex_scala_library", "annex_scala_binary", "annex_scala_runner_toolchain", "basic_scala_binary", "basic_scala_library")
+load("//rules:scala.bzl", "annex_scala_library", "annex_scala_binary", "annex_scala_runner_toolchain")
+load("//rules:scalac.bzl", "scalac_binary", "scalac_library")
 load("//rules:scalafmt.bzl", "annex_scala_format_test")
 
 # Bloop
 
-basic_scala_binary(
+scalac_binary(
     name = "bloop",
     srcs = glob(["bloop/**/*.scala"]),
     main_class = "annex.BloopRunner",
@@ -56,7 +57,7 @@ config_setting(
     },
 )
 
-basic_scala_library(
+scalac_library(
     name = "compiler",
     srcs = glob(["compiler/**/*.scala"]),
     scala = "//external:scala_annex_scala_basic",
@@ -101,7 +102,7 @@ java_proto_library(
     deps = [":zinc_options_proto"],
 )
 
-basic_scala_binary(
+scalac_binary(
     name = "zinc",
     srcs = glob(["zinc/**/*.scala"]),
     main_class = "annex.zinc.ZincRunner",
