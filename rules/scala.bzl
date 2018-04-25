@@ -42,6 +42,10 @@ annex_scala_library = rule(
         "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
+        "data": attr.label_list(
+            allow_files = True,
+            cfg = "data",
+        ),
         "scala": attr.label(
             default = "@scala",
             providers = [ScalaConfiguration, ZincConfiguration],
@@ -75,6 +79,10 @@ annex_scala_binary = rule(
         "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
+        "data": attr.label_list(
+            allow_files = True,
+            cfg = "data",
+        ),
         "main_class": attr.string(),
         "scala": attr.label(
             default = "@scala",
@@ -111,6 +119,10 @@ annex_scala_test = rule(
         "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
+        "data": attr.label_list(
+            allow_files = True,
+            cfg = "data",
+        ),
         "scala": attr.label(
             default = "@scala",
             providers = [ScalaConfiguration, ZincConfiguration],
