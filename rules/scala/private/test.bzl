@@ -55,6 +55,7 @@ def annex_scala_test_implementation(ctx):
             test_info,
             OutputGroupInfo(
                 analysis = depset([res.analysis, res.apis]),
+                deps = depset([res.deps_check]),
             ),
         ],
         java = res.intellij_info,

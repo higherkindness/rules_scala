@@ -19,6 +19,16 @@ runner_common_attributes = {
         default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
         cfg = "host",
     ),
+    "_singlejar": attr.label(
+        cfg = "host",
+        default = "@bazel_tools//tools/jdk:singlejar",
+        executable = True,
+    ),
+    "_zipper": attr.label(
+        cfg = "host",
+        default = "@bazel_tools//tools/zip:zipper",
+        executable = True,
+    ),
 }
 
 def runner_common(ctx):
@@ -63,6 +73,52 @@ def runner_common(ctx):
     ]
     compile_classpath = depset(order = "preorder", transitive = macro_classpath + [sdeps.transitive_compile_time_jars])
 
+    if ctx.files.resources:
+        class_jar = ctx.actions.declare_file("{}/classes.zip".format(ctx.label.name))
+        resource_jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
+        args = ctx.actions.args()
+        args.add("c")
+        args.add(resource_jar)
+        args.set_param_file_format("multiline")
+        args.use_param_file("@%s")
+        for file in ctx.files.resources:
+            args.add("{}={}".format(_resource_path(file, ctx.attr.resource_strip_prefix), file.path))
+        inputs, _, manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
+        ctx.actions.run(
+            arguments = [args],
+            executable = ctx.executable._zipper,
+            inputs = inputs + ctx.files.resources,
+            input_manifests = manifests,
+            outputs = [resource_jar],
+        )
+
+        args = ctx.actions.args()
+        args.add("--exclude_build_data")
+        args.add("--normalize")
+        args.add("--sources")
+        args.add(class_jar)
+        if resource_jar:
+            args.add("--sources")
+            args.add(resource_jar)
+        for file in FileType([".jar"]).filter(ctx.files.resource_jars):
+            args.add("--sources")
+            args.add(file)
+        args.add("--output")
+        args.add(ctx.outputs.jar)
+        args.add("--warn_duplicate_resources")
+        args.set_param_file_format("multiline")
+        args.use_param_file("@%s", use_always = True)
+        ctx.actions.run(
+            arguments = [args],
+            executable = ctx.executable._singlejar,
+            execution_requirements = {"supports-workers": "1"},
+            mnemonic = "SingleJar",
+            inputs = [class_jar, resource_jar] + ctx.files.resource_jars,
+            outputs = [ctx.outputs.jar],
+        )
+    else:
+        class_jar = ctx.outputs.jar
+
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
         args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
@@ -73,7 +129,7 @@ def runner_common(ctx):
         args.add("--main_manifest", mains_file)
         args.add("--output_analysis", analysis)
         args.add("--output_apis", apis)
-        args.add("--output_jar", ctx.outputs.jar)
+        args.add("--output_jar", class_jar)
         args.add("--output_used", used)
         args.add("--plugins", splugins.transitive_runtime_deps)
         args.add("--")
@@ -94,7 +150,7 @@ def runner_common(ctx):
         args.add("--output_apis")
         args.add(apis)
         args.add("--output_jar")
-        args.add(ctx.outputs.jar)
+        args.add(class_jar)
         args.add("--output_used")
         args.add(used)
         args.add("--plugin")
@@ -113,7 +169,7 @@ def runner_common(ctx):
         ],
     )
 
-    outputs = [ctx.outputs.jar, mains_file, analysis, apis, used]
+    outputs = [class_jar, mains_file, analysis, apis, used]
 
     # todo: different execution path for nosrc jar?
     ctx.actions.run(
@@ -170,6 +226,7 @@ def runner_common(ctx):
     return struct(
         analysis = analysis,
         apis = apis,
+        deps_check = deps_check,
         java_info = java_info,
         scala_info = ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
         zinc_info = ZincInfo(analysis = analysis),
@@ -193,6 +250,7 @@ def annex_scala_library_implementation(ctx):
             ),
             OutputGroupInfo(
                 analysis = depset([res.analysis, res.apis]),
+                #deps = depset([res.deps_check]),
             ),
         ],
         java = res.intellij_info,
@@ -214,3 +272,18 @@ def _labeled_group(labeled_jars):
 
 def _labeled_groups(labeled_jars_list):
     return [_labeled_group(labeled_jars) for labeled_jars in labeled_jars_list]
+
+def _resource_path(file, strip_prefix):
+    if strip_prefix:
+        if not file.short_path.startswith(strip_prefix):
+            fail("{} does not have prefix {}".format(file.short_path, strip_prefix))
+        return file.short_path[len(strip_prefix) + 1 - int(file.short_path.endswith("/")):]
+    conventional = [
+        "src/main/resources/",
+        "src/test/resources/",
+    ]
+    for path in conventional:
+        dir1, dir2, rest = file.short_path.partition(path)
+        if rest:
+            return rest
+    return file.short_path
