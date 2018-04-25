@@ -29,6 +29,11 @@ def annex_scala_binary_implementation(ctx):
         jvm_flags = [],
     )
 
+    for entry in ctx.attr.data:
+        print(dir(entry))
+        print(entry.files)
+    data_files = [entry.files for entry in ctx.attr.data]
+
     return struct(
         providers = [
             res.java_info,
@@ -37,13 +42,13 @@ def annex_scala_binary_implementation(ctx):
             res.intellij_info,
             DefaultInfo(
                 executable = ctx.outputs.bin,
-                files = depset(files, transitive = [res.files]),
+                files = depset(files, transitive = [res.files] + data_files),
                 runfiles = ctx.runfiles(
                     files = files + [mains_file],
                     transitive_files = depset(
                         order = "default",
                         direct = [ctx.executable._java],
-                        transitive = [java_info.transitive_runtime_deps],
+                        transitive = [java_info.transitive_runtime_deps] + data_files,
                     ),
                     collect_default = True,
                 ),

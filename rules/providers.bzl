@@ -67,6 +67,28 @@ ZincInfo = provider(
     },
 )
 
+def _zinc_info_implementation(ctx):
+    input = ctx.attr.dep[ZincInfo].analysis
+    output = ctx.outputs.analysis
+    ctx.actions.run_shell(
+        inputs = [input],
+        outputs = [output],
+        command = "cp %s %s" % (input.path, output.path),
+    )
+
+zinc_info = rule(
+    implementation = _zinc_info_implementation,
+    attrs = {
+        "dep": attr.label(
+            mandatory = True,
+            providers = [ZincInfo],
+        ),
+    },
+    outputs = {
+        "analysis": "%{name}.gz",
+    },
+)
+
 def _collect(index, entries):
     return [
         entry[index]
