@@ -44,7 +44,6 @@ annex_scala_library = rule(
         "exports": attr.label_list(),
         "scala": attr.label(
             default = "@scala",
-            mandatory = True,
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
@@ -76,7 +75,6 @@ annex_scala_binary = rule(
         "main_class": attr.string(),
         "scala": attr.label(
             default = "@scala",
-            mandatory = True,
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
@@ -109,7 +107,6 @@ annex_scala_test = rule(
         "exports": attr.label_list(),
         "scala": attr.label(
             default = "@scala",
-            mandatory = True,
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "plugins": attr.label_list(),
