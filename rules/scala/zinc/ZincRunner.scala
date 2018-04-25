@@ -116,27 +116,14 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     val analysis = compileResult.analysis.asInstanceOf[Analysis]
 
-    val directDeps = namespace.getList[File]("direct_classpath").asScala.map(_.getAbsoluteFile).toSet
-
     val bootDeps =
       ManagementFactory.getRuntimeMXBean.getBootClassPath.split(sys.props("path.separator")).map(new File(_))
-    val usedDeps = analysis.relations.allLibraryDeps -- bootDeps
-
-    if (namespace.getBoolean("require_direct")) {
-      val deps = usedDeps -- directDeps -- scalaInstance.allJars.map(_.getAbsoluteFile)
-      if (deps.nonEmpty) {
-        deps.foreach(dep => logger.error(() => s"illicitly used dep: $dep"))
-        sys.exit(-1)
-      }
-    }
-
-    if (namespace.getBoolean("require_used")) {
-      val deps = directDeps -- usedDeps
-      if (deps.nonEmpty) {
-        deps.foreach(dep => logger.error(() => s"unused dep: $dep"))
-        sys.exit(-1)
-      }
-    }
+    val usedDeps = (analysis.relations.allLibraryDeps -- bootDeps - scalaInstance.libraryJar.getAbsoluteFile).toSeq
+      .map(file => Paths.get("").toAbsolutePath.relativize(file.toPath))
+      .sorted
+    val depsPrinter = new PrintWriter(namespace.get[File]("output_used"))
+    try usedDeps.foreach(depsPrinter.println(_))
+    finally depsPrinter.close()
 
     val mains =
       analysis.infos.allInfos.values.toList

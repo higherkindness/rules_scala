@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "annex_scala_library", "annex_scala_binary", "annex_scala_runner_toolchain")
+load("//rules:scala.bzl", "annex_scala_library", "annex_scala_binary", "annex_scala_deps_toolchain", "annex_scala_runner_toolchain")
 load("//rules:scalac.bzl", "scalac_binary", "scalac_library")
 load("//rules:scalafmt.bzl", "annex_scala_format_test")
 
@@ -69,6 +69,72 @@ scalac_library(
 toolchain_type(
     name = "runner_toolchain_type",
     visibility = ["//visibility:public"],
+)
+
+# Deps
+
+toolchain_type(
+    name = "deps_toolchain_type",
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    name = "config_deps_off",
+    define_values = {
+        "scala_deps_direct": "off",
+        "scala_deps_used": "off",
+    },
+)
+
+config_setting(
+    name = "config_deps_used_off",
+    define_values = {
+        "scala_deps_used": "off",
+    },
+)
+
+config_setting(
+    name = "config_deps_direct_off",
+    define_values = {
+        "scala_deps_direct": "off",
+    },
+)
+
+annex_scala_deps_toolchain(
+    name = "config_deps_toolchain_implementation",
+    flags =
+        select({
+            "@rules_scala_annex//rules/scala:config_deps_direct_off": [],
+            "//conditions:default": ["--require_direct=true"],
+        }) +
+        select({
+            "@rules_scala_annex//rules/scala:config_deps_used_off": [],
+            "//conditions:default": ["--require_used=true"],
+        }),
+    runner = select({
+        ":config_deps_off": None,
+        "//conditions:default": "@rules_scala_annex//rules/scala:deps",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+toolchain(
+    name = "config_deps_toolchain",
+    toolchain = ":config_deps_toolchain_implementation",
+    toolchain_type = "@rules_scala_annex//rules/scala:deps_toolchain_type",
+    visibility = ["//visibility:public"],
+)
+
+scalac_binary(
+    name = "deps",
+    srcs = glob(["deps/**/*.scala"]),
+    main_class = "annex.deps.DepsRunner",
+    scala = "//external:scala_annex_scala_basic",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//rules/common:worker",
+        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
+    ],
 )
 
 # Test

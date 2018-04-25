@@ -11,11 +11,11 @@ http_archive(
     urls = ["https://github.com/google/protobuf/archive/v3.5.2.zip"],
 )
 
-load("//rules/scala:workspace.bzl", "annex_scala_repositories")
+load("//rules/scala:workspace.bzl", "annex_scala_repositories", "annex_scala_register_toolchains")
 
 annex_scala_repositories()
 
-register_toolchains("//rules/scala:config_runner_toolchain")
+annex_scala_register_toolchains()
 
 load("//rules/scalafmt:workspace.bzl", "annex_scalafmt_repositories", "scalafmt_default_config")
 

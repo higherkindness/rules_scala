@@ -1,5 +1,6 @@
 load(
     "@rules_scala_annex//rules:providers.bzl",
+    "LabeledJars",
     "ScalaConfiguration",
     "ScalaInfo",
     "ZincConfiguration",
@@ -52,20 +53,24 @@ def runner_common(ctx):
             host_javabase = ctx.attr._host_javabase,
         )
 
+    analysis = ctx.actions.declare_file("{}/analysis.gz".format(ctx.label.name))
+    apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
+    used = ctx.actions.declare_file("{}/deps_used.txt".format(ctx.label.name))
+
+    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
+
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
         args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
         args.add_all("--compiler_classpath", scala_configuration.compiler_classpath)
         args.add_all("--classpath", sdeps.transitive_deps)
-        args.add_all("--direct_classpath", sdeps.compile_jars)
         args.add("--label={}".format(ctx.label))
         args.add("--main_manifest", mains_file)
         args.add("--output_analysis", analysis)
         args.add("--output_apis", apis)
         args.add("--output_jar", ctx.outputs.jar)
+        args.add("--output_used", used)
         args.add("--plugins", splugins.transitive_runtime_deps)
-        args.add("--require_direct", "true")
-        args.add("--require_used", "true")
         args.add("--")
         args.add_all(ctx.files.srcs)
     else:
@@ -75,8 +80,6 @@ def runner_common(ctx):
         args.add(scala_configuration.compiler_classpath)
         args.add("--classpath")
         args.add(sdeps.transitive_deps)
-        args.add("--direct_classpath")
-        args.add(sdeps.compile_jars)
         args.add("--label={}".format(ctx.label))
         args.add("--main_manifest")
         args.add(mains_file)
@@ -86,10 +89,10 @@ def runner_common(ctx):
         args.add(apis)
         args.add("--output_jar")
         args.add(ctx.outputs.jar)
+        args.add("--output_used")
+        args.add(used)
         args.add("--plugin")
         args.add(splugins.transitive_runtime_deps)
-        args.add("--require_direct=true")
-        args.add("--require_used=true")
         args.add("--")
         args.add(ctx.files.srcs)
     args.set_param_file_format("multiline")
@@ -103,7 +106,8 @@ def runner_common(ctx):
             splugins.transitive_runtime_deps,
         ],
     )
-    outputs = [ctx.outputs.jar, mains_file, analysis, apis]
+
+    outputs = [ctx.outputs.jar, mains_file, analysis, apis, used]
 
     # todo: different execution path for nosrc jar?
     ctx.actions.run(
@@ -116,6 +120,44 @@ def runner_common(ctx):
         arguments = [args],
     )
 
+    files = [ctx.outputs.jar]
+
+    deps_runner = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"].runner
+    if deps_runner:
+        deps_check = ctx.actions.declare_file("{}/deps.check".format(ctx.label.name))
+        labeled_jars = depset(transitive = [dep[LabeledJars].values for dep in ctx.attr.deps])
+        deps_args = ctx.actions.args()
+        if hasattr(deps_args, "add_all"):  # Bazel 0.13.0+
+            deps_args.add_all("--direct", [dep.label for dep in ctx.attr.deps], format_each = "_%s")
+            deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
+            deps_args.add("--label", ctx.label, format = "_%s")
+            deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
+            deps_args.add("--")
+            deps_args.add(used)
+            deps_args.add(deps_check)
+        else:
+            deps_args.add("--direct")
+            deps_args.add([dep.label for dep in ctx.attr.deps], format = "_%s")
+            deps_args.add(labeled_jars, before_each = "--group", map_fn = _labeled_groups)
+            deps_args.add("--label")
+            deps_args.add(ctx.label, format = "_%s")
+            deps_args.add("--")
+            deps_args.add(used)
+            deps_args.add(deps_check)
+        deps_args.set_param_file_format("multiline")
+        deps_args.use_param_file("@%s", use_always = True)
+        deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_runner])
+        ctx.actions.run(
+            mnemonic = "ScalaCheckDeps",
+            inputs = [used] + deps_inputs,
+            outputs = [deps_check],
+            executable = deps_runner.files_to_run.executable,
+            input_manifests = deps_input_manifests,
+            execution_requirements = {"supports-workers": "1"},
+            arguments = [deps_args],
+        )
+        files.append(deps_check)
+
     return struct(
         analysis = analysis,
         apis = apis,
@@ -123,7 +165,7 @@ def runner_common(ctx):
         scala_info = ScalaInfo(scala_configuration = scala_configuration),
         zinc_info = ZincInfo(analysis = analysis),
         intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
-        files = depset([ctx.outputs.jar]),
+        files = depset(files),
         mains_files = depset([mains_file]),
     )
 
@@ -153,3 +195,13 @@ def _collect(index, iterable):
         for entry in iterable
         if index in entry
     ]
+
+"""
+Ew. Bazel 0.13.0's map_each will allow us to produce multiple args from each item.
+"""
+
+def _labeled_group(labeled_jars):
+    return "|".join(["_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars])
+
+def _labeled_groups(labeled_jars_list):
+    return [_labeled_group(labeled_jars) for labeled_jars in labeled_jars_list]
