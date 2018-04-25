@@ -14,7 +14,7 @@ def annex_configure_basic_scala_implementation(ctx):
     ]
 
 def annex_configure_scala_implementation(ctx):
-    return ([        
+    return ([
         new_ZincConfiguration(
             compiler_bridge = ctx.file.compiler_bridge,
         ),

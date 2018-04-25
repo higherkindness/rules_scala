@@ -1,10 +1,10 @@
-load("@rules_scala_annex//rules:providers.bzl",
-     "ScalaConfiguration",
-     "ScalaInfo",
-     "ZincConfiguration",
-     "ZincInfo",
+load(
+    "@rules_scala_annex//rules:providers.bzl",
+    "ScalaConfiguration",
+    "ScalaInfo",
+    "ZincConfiguration",
+    "ZincInfo",
 )
-
 load(":private/import.bzl", "create_intellij_info")
 
 def _filesArg(files):

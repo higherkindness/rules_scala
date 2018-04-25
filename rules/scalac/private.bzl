@@ -65,7 +65,6 @@ def _scalac_common(ctx):
     scala = ctx.attr.scala[ScalaConfiguration]
 
     deps = [dep[JavaInfo] for dep in scala.runtime_classpath + ctx.attr.deps]
-
     sdep = java_common.merge(deps)
 
     # Note: we pull in transitive_compile_time_jars for the time being
@@ -138,6 +137,7 @@ def _scalac_common(ctx):
         use_ijar = False,
         sources = ctx.files.srcs,
         deps = deps,
+        runtime_deps = [dep[JavaInfo] for dep in ctx.attr.runtime_deps],
         actions = ctx.actions,
         host_javabase = ctx.attr._host_javabase,
         java_toolchain = ctx.attr._java_toolchain,
