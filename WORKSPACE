@@ -1,5 +1,7 @@
 workspace(name = "rules_scala_annex")
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 load("//rules/common:private/utils.bzl", "require_bazel_version")
 
 require_bazel_version("0.11.0")

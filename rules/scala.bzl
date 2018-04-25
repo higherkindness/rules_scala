@@ -8,16 +8,41 @@ load(
     "ScalaConfiguration",
     "ZincConfiguration",
 )
-
-# scala_library
-
+load(
+    "//rules/scala:private/binary.bzl",
+    _annex_scala_binary_implementation = "annex_scala_binary_implementation",
+    _annex_scala_binary_private_attributes = "annex_scala_binary_private_attributes",
+)
 load(
     "//rules/scala:private/library.bzl",
-    _annex_scala_library_implementation =
-        "annex_scala_library_implementation",
-    _annex_scala_library_private_attributes =
-        "annex_scala_library_private_attributes",
+    _annex_scala_library_implementation = "annex_scala_library_implementation",
+    _annex_scala_library_private_attributes = "annex_scala_library_private_attributes",
 )
+load(
+    "//rules/scala:private/test.bzl",
+    _annex_scala_test_implementation = "annex_scala_test_implementation",
+    _annex_scala_test_private_attributes = "annex_scala_test_private_attributes",
+)
+load(
+    "//rules/scala:private/import.bzl",
+    _scala_import_implementation = "scala_import_implementation",
+)
+load(
+    "//rules/scala:private/provider.bzl",
+    _annex_configure_basic_scala_implementation = "annex_configure_basic_scala_implementation",
+    _annex_configure_scala_implementation = "annex_configure_scala_implementation",
+)
+load(
+    "//rules/scala:private/toolchain.bzl",
+    _annex_scala_runner_toolchain_implementation = "annex_scala_runner_toolchain_implementation",
+    _annex_scala_deps_toolchain_implementation = "annex_scala_deps_toolchain_implementation",
+)
+load(
+    "//rules:scalac.bzl",
+    _scalac_library = "scalac_library",
+)
+
+# scala_library
 
 """
 Compiles and links Scala/Java sources into a .jar file.
@@ -37,7 +62,7 @@ Args:
 """
 annex_scala_library = rule(
     implementation = _annex_scala_library_implementation,
-    attrs = _annex_scala_library_private_attributes + {
+    attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
@@ -48,7 +73,7 @@ annex_scala_library = rule(
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
-    },
+    }, **_annex_scala_library_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -60,17 +85,9 @@ annex_scala_library = rule(
 
 # scala_binary
 
-load(
-    "//rules/scala:private/binary.bzl",
-    _annex_scala_binary_implementation =
-        "annex_scala_binary_implementation",
-    _annex_scala_binary_private_attributes =
-        "annex_scala_binary_private_attributes",
-)
-
 annex_scala_binary = rule(
     implementation = _annex_scala_binary_implementation,
-    attrs = _annex_scala_binary_private_attributes + {
+    attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
@@ -82,7 +99,7 @@ annex_scala_binary = rule(
         ),
         "plugins": attr.label_list(),
         "use_ijar": attr.bool(default = True),
-    },
+    }, **_annex_scala_binary_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -96,17 +113,9 @@ annex_scala_binary = rule(
 
 # scala_test
 
-load(
-    "//rules/scala:private/test.bzl",
-    _annex_scala_test_implementation =
-        "annex_scala_test_implementation",
-    _annex_scala_test_private_attributes =
-        "annex_scala_test_private_attributes",
-)
-
 annex_scala_test = rule(
     implementation = _annex_scala_test_implementation,
-    attrs = _annex_scala_test_private_attributes + {
+    attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(aspects = [labeled_jars]),
         "runtime_deps": attr.label_list(),
@@ -127,7 +136,7 @@ annex_scala_test = rule(
             ],
         ),
         "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
-    },
+    }, **_annex_scala_test_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -141,12 +150,6 @@ annex_scala_test = rule(
 )
 
 # scala_import
-
-load(
-    "//rules/scala:private/import.bzl",
-    _scala_import_implementation =
-        "scala_import_implementation",
-)
 
 """
 scala_import for use with bazel-deps
@@ -168,14 +171,6 @@ scala_import = rule(
 
 # scala_runner_toolchain
 # scala_deps_toolchain
-
-load(
-    "//rules/scala:private/toolchain.bzl",
-    _annex_scala_runner_toolchain_implementation =
-        "annex_scala_runner_toolchain_implementation",
-    _annex_scala_deps_toolchain_implementation =
-        "annex_scala_deps_toolchain_implementation",
-)
 
 """
 Configures which Scala runner to use
@@ -202,12 +197,6 @@ annex_scala_deps_toolchain = rule(
     },
 )
 
-load(
-    "//rules/scala:private/provider.bzl",
-    _annex_configure_basic_scala_implementation =
-        "annex_configure_basic_scala_implementation",
-)
-
 _annex_configure_basic_scala = rule(
     implementation = _annex_configure_basic_scala_implementation,
     attrs = {
@@ -215,12 +204,6 @@ _annex_configure_basic_scala = rule(
         "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
         "version": attr.string(mandatory = True),
     },
-)
-
-load(
-    "//rules/scala:private/provider.bzl",
-    _annex_configure_scala_implementation =
-        "annex_configure_scala_implementation",
 )
 
 _annex_configure_scala = rule(
@@ -231,12 +214,6 @@ _annex_configure_scala = rule(
         "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
         "compiler_bridge": attr.label(allow_single_file = True, mandatory = True),
     },
-)
-
-load(
-    "//rules:scalac.bzl",
-    _scalac_library =
-        "scalac_library",
 )
 
 """

@@ -1,7 +1,7 @@
 load("//rules/common:private/utils.bzl", "write_launcher")
 load(":private/library.bzl", "runner_common", "runner_common_attributes")
 
-annex_scala_binary_private_attributes = runner_common_attributes + {
+annex_scala_binary_private_attributes = dict({
     "_java": attr.label(
         default = Label("@bazel_tools//tools/jdk:java"),
         executable = True,
@@ -10,7 +10,7 @@ annex_scala_binary_private_attributes = runner_common_attributes + {
     "_java_stub_template": attr.label(
         default = Label("@anx_java_stub_template//file"),
     ),
-}
+}, **runner_common_attributes)
 
 def annex_scala_binary_implementation(ctx):
     res = runner_common(ctx)

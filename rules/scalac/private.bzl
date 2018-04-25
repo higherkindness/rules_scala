@@ -29,15 +29,15 @@ _common_private_attributes = {
 }
 
 scalac_library_private_attributes = _common_private_attributes
-scalac_binary_private_attributes = _common_private_attributes + {
+scalac_binary_private_attributes = dict({
     "_java_stub_template": attr.label(
         default = Label("@anx_java_stub_template//file"),
     ),
-}
+}, **_common_private_attributes)
 
 def scalac_binary_implementation(ctx):
     res = _scalac_common(ctx)
-    launcher = ctx.new_file("%s.sh" % ctx.label.name)
+    launcher = ctx.actions.declare_file("%s.sh" % ctx.label.name)
     files = write_launcher(
         ctx,
         launcher,
@@ -45,10 +45,10 @@ def scalac_binary_implementation(ctx):
         main_class = ctx.attr.main_class,
         jvm_flags = [],
     )
-    return _format_providers(ctx, res + {
+    return _format_providers(ctx, dict({
         "executable": launcher,
         "files": files,
-    })
+    }, **res))
 
 def scalac_library_implementation(ctx):
     res = _scalac_common(ctx)
@@ -74,15 +74,12 @@ def _scalac_common(ctx):
     runtime_deps = sdep.transitive_runtime_jars
 
     compiler_classpath_str = ":".join([file.path for file in scala.compiler_classpath])
-    compile_classpath_str = ":".join([file.path for file in compile_deps])
+    compile_classpath_str = ":".join([file.path for file in compile_deps.to_list()])
 
-    inputs = depset()
-    inputs += [jar]
-    inputs += [java]
-    inputs += [jar_creator]
-    inputs += ctx.files.srcs
-    inputs += scala.compiler_classpath
-    inputs += compile_deps
+    inputs = depset(
+        [jar, java, jar_creator] + ctx.files.srcs + scala.compiler_classpath,
+        transitive = [compile_deps],
+    )
 
     srcs = [
         file.path
@@ -158,21 +155,19 @@ def _create_default_info(ctx, blob):
         files += [blob["output_jar"]]
     if "files" in blob:
         files += blob["files"]
-    args += {"files": depset(files)}
+    args["files"] = depset(files)
 
     if "executable" in blob:
-        args += {
-            "executable": blob["executable"],
-            "runfiles": ctx.runfiles(
-                files = files,
-                transitive_files = depset(
-                    order = "default",
-                    direct = [ctx.executable._java],
-                    transitive = [blob["java_info"].transitive_runtime_deps],
-                ),
-                collect_default = True,
+        args["executable"] = blob["executable"]
+        args["runfiles"] = ctx.runfiles(
+            files = files,
+            transitive_files = depset(
+                order = "default",
+                direct = [ctx.executable._java],
+                transitive = [blob["java_info"].transitive_runtime_deps],
             ),
-        }
+            collect_default = True,
+        )
 
     return DefaultInfo(**args)
 

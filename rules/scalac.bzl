@@ -19,7 +19,7 @@ load(
 
 scalac_library = rule(
     implementation = _scalac_library_implementation,
-    attrs = _scalac_library_private_attributes + {
+    attrs = dict({
         "srcs": attr.label_list(
             allow_files = [".scala", ".java", ".srcjar"],
         ),
@@ -29,13 +29,13 @@ scalac_library = rule(
             mandatory = True,
             providers = [ScalaConfiguration],
         ),
-    },
+    }, **_scalac_library_private_attributes),
     fragments = ["java"],
 )
 
 scalac_binary = rule(
     implementation = _scalac_binary_implementation,
-    attrs = _scalac_binary_private_attributes + {
+    attrs = dict({
         "srcs": attr.label_list(
             allow_files = [".scala", ".java", ".srcjar"],
         ),
@@ -46,7 +46,7 @@ scalac_binary = rule(
             mandatory = True,
             providers = [ScalaConfiguration],
         ),
-    },
+    }, **_scalac_binary_private_attributes),
     fragments = ["java"],
     executable = True,
 )
