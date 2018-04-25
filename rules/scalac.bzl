@@ -24,6 +24,7 @@ scalac_library = rule(
             allow_files = [".scala", ".java", ".srcjar"],
         ),
         "deps": attr.label_list(),
+        "macro": attr.bool(default = False),
         "runtime_deps": attr.label_list(),
         "scala": attr.label(
             mandatory = True,
@@ -40,6 +41,7 @@ scalac_binary = rule(
             allow_files = [".scala", ".java", ".srcjar"],
         ),
         "deps": attr.label_list(),
+        "macro": attr.bool(default = False),
         "runtime_deps": attr.label_list(),
         "main_class": attr.string(mandatory = True),
         "scala": attr.label(

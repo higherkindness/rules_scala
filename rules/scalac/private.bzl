@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:providers.bzl", "ScalaConfiguration")
+load("@rules_scala_annex//rules:providers.bzl", "ScalaConfiguration", "ScalaInfo")
 load("//rules/common:private/utils.bzl", "strip_margin")
 load("//rules/common:private/utils.bzl", "write_launcher")
 load("//rules/scala:private/import.bzl", "create_intellij_info")
@@ -67,10 +67,16 @@ def _scalac_common(ctx):
     deps = [dep[JavaInfo] for dep in scala.runtime_classpath + ctx.attr.deps]
     sdep = java_common.merge(deps)
 
+    macro_classpath = [
+        dep[JavaInfo].transitive_runtime_jars
+        for dep in ctx.attr.deps
+        if ScalaInfo in dep and dep[ScalaInfo].macro
+    ]
+
     # Note: we pull in transitive_compile_time_jars for the time being
     # to make development of runners way easier (bloop/zinc have big dep graphs).
     # Consider removing transitive_compile_time_jars in the future.
-    compile_deps = sdep.transitive_compile_time_jars
+    compile_deps = depset(order = "preorder", transitive = macro_classpath + [sdep.transitive_compile_time_jars])
     runtime_deps = sdep.transitive_runtime_jars
 
     compiler_classpath_str = ":".join([file.path for file in scala.compiler_classpath])
@@ -131,7 +137,6 @@ def _scalac_common(ctx):
 
     java_info = JavaInfo(
         output_jar = output_jar,
-        use_ijar = False,
         sources = ctx.files.srcs,
         deps = deps,
         runtime_deps = [dep[JavaInfo] for dep in ctx.attr.runtime_deps],
@@ -140,9 +145,15 @@ def _scalac_common(ctx):
         java_toolchain = ctx.attr._java_toolchain,
     )
 
+    scala_info = ScalaInfo(
+        scala_configuration = ctx.attr.scala[ScalaConfiguration],
+        macro = ctx.attr.macro,
+    )
+
     return {
         "output_jar": output_jar,
         "java_info": java_info,
+        "scala_info": scala_info,
     }
 
     # TODO: put me in a common place?
@@ -174,6 +185,7 @@ def _create_default_info(ctx, blob):
 def _format_providers(ctx, blob):
     default_info = _create_default_info(ctx, blob)
     java_info = blob["java_info"]
+    scala_info = blob["scala_info"]
     intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info)
 
     return struct(
@@ -181,6 +193,7 @@ def _format_providers(ctx, blob):
             default_info,
             java_info,
             intellij_info,
+            scala_info,
         ],
         java = java_info,
     )

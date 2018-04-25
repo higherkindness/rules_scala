@@ -76,11 +76,11 @@ def scala_library(
         name = name,
         srcs = srcs,
         deps = deps,
+        macro = not _use_ijar,
         runtime_deps = runtime_deps,
         exports = exports,
         scala = _scala,
         tags = tags,
-        use_ijar = _use_ijar,
     )
 
 def scala_macro_library(
@@ -181,10 +181,10 @@ def scala_binary(
         main_class = main_class,
         srcs = srcs,
         deps = deps,
+        macro = not _use_ijar,
         runtime_deps = runtime_deps,
         scala = _scala,
         tags = tags,
-        use_ijar = _use_ijar,
     )
 
 def scala_test(
@@ -246,10 +246,10 @@ def scala_test(
         name = name,
         srcs = srcs,
         deps = deps + _scalatest_deps,
+        macro = not _use_ijar,
         runtime_deps = runtime_deps,
         scala = _scala,
         tags = tags,
-        use_ijar = _use_ijar,
         frameworks = ["org.scalatest.tools.Framework"],
     )
 

@@ -105,6 +105,10 @@ object ZincRunner extends WorkerMain[Namespace] {
       try compiler.compile(inputs, logger)
       catch {
         case _: CompileFailed => sys.exit(-1)
+        case e: ClassFormatError =>
+          System.err.println(e)
+          println("You may be missing a `macro = True` attribute.")
+          sys.exit(1)
       }
 
     analysisStore.set(AnalysisContents.create(compileResult.analysis, compileResult.setup))
