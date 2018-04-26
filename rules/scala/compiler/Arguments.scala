@@ -37,6 +37,11 @@ object Arguments {
       .required(true)
       .`type`(ArgumentsImpl.fileType.verifyCanRead().verifyIsFile())
     parser
+      .addArgument("--compiler_option")
+      .help("Compiler option")
+      .action(ArgumentsImpl.append)
+      .metavar("option")
+    parser
       .addArgument("--classpath")
       .help("Compilation classpath")
       .metavar("path")
