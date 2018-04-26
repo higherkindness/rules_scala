@@ -49,27 +49,27 @@ def scala_library(
         # compat layer internals
         _use_ijar = True):
     if plugins != []:
-        fail("%s: plugins unsupported" % name)
+        print("%s: plugins unsupported" % name)
     if data != []:
-        fail("%s: data unsupported" % name)
+        print("%s: data unsupported" % name)
     if resources != []:
-        fail("%s: resources unsupported" % name)
+        print("%s: resources unsupported" % name)
     if resource_strip_prefix != None:
-        fail("%s: resource_strip_prefix unsupported" % name)
+        print("%s: resource_strip_prefix unsupported" % name)
     if resource_jars != []:
-        fail("%s: resource_jars unsupported" % name)
+        print("%s: resource_jars unsupported" % name)
     if javacopts != []:
-        fail("%s: javacopts unsupported" % name)
+        print("%s: javacopts unsupported" % name)
     if jvm_flags != []:
-        fail("%s: jvm_flags unsupported" % name)
+        print("%s: jvm_flags unsupported" % name)
     if scalac_jvm_flags != []:
-        fail("%s: scalac_jvm_flags unsupported" % name)
+        print("%s: scalac_jvm_flags unsupported" % name)
     if javac_jvm_flags != []:
-        fail("%s: javac_jvm_flags unsupported" % name)
+        print("%s: javac_jvm_flags unsupported" % name)
     if print_compile_time != False:
         print("%s: print_compile_time unsupported" % name)
     if main_class != None:
-        fail("%s: main_class unsupported" % name)
+        print("%s: main_class unsupported" % name)
 
     annex_scala_library(
         name = name,
@@ -156,29 +156,29 @@ def scala_binary(
         # compat layer internals
         _use_ijar = True):
     if plugins != []:
-        fail("%s: plugins unsupported" % name)
+        print("%s: plugins unsupported" % name)
     if data != []:
-        fail("%s: data unsupported" % name)
+        print("%s: data unsupported" % name)
     if resources != []:
-        fail("%s: resources unsupported" % name)
+        print("%s: resources unsupported" % name)
     if resource_strip_prefix != None:
-        fail("%s: resource_strip_prefix unsupported" % name)
+        print("%s: resource_strip_prefix unsupported" % name)
     if resource_jars != []:
-        fail("%s: resource_jars unsupported" % name)
+        print("%s: resource_jars unsupported" % name)
     if scalacopts != []:
-        fail("%s: scalacopts unsupported" % name)
+        print("%s: scalacopts unsupported" % name)
     if javacopts != []:
-        fail("%s: javacopts unsupported" % name)
+        print("%s: javacopts unsupported" % name)
     if jvm_flags != []:
-        fail("%s: jvm_flags unsupported" % name)
+        print("%s: jvm_flags unsupported" % name)
     if scalac_jvm_flags != []:
-        fail("%s: scalac_jvm_flags unsupported" % name)
+        print("%s: scalac_jvm_flags unsupported" % name)
     if javac_jvm_flags != []:
-        fail("%s: javac_jvm_flags unsupported" % name)
+        print("%s: javac_jvm_flags unsupported" % name)
     if print_compile_time != False:
         print("%s: print_compile_time unsupported" % name)
     if classpath_resources != []:
-        fail("%s: classpath_resources unsupported" % name)
+        print("%s: classpath_resources unsupported" % name)
 
     annex_scala_binary(
         name = name,
@@ -219,29 +219,29 @@ def scala_test(
         _use_ijar = True,
         **kwargs):
     if plugins != []:
-        fail("%s: plugins unsupported" % name)
+        print("%s: plugins unsupported" % name)
     if data != []:
-        fail("%s: data unsupported" % name)
+        print("%s: data unsupported" % name)
     if resources != []:
-        fail("%s: resources unsupported" % name)
+        print("%s: resources unsupported" % name)
     if resource_strip_prefix != None:
-        fail("%s: resource_strip_prefix unsupported" % name)
+        print("%s: resource_strip_prefix unsupported" % name)
     if resource_jars != []:
-        fail("%s: resource_jars unsupported" % name)
+        print("%s: resource_jars unsupported" % name)
     if scalacopts != []:
-        fail("%s: scalacopts unsupported" % name)
+        print("%s: scalacopts unsupported" % name)
     if javacopts != []:
-        fail("%s: javacopts unsupported" % name)
+        print("%s: javacopts unsupported" % name)
     if jvm_flags != []:
-        fail("%s: jvm_flags unsupported" % name)
+        print("%s: jvm_flags unsupported" % name)
     if scalac_jvm_flags != []:
-        fail("%s: scalac_jvm_flags unsupported" % name)
+        print("%s: scalac_jvm_flags unsupported" % name)
     if javac_jvm_flags != []:
-        fail("%s: javac_jvm_flags unsupported" % name)
+        print("%s: javac_jvm_flags unsupported" % name)
     if print_compile_time != False:
         print("%s: print_compile_time unsupported" % name)
     if suites != []:
-        fail("%s: suites unsupported" % name)
+        print("%s: suites unsupported" % name)
     if colors != None:
         print("%s: colors unsupported" % name)
     if full_stacktraces != None:
