@@ -27,6 +27,7 @@ def scala_library(
         # bazel rule attributes
         name,
         tags = [],
+        visibility = None,
         # rules_scala common attributes
         srcs = [],
         deps = [],
@@ -80,12 +81,14 @@ def scala_library(
         scala = _scala,
         scalacopts = scalacopts,
         tags = tags,
+        visibility = visibility,
     )
 
 def scala_macro_library(
         # bazel rule attributes
         name,
         tags = [],
+        visibility = None,
         # rules_scala common attributes
         srcs = [],
         deps = [],
@@ -107,6 +110,7 @@ def scala_macro_library(
     return scala_library(
         name,
         tags,
+        visibility,
         srcs,
         deps,
         plugins,
@@ -130,6 +134,7 @@ def scala_binary(
         # bazel rule attributes
         name,
         tags = [],
+        visibility = None,
         # rules_scala common attributes
         srcs = [],
         deps = [],
@@ -190,6 +195,7 @@ def scala_test(
         # bazel rule attributes
         name,
         tags = [],
+        visibility = None,
         # rules_scala common attributes
         srcs = [],
         deps = [],
