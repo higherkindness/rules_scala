@@ -1,4 +1,5 @@
-WORKSPACE="$("$BAZEL_REAL" info workspace)"
+#!/bin/bash
+WORKSPACE="$(dirname "${BASH_SOURCE[0]}")/.."
 mkdir -p "$WORKSPACE"/.bazel_cache
 "$WORKSPACE/tools/gen-ignores.sh" > /dev/null
 exec "$BAZEL_REAL" "$@"
