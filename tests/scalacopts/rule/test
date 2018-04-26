@@ -1,0 +1,8 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :default
+
+! bazel build :fatal
+
+bazel build :warn
