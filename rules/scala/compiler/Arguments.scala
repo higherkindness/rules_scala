@@ -96,6 +96,12 @@ object Arguments {
       .nargs("*")
       .`type`(ArgumentsImpl.fileType.verifyCanCreate)
     parser
+      .addArgument("--source_jars")
+      .help("Source jars")
+      .metavar("path")
+      .nargs("*")
+      .`type`(ArgumentsImpl.fileType.verifyCanRead().verifyIsFile())
+    parser
       .addArgument("sources")
       .help("Source files")
       .metavar("source")

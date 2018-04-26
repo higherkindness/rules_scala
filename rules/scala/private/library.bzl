@@ -73,6 +73,8 @@ def runner_common(ctx):
     ]
     compile_classpath = depset(order = "preorder", transitive = macro_classpath + [sdeps.transitive_compile_time_jars])
 
+    zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
+
     if ctx.files.resources:
         class_jar = ctx.actions.declare_file("{}/classes.zip".format(ctx.label.name))
         resource_jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
@@ -83,12 +85,11 @@ def runner_common(ctx):
         args.use_param_file("@%s")
         for file in ctx.files.resources:
             args.add("{}={}".format(_resource_path(file, ctx.attr.resource_strip_prefix), file.path))
-        inputs, _, manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
         ctx.actions.run(
             arguments = [args],
             executable = ctx.executable._zipper,
-            inputs = inputs + ctx.files.resources,
-            input_manifests = manifests,
+            inputs = zipper_inputs + ctx.files.resources,
+            input_manifests = zipper_manifests,
             outputs = [resource_jar],
         )
 
@@ -119,6 +120,9 @@ def runner_common(ctx):
     else:
         class_jar = ctx.outputs.jar
 
+    srcs = FileType([".java", ".scala"]).filter(ctx.files.srcs)
+    src_jars = FileType([".srcjar"]).filter(ctx.files.srcs)
+
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
         args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
@@ -132,8 +136,9 @@ def runner_common(ctx):
         args.add("--output_jar", class_jar)
         args.add("--output_used", used)
         args.add("--plugins", splugins.transitive_runtime_deps)
+        args.add_all("--source_jars", src_jars)
         args.add("--")
-        args.add_all(ctx.files.srcs)
+        args.add_all(srcs)
     else:
         args.add("--compiler_bridge")
         args.add(zinc_configuration.compiler_bridge)
@@ -155,8 +160,10 @@ def runner_common(ctx):
         args.add(used)
         args.add("--plugin")
         args.add(splugins.transitive_runtime_deps)
+        args.add("--source_jars")
+        args.add(src_jars)
         args.add("--")
-        args.add(ctx.files.srcs)
+        args.add(srcs)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
 

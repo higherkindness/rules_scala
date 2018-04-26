@@ -7,13 +7,15 @@ import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
 import java.lang.management.ManagementFactory
 import java.net.URLClassLoader
-import java.nio.file.{Files, Paths}
+import java.nio.file.{Files, Paths, StandardCopyOption}
 import java.util.function.Supplier
+import java.util.zip.{ZipFile, ZipInputStream}
 import java.util.{Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.{Hash => _, ScalaInstance => _, _}
 import sbt.io.Hash
+import scala.annotation.tailrec
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.util.control.NonFatal
@@ -60,9 +62,31 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     val compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
+    val sources = namespace.getList[File]("sources").asScala ++
+      namespace.getList[File]("source_jars").asScala.zipWithIndex.flatMap { case (jar, i) =>
+        val fileStream = Files.newInputStream(jar.toPath)
+        try {
+          val zipStream = new ZipInputStream(fileStream)
+          @tailrec
+          def next(files: List[File]): List[File] = {
+            zipStream.getNextEntry match {
+              case entry if entry != null && !entry.isDirectory =>
+                val file = Paths.get("tmp", i.toString).resolve(entry.getName)
+                Files.createDirectories(file.getParent)
+                Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
+                next(file.toFile :: files)
+              case _ => files
+            }
+          }
+          next(Nil)
+        } finally {
+          fileStream.close()
+        }
+      }
+
     val compileOptions =
       CompileOptions.create
-        .withSources(namespace.getList[File]("sources").asScala.map(_.getAbsoluteFile).toArray)
+        .withSources(sources.map(_.getAbsoluteFile).toArray)
         .withClasspath(
           Array.concat(
             Array(classesDir.toFile),
