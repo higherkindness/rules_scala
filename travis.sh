@@ -11,7 +11,7 @@ case "$1" in
         ;;
 
     "lint")
-        ./setup-tools.sh
+        ./setup-tools.sh --skip-deps
         ./format.sh -mode=check
         ;;
     "install-bazel")
