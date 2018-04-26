@@ -1,0 +1,8 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :lib
+
+! bazel build --extra_toolchains=:fatal lib
+
+bazel build --extra_toolchains=:warn

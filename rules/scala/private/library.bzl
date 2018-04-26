@@ -22,7 +22,7 @@ runner_common_attributes = {
 }
 
 def runner_common(ctx):
-    runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"].runner
+    runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
 
     scala_configuration = ctx.attr.scala[ScalaConfiguration]
     scala_configuration_runtime_deps = _collect(JavaInfo, scala_configuration.runtime_classpath)
@@ -56,8 +56,6 @@ def runner_common(ctx):
     apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
     used = ctx.actions.declare_file("{}/deps_used.txt".format(ctx.label.name))
 
-    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
-
     macro_classpath = [
         dep[JavaInfo].transitive_runtime_jars
         for dep in ctx.attr.deps
@@ -70,6 +68,7 @@ def runner_common(ctx):
         args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
         args.add_all("--compiler_classpath", scala_configuration.compiler_classpath)
         args.add_all("--classpath", compile_classpath)
+        args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
         args.add("--label={}".format(ctx.label))
         args.add("--main_manifest", mains_file)
         args.add("--output_analysis", analysis)
@@ -84,6 +83,7 @@ def runner_common(ctx):
         args.add(zinc_configuration.compiler_bridge)
         args.add("--compiler_classpath")
         args.add(scala_configuration.compiler_classpath)
+        args.add(runner.scalacopts + ctx.attr.scalacopts, format = "--compiler_option=%s")
         args.add("--classpath")
         args.add(compile_classpath)
         args.add("--label={}".format(ctx.label))
@@ -104,7 +104,7 @@ def runner_common(ctx):
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
 
-    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner])
+    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner.runner])
     inputs = depset(
         [zinc_configuration.compiler_bridge] + scala_configuration.compiler_classpath + ctx.files.srcs + runner_inputs,
         transitive = [
@@ -120,7 +120,7 @@ def runner_common(ctx):
         mnemonic = "ScalaCompile",
         inputs = inputs,
         outputs = outputs,
-        executable = runner.files_to_run.executable,
+        executable = runner.runner.files_to_run.executable,
         input_manifests = input_manifests,
         execution_requirements = {"supports-workers": "1"},
         arguments = [args],

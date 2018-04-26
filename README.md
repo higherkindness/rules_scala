@@ -49,7 +49,8 @@ http_archive(
   url = "https://github.com/andyscott/rules_scala_annex/archive/<commit>.zip",
 )
 
-load("@rules_scala_annex//rules/scala:workspace.bzl", "annex_scala_repositories", "annex_scala_register_toolchains")
+load("@rules_scala_annex//rules/scala:workspace.bzl", "annex_scala_register_toolchains", "annex_scala_repository" "annex_scala_repositories")
+
 annex_scala_repositories()
 annex_scala_register_toolchains()
 

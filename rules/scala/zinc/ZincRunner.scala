@@ -71,7 +71,12 @@ object ZincRunner extends WorkerMain[Namespace] {
           )
         ) // err??
         .withClassesDirectory(classesDir.toFile)
-        .withScalacOptions(namespace.getList[File]("plugins").asScala.map(p => s"-Xplugin:$p").toArray)
+        .withScalacOptions(
+          Array.concat(
+            namespace.getList[File]("plugins").asScala.map(p => s"-Xplugin:$p").toArray,
+            Option(namespace.getList[String]("compiler_option")).fold[Seq[String]](Nil)(_.asScala).toArray,
+          )
+        )
 
     try persistence.load()
     catch {

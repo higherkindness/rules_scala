@@ -73,6 +73,7 @@ annex_scala_library = rule(
             default = "@scala",
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
+        "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
     }, **_annex_scala_library_private_attributes),
     toolchains = [
@@ -100,6 +101,7 @@ annex_scala_binary = rule(
             default = "@scala",
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
+        "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
     }, **_annex_scala_binary_private_attributes),
     toolchains = [
@@ -128,6 +130,7 @@ annex_scala_test = rule(
             default = "@scala",
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
+        "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
         "frameworks": attr.string_list(
             default = [
@@ -186,6 +189,7 @@ annex_scala_runner_toolchain = rule(
             executable = True,
             cfg = "host",
         ),
+        "scalacopts": attr.string_list(),
     },
 )
 
@@ -193,7 +197,7 @@ annex_scala_runner_toolchain = rule(
 Configures the deps checker and options to use
 """
 annex_scala_deps_toolchain = rule(
-    implementation = _annex_scala_runner_toolchain_implementation,
+    implementation = _annex_scala_deps_toolchain_implementation,
     attrs = {
         "flags": attr.string_list(default = []),
         "runner": attr.label(allow_files = True, executable = True, cfg = "host"),

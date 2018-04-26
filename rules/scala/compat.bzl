@@ -57,8 +57,6 @@ def scala_library(
         fail("%s: resource_strip_prefix unsupported" % name)
     if resource_jars != []:
         fail("%s: resource_jars unsupported" % name)
-    if scalacopts != []:
-        fail("%s: scalacopts unsupported" % name)
     if javacopts != []:
         fail("%s: javacopts unsupported" % name)
     if jvm_flags != []:
@@ -80,6 +78,7 @@ def scala_library(
         runtime_deps = runtime_deps,
         exports = exports,
         scala = _scala,
+        scalacopts = scalacopts,
         tags = tags,
     )
 
