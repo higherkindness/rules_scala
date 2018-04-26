@@ -17,6 +17,7 @@ object DepsRunner extends SimpleMain {
       .help("Label and manifest of jars")
       .metavar("label[|path|path...]")
     parser.addArgument("--label").help("Label of current target").metavar("label").required(true)
+    parser.addArgument("--whitelist").help("Whitelist of labels to ignore for unused deps").metavar("label").nargs("*")
     parser.addArgument("used").help("Manifest of used").`type`(Arguments.fileType.verifyCanRead().verifyIsFile())
     parser.addArgument("success").help("Success file").`type`(Arguments.fileType.verifyCanCreate())
     parser
@@ -41,7 +42,8 @@ object DepsRunner extends SimpleMain {
       println(s"buildozer 'remove deps $depLabel' $label")
     }
 
-    val add = (usedPaths -- directLabels.flatMap(labelToPaths))
+    val whitelist = namespace.getList[String]("whitelist").asScala
+    val add = (usedPaths -- (directLabels -- whitelist).flatMap(labelToPaths))
       .flatMap(
         path =>
           groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {

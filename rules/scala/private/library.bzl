@@ -43,7 +43,6 @@ def runner_common(ctx):
     else:
         java_info = JavaInfo(
             output_jar = ctx.outputs.jar,
-            use_ijar = ctx.attr.use_ijar,
             sources = ctx.files.srcs,
             deps = [sdeps],
             runtime_deps = [sruntime_deps] + scala_configuration_runtime_deps,
@@ -57,10 +56,18 @@ def runner_common(ctx):
     apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
     used = ctx.actions.declare_file("{}/deps_used.txt".format(ctx.label.name))
 
+    macro_classpath = [
+        dep[JavaInfo].transitive_runtime_jars
+        for dep in ctx.attr.deps
+        if ScalaInfo in dep and dep[ScalaInfo].macro
+    ]
+    compile_classpath = depset(order = "preorder", transitive = macro_classpath + [sdeps.transitive_compile_time_jars])
+
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
         args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
         args.add_all("--compiler_classpath", scala_configuration.compiler_classpath)
+        args.add_all("--classpath", compile_classpath)
         args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
         args.add("--label={}".format(ctx.label))
         args.add("--main_manifest", mains_file)
@@ -78,7 +85,7 @@ def runner_common(ctx):
         args.add(scala_configuration.compiler_classpath)
         args.add(runner.scalacopts + ctx.attr.scalacopts, format = "--compiler_option=%s")
         args.add("--classpath")
-        args.add(sdeps.transitive_deps)
+        args.add(compile_classpath)
         args.add("--label={}".format(ctx.label))
         args.add("--main_manifest")
         args.add(mains_file)
@@ -101,8 +108,8 @@ def runner_common(ctx):
     inputs = depset(
         [zinc_configuration.compiler_bridge] + scala_configuration.compiler_classpath + ctx.files.srcs + runner_inputs,
         transitive = [
-            sdeps.transitive_deps,
             splugins.transitive_runtime_deps,
+            compile_classpath,
         ],
     )
 
@@ -131,6 +138,7 @@ def runner_common(ctx):
             deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
             deps_args.add("--label", ctx.label, format = "_%s")
             deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
+            deps_args.add("--whitelist", ctx.attr.deps_used_whitelist, format = "_%s")
             deps_args.add("--")
             deps_args.add(used)
             deps_args.add(deps_check)
@@ -140,6 +148,8 @@ def runner_common(ctx):
             deps_args.add(labeled_jars, before_each = "--group", map_fn = _labeled_groups)
             deps_args.add("--label")
             deps_args.add(ctx.label, format = "_%s")
+            deps_args.add("--whitelist")
+            deps_args.add(ctx.attr.deps_used_whitelist, format = "_%s")
             deps_args.add("--")
             deps_args.add(used)
             deps_args.add(deps_check)
@@ -161,7 +171,7 @@ def runner_common(ctx):
         analysis = analysis,
         apis = apis,
         java_info = java_info,
-        scala_info = ScalaInfo(scala_configuration = scala_configuration),
+        scala_info = ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
         zinc_info = ZincInfo(analysis = analysis),
         intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
         files = depset(files),

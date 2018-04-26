@@ -65,15 +65,16 @@ annex_scala_library = rule(
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
+        "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
-        "use_ijar": attr.bool(default = True),
     }, **_annex_scala_library_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
@@ -91,8 +92,10 @@ annex_scala_binary = rule(
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
+        "macro": attr.bool(default = False),
         "main_class": attr.string(),
         "scala": attr.label(
             default = "@scala",
@@ -100,7 +103,6 @@ annex_scala_binary = rule(
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
-        "use_ijar": attr.bool(default = True),
     }, **_annex_scala_binary_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
@@ -120,15 +122,16 @@ annex_scala_test = rule(
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java"]),
         "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
+        "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
             providers = [ScalaConfiguration, ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
-        "use_ijar": attr.bool(default = True),
         "frameworks": attr.string_list(
             default = [
                 "org.scalatest.tools.Framework",

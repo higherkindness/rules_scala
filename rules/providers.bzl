@@ -34,6 +34,7 @@ declare_scala_configuration = rule(
 ScalaInfo = provider(
     doc = "Provider for cross versioned scala rule outputs",
     fields = {
+        "macro": "whether the jar contains macros",
         "scala_configuration": "the scala configuration associated with this output",
     },
 )
