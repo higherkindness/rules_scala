@@ -201,7 +201,7 @@ Ew. Bazel 0.13.0's map_each will allow us to produce multiple args from each ite
 """
 
 def _labeled_group(labeled_jars):
-    return "|".join(["_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars])
+    return "|".join(["_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars.to_list()])
 
 def _labeled_groups(labeled_jars_list):
     return [_labeled_group(labeled_jars) for labeled_jars in labeled_jars_list]

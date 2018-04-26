@@ -1,3 +1,5 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
 load("//rules/common:private/utils.bzl", "safe_name", "strip_margin")
 load("//rules/scala:private/workspace.bzl", "annex_configure_scala_repository_implementation")
 load("//3rdparty:maven.bzl", "maven_dependencies")
@@ -22,7 +24,7 @@ def annex_scala_repositories():
         "java_stub_template.txt"
     )
 
-    native.http_file(
+    http_file(
         name = "anx_java_stub_template",
         urls = [
             "https://mirror.bazel.build/%s" % java_stub_template_url,
@@ -38,14 +40,14 @@ def annex_scala_repositories():
       |    visibility = ["//visibility:public"]
       |)""")
 
-    native.new_http_archive(
+    http_archive(
         name = "compiler_bridge_2_11",
         build_file_content = scala_src_build,
         sha256 = "a3fda3b74ad549e5234ecad73847856607d42f3866890fa8f2b48130eaf303ce",
         url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.1.3/compiler-bridge_2.11-1.1.3-sources.jar",
     )
 
-    native.new_http_archive(
+    http_archive(
         name = "compiler_bridge_2_12",
         build_file_content = scala_src_build,
         sha256 = "cec8a3423b04c1ac8060a7de21ca14fb0461186aa0256ddf0602f4f8fcb6c6d0",
@@ -64,10 +66,11 @@ def annex_scala_repositories():
     )
 
     # for rules_scala compat
-    native.http_jar(
+    java_import_external(
         name = "scalatest_2_11",
-        url = "https://mirror.bazel.build/oss.sonatype.org/content/groups/public/org/scalatest/scalatest_2.11/2.2.6/scalatest_2.11-2.2.6.jar",
-        sha256 = "f198967436a5e7a69cfd182902adcfbcb9f2e41b349e1a5c8881a2407f615962",
+        licenses = ["notice"],
+        jar_urls = ["https://mirror.bazel.build/oss.sonatype.org/content/groups/public/org/scalatest/scalatest_2.11/2.2.6/scalatest_2.11-2.2.6.jar"],
+        jar_sha256 = "f198967436a5e7a69cfd182902adcfbcb9f2e41b349e1a5c8881a2407f615962",
     )
 
     native.bind(
