@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules/scala:compat.bzl", "annex_scala_binary", "annex_scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "annex_scala_binary", "annex_scala_library")
 
 annex_scala_library(
     name = "bad_compile",

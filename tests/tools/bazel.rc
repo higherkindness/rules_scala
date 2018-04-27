@@ -1,4 +1,3 @@
-common --all_incompatible_changes
 common --color yes
 
 build --experimental_strict_action_env

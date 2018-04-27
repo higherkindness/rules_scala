@@ -65,19 +65,6 @@ def annex_scala_repositories():
         actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic",
     )
 
-    # for rules_scala compat
-    java_import_external(
-        name = "scalatest_2_11",
-        licenses = ["notice"],
-        jar_urls = ["https://mirror.bazel.build/oss.sonatype.org/content/groups/public/org/scalatest/scalatest_2.11/2.2.6/scalatest_2.11-2.2.6.jar"],
-        jar_sha256 = "f198967436a5e7a69cfd182902adcfbcb9f2e41b349e1a5c8881a2407f615962",
-    )
-
-    native.bind(
-        name = "scala_annex_dependency/scalatest/scalatest_2_11",
-        actual = "@rules_scala_annex//rules/scala:scalatest_2_11_no_ijar",
-    )
-
 def annex_scala_register_toolchains():
     native.register_toolchains("@rules_scala_annex//rules/scala:config_runner_toolchain")
     native.register_toolchains("@rules_scala_annex//rules/scala:config_deps_toolchain")
