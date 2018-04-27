@@ -5,15 +5,20 @@ def _emulate_rules_scala_repository_impl(repository_ctx):
     repository_ctx.file(
         "scala/scala.bzl",
         content = strip_margin("""
-          |load("@rules_scala_annex//rules:scala.bzl",
-          |     "scala_import",
-          |)
           |load("@rules_scala_annex//rules:rules_scala/private/compat.bzl",
           |     "scala_library",
           |     "scala_macro_library",
           |     "scala_binary",
           |     "scala_test",
           |     "scala_test_suite",
+          |)
+          |"""),
+    )
+    repository_ctx.file(
+        "scala/scala_import.bzl",
+        content = strip_margin("""
+          |load("@rules_scala_annex//rules:scala.bzl",
+          |     "scala_import",
           |)
           |"""),
     )
