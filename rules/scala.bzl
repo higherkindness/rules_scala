@@ -75,6 +75,9 @@ annex_scala_library = rule(
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
+        "resource_strip_prefix": attr.string(),
+        "resources": attr.label_list(allow_files = True),
+        "resource_jars": attr.label_list(allow_files = [".jar"]),
     }, **_annex_scala_library_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
@@ -103,6 +106,9 @@ annex_scala_binary = rule(
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
+        "resource_strip_prefix": attr.string(),
+        "resources": attr.label_list(allow_files = True),
+        "resource_jars": attr.label_list(allow_files = [".jar"]),
     }, **_annex_scala_binary_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
@@ -141,6 +147,9 @@ annex_scala_test = rule(
                 "utest.runner.Framework",
             ],
         ),
+        "resource_strip_prefix": attr.string(),
+        "resources": attr.label_list(allow_files = True),
+        "resource_jars": attr.label_list(allow_files = [".jar"]),
         "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
     }, **_annex_scala_test_private_attributes),
     toolchains = [

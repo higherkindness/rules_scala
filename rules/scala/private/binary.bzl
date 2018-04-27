@@ -50,6 +50,7 @@ def annex_scala_binary_implementation(ctx):
             ),
             OutputGroupInfo(
                 analysis = depset([res.analysis, res.apis]),
+                deps = depset([res.deps_check]),
             ),
         ],
         java = res.intellij_info,

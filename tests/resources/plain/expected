@@ -1,0 +1,7 @@
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+        0  1980-01-01 00:00   META-INF/
+       48  1980-01-01 00:00   META-INF/MANIFEST.MF
+        8  1980-01-01 00:00   resources/plain/example/example.txt
+---------                     -------
+       56                     3 files
