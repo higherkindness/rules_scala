@@ -8,20 +8,17 @@ newer rules.
 
 load(
     "//rules:scala.bzl",
-    "annex_scala_library",
-    "annex_scala_binary",
-    "annex_scala_test",
+    _annex_scala_library = "annex_scala_library",
+    _annex_scala_binary = "annex_scala_binary",
+    _annex_scala_test = "annex_scala_test",
 )
 load(
     "//rules:common/private/utils.bzl",
-    "safe_name",
+    _safe_name = "safe_name",
 )
 
-# use the same fixed version as rules_scala
-_scala = "@scala_2_11"
-_scalatest_deps = [
-    "//external:scala_annex_dependency/scalatest/scalatest_2_11",
-]
+_scala = "//external:scala_annex/compat/rules_scala/scala"
+_scalatest_deps = ["//external:scala_annex/compat/rules_scala/scalatest_dep"]
 
 def scala_library(
         # bazel rule attributes
@@ -71,7 +68,7 @@ def scala_library(
     if main_class != None:
         print("%s: main_class unsupported" % name)
 
-    annex_scala_library(
+    _annex_scala_library(
         name = name,
         srcs = srcs,
         deps = deps,
@@ -180,7 +177,7 @@ def scala_binary(
     if classpath_resources != []:
         print("%s: classpath_resources unsupported" % name)
 
-    annex_scala_binary(
+    _annex_scala_binary(
         name = name,
         main_class = main_class,
         srcs = srcs,
@@ -215,6 +212,8 @@ def scala_test(
         suites = [],
         colors = None,
         full_stacktraces = None,
+        # compat layer internals
+        _use_ijar = True,
         **kwargs):
     if plugins != []:
         print("%s: plugins unsupported" % name)
@@ -245,10 +244,11 @@ def scala_test(
     if full_stacktraces != None:
         print("%s: full_stacktraces unsupported" % name)
 
-    annex_scala_test(
+    _annex_scala_test(
         name = name,
         srcs = srcs,
         deps = deps + _scalatest_deps,
+        macro = not _use_ijar,
         runtime_deps = runtime_deps,
         scala = _scala,
         tags = tags,
@@ -270,7 +270,7 @@ def scala_test_suite(
         full_stacktraces = True):
     tests = []
     for src in srcs:
-        test_name = "%s_test_suite_%s" % (name, safe_name(src))
+        test_name = "%s_test_suite_%s" % (name, _safe_name(src))
         scala_test(
             name = test_name,
             srcs = [src],

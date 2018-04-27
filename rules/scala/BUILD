@@ -205,13 +205,3 @@ annex_scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),
 )
-
-# Compat
-
-load("//rules/scala:private/build.bzl", "no_ijar")
-
-no_ijar(
-    name = "scalatest_2_11_no_ijar",
-    dep = "@scalatest_2_11//jar",
-    visibility = ["//visibility:public"],
-)

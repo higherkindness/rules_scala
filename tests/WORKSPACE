@@ -12,7 +12,12 @@ local_repository(
     path = "../",
 )
 
-load("@rules_scala_annex//rules/scala:workspace.bzl", "annex_scala_register_toolchains", "annex_scala_repository", "annex_scala_repositories")
+load(
+    "@rules_scala_annex//rules/scala:workspace.bzl",
+    "annex_scala_register_toolchains",
+    "annex_scala_repository",
+    "annex_scala_repositories",
+)
 
 annex_scala_repositories()
 
@@ -34,6 +39,27 @@ annex_scala_repository(
     "typelevel_2_12",
     ("org.typelevel", "2.12.1"),
     "@compiler_bridge_2_12//:src",
+)
+
+annex_scala_repository(
+    "scala",
+    ("org.typelevel", "2.12.1"),
+    "@compiler_bridge_2_12//:src",
+)
+
+load("@rules_scala_annex//rules:rules_scala.bzl", "emulate_rules_scala")
+load("@rules_scala_annex//rules:external.bzl", "scala_import_external")
+
+scala_import_external(
+    name = "scalatest_2_11",
+    jar_sha256 = "f198967436a5e7a69cfd182902adcfbcb9f2e41b349e1a5c8881a2407f615962",
+    jar_urls = ["https://mirror.bazel.build/oss.sonatype.org/content/groups/public/org/scalatest/scalatest_2.11/2.2.6/scalatest_2.11-2.2.6.jar"],
+    licenses = ["notice"],
+)
+
+emulate_rules_scala(
+    scala = "@scala_2_11",
+    scalatest = "@scalatest_2_11//jar",
 )
 
 load("@rules_scala_annex//rules/scalafmt:workspace.bzl", "annex_scalafmt_repositories", "scalafmt_default_config")
@@ -61,21 +87,26 @@ maven_jar(
     artifact = "org.scalacheck:scalacheck_2.11:1.14.0",
 )
 
-# see rules_scala directory
+# see rules_docker directory
 
-rules_scala_version = "f105ef7e0eb00ae4b4a3fca372dc10c30514c3bb"  # update this as needed
-
-http_archive(
-    name = "io_bazel_rules_scala",
-    strip_prefix = "rules_scala-%s" % rules_scala_version,
-    type = "zip",
-    url = "https://github.com/bazelbuild/rules_scala/archive/%s.zip" % rules_scala_version,
+git_repository(
+    name = "io_bazel_rules_docker",
+    remote = "https://github.com/bazelbuild/rules_docker.git",
+    tag = "v0.4.0",
 )
 
-load("@io_bazel_rules_scala//scala:scala.bzl", "scala_repositories")
+rules_docker_version = "452878d665648ada0aaf816931611fdd9c683a97"
 
-scala_repositories()
+http_archive(
+    name = "io_bazel_rules_docker",
+    strip_prefix = "rules_docker-%s" % rules_docker_version,
+    type = "zip",
+    url = "https://github.com/bazelbuild/rules_docker/archive/%s.zip" % rules_docker_version,
+)
 
-load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_toolchains")
+load(
+    "@io_bazel_rules_docker//scala:image.bzl",
+    _scala_image_repos = "repositories",
+)
 
-scala_register_toolchains()
+_scala_image_repos()

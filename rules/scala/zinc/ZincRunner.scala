@@ -63,25 +63,26 @@ object ZincRunner extends WorkerMain[Namespace] {
     val compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
     val sources = namespace.getList[File]("sources").asScala ++
-      namespace.getList[File]("source_jars").asScala.zipWithIndex.flatMap { case (jar, i) =>
-        val fileStream = Files.newInputStream(jar.toPath)
-        try {
-          val zipStream = new ZipInputStream(fileStream)
-          @tailrec
-          def next(files: List[File]): List[File] = {
-            zipStream.getNextEntry match {
-              case entry if entry != null && !entry.isDirectory =>
-                val file = Paths.get("tmp", i.toString).resolve(entry.getName)
-                Files.createDirectories(file.getParent)
-                Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
-                next(file.toFile :: files)
-              case _ => files
+      namespace.getList[File]("source_jars").asScala.zipWithIndex.flatMap {
+        case (jar, i) =>
+          val fileStream = Files.newInputStream(jar.toPath)
+          try {
+            val zipStream = new ZipInputStream(fileStream)
+            @tailrec
+            def next(files: List[File]): List[File] = {
+              zipStream.getNextEntry match {
+                case entry if entry != null && !entry.isDirectory =>
+                  val file = Paths.get("tmp", i.toString).resolve(entry.getName)
+                  Files.createDirectories(file.getParent)
+                  Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
+                  next(file.toFile :: files)
+                case _ => files
+              }
             }
+            next(Nil)
+          } finally {
+            fileStream.close()
           }
-          next(Nil)
-        } finally {
-          fileStream.close()
-        }
       }
 
     val compileOptions =

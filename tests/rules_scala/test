@@ -1,6 +1,0 @@
-#!/bin/bash -e
-. "$(dirname "$0")"/../common.sh
-
-bazel build \
-    --incompatible_remove_native_http_archive=false \
-    :library

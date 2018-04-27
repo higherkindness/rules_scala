@@ -1,3 +1,0 @@
-package anx
-
-object library
