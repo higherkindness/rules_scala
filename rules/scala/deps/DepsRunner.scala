@@ -35,15 +35,15 @@ object DepsRunner extends SimpleMain {
     val labelToPaths = groups.toMap
     val usedPaths = Files.readAllLines(namespace.get[File]("used").toPath).asScala.toSet
 
-    val remove = directLabels.filterNot(labelToPaths(_).exists(usedPaths))
+    val whitelist = namespace.getList[String]("whitelist").asScala.map(_.tail)
+    val remove = (directLabels -- whitelist).filterNot(labelToPaths(_).exists(usedPaths))
     remove.foreach { depLabel =>
       println(s"Target '$depLabel' not used, please remove it from the deps.")
       println(s"You can use the following buildozer command:")
       println(s"buildozer 'remove deps $depLabel' $label")
     }
 
-    val whitelist = namespace.getList[String]("whitelist").asScala
-    val add = (usedPaths -- (directLabels -- whitelist).flatMap(labelToPaths))
+    val add = (usedPaths -- directLabels.flatMap(labelToPaths))
       .flatMap(
         path =>
           groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
