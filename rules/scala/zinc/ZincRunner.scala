@@ -92,7 +92,6 @@ object ZincRunner extends WorkerMain[Namespace] {
           Array.concat(
             Array(classesDir.toFile),
             namespace.getList[File]("classpath").asScala.toArray,
-            namespace.getList[File]("compiler_classpath").asScala.toArray
           )
         ) // err??
         .withClassesDirectory(classesDir.toFile)

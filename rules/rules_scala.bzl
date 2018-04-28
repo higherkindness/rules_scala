@@ -22,17 +22,38 @@ def _emulate_rules_scala_repository_impl(repository_ctx):
           |)
           |"""),
     )
-    repository_ctx.file("scala/BUILD", content = "")
+    extra_deps = ", ".join(["\"{}\"".format(dep) for dep in repository_ctx.attr.extra_deps])
+    repository_ctx.file(
+        "scala/BUILD",
+        content = strip_margin("""
+          |java_import(
+          |    name = "extra_deps",
+          |    exports = [
+          |        {extra_deps}
+          |    ],
+          |    jars = [],
+          |    visibility = ["//visibility:public"],
+          |)
+          |""".format(extra_deps = extra_deps)),
+    )
 
 emulate_rules_scala_repository = repository_rule(
     implementation = _emulate_rules_scala_repository_impl,
+    attrs = {
+        "extra_deps": attr.label_list(default = []),
+    },
     local = True,
 )
 
-def emulate_rules_scala(scala, scalatest):
+def emulate_rules_scala(scala, scalatest, extra_deps = []):
     native.bind(
         name = "scala_annex/compat/rules_scala/scala",
         actual = scala,
+    )
+
+    native.bind(
+        name = "scala_annex/compat/rules_scala/extra_deps",
+        actual = "@io_bazel_rules_scala//scala:extra_deps",
     )
 
     native.bind(
@@ -40,4 +61,7 @@ def emulate_rules_scala(scala, scalatest):
         actual = scalatest,
     )
 
-    emulate_rules_scala_repository(name = "io_bazel_rules_scala")
+    emulate_rules_scala_repository(
+        name = "io_bazel_rules_scala",
+        extra_deps = extra_deps,
+    )

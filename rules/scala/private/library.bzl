@@ -39,7 +39,7 @@ def runner_common(ctx):
 
     zinc_configuration = ctx.attr.scala[ZincConfiguration]
 
-    sdeps = java_common.merge(_collect(JavaInfo, ctx.attr.deps))
+    sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
     splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins))
