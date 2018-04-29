@@ -5,7 +5,6 @@ import annex.compiler.Arguments.LogLevel
 import annex.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
-import java.lang.management.ManagementFactory
 import java.net.URLClassLoader
 import java.nio.file.{Files, Paths, StandardCopyOption}
 import java.util.function.Supplier
@@ -71,12 +70,16 @@ object ZincRunner extends WorkerMain[Namespace] {
             @tailrec
             def next(files: List[File]): List[File] = {
               zipStream.getNextEntry match {
-                case entry if entry != null && !entry.isDirectory =>
+                case null => files
+                case entry if entry.isDirectory =>
+                  zipStream.closeEntry()
+                  next(files)
+                case entry =>
                   val file = Paths.get("tmp", i.toString).resolve(entry.getName)
                   Files.createDirectories(file.getParent)
                   Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
+                  zipStream.closeEntry()
                   next(file.toFile :: files)
-                case _ => files
               }
             }
             next(Nil)
@@ -85,13 +88,15 @@ object ZincRunner extends WorkerMain[Namespace] {
           }
       }
 
+    val classpath = namespace.getList[File]("classpath").asScala.toArray
+
     val compileOptions =
       CompileOptions.create
         .withSources(sources.map(_.getAbsoluteFile).toArray)
         .withClasspath(
           Array.concat(
             Array(classesDir.toFile),
-            namespace.getList[File]("classpath").asScala.toArray,
+            classpath,
           )
         ) // err??
         .withClassesDirectory(classesDir.toFile)
@@ -149,9 +154,7 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     val analysis = compileResult.analysis.asInstanceOf[Analysis]
 
-    val bootDeps =
-      ManagementFactory.getRuntimeMXBean.getBootClassPath.split(sys.props("path.separator")).map(new File(_))
-    val usedDeps = (analysis.relations.allLibraryDeps -- bootDeps - scalaInstance.libraryJar.getAbsoluteFile).toSeq
+    val usedDeps = analysis.relations.allLibraryDeps.filter((classpath.toSet - scalaInstance.libraryJar).map(_.getAbsoluteFile)).toSeq
       .map(file => Paths.get("").toAbsolutePath.relativize(file.toPath))
       .sorted
     val depsPrinter = new PrintWriter(namespace.get[File]("output_used"))
