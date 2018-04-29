@@ -7,6 +7,10 @@ newer rules.
 """
 
 load(
+    "//rules:providers.bzl",
+    "ScalaConfiguration",
+)
+load(
     "//rules:scala.bzl",
     _annex_scala_library = "annex_scala_library",
     _annex_scala_binary = "annex_scala_binary",
@@ -17,6 +21,7 @@ load(
     _safe_name = "safe_name",
 )
 
+_extra_deps = ["//external:scala_annex/compat/rules_scala/extra_deps"]
 _scala = "//external:scala_annex/compat/rules_scala/scala"
 _scalatest_deps = ["//external:scala_annex/compat/rules_scala/scalatest_dep"]
 
@@ -71,7 +76,8 @@ def scala_library(
     _annex_scala_library(
         name = name,
         srcs = srcs,
-        deps = deps,
+        deps = deps + _extra_deps,
+        deps_used_whitelist = _extra_deps,
         macro = not _use_ijar,
         runtime_deps = runtime_deps,
         exports = exports,
@@ -177,11 +183,13 @@ def scala_binary(
     if classpath_resources != []:
         print("%s: classpath_resources unsupported" % name)
 
+    scala_compiler_deps = [] if _scala in deps else [_scala]
     _annex_scala_binary(
         name = name,
         main_class = main_class,
         srcs = srcs,
-        deps = deps,
+        deps = deps + _extra_deps,
+        deps_used_whitelist = _extra_deps,
         macro = not _use_ijar,
         runtime_deps = runtime_deps,
         scala = _scala,
@@ -244,10 +252,12 @@ def scala_test(
     if full_stacktraces != None:
         print("%s: full_stacktraces unsupported" % name)
 
+    scala_compiler_deps = [] if _scala in deps else [_scala]
     _annex_scala_test(
         name = name,
         srcs = srcs,
-        deps = deps + _scalatest_deps,
+        deps = deps + _scalatest_deps + _extra_deps,
+        deps_used_whitelist = _extra_deps,
         macro = not _use_ijar,
         runtime_deps = runtime_deps,
         scala = _scala,

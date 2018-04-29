@@ -8,11 +8,14 @@ ScalaConfiguration = provider(
 )
 
 def _declare_scala_configuration_implementation(ctx):
-    return [ScalaConfiguration(
-        version = ctx.attr.version,
-        compiler_classpath = ctx.files.compiler_classpath,
-        runtime_classpath = ctx.attr.runtime_classpath,
-    )]
+    return [
+        java_common.merge(_collect(JavaInfo, ctx.attr.compiler_classpath)),
+        ScalaConfiguration(
+            version = ctx.attr.version,
+            compiler_classpath = ctx.files.compiler_classpath,
+            runtime_classpath = ctx.attr.runtime_classpath,
+        ),
+    ]
 
 declare_scala_configuration = rule(
     implementation = _declare_scala_configuration_implementation,

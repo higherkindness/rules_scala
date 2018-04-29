@@ -34,6 +34,7 @@ annex_scala_library(
     name = "util",
     srcs = ["MacroUtil.scala"],
     scala = "@scala_2_12",
+    deps = ["@scala_2_12_scala_reflect//jar"],
 )
 
 annex_scala_binary(

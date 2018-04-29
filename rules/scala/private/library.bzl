@@ -39,7 +39,7 @@ def runner_common(ctx):
 
     zinc_configuration = ctx.attr.scala[ZincConfiguration]
 
-    sdeps = java_common.merge(_collect(JavaInfo, ctx.attr.deps))
+    sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
     splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins))
@@ -201,7 +201,7 @@ def runner_common(ctx):
             deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
             deps_args.add("--label", ctx.label, format = "_%s")
             deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
-            deps_args.add("--whitelist", ctx.attr.deps_used_whitelist, format = "_%s")
+            deps_args.add("--whitelist", [dep.label for dep in ctx.attr.deps_used_whitelist], format = "_%s")
             deps_args.add("--")
             deps_args.add(used)
             deps_args.add(deps_check)
@@ -212,7 +212,7 @@ def runner_common(ctx):
             deps_args.add("--label")
             deps_args.add(ctx.label, format = "_%s")
             deps_args.add("--whitelist")
-            deps_args.add(ctx.attr.deps_used_whitelist, format = "_%s")
+            deps_args.add([dep.label for dep in ctx.attr.deps_used_whitelist], format = "_%s")
             deps_args.add("--")
             deps_args.add(used)
             deps_args.add(deps_check)

@@ -39,10 +39,10 @@ def list_dependencies():
                     "@scala_annex_io_github_soc_directories",
                     "@scala_annex_io_methvin_directory_watcher_better_files_2_12",
                     "@scala_annex_io_monix_monix_2_12",
-                    "@scala_annex_org_scala_lang_scala_library",
                     "@scala_annex_org_scala_sbt_librarymanagement_ivy_2_12",
                     "@scala_annex_org_scala_sbt_test_agent",
                     "@scala_annex_org_scala_sbt_test_interface",
+                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "f1ddfd9a8688cce1ac65adf5afc870345ddbfb1882a62c653ba59073dd9be1fa",
                 "jar_urls": [
@@ -70,7 +70,7 @@ def list_dependencies():
                     "@scala_annex_com_geirsson_metaconfig_typesafe_config_2_12",
                     "@scala_annex_com_typesafe_config",
                     "@scala_annex_io_circe_circe_derivation_2_12",
-                    "@scala_annex_org_scala_lang_scala_library",
+                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "3641d9ced747f914b295ef7ec24f5725b2e5ef51591944e042a45854e38e58d0",
                 "jar_urls": [
@@ -98,7 +98,7 @@ def list_dependencies():
                     "@scala_annex_ch_epfl_scala_bsp_2_12",
                     "@scala_annex_com_github_alexarchambault_case_app_2_12",
                     "@scala_annex_io_monix_monix_2_12",
-                    "@scala_annex_org_scala_lang_scala_library",
+                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "d4c9de1e47dbcbbc801fe49349220244b91ffd6585e4ff02f073082e021fd98e",
                 "jar_urls": [
@@ -1034,9 +1034,9 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": [
-                    "@scala_annex_org_scala_lang_scala_library",
-                    "@scala_annex_org_scala_lang_scala_reflect",
                     "@scala_annex_org_scala_sbt_test_interface",
+                    "@scala_annex_scala_2_12_scala_compiler//jar",
+                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "1bc91780bf810e0a86343a899095ba8afe3dee3c422695ca2b6f9f5299c2879a",
                 "jar_urls": [
@@ -1997,59 +1997,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-lang:scala-library promoted to 2.12.4
-        # - ch.epfl.scala:bloop-backend_2.12:1.0.0-M9 wanted version 2.12.4
-        # - ch.epfl.scala:bloop-config_2.12:1.0.0-M9 wanted version 2.12.4
-        # - ch.epfl.scala:bloop-frontend_2.12:1.0.0-M9 wanted version 2.12.4
-        # - com.lihaoyi:utest_2.12:0.6.0 wanted version 2.12.3
-        # - org.scala-sbt:zinc_2.12:1.1.3 wanted version 2.12.4
-        # - org.scalacheck:scalacheck_2.12:1.13.4 wanted version 2.12.0
-        # - org.scalatest:scalatest_2.12:3.0.4 wanted version 2.12.3
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_scala_lang_scala_library",
-                "name": "jar/scala_annex_org/scala_lang/scala_library",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "17824fcee4d3f46cfaa4da84ebad4f58496426c2b9bc9e341f812ab23a667d5d",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/scala-library/2.12.4/scala-library-2.12.4.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_scala_lang_scala_library",
-                "srcjar_sha256": "b9c34cf968a0e348ecec32837797a794ffeade2fe016323474fe756cb7d74042",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/scala-library/2.12.4/scala-library-2.12.4-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        # duplicates in org.scala-lang:scala-reflect promoted to 2.12.4
-        # - com.lihaoyi:utest_2.12:0.6.0 wanted version 2.12.3
-        # - org.scala-sbt:util-logging_2.12:1.1.3 wanted version 2.12.4
-        # - org.scalatest:scalatest_2.12:3.0.4 wanted version 2.12.3
-        # - org.typelevel:machinist_2.12:0.6.2 wanted version 2.12.0
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_scala_lang_scala_reflect",
-                "name": "jar/scala_annex_org/scala_lang/scala_reflect",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "ea70fe0e550e24d23fc52a18963b2be9c3b24283f4cb18b98327eb72746567cc",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/scala-reflect/2.12.4/scala-reflect-2.12.4.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_scala_lang_scala_reflect",
-                "srcjar_sha256": "7b4dc73dc3cb46ac9ac948a0c231ccd989bed6cefb137c302a8ec8d6811e8148",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/scala-reflect/2.12.4/scala-reflect-2.12.4-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_ivy_ivy",
@@ -2342,7 +2289,7 @@ def list_dependencies():
                     "@scala_annex_jline_jline",
                     "@scala_annex_org_apache_logging_log4j_log4j_api",
                     "@scala_annex_org_apache_logging_log4j_log4j_core",
-                    "@scala_annex_org_scala_lang_scala_reflect",
+                    "@scala_annex_scala_2_12_scala_compiler//jar",
                 ],
                 "jar_sha256": "14ec8942b844658a7da7e04f60555751661ab1273f8b31b57cfd86b473be2653",
                 "jar_urls": [
@@ -2569,12 +2516,12 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": [
-                    "@scala_annex_org_scala_lang_scala_library",
                     "@scala_annex_org_scala_sbt_zinc_classfile_2_12",
                     "@scala_annex_org_scala_sbt_zinc_compile_core_2_12",
                     "@scala_annex_org_scala_sbt_zinc_core_2_12",
                     "@scala_annex_org_scala_sbt_zinc_ivy_integration_2_12",
                     "@scala_annex_org_scala_sbt_zinc_persist_2_12",
+                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "af1f9507af3f2898c94be71710e1c33ef00600ba2780b38d22148ce2ed326d03",
                 "jar_urls": [
@@ -2597,8 +2544,8 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": [
-                    "@scala_annex_org_scala_lang_scala_library",
                     "@scala_annex_org_scala_sbt_test_interface",
+                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "4526e6640fa10d9d790fa19df803dfcaaf7f13e3ed627c5bf727fd5efadf0187",
                 "jar_urls": [
@@ -2781,9 +2728,9 @@ def list_dependencies():
                 "deps": [
                     "@scala_annex_org_scala_lang_modules_scala_parser_combinators_2_12",
                     "@scala_annex_org_scala_lang_modules_scala_xml_2_12",
-                    "@scala_annex_org_scala_lang_scala_library",
-                    "@scala_annex_org_scala_lang_scala_reflect",
                     "@scala_annex_org_scalactic_scalactic_2_12",
+                    "@scala_annex_scala_2_12_scala_compiler//jar",
+                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "cf2a7999681567e0f0e0166756356ae4ab0cd6c83f3f1d70225d25bb87d26070",
                 "jar_urls": [
@@ -2974,7 +2921,7 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_org_scala_lang_scala_reflect"],
+                "deps": ["@scala_annex_scala_2_12_scala_compiler//jar"],
                 "jar_sha256": "b7e97638fa25ba02414b9b8387e9ecc2ea2fce4c9d9068ac3108ee5718b477a9",
                 "jar_urls": [
                     "http://central.maven.org/maven2/org/typelevel/machinist_2.12/0.6.2/machinist_2.12-0.6.2.jar",
