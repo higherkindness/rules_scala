@@ -71,12 +71,16 @@ object ZincRunner extends WorkerMain[Namespace] {
             @tailrec
             def next(files: List[File]): List[File] = {
               zipStream.getNextEntry match {
-                case entry if entry != null && !entry.isDirectory =>
+                case null => files
+                case entry if entry.isDirectory =>
+                  zipStream.closeEntry()
+                  next(files)
+                case entry =>
                   val file = Paths.get("tmp", i.toString).resolve(entry.getName)
                   Files.createDirectories(file.getParent)
                   Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
+                  zipStream.closeEntry()
                   next(file.toFile :: files)
-                case _ => files
               }
             }
             next(Nil)
