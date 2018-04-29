@@ -2,11 +2,14 @@
 ## top level rules
 ##
 
-load("@rules_scala_annex//rules:jvm.bzl", "labeled_jars")
+load(
+    "@rules_scala_annex//rules:jvm.bzl",
+    _labeled_jars = "labeled_jars",
+)
 load(
     "@rules_scala_annex//rules:providers.bzl",
-    "ScalaConfiguration",
-    "ZincConfiguration",
+    _ScalaConfiguration = "ScalaConfiguration",
+    _ZincConfiguration = "ZincConfiguration",
 )
 load(
     "//rules/scala:private/core.bzl",
@@ -53,14 +56,14 @@ annex_scala_library = rule(
     implementation = _annex_scala_library_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
-            providers = [ScalaConfiguration, ZincConfiguration],
+            providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
@@ -83,7 +86,7 @@ annex_scala_binary = rule(
     implementation = _annex_scala_binary_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
@@ -91,7 +94,7 @@ annex_scala_binary = rule(
         "main_class": attr.string(),
         "scala": attr.label(
             default = "@scala",
-            providers = [ScalaConfiguration, ZincConfiguration],
+            providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
@@ -116,14 +119,14 @@ annex_scala_test = rule(
     implementation = _annex_scala_test_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
-            providers = [ScalaConfiguration, ZincConfiguration],
+            providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
