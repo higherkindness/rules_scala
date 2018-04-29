@@ -9,9 +9,6 @@ load(
 load("//rules/common:private/utils.bzl", "write_launcher")
 load(":private/import.bzl", "create_intellij_info")
 
-def _filesArg(files):
-    return ([str(len(files))] + [file.path for file in files])
-
 runner_common_attributes = {
     "_java_toolchain": attr.label(
         default = Label("@bazel_tools//tools/jdk:current_java_toolchain"),
