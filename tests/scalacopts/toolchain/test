@@ -3,6 +3,6 @@
 
 bazel build :lib
 
-! bazel build --extra_toolchains=:fatal lib
+! bazel build --extra_toolchains=:fatal lib || false
 
 bazel build --extra_toolchains=:warn

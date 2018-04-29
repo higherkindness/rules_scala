@@ -2,4 +2,4 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel test :formatted
-! bazel test :unformatted
+! bazel test :unformatted || false

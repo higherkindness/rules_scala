@@ -1,5 +1,5 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
-! bazel build :bad || exit 1
+! bazel build :bad || false
 bazel run :good
