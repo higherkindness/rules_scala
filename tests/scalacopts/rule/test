@@ -3,6 +3,6 @@
 
 bazel build :default
 
-! bazel build :fatal
+! bazel build :fatal || false
 
 bazel build :warn
