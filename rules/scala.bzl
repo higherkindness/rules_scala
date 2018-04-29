@@ -33,11 +33,6 @@ load(
     _annex_configure_scala_implementation = "annex_configure_scala_implementation",
 )
 load(
-    "//rules/scala:private/toolchain.bzl",
-    _annex_scala_runner_toolchain_implementation = "annex_scala_runner_toolchain_implementation",
-    _annex_scala_deps_toolchain_implementation = "annex_scala_deps_toolchain_implementation",
-)
-load(
     "//rules:scalac.bzl",
     _scalac_library = "scalac_library",
 )
@@ -185,7 +180,12 @@ scala_import = rule(
 ##
 
 # scala_runner_toolchain
-# scala_deps_toolchain
+
+def _annex_scala_runner_toolchain_implementation(ctx):
+    return [platform_common.ToolchainInfo(
+        runner = ctx.attr.runner,
+        scalacopts = ctx.attr.scalacopts,
+    )]
 
 """
 Configures which Scala runner to use
@@ -201,6 +201,14 @@ annex_scala_runner_toolchain = rule(
         "scalacopts": attr.string_list(),
     },
 )
+
+# scala_deps_toolchain
+
+def _annex_scala_deps_toolchain_implementation(ctx):
+    return [platform_common.ToolchainInfo(
+        runner = ctx.attr.runner,
+        flags = ctx.attr.flags,
+    )]
 
 """
 Configures the deps checker and options to use
