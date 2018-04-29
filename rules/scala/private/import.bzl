@@ -5,13 +5,16 @@ def scala_import_implementation(ctx):
         files = depset(ctx.files.jars + ctx.files.srcjar),
     )
 
-    java_info = JavaInfo(
-        output_jar = ctx.files.jars[0],
-        use_ijar = False,
-        source_jars = ctx.files.srcjar or ctx.files.jars,
-        deps = [dep[JavaInfo] for dep in ctx.attr.deps],
-        actions = ctx.actions,
-    )
+    if ctx.files.jars:
+        java_info = JavaInfo(
+            output_jar = ctx.files.jars[0],
+            use_ijar = False,
+            source_jars = ctx.files.srcjar or ctx.files.jars,
+            deps = [dep[JavaInfo] for dep in ctx.attr.deps],
+            actions = ctx.actions,
+        )
+    else:
+        java_info = java_common.merge([dep[JavaInfo] for dep in ctx.attr.deps])
 
     intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info)
 
