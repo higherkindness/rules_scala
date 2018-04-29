@@ -47,3 +47,12 @@ dependencies:
     utest:
       lang: scala
       version: "0.6.0"
+
+replacements:
+  org.scala-lang:
+    scala-library:
+      lang: java
+      target: "@scala_annex_scala_2_12_scala_library//jar"
+    scala-reflect:
+      lang: java
+      target: "@scala_annex_scala_2_12_scala_compiler//jar"
