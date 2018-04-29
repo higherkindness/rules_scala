@@ -2,24 +2,21 @@
 ## top level rules
 ##
 
-load("@rules_scala_annex//rules:jvm.bzl", "labeled_jars")
+load(
+    "@rules_scala_annex//rules:jvm.bzl",
+    _labeled_jars = "labeled_jars",
+)
 load(
     "@rules_scala_annex//rules:providers.bzl",
-    "ScalaConfiguration",
-    "ZincConfiguration",
+    _ScalaConfiguration = "ScalaConfiguration",
+    _ZincConfiguration = "ZincConfiguration",
 )
 load(
-    "//rules/scala:private/binary.bzl",
-    _annex_scala_binary_implementation = "annex_scala_binary_implementation",
-    _annex_scala_binary_private_attributes = "annex_scala_binary_private_attributes",
-)
-load(
-    "//rules/scala:private/library.bzl",
+    "//rules/scala:private/core.bzl",
     _annex_scala_library_implementation = "annex_scala_library_implementation",
     _annex_scala_library_private_attributes = "annex_scala_library_private_attributes",
-)
-load(
-    "//rules/scala:private/test.bzl",
+    _annex_scala_binary_implementation = "annex_scala_binary_implementation",
+    _annex_scala_binary_private_attributes = "annex_scala_binary_private_attributes",
     _annex_scala_test_implementation = "annex_scala_test_implementation",
     _annex_scala_test_private_attributes = "annex_scala_test_private_attributes",
 )
@@ -31,11 +28,6 @@ load(
     "//rules/scala:private/provider.bzl",
     _annex_configure_basic_scala_implementation = "annex_configure_basic_scala_implementation",
     _annex_configure_scala_implementation = "annex_configure_scala_implementation",
-)
-load(
-    "//rules/scala:private/toolchain.bzl",
-    _annex_scala_runner_toolchain_implementation = "annex_scala_runner_toolchain_implementation",
-    _annex_scala_deps_toolchain_implementation = "annex_scala_deps_toolchain_implementation",
 )
 load(
     "//rules:scalac.bzl",
@@ -64,14 +56,14 @@ annex_scala_library = rule(
     implementation = _annex_scala_library_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
-            providers = [ScalaConfiguration, ZincConfiguration],
+            providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
@@ -94,7 +86,7 @@ annex_scala_binary = rule(
     implementation = _annex_scala_binary_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
@@ -102,7 +94,7 @@ annex_scala_binary = rule(
         "main_class": attr.string(),
         "scala": attr.label(
             default = "@scala",
-            providers = [ScalaConfiguration, ZincConfiguration],
+            providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
@@ -127,14 +119,14 @@ annex_scala_test = rule(
     implementation = _annex_scala_test_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "deps": attr.label_list(aspects = [labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
-            providers = [ScalaConfiguration, ZincConfiguration],
+            providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(),
@@ -185,7 +177,12 @@ scala_import = rule(
 ##
 
 # scala_runner_toolchain
-# scala_deps_toolchain
+
+def _annex_scala_runner_toolchain_implementation(ctx):
+    return [platform_common.ToolchainInfo(
+        runner = ctx.attr.runner,
+        scalacopts = ctx.attr.scalacopts,
+    )]
 
 """
 Configures which Scala runner to use
@@ -201,6 +198,14 @@ annex_scala_runner_toolchain = rule(
         "scalacopts": attr.string_list(),
     },
 )
+
+# scala_deps_toolchain
+
+def _annex_scala_deps_toolchain_implementation(ctx):
+    return [platform_common.ToolchainInfo(
+        runner = ctx.attr.runner,
+        flags = ctx.attr.flags,
+    )]
 
 """
 Configures the deps checker and options to use

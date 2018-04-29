@@ -1,10 +1,13 @@
-load("//rules/common:private/utils.bzl", "strip_margin")
+load(
+    "//rules/common:private/utils.bzl",
+    _strip_margin = "strip_margin",
+)
 
 def _emulate_rules_scala_repository_impl(repository_ctx):
     repository_ctx.file("WORKSPACE", content = "")
     repository_ctx.file(
         "scala/scala.bzl",
-        content = strip_margin("""
+        content = _strip_margin("""
           |load("@rules_scala_annex//rules:rules_scala/private/compat.bzl",
           |     "scala_library",
           |     "scala_macro_library",
@@ -16,7 +19,7 @@ def _emulate_rules_scala_repository_impl(repository_ctx):
     )
     repository_ctx.file(
         "scala/scala_import.bzl",
-        content = strip_margin("""
+        content = _strip_margin("""
           |load("@rules_scala_annex//rules:scala.bzl",
           |     "scala_import",
           |)
@@ -25,7 +28,7 @@ def _emulate_rules_scala_repository_impl(repository_ctx):
     extra_deps = ", ".join(["\"{}\"".format(dep) for dep in repository_ctx.attr.extra_deps])
     repository_ctx.file(
         "scala/BUILD",
-        content = strip_margin("""
+        content = _strip_margin("""
           |java_import(
           |    name = "extra_deps",
           |    exports = [

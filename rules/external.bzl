@@ -1,11 +1,15 @@
-load("//rules/external/third_party/bazel/tools/build_defs/repo:java.bzl", "jvm_import_external", "jvm_maven_import_external")
+load(
+    "//rules/external/third_party/bazel/tools/build_defs/repo:java.bzl",
+    _jvm_import_external = "jvm_import_external",
+    _jvm_maven_import_external = "jvm_maven_import_external",
+)
 
 def scala_maven_import_external(
         artifact,
         server_urls,
         rule_load = "load(\"@rules_scala_annex//rules:scala.bzl\", \"scala_import\")",
         **kwargs):
-    jvm_maven_import_external(
+    _jvm_maven_import_external(
         rule_name = "scala_import",
         rule_load = rule_load,
         artifact = artifact,
@@ -18,7 +22,7 @@ def scala_maven_import_external(
 def scala_import_external(
         rule_load = "load(\"@rules_scala_annex//rules:scala.bzl\", \"scala_import\")",
         **kwargs):
-    jvm_import_external(
+    _jvm_import_external(
         rule_name = "scala_import",
         rule_load = rule_load,
         **kwargs

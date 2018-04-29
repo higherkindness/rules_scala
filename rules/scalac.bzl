@@ -8,7 +8,10 @@ You probably don't want to use these directly!
 
 """
 
-load("@rules_scala_annex//rules:providers.bzl", "ScalaConfiguration")
+load(
+    "@rules_scala_annex//rules:providers.bzl",
+    _ScalaConfiguration = "ScalaConfiguration",
+)
 load(
     "//rules/scalac:private.bzl",
     _scalac_library_implementation = "scalac_library_implementation",
@@ -28,7 +31,7 @@ scalac_library = rule(
         "runtime_deps": attr.label_list(),
         "scala": attr.label(
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [_ScalaConfiguration],
         ),
     }, **_scalac_library_private_attributes),
     fragments = ["java"],
@@ -46,7 +49,7 @@ scalac_binary = rule(
         "main_class": attr.string(mandatory = True),
         "scala": attr.label(
             mandatory = True,
-            providers = [ScalaConfiguration],
+            providers = [_ScalaConfiguration],
         ),
     }, **_scalac_binary_private_attributes),
     fragments = ["java"],

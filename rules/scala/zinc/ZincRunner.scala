@@ -154,7 +154,9 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     val analysis = compileResult.analysis.asInstanceOf[Analysis]
 
-    val usedDeps = analysis.relations.allLibraryDeps.filter((classpath.toSet - scalaInstance.libraryJar).map(_.getAbsoluteFile)).toSeq
+    val usedDeps = analysis.relations.allLibraryDeps
+      .filter((classpath.toSet - scalaInstance.libraryJar).map(_.getAbsoluteFile))
+      .toSeq
       .map(file => Paths.get("").toAbsolutePath.relativize(file.toPath))
       .sorted
     val depsPrinter = new PrintWriter(namespace.get[File]("output_used"))
