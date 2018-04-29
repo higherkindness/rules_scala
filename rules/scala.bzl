@@ -9,17 +9,11 @@ load(
     "ZincConfiguration",
 )
 load(
-    "//rules/scala:private/binary.bzl",
-    _annex_scala_binary_implementation = "annex_scala_binary_implementation",
-    _annex_scala_binary_private_attributes = "annex_scala_binary_private_attributes",
-)
-load(
-    "//rules/scala:private/library.bzl",
+    "//rules/scala:private/core.bzl",
     _annex_scala_library_implementation = "annex_scala_library_implementation",
     _annex_scala_library_private_attributes = "annex_scala_library_private_attributes",
-)
-load(
-    "//rules/scala:private/test.bzl",
+    _annex_scala_binary_implementation = "annex_scala_binary_implementation",
+    _annex_scala_binary_private_attributes = "annex_scala_binary_private_attributes",
     _annex_scala_test_implementation = "annex_scala_test_implementation",
     _annex_scala_test_private_attributes = "annex_scala_test_private_attributes",
 )
