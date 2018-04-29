@@ -1,0 +1,5 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+! bazel build :bad || false
+[ $(bazel run :good) = "<things><thing1></thing1><thing2></thing2></things>" ]
