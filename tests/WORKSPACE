@@ -111,3 +111,51 @@ load(
 )
 
 _scala_image_repos()
+
+# intellij
+
+maven_jar(
+    name = "truth",
+    artifact = "com.google.truth:truth:0.30",
+    sha1 = "9d591b5a66eda81f0b88cf1c748ab8853d99b18b",
+)
+
+maven_jar(
+    name = "junit",
+    artifact = "junit:junit:4.12",
+    sha1 = "2973d150c0dc1fefe998f834810d68f278ea58ec",
+)
+
+http_archive(
+    name = "com_google_protobuf",
+    strip_prefix = "protobuf-master",
+    urls = ["https://github.com/google/protobuf/archive/master.zip"],
+)
+
+http_archive(
+    name = "com_google_protobuf_java",
+    strip_prefix = "protobuf-master",
+    urls = ["https://github.com/google/protobuf/archive/master.zip"],
+)
+
+new_http_archive(
+    name = "intellij_ce_2017_3",
+    build_file = "@intellij_with_bazel//:intellij_platform_sdk/BUILD.idea",
+    sha256 = "fcc571a869808776c7e336e301246e2db0f6adcbfaf7244422cb97f8be0e06d1",
+    url = "https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2017.3.5/ideaIC-2017.3.5.zip",
+)
+
+maven_jar(
+    name = "error_prone_annotations",
+    artifact = "com.google.errorprone:error_prone_annotations:2.3.0",
+    sha1 = "dc72efd247e1c8489df04af8a5451237698e6380",
+)
+
+intellij_version = "2dbee06790bbb05a70d519d6d1ef20f32abb06d7"
+
+http_archive(
+    name = "intellij_with_bazel",
+    strip_prefix = "intellij-%s" % intellij_version,
+    type = "zip",
+    url = "https://github.com/bazelbuild/intellij/archive/%s.zip" % intellij_version,
+)
