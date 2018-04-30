@@ -60,7 +60,7 @@ def write_launcher(
 
     classpath_args = ctx.actions.args()
     if hasattr(classpath_args, "add_all"):  # Bazel 0.13.0+
-        classpath_args.add_all(runtime_classpath, format_each = "${RUNPATH}%s", join_with = ":", map_each = _short_path)
+        classpath_args.add_joined(runtime_classpath, format_each = "${RUNPATH}%s", join_with = ":", map_each = _short_path)
     else:
         classpath_args.add(runtime_classpath, format = "${RUNPATH}%s", join_with = ":", map_fn = _short_paths)
     classpath_args.set_param_file_format("multiline")

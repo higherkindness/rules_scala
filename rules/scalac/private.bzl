@@ -112,7 +112,7 @@ def _scalac_common(ctx):
             """
             |set -eo pipefail
             |
-            |mkdir tmp/classes
+            |mkdir -p tmp/classes
             |
             |{java} \\
             |  -cp {compiler_classpath} \\
