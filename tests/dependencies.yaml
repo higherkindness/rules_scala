@@ -24,6 +24,9 @@ dependencies:
     specs2-core:
       lang: scala
       version: 4.0.3
+    specs2-core_2.11:
+      lang: java
+      version: 3.9.5
 
   com.lihaoyi:
     utest:
