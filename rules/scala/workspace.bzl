@@ -2,7 +2,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file"
 load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
 load("//rules/common:private/utils.bzl", "safe_name", "strip_margin")
 load("//rules/scala:private/workspace.bzl", "annex_configure_scala_repository_implementation")
-load("//3rdparty:maven.bzl", "maven_dependencies")
+load("//3rdparty:maven.bzl", "list_dependencies")
 
 annex_configure_scala_repository = repository_rule(
     implementation = annex_configure_scala_repository_implementation,
@@ -14,7 +14,8 @@ annex_configure_scala_repository = repository_rule(
 )
 
 def annex_scala_repositories():
-    maven_dependencies()
+    for dep in list_dependencies():
+        java_import_external(**dep["import_args"])
 
     BAZEL_JAVA_LAUNCHER_VERSION = "0.11.1"
     java_stub_template_url = (

@@ -1,26 +1,4 @@
 # Do not edit. bazel-deps autogenerates this file from dependencies.yaml.
-load("@rules_scala_annex//rules/external/third_party/bazel/tools/build_defs/repo:java.bzl", "java_import_external")
-load("@rules_scala_annex//rules:external.bzl", "scala_import_external")
-
-def declare_maven(hash):
-    lang = hash.pop("lang")
-    import_args = hash["import_args"]
-
-    # TODO: Change this back once java_import works again
-    # if lang == "java":
-    if False:
-        java_import_external(**import_args)
-    else:
-        #elif lang.startswith("scala"):
-        if "testonly_" in import_args:
-            import_args.pop("testonly_")
-        if "neverlink" in import_args:
-            import_args.pop("neverlink")
-
-        scala_import_external(**import_args)
-
-    native.bind(**hash["bind_args"])
-
 def list_dependencies():
     return [
         {
@@ -487,7 +465,3 @@ def list_dependencies():
             "lang": "java",
         },
     ]
-
-def maven_dependencies(callback = declare_maven):
-    for hash in list_dependencies():
-        callback(hash)
