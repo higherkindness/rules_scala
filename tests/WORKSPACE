@@ -69,7 +69,7 @@ annex_scalafmt_repositories()
 
 scalafmt_default_config()
 
-load("//3rdparty:workspace.bzl", "maven_dependencies")
+load(":workspace.bzl", "maven_dependencies")
 
 maven_dependencies()
 
