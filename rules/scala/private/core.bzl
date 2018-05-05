@@ -335,7 +335,7 @@ def annex_scala_binary_implementation(ctx):
         ctx,
         ctx.outputs.bin,
         java_info.transitive_runtime_deps,
-        main_class = "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
+        main_class = ctx.attr.main_class or "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
         jvm_flags = [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
     )
 
