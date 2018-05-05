@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+option java_package = "anx.proto";
+
+message Zero {
+    required string string_0 = 1;
+    optional int32 int32_0 = 2;    
+}
