@@ -60,7 +60,7 @@ object Arguments {
       .addArgument("--log_level")
       .help("Log level")
       .choices(LogLevel.Debug, LogLevel.Error, LogLevel.Info, LogLevel.None, LogLevel.Warn)
-      .setDefault_(LogLevel.Info)
+      .setDefault_(LogLevel.Warn)
     parser
       .addArgument("--main_manifest")
       .help("List of main entry points")
