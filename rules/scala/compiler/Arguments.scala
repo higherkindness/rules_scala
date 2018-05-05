@@ -24,6 +24,12 @@ object Arguments {
 
   def add(parser: ArgumentParser): Unit = {
     parser
+      .addArgument("--analyses")
+      .help("Analysis")
+      .metavar("label=analysis,apis=jar1,jar2,...")
+      .nargs("*")
+      .required(true)
+    parser
       .addArgument("--compiler_bridge")
       .help("Compiler bridge")
       .metavar("path")
@@ -52,6 +58,11 @@ object Arguments {
       .metavar("debug")
       .`type`(ArgumentsImpl.booleanType)
       .setDefault_(false)
+    parser
+      .addArgument("--java_compiler_option")
+      .help("Java compiler option")
+      .action(ArgumentsImpl.append)
+      .metavar("option")
     parser
       .addArgument("--label")
       .help("Bazel label")
@@ -94,13 +105,19 @@ object Arguments {
       .help("Compiler plugins")
       .metavar("path")
       .nargs("*")
-      .`type`(ArgumentsImpl.fileType.verifyCanCreate)
+      .`type`(ArgumentsImpl.fileType.verifyCanRead)
     parser
       .addArgument("--source_jars")
       .help("Source jars")
       .metavar("path")
       .nargs("*")
       .`type`(ArgumentsImpl.fileType.verifyCanRead().verifyIsFile())
+    parser
+      .addArgument("--tmp")
+      .help("Temporary directory")
+      .metavar("path")
+      .required(true)
+      .`type`(ArgumentsImpl.fileType)
     parser
       .addArgument("sources")
       .help("Source files")

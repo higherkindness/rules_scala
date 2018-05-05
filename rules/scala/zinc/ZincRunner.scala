@@ -6,9 +6,9 @@ import annex.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
 import java.net.URLClassLoader
-import java.nio.file.{Files, Paths, StandardCopyOption}
+import java.nio.file._
 import java.util.function.Supplier
-import java.util.zip.{ZipFile, ZipInputStream}
+import java.util.zip.ZipInputStream
 import java.util.{Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.inf.Namespace
@@ -35,22 +35,28 @@ object ZincRunner extends WorkerMain[Namespace] {
     val namespace = parser.parseArgsOrFail(args)
 
     val debug = namespace.getBoolean("debug")
+    val format = if (debug) AnxAnalysisStore.TextFormat else AnxAnalysisStore.BinaryFormat
+
+    val tmpDir = namespace.get[File]("tmp").toPath
+    try FileUtil.delete(tmpDir)
+    catch { case _: NoSuchFileException => }
+
+    val classesDir = tmpDir.resolve("classes")
 
     val path = namespace.getString("label").replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_")
-    val classesDir = Paths.get("tmp", "classes")
-    Files.createDirectories(classesDir)
+    val classesOutputDir = classesDir.resolve(path)
+    Files.createDirectories(classesOutputDir)
 
     // https://github.com/sbt/zinc/pull/532
     val analysisFiles = AnalysisFiles(
       namespace.get[File]("output_analysis").toPath,
       namespace.get[File]("output_apis").toPath,
     )
-    val analysisStore =
-      new AnxAnalysisStore(analysisFiles, if (debug) AnxAnalysisStore.TextFormat else AnxAnalysisStore.BinaryFormat)
+    val analysisStore = new AnxAnalysisStore(analysisFiles, format)
 
     val persistence = Option(worker.getString("persistence_dir")).fold[ZincPersistence](NullPersistence) { dir =>
       val rootDir = Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
-      new FilePersistence(rootDir.resolve(path), analysisFiles, classesDir)
+      new FilePersistence(rootDir.resolve(path), analysisFiles, classesOutputDir)
     }
 
     val scalaInstance = new AnxScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
@@ -75,7 +81,7 @@ object ZincRunner extends WorkerMain[Namespace] {
                   zipStream.closeEntry()
                   next(files)
                 case entry =>
-                  val file = Paths.get("tmp", i.toString).resolve(entry.getName)
+                  val file = tmpDir.resolve("src").resolve(i.toString).resolve(entry.getName)
                   Files.createDirectories(file.getParent)
                   Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
                   zipStream.closeEntry()
@@ -88,18 +94,26 @@ object ZincRunner extends WorkerMain[Namespace] {
           }
       }
 
-    val classpath = namespace.getList[File]("classpath").asScala.toArray
+    val analyses = namespace
+      .getList[String]("analyses")
+      .asScala
+      .flatMap { value =>
+        val Array(id, analyses, jars) = value.split("=", 3)
+        val Array(analysis, apis) = analyses.split(",", 2)
+        jars.split(",").map(jar => Paths.get(jar) -> (id, AnalysisFiles(Paths.get(analysis), Paths.get(apis))))
+      }
+      .toMap
+
+    val originalClasspath: Seq[Path] = namespace.getList[File]("classpath").asScala.map(_.toPath)
+
+    val deps = Dep.create(originalClasspath, classesDir, analyses /* Map.empty */ )
 
     val compileOptions =
       CompileOptions.create
         .withSources(sources.map(_.getAbsoluteFile).toArray)
-        .withClasspath(
-          Array.concat(
-            Array(classesDir.toFile),
-            classpath,
-          )
-        ) // err??
-        .withClassesDirectory(classesDir.toFile)
+        .withClasspath((classesOutputDir +: deps.map(_.classpath)).map(_.toFile).toArray)
+        .withClassesDirectory(classesOutputDir.toFile)
+        .withJavacOptions(namespace.getList[String]("java_compiler_option").asScala.toArray)
         .withScalacOptions(
           Array.concat(
             namespace.getList[File]("plugins").asScala.map(p => s"-Xplugin:$p").toArray,
@@ -124,7 +138,14 @@ object ZincRunner extends WorkerMain[Namespace] {
       .orElseGet(() => PreviousResult.of(Optional.empty(), Optional.empty()))
 
     val skip = false
-    val lookup: PerClasspathEntryLookup = new AnxPerClasspathEntryLookup
+    val lookup = new AnxPerClasspathEntryLookup(
+      deps
+        .collect {
+          case ExternalDep(_, classpath, analyses) => classpath.toFile -> new AnxAnalysisStore(analyses, format)
+        }
+        .toMap
+        .get
+    )
     val reporter: Reporter = new LoggedReporter(10, logger)
     val compilerCache = new FreshCompilerCache
     val incOptions = IncOptions.create()
@@ -153,15 +174,9 @@ object ZincRunner extends WorkerMain[Namespace] {
     }
 
     val analysis = compileResult.analysis.asInstanceOf[Analysis]
-
-    val usedDeps = analysis.relations.allLibraryDeps
-      .filter((classpath.toSet - scalaInstance.libraryJar).map(_.getAbsoluteFile))
-      .toSeq
-      .map(file => Paths.get("").toAbsolutePath.relativize(file.toPath))
-      .sorted
-    val depsPrinter = new PrintWriter(namespace.get[File]("output_used"))
-    try usedDeps.foreach(depsPrinter.println(_))
-    finally depsPrinter.close()
+    val usedDeps =
+      deps.filter(Dep.used(deps, analysis.relations, lookup)).filter(_.file != scalaInstance.libraryJar.toPath)
+    Files.write(namespace.get[File]("output_used").toPath, usedDeps.map(_.file.toString).sorted.asJava)
 
     val mains =
       analysis.infos.allInfos.values.toList
@@ -173,7 +188,7 @@ object ZincRunner extends WorkerMain[Namespace] {
     finally pw.close()
 
     val jarCreator = new JarCreator(namespace.get[File]("output_jar").toPath)
-    jarCreator.addDirectory(classesDir)
+    jarCreator.addDirectory(classesOutputDir)
     jarCreator.setCompression(true)
     jarCreator.setNormalize(true)
     jarCreator.setVerbose(false)
@@ -190,9 +205,9 @@ object ZincRunner extends WorkerMain[Namespace] {
   }
 }
 
-final class AnxPerClasspathEntryLookup extends PerClasspathEntryLookup {
+final class AnxPerClasspathEntryLookup(analyses: File => Option[AnalysisStore]) extends PerClasspathEntryLookup {
   override def analysis(classpathEntry: File): Optional[CompileAnalysis] =
-    Optional.empty[CompileAnalysis]
+    analyses(classpathEntry).fold(Optional.empty[CompileAnalysis])(store => Optional.of(store.get().get.getAnalysis))
   override def definesClass(classpathEntry: File): DefinesClass =
     Locate.definesClass(classpathEntry)
 }

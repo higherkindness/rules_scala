@@ -134,10 +134,16 @@ def runner_common(ctx):
     srcs = FileType([".java", ".scala"]).filter(ctx.files.srcs)
     src_jars = FileType([".srcjar"]).filter(ctx.files.srcs)
 
+    tmp = ctx.actions.declare_directory("{}/tmp".format(ctx.label.name))
+
     javacopts = [ctx.expand_location(option, ctx.attr.data) for option in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")]
+
+    zincs = [dep[ZincInfo] for dep in ctx.attr.deps if ZincInfo in dep]
 
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
+        args.add("--analyses")
+        args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _analysis)
         args.add("--compiler_bridge")
         args.add(zinc_configuration.compiler_bridge)
         args.add("--compiler_classpath")
@@ -145,7 +151,8 @@ def runner_common(ctx):
         args.add("--classpath")
         args.add_all(compile_classpath)
         args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
-        args.add("--label={}".format(ctx.label))
+        args.add_all(javacopts, format_each = "--java_compiler_option=%s")
+        args.add(ctx.label, format = "--label=%s")
         args.add("--main_manifest")
         args.add(mains_file)
         args.add("--output_analysis")
@@ -160,9 +167,13 @@ def runner_common(ctx):
         args.add_all(splugins.transitive_runtime_deps)
         args.add("--source_jars")
         args.add_all(src_jars)
+        args.add("--tmp")
+        args.add(tmp)
         args.add("--")
         args.add_all(srcs)
     else:
+        args.add("--analyses")
+        args.add(depset(transitive = [zinc.deps for zinc in zincs]), map_fn = _analyses)
         args.add("--compiler_bridge")
         args.add(zinc_configuration.compiler_bridge)
         args.add("--compiler_classpath")
@@ -171,7 +182,7 @@ def runner_common(ctx):
         args.add(javacopts, format = "--java_compiler_option=%s")
         args.add("--classpath")
         args.add(compile_classpath)
-        args.add("--label={}".format(ctx.label))
+        args.add(ctx.label, format = "--label=%s")
         args.add("--main_manifest")
         args.add(mains_file)
         args.add("--output_analysis")
@@ -186,6 +197,8 @@ def runner_common(ctx):
         args.add(splugins.transitive_runtime_deps)
         args.add("--source_jars")
         args.add(src_jars)
+        args.add("--tmp")
+        args.add(tmp)
         args.add("--")
         args.add(srcs)
     args.set_param_file_format("multiline")
@@ -197,10 +210,10 @@ def runner_common(ctx):
         transitive = [
             splugins.transitive_runtime_deps,
             compile_classpath,
-        ],
+        ] + [zinc.deps_analyses for zinc in zincs],
     )
 
-    outputs = [class_jar, mains_file, analysis, apis, used]
+    outputs = [class_jar, mains_file, analysis, apis, used, tmp]
 
     # todo: different execution path for nosrc jar?
     ctx.actions.run(
@@ -256,14 +269,34 @@ def runner_common(ctx):
             arguments = [deps_args],
         )
         files.append(deps_check)
+    else:
+        deps_check = None
 
-    return struct(
+    jars = []
+    for jar in java_info.outputs.jars:
+        jars.append(jar.class_jar)
+        jars.append(jar.ijar)
+    zinc_info = ZincInfo(
         analysis = analysis,
         apis = apis,
+        label = ctx.label,
+        deps = depset(
+            [struct(
+                analysis = analysis,
+                apis = apis,
+                label = ctx.label,
+                jars = jars,
+            )],
+            transitive = [zinc.deps for zinc in zincs],
+        ),
+        deps_analyses = depset([analysis, apis], transitive = [zinc.deps_analyses for zinc in zincs]),
+    )
+
+    return struct(
         deps_check = deps_check,
         java_info = java_info,
         scala_info = ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
-        zinc_info = ZincInfo(analysis = analysis),
+        zinc_info = zinc_info,
         intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
         files = depset(files),
         mains_files = depset([mains_file]),
@@ -283,7 +316,7 @@ def annex_scala_library_implementation(ctx):
                 files = res.files,
             ),
             OutputGroupInfo(
-                analysis = depset([res.analysis, res.apis]),
+                analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
                 #deps = depset([res.deps_check]),
             ),
         ],
@@ -359,7 +392,7 @@ def annex_scala_binary_implementation(ctx):
                 ),
             ),
             OutputGroupInfo(
-                analysis = depset([res.analysis, res.apis]),
+                analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
                 deps = depset([res.deps_check]),
             ),
         ],
@@ -369,7 +402,7 @@ def annex_scala_binary_implementation(ctx):
 def annex_scala_test_implementation(ctx):
     res = runner_common(ctx)
 
-    files = ctx.files._java + [res.apis]
+    files = ctx.files._java + [res.zinc_info.apis]
 
     test_jars = res.java_info.transitive_runtime_deps
     runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps
@@ -377,14 +410,14 @@ def annex_scala_test_implementation(ctx):
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
         args.add("--apis")
-        args.add(res.apis.short_path)
+        args.add(res.zinc_info.apis.short_path)
         args.add("--frameworks")
         args.add(ctx.attr.frameworks)
         args.add("--")
         args.add_all(res.java_info.transitive_runtime_jars, map_each = _short_path)
     else:
         args.add("--apis")
-        args.add(res.apis.short_path)
+        args.add(res.zinc_info.apis.short_path)
         args.add("--frameworks")
         args.add(ctx.attr.frameworks)
         args.add("--")
@@ -399,7 +432,7 @@ def annex_scala_test_implementation(ctx):
         ctx.outputs.bin,
         runner_jars,
         "annex.TestRunner",
-        [
+        [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags] + [
             "-Dbazel.runPath=$RUNPATH",
             "-DscalaAnnex.test.args=${{RUNPATH}}{}".format(args_file.short_path),
         ],
@@ -418,12 +451,18 @@ def annex_scala_test_implementation(ctx):
             res.intellij_info,
             test_info,
             OutputGroupInfo(
-                analysis = depset([res.analysis, res.apis]),
+                analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
                 deps = depset([res.deps_check]),
             ),
         ],
         java = res.intellij_info,
     )
+
+def _analysis(analysis):
+    return "{}={},{}={}".format(analysis.label, analysis.analysis.path, analysis.apis.path, ",".join([jar.path for jar in analysis.jars]))
+
+def _analyses(analyses):
+    return [_analysis(analysis) for analysis in analyses]
 
 def _short_path(file):
     return file.short_path
