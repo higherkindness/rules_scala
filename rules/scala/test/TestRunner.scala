@@ -63,7 +63,7 @@ object TestRunner {
       .help("Testing classpath")
       .metavar("path")
       .nargs("*")
-      .`type`(Arguments.fileType.verifyCanRead())
+      .`type`(Arguments.fileType.verifyCanRead().verifyExists())
     parser
   }
 
@@ -93,15 +93,10 @@ object TestRunner {
         .asScala
         .map(file => runPath.resolve(file.toPath).toUri.toURL)
 
-    val classLoader = new LoaderBase(urls, classOf[Framework].getClassLoader) {
-      override final def doLoadClass(className: String): Class[_] = {
-        if (className.startsWith("sbt.testing."))
-          defaultLoadClass(className)
-        else
-          try { findClass(className) } catch {
-            case _: ClassNotFoundException => defaultLoadClass(className)
-          }
-      }
+    val classLoader = new URLClassLoader(urls.toArray, null) {
+      private[this] val current = getClass.getClassLoader()
+      override protected def findClass(className: String): Class[_] =
+        if (className.startsWith("sbt.testing.")) current.loadClass(className) else super.findClass(className)
     }
 
     val apisStream = Files.newInputStream(runPath.resolve(testNamespace.get[File]("apis").toPath))

@@ -68,7 +68,7 @@ scala_import_external(
 )
 
 emulate_rules_scala(
-    extra_deps = ["@scala_2_11_scala_reflect//jar"],
+    extra_deps = ["@scala_2_11_scala_reflect//jar", "@org_scala_lang_modules_scala_xml_2_11//jar"],
     scala = "@scala_2_11",
     scalatest = "@scalatest_2_11//jar",
 )

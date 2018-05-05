@@ -1,0 +1,5 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+! bazel test :bad || false
+bazel test :good
