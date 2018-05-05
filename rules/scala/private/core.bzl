@@ -190,7 +190,7 @@ def runner_common(ctx):
 
     runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner.runner])
     inputs = depset(
-        [zinc_configuration.compiler_bridge] + scala_configuration.compiler_classpath + ctx.files.srcs + runner_inputs,
+        [zinc_configuration.compiler_bridge] + scala_configuration.compiler_classpath + ctx.files.data + ctx.files.srcs + runner_inputs,
         transitive = [
             splugins.transitive_runtime_deps,
             compile_classpath,
@@ -346,7 +346,7 @@ def annex_scala_binary_implementation(ctx):
                 executable = ctx.outputs.bin,
                 files = depset(files, transitive = [res.files]),
                 runfiles = ctx.runfiles(
-                    files = files + [mains_file],
+                    files = files + ctx.files.data + [mains_file],
                     transitive_files = depset(
                         order = "default",
                         direct = [ctx.executable._java],
