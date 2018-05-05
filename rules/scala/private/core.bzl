@@ -134,6 +134,8 @@ def runner_common(ctx):
     srcs = FileType([".java", ".scala"]).filter(ctx.files.srcs)
     src_jars = FileType([".srcjar"]).filter(ctx.files.srcs)
 
+    javacopts = [ctx.expand_location(option, ctx.attr.data) for option in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")]
+
     args = ctx.actions.args()
     if hasattr(args, "add_all"):  # Bazel 0.13.0+
         args.add("--compiler_bridge")
@@ -166,6 +168,7 @@ def runner_common(ctx):
         args.add("--compiler_classpath")
         args.add(scala_configuration.compiler_classpath)
         args.add(runner.scalacopts + ctx.attr.scalacopts, format = "--compiler_option=%s")
+        args.add(javacopts, format = "--java_compiler_option=%s")
         args.add("--classpath")
         args.add(compile_classpath)
         args.add("--label={}".format(ctx.label))
@@ -333,7 +336,7 @@ def annex_scala_binary_implementation(ctx):
         ctx.outputs.bin,
         java_info.transitive_runtime_deps,
         main_class = "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
-        jvm_flags = [],
+        jvm_flags = [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
     )
 
     return struct(
