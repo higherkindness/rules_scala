@@ -47,6 +47,16 @@ annex_scala_repository(
     "@compiler_bridge_2_12//:src",
 )
 
+load(
+    "@rules_scala_annex//rules/scala_proto:workspace.bzl",
+    "scala_proto_repositories",
+    "scala_proto_register_toolchains",
+)
+
+scala_proto_repositories()
+
+scala_proto_register_toolchains()
+
 load("@rules_scala_annex//rules:rules_scala.bzl", "emulate_rules_scala")
 load("@rules_scala_annex//rules:external.bzl", "scala_import_external")
 

@@ -1,0 +1,6 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../common.sh
+
+bazel build :zero_scala_proto
+# todo: fix me!
+# bazel build :zero_scala

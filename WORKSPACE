@@ -23,3 +23,13 @@ load("//rules/scalafmt:workspace.bzl", "annex_scalafmt_repositories", "scalafmt_
 annex_scalafmt_repositories()
 
 scalafmt_default_config(".scalafmt.conf")
+
+load(
+    "//rules/scala_proto:workspace.bzl",
+    "scala_proto_repositories",
+    "scala_proto_register_toolchains",
+)
+
+scala_proto_repositories()
+
+scala_proto_register_toolchains()
