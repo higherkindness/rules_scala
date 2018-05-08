@@ -23,6 +23,8 @@ import xsbti.{Logger, Reporter}
 
 object ZincRunner extends WorkerMain[Namespace] {
 
+  private[this] val compilerCache = CompilerCache.createCacheFor(10)
+
   protected[this] def init(args: Option[Array[String]]) = {
     val parser = ArgumentParsers.newFor("zinc-worker").addHelp(true).build
     parser.addArgument("--persistence_dir", /* deprecated */ "--persistenceDir").metavar("path")
@@ -147,7 +149,6 @@ object ZincRunner extends WorkerMain[Namespace] {
         .get
     )
     val reporter: Reporter = new LoggedReporter(10, logger)
-    val compilerCache = new FreshCompilerCache
     val incOptions = IncOptions.create()
 
     val setup: Setup =

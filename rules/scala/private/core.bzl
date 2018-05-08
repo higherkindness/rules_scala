@@ -87,7 +87,6 @@ def runner_common(ctx):
     zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
 
     if ctx.files.resources:
-        class_jar = ctx.actions.declare_file("{}/classes.zip".format(ctx.label.name))
         resource_jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
         args = ctx.actions.args()
         args.add("c")
@@ -104,6 +103,7 @@ def runner_common(ctx):
             outputs = [resource_jar],
         )
 
+        class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
         args = ctx.actions.args()
         args.add("--exclude_build_data")
         args.add("--normalize")
