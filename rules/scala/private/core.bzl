@@ -55,10 +55,6 @@ def runner_common(ctx):
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
     splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins))
 
-    mains_file = ctx.actions.declare_file("{}.jar.mains.txt".format(ctx.label.name))
-    analysis = ctx.actions.declare_file("{}/analysis.gz".format(ctx.label.name))
-    apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
-
     if len(ctx.attr.srcs) == 0:
         java_info = java_common.merge([sdeps, sexports])
     else:
@@ -73,8 +69,12 @@ def runner_common(ctx):
             host_javabase = ctx.attr._host_javabase,
         )
 
-    analysis = ctx.actions.declare_file("{}/analysis.gz".format(ctx.label.name))
     apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
+    infos = ctx.actions.declare_file("{}/infos.gz".format(ctx.label.name))
+    mains_file = ctx.actions.declare_file("{}.jar.mains.txt".format(ctx.label.name))
+    relations = ctx.actions.declare_file("{}/relations.gz".format(ctx.label.name))
+    setup = ctx.actions.declare_file("{}/setup.gz".format(ctx.label.name))
+    stamps = ctx.actions.declare_file("{}/stamps.gz".format(ctx.label.name))
     used = ctx.actions.declare_file("{}/deps_used.txt".format(ctx.label.name))
 
     macro_classpath = [
@@ -155,12 +155,18 @@ def runner_common(ctx):
         args.add(ctx.label, format = "--label=%s")
         args.add("--main_manifest")
         args.add(mains_file)
-        args.add("--output_analysis")
-        args.add(analysis)
         args.add("--output_apis")
         args.add(apis)
+        args.add("--output_infos")
+        args.add(infos)
         args.add("--output_jar")
         args.add(class_jar)
+        args.add("--output_relations")
+        args.add(relations)
+        args.add("--output_setup")
+        args.add(setup)
+        args.add("--output_stamps")
+        args.add(stamps)
         args.add("--output_used")
         args.add(used)
         args.add("--plugins")
@@ -185,12 +191,18 @@ def runner_common(ctx):
         args.add(ctx.label, format = "--label=%s")
         args.add("--main_manifest")
         args.add(mains_file)
-        args.add("--output_analysis")
-        args.add(analysis)
         args.add("--output_apis")
         args.add(apis)
+        args.add("--output_infos")
+        args.add(infos)
         args.add("--output_jar")
         args.add(class_jar)
+        args.add("--output_relations")
+        args.add(relations)
+        args.add("--output_setup")
+        args.add(setup)
+        args.add("--output_stamps")
+        args.add(stamps)
         args.add("--output_used")
         args.add(used)
         args.add("--plugin")
@@ -210,10 +222,10 @@ def runner_common(ctx):
         transitive = [
             splugins.transitive_runtime_deps,
             compile_classpath,
-        ] + [zinc.deps_analyses for zinc in zincs],
+        ] + [zinc.deps_files for zinc in zincs],
     )
 
-    outputs = [class_jar, mains_file, analysis, apis, used, tmp]
+    outputs = [class_jar, mains_file, apis, infos, relations, setup, stamps, used, tmp]
 
     # todo: different execution path for nosrc jar?
     ctx.actions.run(
@@ -277,19 +289,19 @@ def runner_common(ctx):
         jars.append(jar.class_jar)
         jars.append(jar.ijar)
     zinc_info = ZincInfo(
-        analysis = analysis,
         apis = apis,
         label = ctx.label,
+        relations = relations,
         deps = depset(
             [struct(
-                analysis = analysis,
                 apis = apis,
                 label = ctx.label,
+                relations = relations,
                 jars = jars,
             )],
             transitive = [zinc.deps for zinc in zincs],
         ),
-        deps_analyses = depset([analysis, apis], transitive = [zinc.deps_analyses for zinc in zincs]),
+        deps_files = depset([apis, relations], transitive = [zinc.deps_files for zinc in zincs]),
     )
 
     return struct(
@@ -316,7 +328,7 @@ def annex_scala_library_implementation(ctx):
                 files = res.files,
             ),
             OutputGroupInfo(
-                analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
+                # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
                 #deps = depset([res.deps_check]),
             ),
         ],
@@ -392,7 +404,6 @@ def annex_scala_binary_implementation(ctx):
                 ),
             ),
             OutputGroupInfo(
-                analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
                 deps = depset([res.deps_check]),
             ),
         ],
@@ -451,7 +462,7 @@ def annex_scala_test_implementation(ctx):
             res.intellij_info,
             test_info,
             OutputGroupInfo(
-                analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
+                # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
                 deps = depset([res.deps_check]),
             ),
         ],
@@ -459,7 +470,7 @@ def annex_scala_test_implementation(ctx):
     )
 
 def _analysis(analysis):
-    return "{}={},{}={}".format(analysis.label, analysis.analysis.path, analysis.apis.path, ",".join([jar.path for jar in analysis.jars]))
+    return "_{}={},{}={}".format(analysis.label, analysis.apis.path, analysis.relations.path, ",".join([jar.path for jar in analysis.jars]))
 
 def _analyses(analyses):
     return [_analysis(analysis) for analysis in analyses]

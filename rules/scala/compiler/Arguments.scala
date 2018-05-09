@@ -26,7 +26,7 @@ object Arguments {
     parser
       .addArgument("--analyses")
       .help("Analysis")
-      .metavar("label=analysis,apis=jar1,jar2,...")
+      .metavar("label=apis,relations=jar1,jar2,...")
       .nargs("*")
       .required(true)
     parser
@@ -79,26 +79,46 @@ object Arguments {
       .required(true)
       .`type`(ArgumentsImpl.fileType.verifyCanCreate)
     parser
-      .addArgument("--output_analysis")
-      .help("Output analysis")
-      .metavar("path")
-      .required(true)
-      .`type`(ArgumentsImpl.fileType.verifyCanCreate)
-    parser
       .addArgument("--output_apis")
       .help("Output APIs")
       .metavar("path")
       .required(true)
-      .`type`(ArgumentsImpl.fileType.verifyCanCreate)
+      .`type`(ArgumentsImpl.fileType.verifyCanCreate())
+    parser
+      .addArgument("--output_infos")
+      .help("Output Zinc source infos")
+      .metavar("path")
+      .required(true)
+      .`type`(ArgumentsImpl.fileType.verifyCanCreate())
     parser
       .addArgument("--output_jar")
       .help("Output jar")
       .metavar("path")
-      .`type`(ArgumentsImpl.fileType.verifyCanCreate)
+      .required(true)
+      .`type`(ArgumentsImpl.fileType.verifyCanCreate())
+    parser
+      .addArgument("--output_relations")
+      .help("Output Zinc relations")
+      .metavar("path")
+      .required(true)
+      .`type`(ArgumentsImpl.fileType.verifyCanCreate())
+    parser
+      .addArgument("--output_setup")
+      .help("Output Zinc setup")
+      .metavar("path")
+      .required(true)
+      .`type`(ArgumentsImpl.fileType.verifyCanCreate())
+    parser
+      .addArgument("--output_stamps")
+      .help("Output Zinc source stamps")
+      .metavar("path")
+      .required(true)
+      .`type`(ArgumentsImpl.fileType.verifyCanCreate())
     parser
       .addArgument("--output_used")
       .help("Output list of used jars")
       .metavar("path")
+      .required(true)
       .`type`(ArgumentsImpl.fileType.verifyCanCreate)
     parser
       .addArgument("--plugins")

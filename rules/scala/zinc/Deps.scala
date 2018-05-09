@@ -16,35 +16,37 @@ case class LibraryDep(file: Path) extends Dep {
   def classpath = file
 }
 
-case class ExternalDep(file: Path, classpath: Path, analysis: AnalysisFiles) extends Dep
+case class DepAnalysisFiles(apis: Path, relations: Path)
+
+case class ExternalDep(file: Path, classpath: Path, analysis: DepAnalysisFiles) extends Dep
 
 object Dep {
-  def create(classpath: Seq[Path], classDir: Path, analyses: Map[Path, (String, AnalysisFiles)]): Seq[Dep] = {
+  def create(classpath: Seq[Path], analyses: Map[Path, (Path, DepAnalysisFiles)]): Seq[Dep] = {
     val roots = scala.collection.mutable.Set[Path]()
     classpath.flatMap { original =>
       analyses.get(original).fold[Option[Dep]](Some(LibraryDep(original))) { analysis =>
-        val root = classDir.resolve(analysis._1.replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_"))
+        val root = analysis._1
         if (roots.add(root)) {
           val fileStream = Files.newInputStream(original)
           try {
             val zipStream = new ZipInputStream(fileStream)
 
             @tailrec
-            def next(files: List[File]): List[File] = {
+            def next(): Unit = {
               zipStream.getNextEntry match {
-                case null => files
+                case null =>
                 case entry if entry.isDirectory =>
                   zipStream.closeEntry()
-                  next(files)
+                  next()
                 case entry =>
                   val file = root.resolve(entry.getName)
                   Files.createDirectories(file.getParent)
                   Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
                   zipStream.closeEntry()
-                  next(file.toFile :: files)
+                  next()
               }
             }
-            next(Nil)
+            next()
           } finally {
             fileStream.close()
           }
