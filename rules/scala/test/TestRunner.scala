@@ -99,13 +99,14 @@ object TestRunner {
         if (className.startsWith("sbt.testing.")) current.loadClass(className) else super.findClass(className)
     }
 
-    val apisStream = Files.newInputStream(runPath.resolve(testNamespace.get[File]("apis").toPath))
+    val apisFile = runPath.resolve(testNamespace.get[File]("apis").toPath)
+    val apisStream = Files.newInputStream(apisFile)
     val apis = try {
-      val raw = try schema.APIsFile.parseFrom(new GZIPInputStream(apisStream))
+      val raw = try schema.APIs.parseFrom(new GZIPInputStream(apisStream))
       finally apisStream.close()
-      new ProtobufReaders(ReadMapper.getEmptyMapper).fromApisFile(raw)._1
+      new ProtobufReaders(ReadMapper.getEmptyMapper).fromApis(raw)
     } catch {
-      case NonFatal(e) => throw new Exception("Failed to load APIs", e)
+      case NonFatal(e) => throw new Exception(s"Failed to load APIs from $apisFile", e)
     }
 
     val loader = new TestFrameworkLoader(classLoader, logger)
