@@ -29,6 +29,8 @@ def require_bazel_version(
         current_version = None):
     if not current_version:
         current_version = native.bazel_version
+    if not current_version:
+        return
 
     required_nums = _version_tuple(required_version)
     current_nums = _version_tuple(current_version)
