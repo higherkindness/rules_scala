@@ -6,6 +6,7 @@ import com.trueaccord.scalapb.{GeneratedMessage, GeneratedMessageCompanion, Mess
 import java.io._
 import java.nio.charset.StandardCharsets
 import java.nio.file._
+import java.nio.file.attribute.FileTime
 import java.util.zip.{GZIPInputStream, GZIPOutputStream}
 import java.util.Optional
 import sbt.internal.inc.binary.converters.{ProtobufReaders, ProtobufWriters}
@@ -162,6 +163,17 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
 object AnxMapper {
   val rootPlaceholder = Paths.get("_ROOT_")
   def mappers(root: Path) = new ReadWriteMappers(new AnxReadMapper(root), new AnxWriteMapper(root))
+  private[this] val stampCache = new scala.collection.mutable.HashMap[Path, (FileTime, Stamp)]
+  def hashStamp(file: Path) = {
+    val newTime = Files.getLastModifiedTime(file)
+    stampCache.get(file) match {
+      case Some((time, stamp)) if newTime.compareTo(time) <= 0 => stamp
+      case _ =>
+        val stamp = Stamper.forHash(file.toFile)
+        stampCache += (file -> (newTime, stamp))
+        stamp
+    }
+  }
 }
 
 final class AnxWriteMapper(root: Path) extends WriteMapper {
@@ -173,7 +185,7 @@ final class AnxWriteMapper(root: Path) extends WriteMapper {
   }
 
   def mapBinaryFile(binaryFile: File) = mapFile(binaryFile)
-  def mapBinaryStamp(file: File, binaryStamp: Stamp) = Stamper.forHash(file)
+  def mapBinaryStamp(file: File, binaryStamp: Stamp) = AnxMapper.hashStamp(file.toPath)
   def mapClasspathEntry(classpathEntry: File) = mapFile(classpathEntry)
   def mapJavacOption(javacOption: String) = javacOption
   def mapMiniSetup(miniSetup: MiniSetup) = miniSetup
@@ -198,7 +210,7 @@ final class AnxReadMapper(root: Path) extends ReadMapper {
 
   def mapBinaryFile(file: File) = mapFile(file)
   def mapBinaryStamp(file: File, stamp: Stamp) =
-    if (Stamper.forHash(file) == stamp) Stamper.forLastModified(file) else stamp
+    if (AnxMapper.hashStamp(file.toPath) == stamp) Stamper.forLastModified(file) else stamp
   def mapClasspathEntry(classpathEntry: File) = mapFile(classpathEntry)
   def mapJavacOption(javacOption: String) = javacOption
   def mapOutputDir(dir: File) = mapFile(dir)
