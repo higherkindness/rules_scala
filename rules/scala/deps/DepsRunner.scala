@@ -10,6 +10,8 @@ import scala.collection.JavaConverters._
 object DepsRunner extends SimpleMain {
   private[this] val argParser = {
     val parser = ArgumentParsers.newFor("deps").addHelp(true).fromFilePrefix("@").build
+    parser.addArgument("--check_direct").`type`(Arguments.booleanType)
+    parser.addArgument("--check_used").`type`(Arguments.booleanType)
     parser.addArgument("--direct").help("Labels of direct deps").metavar("label").nargs("*")
     parser
       .addArgument("--group")
@@ -35,22 +37,26 @@ object DepsRunner extends SimpleMain {
     val labelToPaths = groups.toMap
     val usedPaths = Files.readAllLines(namespace.get[File]("used").toPath).asScala.toSet
 
-    val whitelist = namespace.getList[String]("whitelist").asScala.map(_.tail)
-    val remove = (directLabels -- whitelist).filterNot(labelToPaths(_).exists(usedPaths))
+    val remove = if (namespace.getBoolean("check_used") == true) {
+      val whitelist = namespace.getList[String]("whitelist").asScala.map(_.tail)
+      (directLabels -- whitelist).filterNot(labelToPaths(_).exists(usedPaths))
+    } else Nil
     remove.foreach { depLabel =>
       println(s"Target '$depLabel' not used, please remove it from the deps.")
       println(s"You can use the following buildozer command:")
       println(s"buildozer 'remove deps $depLabel' $label")
     }
 
-    val add = (usedPaths -- directLabels.flatMap(labelToPaths))
-      .flatMap(
-        path =>
-          groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
-            System.err.println(s"Warning: There is a reference to $path, but no dependency of $label provides it")
-            None
-        }
-      )
+    val add = if (namespace.getBoolean("check_direct") == true) {
+      (usedPaths -- directLabels.flatMap(labelToPaths))
+        .flatMap(
+          path =>
+            groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
+              System.err.println(s"Warning: There is a reference to $path, but no dependency of $label provides it")
+              None
+          }
+        )
+    } else Nil
     add.foreach { depLabel =>
       println(s"Target '$depLabel' is used but isn't explicitly declared, please add it to the deps.")
       println(s"You can use the following buildozer command:")

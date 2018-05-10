@@ -102,34 +102,10 @@ def runner_common(ctx):
             input_manifests = zipper_manifests,
             outputs = [resource_jar],
         )
-
-        class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
-        args = ctx.actions.args()
-        args.add("--exclude_build_data")
-        args.add("--normalize")
-        args.add("--sources")
-        args.add(class_jar)
-        if resource_jar:
-            args.add("--sources")
-            args.add(resource_jar)
-        for file in FileType([".jar"]).filter(ctx.files.resource_jars):
-            args.add("--sources")
-            args.add(file)
-        args.add("--output")
-        args.add(ctx.outputs.jar)
-        args.add("--warn_duplicate_resources")
-        args.set_param_file_format("multiline")
-        args.use_param_file("@%s", use_always = True)
-        ctx.actions.run(
-            arguments = [args],
-            executable = ctx.executable._singlejar,
-            execution_requirements = {"supports-workers": "1"},
-            mnemonic = "SingleJar",
-            inputs = [class_jar, resource_jar] + ctx.files.resource_jars,
-            outputs = [ctx.outputs.jar],
-        )
     else:
-        class_jar = ctx.outputs.jar
+        resource_jar = None
+
+    class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
 
     srcs = FileType([".java", ".scala"]).filter(ctx.files.srcs)
     src_jars = FileType([".srcjar"]).filter(ctx.files.srcs)
@@ -240,12 +216,15 @@ def runner_common(ctx):
 
     files = [ctx.outputs.jar]
 
-    deps_runner = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"].runner
-    if deps_runner:
-        deps_check = ctx.actions.declare_file("{}/deps.check".format(ctx.label.name))
-        labeled_jars = depset(transitive = [dep[LabeledJars].values for dep in ctx.attr.deps])
+    deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
+    deps_checks = {}
+    labeled_jars = depset(transitive = [dep[LabeledJars].values for dep in ctx.attr.deps])
+    deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_toolchain.runner])
+    for name in ("direct", "used"):
+        deps_check = ctx.actions.declare_file("{}/deps_check_{}".format(ctx.label.name, name))
         deps_args = ctx.actions.args()
         if hasattr(deps_args, "add_all"):  # Bazel 0.13.0+
+            deps_args.add(name, format = "--check_%s=true")
             deps_args.add("--direct")
             deps_args.add_all([dep.label for dep in ctx.attr.deps], format_each = "_%s")
             deps_args.add_all(labeled_jars, before_each = "--group", map_each = _labeled_group)
@@ -258,6 +237,7 @@ def runner_common(ctx):
             deps_args.add(used)
             deps_args.add(deps_check)
         else:
+            deps_args.add(name, format = "--check_%s=true")
             deps_args.add("--direct")
             deps_args.add([dep.label for dep in ctx.attr.deps], format = "_%s")
             deps_args.add(labeled_jars, before_each = "--group", map_fn = _labeled_groups)
@@ -270,19 +250,47 @@ def runner_common(ctx):
             deps_args.add(deps_check)
         deps_args.set_param_file_format("multiline")
         deps_args.use_param_file("@%s", use_always = True)
-        deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_runner])
         ctx.actions.run(
             mnemonic = "ScalaCheckDeps",
             inputs = [used] + deps_inputs,
             outputs = [deps_check],
-            executable = deps_runner.files_to_run.executable,
+            executable = deps_toolchain.runner.files_to_run.executable,
             input_manifests = deps_input_manifests,
             execution_requirements = {"supports-workers": "1"},
             arguments = [deps_args],
         )
-        files.append(deps_check)
-    else:
-        deps_check = None
+        deps_checks[name] = deps_check
+
+    inputs = [class_jar] + ctx.files.resource_jars
+    args = ctx.actions.args()
+    args.add("--exclude_build_data")
+    args.add("--normalize")
+    args.add("--sources")
+    args.add(class_jar)
+    if resource_jar:
+        args.add("--sources")
+        args.add(resource_jar)
+        inputs.append(resource_jar)
+    for file in FileType([".jar"]).filter(ctx.files.resource_jars):
+        args.add("--sources")
+        args.add(file)
+    args.add("--output")
+    args.add(ctx.outputs.jar)
+    args.add("--warn_duplicate_resources")
+    args.set_param_file_format("multiline")
+    args.use_param_file("@%s", use_always = True)
+    if deps_toolchain.direct == "error":
+        inputs.append(deps_checks["direct"])
+    if deps_toolchain.used == "error":
+        inputs.append(deps_checks["used"])
+    ctx.actions.run(
+        arguments = [args],
+        executable = ctx.executable._singlejar,
+        execution_requirements = {"supports-workers": "1"},
+        mnemonic = "SingleJar",
+        inputs = inputs,
+        outputs = [ctx.outputs.jar],
+    )
 
     jars = []
     for jar in java_info.outputs.jars:
@@ -303,6 +311,12 @@ def runner_common(ctx):
         ),
         deps_files = depset([apis, relations], transitive = [zinc.deps_files for zinc in zincs]),
     )
+
+    deps_check = []
+    if deps_toolchain.direct != "off":
+        deps_check.append(deps_checks["direct"])
+    if deps_toolchain.used != "off":
+        deps_check.append(deps_checks["used"])
 
     return struct(
         deps_check = deps_check,
@@ -329,7 +343,7 @@ def annex_scala_library_implementation(ctx):
             ),
             OutputGroupInfo(
                 # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
-                #deps = depset([res.deps_check]),
+                deps = depset(res.deps_check),
             ),
         ],
         java = res.intellij_info,
@@ -392,7 +406,7 @@ def annex_scala_binary_implementation(ctx):
             res.intellij_info,
             DefaultInfo(
                 executable = ctx.outputs.bin,
-                files = depset(files, transitive = [res.files]),
+                files = depset([ctx.outputs.bin], transitive = [res.files]),
                 runfiles = ctx.runfiles(
                     files = files + ctx.files.data + [mains_file],
                     transitive_files = depset(
@@ -404,7 +418,7 @@ def annex_scala_binary_implementation(ctx):
                 ),
             ),
             OutputGroupInfo(
-                deps = depset([res.deps_check]),
+                deps_check = depset(res.deps_check),
             ),
         ],
         java = res.intellij_info,
@@ -463,7 +477,7 @@ def annex_scala_test_implementation(ctx):
             test_info,
             OutputGroupInfo(
                 # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
-                deps = depset([res.deps_check]),
+                deps_check = depset(res.deps_check),
             ),
         ],
         java = res.intellij_info,
