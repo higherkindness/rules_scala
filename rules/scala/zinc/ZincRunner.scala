@@ -12,6 +12,7 @@ import java.util.zip.ZipInputStream
 import java.util.{Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.inf.Namespace
+import sbt.internal.inc.classpath.ClassLoaderCache
 import sbt.internal.inc.{Hash => _, ScalaInstance => _, _}
 import sbt.io.Hash
 import scala.annotation.tailrec
@@ -23,7 +24,9 @@ import xsbti.{Logger, Reporter}
 
 object ZincRunner extends WorkerMain[Namespace] {
 
-  private[this] val compilerCache = CompilerCache.createCacheFor(10)
+  private[this] val classloaderCache = new ClassLoaderCache(null)
+
+  private[this] val compilerCache = CompilerCache.createCacheFor(1) // since classloaderCache has only soft references
 
   private[this] def labelToPath(label: String) = Paths.get(label.replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_"))
 
@@ -34,7 +37,6 @@ object ZincRunner extends WorkerMain[Namespace] {
   }
 
   protected[this] def work(worker: Namespace, args: Array[String]) = {
-    var start = System.currentTimeMillis()
     val parser = ArgumentParsers.newFor("zinc").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
     Arguments.add(parser)
     val namespace = parser.parseArgsOrFail(args)
@@ -46,7 +48,6 @@ object ZincRunner extends WorkerMain[Namespace] {
     val tmpDir = namespace.get[File]("tmp").toPath
     try FileUtil.delete(tmpDir)
     catch { case _: NoSuchFileException => }
-    Files.createDirectories(tmpDir)
 
     val classesDir = tmpDir.resolve("classes")
     val classesOutputDir = classesDir.resolve(labelToPath(namespace.getString("label")))
@@ -72,7 +73,9 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     val logger = new AnxLogger(namespace.getString("log_level"))
 
-    val scalaCompiler = ZincUtil.scalaCompiler(scalaInstance, namespace.get[File]("compiler_bridge"))
+    val scalaCompiler = ZincUtil
+      .scalaCompiler(scalaInstance, namespace.get[File]("compiler_bridge"))
+      .withClassLoaderCache(classloaderCache)
 
     val compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
@@ -221,6 +224,9 @@ object ZincRunner extends WorkerMain[Namespace] {
     }
 
     jarCreator.execute()
+
+    FileUtil.delete(tmpDir)
+    Files.createDirectory(tmpDir)
 
     worker
   }
