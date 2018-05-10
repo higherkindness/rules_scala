@@ -7,7 +7,6 @@ common --incompatible_depset_union
 common --incompatible_disable_glob_tracking
 common --incompatible_disable_objc_provider_resources
 common --incompatible_disallow_dict_plus
-common --incompatible_disallow_toplevel_if_statement
 common --incompatible_new_actions_api
 common --incompatible_remove_native_git_repository
 common --incompatible_remove_native_http_archive
