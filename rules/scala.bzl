@@ -211,8 +211,9 @@ annex_scala_runner_toolchain = rule(
 
 def _annex_scala_deps_toolchain_implementation(ctx):
     return [platform_common.ToolchainInfo(
+        direct = ctx.attr.direct,
         runner = ctx.attr.runner,
-        flags = ctx.attr.flags,
+        used = ctx.attr.used,
     )]
 
 """
@@ -221,8 +222,9 @@ Configures the deps checker and options to use
 annex_scala_deps_toolchain = rule(
     implementation = _annex_scala_deps_toolchain_implementation,
     attrs = {
-        "flags": attr.string_list(default = []),
+        "direct": attr.string(),
         "runner": attr.label(allow_files = True, executable = True, cfg = "host"),
+        "used": attr.string(),
     },
 )
 

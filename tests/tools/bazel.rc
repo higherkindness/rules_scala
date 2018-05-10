@@ -1,4 +1,6 @@
 common --color yes
+common --define=scala_deps_direct=error
+common --define=scala_deps_used=error
 
 build --experimental_strict_action_env
 
