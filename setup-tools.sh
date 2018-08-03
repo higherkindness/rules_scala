@@ -22,7 +22,7 @@ if [ "$1" != '--skip-deps' ]; then
     mkdir -p external-tools/bazel-deps
     echo Downloading bazel-deps
     # TODO: move back to johnynek/bazel-deps when it supports scala_import_external
-    curl -L -sS https://github.com/lucidsoftware/bazel-deps/archive/178315daf2fa1e39d6802cfe8aa94134eb3de28d.tar.gz | tar zxf - --strip 1 -C external-tools/bazel-deps
+    curl -L -sS https://github.com/lucidsoftware/bazel-deps/archive/2b1f550f6a6ececdda4233a47b8429b9f98826f1.tar.gz | tar zxf - --strip 1 -C external-tools/bazel-deps
 
     echo Building bazel-deps
     (cd external-tools/bazel-deps; bazel run "${BAZEL_OPTS[@]}" --script_path=../bazel-deps.sh parse)
