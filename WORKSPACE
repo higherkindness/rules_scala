@@ -7,9 +7,9 @@ require_bazel_version("0.11.0")
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "7404d040865a031e80c2810cd9453eafefb2bbbf5f5f9a282b1d071d8e12c4bf",
-    strip_prefix = "protobuf-3.5.2",
-    urls = ["https://github.com/google/protobuf/archive/v3.5.2.zip"],
+    sha256 = "d7a221b3d4fb4f05b7473795ccea9e05dab3b8721f6286a95fffbffc2d926f8b",
+    strip_prefix = "protobuf-3.6.1",
+    urls = ["https://github.com/google/protobuf/archive/v3.6.1.zip"],
 )
 
 load("//rules/scala:workspace.bzl", "annex_scala_repositories", "annex_scala_register_toolchains")
