@@ -97,9 +97,10 @@ def runner_common(ctx):
         ctx.actions.run(
             arguments = [args],
             executable = ctx.executable._zipper,
-            inputs = zipper_inputs + ctx.files.resources,
+            inputs = ctx.files.resources,
             input_manifests = zipper_manifests,
             outputs = [resource_jar],
+            tools = zipper_inputs,
         )
     else:
         resource_jar = None

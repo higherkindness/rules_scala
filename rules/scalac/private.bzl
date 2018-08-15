@@ -83,9 +83,10 @@ def _scalac_common(ctx):
     compile_classpath_str = ":".join([file.path for file in compile_deps.to_list()])
 
     inputs = depset(
-        [jar, java, jar_creator] + ctx.files.srcs + scala.compiler_classpath,
+        [jar, java] + ctx.files.srcs + scala.compiler_classpath,
         transitive = [compile_deps],
     )
+    tools = [jar_creator]
 
     srcs = [
         file.path
@@ -107,6 +108,7 @@ def _scalac_common(ctx):
 
     ctx.actions.run_shell(
         inputs = inputs,
+        tools = tools,
         outputs = [output_jar],
         command = strip_margin(
             """
