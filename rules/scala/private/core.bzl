@@ -107,8 +107,8 @@ def runner_common(ctx):
 
     class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
 
-    srcs = FileType([".java", ".scala"]).filter(ctx.files.srcs)
-    src_jars = FileType([".srcjar"]).filter(ctx.files.srcs)
+    srcs = [file for file in ctx.files.srcs if file.extension.lower() in ["java", "scala"]]
+    src_jars = [file for file in ctx.files.srcs if file.extension.lower() in ["srcjar"]]
 
     tmp = ctx.actions.declare_directory("{}/tmp".format(ctx.label.name))
 
@@ -199,7 +199,7 @@ def runner_common(ctx):
     if resource_jar:
         args.add("--sources", resource_jar)
         inputs.append(resource_jar)
-    for file in FileType([".jar"]).filter(ctx.files.resource_jars):
+    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
         args.add("--sources")
         args.add(file)
     args.add("--output", ctx.outputs.jar)

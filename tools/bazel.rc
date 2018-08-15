@@ -2,7 +2,6 @@ import %workspace%/tools/deleted_packages.rc
 
 common --color yes
 common --all_incompatible_changes
-common --incompatible_disallow_filetype=false
 common --incompatible_disallow_legacy_javainfo=false
 common --incompatible_package_name_is_a_function=false
 
