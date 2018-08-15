@@ -3,7 +3,6 @@ common --all_incompatible_changes
 common --incompatible_bzl_disallow_load_after_statement=false
 common --incompatible_depset_is_not_iterable=false
 common --incompatible_depset_union=false
-common --incompatible_disallow_legacy_javainfo=false
 common --incompatible_disallow_old_style_args_add=false
 common --incompatible_new_actions_api=false
 common --incompatible_package_name_is_a_function=false

@@ -58,15 +58,28 @@ def runner_common(ctx):
     if len(ctx.attr.srcs) == 0:
         java_info = java_common.merge([sdeps, sexports])
     else:
-        java_info = JavaInfo(
+        compile_jar = java_common.run_ijar(
+            ctx.actions,
+            jar = ctx.outputs.jar,
+            target_label = ctx.label,
+            java_toolchain = ctx.attr._java_toolchain,
+        )
+
+        source_jar = java_common.pack_sources(
+            ctx.actions,
             output_jar = ctx.outputs.jar,
             sources = ctx.files.srcs,
+            host_javabase = ctx.attr._host_javabase,
+            java_toolchain = ctx.attr._java_toolchain,
+        )
+
+        java_info = JavaInfo(
+            output_jar = ctx.outputs.jar,
+            compile_jar = compile_jar,
+            source_jar = source_jar,
             deps = [sdeps],
             runtime_deps = [sruntime_deps] + scala_configuration_runtime_deps,
             exports = [sexports],
-            actions = ctx.actions,
-            java_toolchain = ctx.attr._java_toolchain,
-            host_javabase = ctx.attr._host_javabase,
         )
 
     apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
