@@ -14,23 +14,26 @@ def list_dependencies():
                     "@scala_annex_com_lihaoyi_sourcecode_2_12",
                     "@scala_annex_io_get_coursier_coursier_2_12",
                     "@scala_annex_io_get_coursier_coursier_cache_2_12",
+                    "@scala_annex_io_get_coursier_coursier_scalaz_interop_2_12",
                     "@scala_annex_io_github_soc_directories",
-                    "@scala_annex_io_methvin_directory_watcher_better_files_2_12",
                     "@scala_annex_io_monix_monix_2_12",
+                    "@scala_annex_me_vican_jorge_directory_watcher_better_files_2_12",
                     "@scala_annex_org_scala_sbt_librarymanagement_ivy_2_12",
                     "@scala_annex_org_scala_sbt_test_agent",
                     "@scala_annex_org_scala_sbt_test_interface",
+                    "@scala_annex_org_scalaz_scalaz_concurrent_2_12",
+                    "@scala_annex_org_scalaz_scalaz_core_2_12",
                     "@scala_annex_scala_2_12_scala_library//jar",
                 ],
-                "jar_sha256": "f1ddfd9a8688cce1ac65adf5afc870345ddbfb1882a62c653ba59073dd9be1fa",
+                "jar_sha256": "62778a25e6d62ccb9efde50621d0469810dc957a01715a988c1da5939a2c6fe5",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-backend_2.12/1.0.0-M9/bloop-backend_2.12-1.0.0-M9.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-backend_2.12/1.0.0/bloop-backend_2.12-1.0.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_bloop_backend_2_12",
-                "srcjar_sha256": "603f19c397d63a2f1a2027ce01662460a89891802d76fbfc40a0a7d3463dd156",
+                "srcjar_sha256": "456446e45fec886ca848fc1ef0e36a0d9bf1260464d1ed98369df9bfcf6c4bbe",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-backend_2.12/1.0.0-M9/bloop-backend_2.12-1.0.0-M9-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-backend_2.12/1.0.0/bloop-backend_2.12-1.0.0-sources.jar",
                 ],
             },
             "lang": "scala",
@@ -43,22 +46,19 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": [
-                    "@scala_annex_com_geirsson_metaconfig_core_2_12",
-                    "@scala_annex_com_geirsson_metaconfig_docs_2_12",
-                    "@scala_annex_com_geirsson_metaconfig_typesafe_config_2_12",
-                    "@scala_annex_com_typesafe_config",
                     "@scala_annex_io_circe_circe_derivation_2_12",
+                    "@scala_annex_io_circe_circe_parser_2_12",
                     "@scala_annex_scala_2_12_scala_library//jar",
                 ],
-                "jar_sha256": "3641d9ced747f914b295ef7ec24f5725b2e5ef51591944e042a45854e38e58d0",
+                "jar_sha256": "1f9b0639dd36e74bc18cdeac3d6a1e815a7919d2f025d2729fe6ffca4a137bd0",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/1.0.0-M9/bloop-config_2.12-1.0.0-M9.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/1.0.0/bloop-config_2.12-1.0.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_bloop_config_2_12",
-                "srcjar_sha256": "748cef18cb61cb7b604dda5e6c6c2e91cd27eaac30c077db5e4b3232b34753f0",
+                "srcjar_sha256": "1252c13b68159ac36d643bc3f7a7e0f4bce9dea7871975eaeac706df37b52491",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/1.0.0-M9/bloop-config_2.12-1.0.0-M9-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/1.0.0/bloop-config_2.12-1.0.0-sources.jar",
                 ],
             },
             "lang": "scala",
@@ -74,19 +74,21 @@ def list_dependencies():
                     "@scala_annex_ch_epfl_scala_bloop_backend_2_12",
                     "@scala_annex_ch_epfl_scala_bloop_config_2_12",
                     "@scala_annex_ch_epfl_scala_bsp_2_12",
-                    "@scala_annex_com_github_alexarchambault_case_app_2_12",
+                    "@scala_annex_ch_epfl_scala_case_app_2_12",
+                    "@scala_annex_com_zaxxer_nuprocess",
                     "@scala_annex_io_monix_monix_2_12",
+                    "@scala_annex_org_scalaz_scalaz_core_2_12",
                     "@scala_annex_scala_2_12_scala_library//jar",
                 ],
-                "jar_sha256": "d4c9de1e47dbcbbc801fe49349220244b91ffd6585e4ff02f073082e021fd98e",
+                "jar_sha256": "8dccc92d2d0eb772cb78bec87578aeccc41da9b1d8289431a895d7e77d3daa29",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-frontend_2.12/1.0.0-M9/bloop-frontend_2.12-1.0.0-M9.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-frontend_2.12/1.0.0/bloop-frontend_2.12-1.0.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_bloop_frontend_2_12",
-                "srcjar_sha256": "5c3e92f7f85f930c02c954e9117297ebdaaaafdb83d9c7058673e62e12e88e87",
+                "srcjar_sha256": "c713a426b6213aa947c869269d77be2e20e415ed85021251e02274899a2d7ea7",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-frontend_2.12/1.0.0-M9/bloop-frontend_2.12-1.0.0-M9-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bloop-frontend_2.12/1.0.0/bloop-frontend_2.12-1.0.0-sources.jar",
                 ],
             },
             "lang": "scala",
@@ -99,19 +101,86 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": [
-                    "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
-                    "@scala_annex_io_github_scalapb_json_scalapb_circe_2_12",
+                    "@scala_annex_io_circe_circe_core_2_12",
                     "@scala_annex_org_scalameta_lsp4s_2_12",
                 ],
-                "jar_sha256": "5802b2d779e83e761fdc82e4f0f4730890ad8d40d40793079eda73997af9aa3d",
+                "jar_sha256": "37d4fc75c72b7fabaf6fca8f1dc43e5fe1953f95f6631a0f34159fc75f2615a1",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bsp_2.12/03e9b72d/bsp_2.12-03e9b72d.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bsp_2.12/1.0.0-M4/bsp_2.12-1.0.0-M4.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_bsp_2_12",
-                "srcjar_sha256": "f8e7f49ab1b5f88d17cd01d917bc2a2e7abcdef0787a17ec3b0bf0585012ea0a",
+                "srcjar_sha256": "e9ca095842a243bd880f2396dbb852b1f06eda081c36afc31e2839832a2c19c7",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/bsp_2.12/03e9b72d/bsp_2.12-03e9b72d-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/bsp_2.12/1.0.0-M4/bsp_2.12-1.0.0-M4-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_ch_epfl_scala_case_app_annotations_2_12",
+                "name": "jar/scala_annex_ch/epfl/scala/case_app_annotations_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "6918a8e756486c4ab6d8fd037898c9b727e03ab16cc36edf95f3fd97519a6403",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/ch/epfl/scala/case-app-annotations_2.12/1.2.0-faster-compile-time/case-app-annotations_2.12-1.2.0-faster-compile-time.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_ch_epfl_scala_case_app_annotations_2_12",
+                "srcjar_sha256": "d9d3da4572c4278663212b34833629ba8616b887eb55477a4a71ea540258a610",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/ch/epfl/scala/case-app-annotations_2.12/1.2.0-faster-compile-time/case-app-annotations_2.12-1.2.0-faster-compile-time-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_ch_epfl_scala_case_app_util_2_12",
+                "name": "jar/scala_annex_ch/epfl/scala/case_app_util_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@scala_annex_com_chuusai_shapeless_2_12",
+                    "@scala_annex_org_typelevel_macro_compat_2_12",
+                ],
+                "jar_sha256": "17cab6c45c702e01af1ebefe8415117eb4ca0813be76d08e1cc18f85fe5d7c5b",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/ch/epfl/scala/case-app-util_2.12/1.2.0-faster-compile-time/case-app-util_2.12-1.2.0-faster-compile-time.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_ch_epfl_scala_case_app_util_2_12",
+                "srcjar_sha256": "2e4e1cead6a42006d661dd3bf7dbbd19468d427f04a93e6517c6900dc4ce69ed",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/ch/epfl/scala/case-app-util_2.12/1.2.0-faster-compile-time/case-app-util_2.12-1.2.0-faster-compile-time-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_ch_epfl_scala_case_app_2_12",
+                "name": "jar/scala_annex_ch/epfl/scala/case_app_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@scala_annex_ch_epfl_scala_case_app_annotations_2_12",
+                    "@scala_annex_ch_epfl_scala_case_app_util_2_12",
+                ],
+                "jar_sha256": "316631204e37ba90c6e5457bd31a54e1497f00ceaa5d70cc9a902096dd663e2e",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/ch/epfl/scala/case-app_2.12/1.2.0-faster-compile-time/case-app_2.12-1.2.0-faster-compile-time.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_ch_epfl_scala_case_app_2_12",
+                "srcjar_sha256": "9fc615f1bd1419db048e7de32f6631c3373f3a421538e983334cd6b2f19a9885",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/ch/epfl/scala/case-app_2.12/1.2.0-faster-compile-time/case-app_2.12-1.2.0-faster-compile-time-sources.jar",
                 ],
             },
             "lang": "java",
@@ -124,15 +193,15 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": ["@scala_annex_org_scala_sbt_util_interface"],
-                "jar_sha256": "a571f53e002aac712b6edc572e2d2dbd2eba432816c9172e6cbc716ac0050f91",
+                "jar_sha256": "468d515a1a23d2ffb5635d38addac8f0da7937e54f91ed278a9b1884947bc284",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/compiler-interface/1.1.1+49-1c290cbb/compiler-interface-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/compiler-interface/1.1.7+62-0f4ad9d5/compiler-interface-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_compiler_interface",
-                "srcjar_sha256": "254010c1eb38020f0a0462c628007a3f51b464a5a5bf9ff6eda996e86d62d997",
+                "srcjar_sha256": "779b0dba1398d8fe90b8f89a4702929eb240e3677b50ba9751519e353277235a",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/compiler-interface/1.1.1+49-1c290cbb/compiler-interface-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/compiler-interface/1.1.7+62-0f4ad9d5/compiler-interface-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -148,15 +217,15 @@ def list_dependencies():
                     "@scala_annex_net_java_dev_jna_jna",
                     "@scala_annex_net_java_dev_jna_jna_platform",
                 ],
-                "jar_sha256": "f933a203d983992d986aa9c24a1e0839fd8972995d14b9456b5a8889db3563f8",
+                "jar_sha256": "b5fbb84441e55c7e91540ee00d0808c8b656b0bfc2fc67907e754d3518ea66ea",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/nailgun-server/51ddd0d9/nailgun-server-51ddd0d9.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/nailgun-server/0c8b937b/nailgun-server-0c8b937b.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_nailgun_server",
-                "srcjar_sha256": "8f8b48b2457968cd9c5c695a72cec61b1cfb254088a9e606f9df9dbe742a2e41",
+                "srcjar_sha256": "c4bb657ec224b8ea19def64627ab8c9c76c9b6cc9dddc2572e8fc767055ebb2c",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/nailgun-server/51ddd0d9/nailgun-server-51ddd0d9-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/nailgun-server/0c8b937b/nailgun-server-0c8b937b-sources.jar",
                 ],
             },
             "lang": "java",
@@ -168,15 +237,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "c1727ad90be2180eef3cd9b4cc8d14ecb23c67a42bfb18b561cb6a709d5c9297",
+                "jar_sha256": "1b041dd66c3d50ec17a80a1e1b8c0e3dc16ca8308495661a0b48abe84f09f327",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-apiinfo_2.12/1.1.1+49-1c290cbb/zinc-apiinfo_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-apiinfo_2.12/1.1.7+62-0f4ad9d5/zinc-apiinfo_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_apiinfo_2_12",
-                "srcjar_sha256": "65d940d5bca97a8cefa7b5ec29287c4369f75e83fe1c4a1ae9b9ba4d56851d02",
+                "srcjar_sha256": "54e686ca61511cdcbb46b6b45cbf4804588ad6cfbf2c4f31c80ffacb47676436",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-apiinfo_2.12/1.1.1+49-1c290cbb/zinc-apiinfo_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-apiinfo_2.12/1.1.7+62-0f4ad9d5/zinc-apiinfo_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -188,15 +257,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "e1887d254e6715212d5661a31fcb57cce9cd193f4dd1be4bb57edc265c3eb1d6",
+                "jar_sha256": "298716ee438261d00757821e69d6849ece59f14d11a78c0c13d8ebce4ef74411",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classfile_2.12/1.1.1+49-1c290cbb/zinc-classfile_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classfile_2.12/1.1.7+62-0f4ad9d5/zinc-classfile_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_classfile_2_12",
-                "srcjar_sha256": "fadbbebe13a5c853c19212dc45f53ca2a1cc982c4e150ae62607ca23c9c0a5ff",
+                "srcjar_sha256": "6514d2aa547d31b2f52a0398e4471b5978d585f91edcb9bca48e2ba1eebbdcf2",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classfile_2.12/1.1.1+49-1c290cbb/zinc-classfile_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classfile_2.12/1.1.7+62-0f4ad9d5/zinc-classfile_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -208,15 +277,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "b12c1c347a0ab218268530ab338c25329446b270d2ac12d0918147d31e9b655e",
+                "jar_sha256": "ef6b0fa2b0e84b17f31775afc032e1e6fe79248dbb2b63e81e72e416ae6baee1",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classpath_2.12/1.1.1+49-1c290cbb/zinc-classpath_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classpath_2.12/1.1.7+62-0f4ad9d5/zinc-classpath_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_classpath_2_12",
-                "srcjar_sha256": "09e89b38f630d52687bf186b62a247c6bba9d1f75ac0a990c417c396bdcd5e91",
+                "srcjar_sha256": "facbecb4a0f2a87ef15881fcb3f98884b31c29a3a03440ebf102b38eb5e2bc1c",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classpath_2.12/1.1.1+49-1c290cbb/zinc-classpath_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-classpath_2.12/1.1.7+62-0f4ad9d5/zinc-classpath_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -233,15 +302,15 @@ def list_dependencies():
                     "@scala_annex_org_scala_sbt_launcher_interface",
                     "@scala_annex_org_scala_sbt_util_control_2_12",
                 ],
-                "jar_sha256": "697455c1805b108e2bd2925d1b6e9d990a4585af411695e9f6e1d289b94b0f3d",
+                "jar_sha256": "28364add18a0602b87321d5fb41b2d1c62539369cb897a57261013fa9be07022",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-compile-core_2.12/1.1.1+49-1c290cbb/zinc-compile-core_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-compile-core_2.12/1.1.7+62-0f4ad9d5/zinc-compile-core_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_compile_core_2_12",
-                "srcjar_sha256": "3f035a0ed4022c45843d45917d9fd035fe374e9ee33ad3c27693bf6bcd5fe690",
+                "srcjar_sha256": "de3ce5cabd5c2e85a0859c98a7b3cb1b91d09bcd74b5142afc83629f0240a5b8",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-compile-core_2.12/1.1.1+49-1c290cbb/zinc-compile-core_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-compile-core_2.12/1.1.7+62-0f4ad9d5/zinc-compile-core_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -261,15 +330,15 @@ def list_dependencies():
                     "@scala_annex_org_scala_sbt_util_logging_2_12",
                     "@scala_annex_org_scala_sbt_util_relation_2_12",
                 ],
-                "jar_sha256": "9129366e58034b613162a98b8c70c1c082f9966cb9fa7b14595701ab918fb221",
+                "jar_sha256": "cb9d022abc169847c3a383f2e804b6f4452eaedac8771e4601863cc4da564006",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-core_2.12/1.1.1+49-1c290cbb/zinc-core_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-core_2.12/1.1.7+62-0f4ad9d5/zinc-core_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_core_2_12",
-                "srcjar_sha256": "afa2306607c03722d56a44fc77cfdce4f2a3550d515e9ebf2a7d6ad9fb46043f",
+                "srcjar_sha256": "144e22ce486a6b540a59ebb33525de795eb1150353c02a54597cc0ac8bb5301d",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-core_2.12/1.1.1+49-1c290cbb/zinc-core_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-core_2.12/1.1.7+62-0f4ad9d5/zinc-core_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -281,15 +350,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "25839c54ed27f8c1bc4aa37cc0b4ab28bafff04a3228aeefa0e5d65554da3e6c",
+                "jar_sha256": "90925274b812fcbdc703f335cbeba0341579d1569894e32fccdaa921e73e2329",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-ivy-integration_2.12/1.1.1+49-1c290cbb/zinc-ivy-integration_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-ivy-integration_2.12/1.1.7+62-0f4ad9d5/zinc-ivy-integration_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_ivy_integration_2_12",
-                "srcjar_sha256": "0243da0ccefa4731a7ea087e8478d18e46da27c6ae4102cd940fccd3578b790a",
+                "srcjar_sha256": "16c4c2b77eeaea0e9bb6f2c3b9008ba9e6415e38ed991fb43e9e461ea63fa046",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-ivy-integration_2.12/1.1.1+49-1c290cbb/zinc-ivy-integration_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-ivy-integration_2.12/1.1.7+62-0f4ad9d5/zinc-ivy-integration_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -305,15 +374,15 @@ def list_dependencies():
                     "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
                     "@scala_annex_org_scala_sbt_sbinary_2_12",
                 ],
-                "jar_sha256": "dc4eb300babf225e947f52d4cfbb92ef25790cdab3ca8683888b378381bff6f6",
+                "jar_sha256": "e0a98ad11934b56c4357c11b866dbd6ba79c18deaeb7e38ed8ff9cd8ee52abde",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-persist_2.12/1.1.1+49-1c290cbb/zinc-persist_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-persist_2.12/1.1.7+62-0f4ad9d5/zinc-persist_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_persist_2_12",
-                "srcjar_sha256": "a67de98e39ba135d784a6c4ac0ca0160e40f21fc68c27a75dfb2a12642e26b42",
+                "srcjar_sha256": "4d84c7442a724b7eb0f53deba8fbbd6e614a3688402d1f1f8c3030320892ceb8",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-persist_2.12/1.1.1+49-1c290cbb/zinc-persist_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc-persist_2.12/1.1.7+62-0f4ad9d5/zinc-persist_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -332,15 +401,15 @@ def list_dependencies():
                     "@scala_annex_ch_epfl_scala_zinc_ivy_integration_2_12",
                     "@scala_annex_ch_epfl_scala_zinc_persist_2_12",
                 ],
-                "jar_sha256": "b183eeb5d719df3c213dadbfaa06024dbfec6b8e748b2cacff5c8ff8ddc0bcfb",
+                "jar_sha256": "7d39dcd05773e4c61e5498cf38385e18479a9031a5052410bdbf6414c637ca18",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc_2.12/1.1.1+49-1c290cbb/zinc_2.12-1.1.1+49-1c290cbb.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc_2.12/1.1.7+62-0f4ad9d5/zinc_2.12-1.1.7+62-0f4ad9d5.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_ch_epfl_scala_zinc_2_12",
-                "srcjar_sha256": "77d3b48e396d380b6f99c8c0930bff1ed305546676fd1265a1e5f896554da1f9",
+                "srcjar_sha256": "d2e4de73c039433c9ebb35e0c05bb835ba84fada8acd1b47a47f5bb116b10bb4",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/ch/epfl/scala/zinc_2.12/1.1.1+49-1c290cbb/zinc_2.12-1.1.1+49-1c290cbb-sources.jar",
+                    "http://central.maven.org/maven2/ch/epfl/scala/zinc_2.12/1.1.7+62-0f4ad9d5/zinc_2.12-1.1.7+62-0f4ad9d5-sources.jar",
                 ],
             },
             "lang": "java",
@@ -605,154 +674,20 @@ def list_dependencies():
         },
         {
             "bind_args": {
-                "actual": "@scala_annex_com_geirsson_metaconfig_core_2_12",
-                "name": "jar/scala_annex_com/geirsson/metaconfig_core_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_com_lihaoyi_pprint_2_12",
-                    "@scala_annex_org_scalameta_inputs_2_12",
-                    "@scala_annex_org_typelevel_paiges_core_2_12",
-                ],
-                "jar_sha256": "9033b2bf857fccc70fa4b613a1276fc957263ba784a2ffead753fd386c7153ac",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/com/geirsson/metaconfig-core_2.12/0.6.0/metaconfig-core_2.12-0.6.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_com_geirsson_metaconfig_core_2_12",
-                "srcjar_sha256": "034a66211fa88884328c3c3e033c68dc887880b1ec4b7a7da0eb4c7b1a66db4f",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/geirsson/metaconfig-core_2.12/0.6.0/metaconfig-core_2.12-0.6.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_com_geirsson_metaconfig_docs_2_12",
-                "name": "jar/scala_annex_com/geirsson/metaconfig_docs_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_com_lihaoyi_scalatags_2_12"],
-                "jar_sha256": "5ab5b2cba87511ed6a5b4869550935c58490d7699eb8199e15e67b187f15f814",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/com/geirsson/metaconfig-docs_2.12/0.6.0/metaconfig-docs_2.12-0.6.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_com_geirsson_metaconfig_docs_2_12",
-                "srcjar_sha256": "6e047754641bba12c0c8a971e726a52e0d622d3a3d1cd9e9969ee558a70f63f9",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/geirsson/metaconfig-docs_2.12/0.6.0/metaconfig-docs_2.12-0.6.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_com_geirsson_metaconfig_typesafe_config_2_12",
-                "name": "jar/scala_annex_com/geirsson/metaconfig_typesafe_config_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "171ebd45710bd962adac86c7d8f29b3d08b2714858317be4d27f05a00c598da7",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/com/geirsson/metaconfig-typesafe-config_2.12/0.6.0/metaconfig-typesafe-config_2.12-0.6.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_com_geirsson_metaconfig_typesafe_config_2_12",
-                "srcjar_sha256": "268030b8f634ee5dc5b6295c217bf325224fff4f685457b2e9f91899505dbab0",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/geirsson/metaconfig-typesafe-config_2.12/0.6.0/metaconfig-typesafe-config_2.12-0.6.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_com_github_alexarchambault_case_app_annotations_2_12",
-                "name": "jar/scala_annex_com/github/alexarchambault/case_app_annotations_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "f11466c855f9db55f334fcce032731090c464777a2d145d78ddbbd2bb35fbd8e",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/com/github/alexarchambault/case-app-annotations_2.12/1.2.0/case-app-annotations_2.12-1.2.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_com_github_alexarchambault_case_app_annotations_2_12",
-                "srcjar_sha256": "1344cffe820527e31814235aa7e68191b2b56f695836a1965c20bfd76cb1722e",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/github/alexarchambault/case-app-annotations_2.12/1.2.0/case-app-annotations_2.12-1.2.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_com_github_alexarchambault_case_app_util_2_12",
-                "name": "jar/scala_annex_com/github/alexarchambault/case_app_util_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_com_chuusai_shapeless_2_12",
-                    "@scala_annex_org_typelevel_macro_compat_2_12",
-                ],
-                "jar_sha256": "65ae3c037fd533fa02433970ce686d45e17ab9cad6a895fff65e3b7cfcec625a",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/com/github/alexarchambault/case-app-util_2.12/1.2.0/case-app-util_2.12-1.2.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_com_github_alexarchambault_case_app_util_2_12",
-                "srcjar_sha256": "b4b54eeb98073392757b9b4e0656beb5fe3a51ab0b0fd749f4dcbc4e8e1d7bbf",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/github/alexarchambault/case-app-util_2.12/1.2.0/case-app-util_2.12-1.2.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_com_github_alexarchambault_case_app_2_12",
-                "name": "jar/scala_annex_com/github/alexarchambault/case_app_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_com_github_alexarchambault_case_app_annotations_2_12",
-                    "@scala_annex_com_github_alexarchambault_case_app_util_2_12",
-                ],
-                "jar_sha256": "b3326b400394700ca92e5eaaa3389a9b713568ec80eaf6daec58c4f4828ec343",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/com/github/alexarchambault/case-app_2.12/1.2.0/case-app_2.12-1.2.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_com_github_alexarchambault_case_app_2_12",
-                "srcjar_sha256": "6f8f1f7703c0a9c30fdd45610c77763339b0e2a49e68d2df7729d1a6e77447c5",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/github/alexarchambault/case-app_2.12/1.2.0/case-app_2.12-1.2.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
                 "actual": "@scala_annex_com_github_pathikrit_better_files_2_12",
                 "name": "jar/scala_annex_com/github/pathikrit/better_files_2_12",
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "ac691b8fea3fcb01bf57cc396b7f55d61fbd9c22c00971fda3c1cabfcdd471a2",
+                "jar_sha256": "79b49bc134f06a6a091a962ec10ce3f1810403bccec7d99bf9928b7eb02e85c4",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/com/github/pathikrit/better-files_2.12/3.2.0/better-files_2.12-3.2.0.jar",
+                    "http://central.maven.org/maven2/com/github/pathikrit/better-files_2.12/3.4.0/better-files_2.12-3.4.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_com_github_pathikrit_better_files_2_12",
-                "srcjar_sha256": "b2c84728ab879a63007c3d226bc45e529a9934fd4d9a09bb821b64777eb20cd3",
+                "srcjar_sha256": "819911f7306162bdf9617f3ec0c218ebf7eec855e7120585e44f1b2a8d4852ec",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/github/pathikrit/better-files_2.12/3.2.0/better-files_2.12-3.2.0-sources.jar",
+                    "http://central.maven.org/maven2/com/github/pathikrit/better-files_2.12/3.4.0/better-files_2.12-3.4.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -846,15 +781,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "dce7e66b32456a1b1198da0caff3a8acb71548658391e798c79369241e6490a4",
+                "jar_sha256": "90b82eeb94e7aba6f5053cc3d42f73da3ed188f4c6bc73a412d6fb3a12d97444",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/com/google/protobuf/protobuf-java/3.4.0/protobuf-java-3.4.0.jar",
+                    "http://central.maven.org/maven2/com/google/protobuf/protobuf-java/3.3.1/protobuf-java-3.3.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_com_google_protobuf_protobuf_java",
-                "srcjar_sha256": "07a55d5d34d2b47d2d1d9092be1dbf1b1d99fffcea19b7eafba508de8daae2cd",
+                "srcjar_sha256": "a5f40b040e76982c8ce70758acdabd063be8803f879a2a0b8a86f2a57feb8d3a",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/google/protobuf/protobuf-java/3.4.0/protobuf-java-3.4.0-sources.jar",
+                    "http://central.maven.org/maven2/com/google/protobuf/protobuf-java/3.3.1/protobuf-java-3.3.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -906,15 +841,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "02f59c0c856511ff20a6f9ce875097e3cec990618c354ffb75e4d7bbdf5be7da",
+                "jar_sha256": "0da40d3c89d3f7009ac2f6e32b11d8cdd379b40a2f09ce08669b4695f558e101",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/com/lihaoyi/fastparse-utils_2.12/0.4.4/fastparse-utils_2.12-0.4.4.jar",
+                    "http://central.maven.org/maven2/com/lihaoyi/fastparse-utils_2.12/0.4.2/fastparse-utils_2.12-0.4.2.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_com_lihaoyi_fastparse_utils_2_12",
-                "srcjar_sha256": "4415d71dd6dea0ab0a62d5c2ff861cc4666d861f96ed53734d51acb14a76ee45",
+                "srcjar_sha256": "1eb227bc9659ce84b40d2d258c9ea3e8b8246f362241f43422266e05cabc902d",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/lihaoyi/fastparse-utils_2.12/0.4.4/fastparse-utils_2.12-0.4.4-sources.jar",
+                    "http://central.maven.org/maven2/com/lihaoyi/fastparse-utils_2.12/0.4.2/fastparse-utils_2.12-0.4.2-sources.jar",
                 ],
             },
             "lang": "java",
@@ -926,16 +861,19 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_com_lihaoyi_fastparse_utils_2_12"],
-                "jar_sha256": "7bc2a3131204e737f020f94e19b1e62a1bf5359f5741c35dff9351ef36d7a80e",
+                "deps": [
+                    "@scala_annex_com_lihaoyi_fastparse_utils_2_12",
+                    "@scala_annex_com_lihaoyi_sourcecode_2_12",
+                ],
+                "jar_sha256": "43f57787179e902137167ba107e665272a0764f1addb3f452136f15bad5b21a8",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/com/lihaoyi/fastparse_2.12/0.4.4/fastparse_2.12-0.4.4.jar",
+                    "http://central.maven.org/maven2/com/lihaoyi/fastparse_2.12/0.4.2/fastparse_2.12-0.4.2.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_com_lihaoyi_fastparse_2_12",
-                "srcjar_sha256": "d969946c31d521e7afbe9b126bc18ad7e62f293665fb50c7050fad982ad66904",
+                "srcjar_sha256": "8e242feb1704b8483969c726056c46e5ba2bb659c943d336ae3948b3a507707d",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/lihaoyi/fastparse_2.12/0.4.4/fastparse_2.12-0.4.4-sources.jar",
+                    "http://central.maven.org/maven2/com/lihaoyi/fastparse_2.12/0.4.2/fastparse_2.12-0.4.2-sources.jar",
                 ],
             },
             "lang": "java",
@@ -947,10 +885,7 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_com_lihaoyi_fansi_2_12",
-                    "@scala_annex_com_lihaoyi_sourcecode_2_12",
-                ],
+                "deps": ["@scala_annex_com_lihaoyi_fansi_2_12"],
                 "jar_sha256": "2e18aa0884870537bf5c562255fc759d4ebe360882b5cb2141b30eda4034c71d",
                 "jar_urls": [
                     "http://central.maven.org/maven2/com/lihaoyi/pprint_2.12/0.5.3/pprint_2.12-0.5.3.jar",
@@ -964,26 +899,9 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_com_lihaoyi_scalatags_2_12",
-                "name": "jar/scala_annex_com/lihaoyi/scalatags_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "a63871de40fce5dc15f9186032ef562211e43d52fa2b0b68a5a52945fa676113",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/com/lihaoyi/scalatags_2.12/0.6.7/scalatags_2.12-0.6.7.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_com_lihaoyi_scalatags_2_12",
-                "srcjar_sha256": "9b45a3efca18bbbdbeabd07ce1419d6a822f6c6b629b03878ef9f44f266140da",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/lihaoyi/scalatags_2.12/0.6.7/scalatags_2.12-0.6.7-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
+        # duplicates in com.lihaoyi:sourcecode_2.12 promoted to 0.1.4
+        # - ch.epfl.scala:bloop-backend_2.12:1.0.0 wanted version 0.1.4
+        # - com.lihaoyi:fastparse_2.12:0.4.2 wanted version 0.1.3
         {
             "bind_args": {
                 "actual": "@scala_annex_com_lihaoyi_sourcecode_2_12",
@@ -1130,11 +1048,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in com.trueaccord.scalapb:scalapb-runtime_2.12 promoted to 0.6.6
-        # - ch.epfl.scala:bsp_2.12:03e9b72d wanted version 0.6.6
-        # - ch.epfl.scala:zinc-persist_2.12:1.1.1+49-1c290cbb wanted version 0.6.0
-        # - org.scala-sbt:zinc-persist_2.12:1.1.3 wanted version 0.6.0
-        # - org.scalameta:langmeta_2.12:2.0.0-M3 wanted version 0.6.2
         {
             "bind_args": {
                 "actual": "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
@@ -1147,15 +1060,15 @@ def list_dependencies():
                     "@scala_annex_com_lihaoyi_fastparse_2_12",
                     "@scala_annex_com_trueaccord_lenses_lenses_2_12",
                 ],
-                "jar_sha256": "80307c8cef7d27adcd87eeefdd13ab0a809b5bc1d8e02240f1d1777f34bb4a47",
+                "jar_sha256": "7921c157a5d0c4852d6ee99c728cf77c148ce6d36280dfcb6b58d1fa90d17f8d",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/com/trueaccord/scalapb/scalapb-runtime_2.12/0.6.6/scalapb-runtime_2.12-0.6.6.jar",
+                    "http://central.maven.org/maven2/com/trueaccord/scalapb/scalapb-runtime_2.12/0.6.0/scalapb-runtime_2.12-0.6.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
-                "srcjar_sha256": "0f222e77533a74e9b976d5b82c81d778cb31f2ac6c09b154b9b6468d33b50596",
+                "srcjar_sha256": "ed9b75d56698da090ead2ee1f464157225a4c6117d4adb31d2947809fb1f4da8",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/trueaccord/scalapb/scalapb-runtime_2.12/0.6.6/scalapb-runtime_2.12-0.6.6-sources.jar",
+                    "http://central.maven.org/maven2/com/trueaccord/scalapb/scalapb-runtime_2.12/0.6.0/scalapb-runtime_2.12-0.6.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1180,9 +1093,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in com.typesafe:config promoted to 1.3.2
-        # - ch.epfl.scala:bloop-config_2.12:1.0.0-M9 wanted version 1.3.2
-        # - com.typesafe:ssl-config-core_2.12:0.2.2 wanted version 1.2.0
         {
             "bind_args": {
                 "actual": "@scala_annex_com_typesafe_config",
@@ -1190,15 +1100,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "6563d1723f3300bf596f41e40bc03e54986108b5c45d0ac34ebc66d48c2e25a3",
+                "jar_sha256": "56f2c2e8acb95fb1e358b1e3faef2d565782c2a528747b01af8dd8e8bd87bd60",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/com/typesafe/config/1.3.2/config-1.3.2.jar",
+                    "http://central.maven.org/maven2/com/typesafe/config/1.2.0/config-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_com_typesafe_config",
-                "srcjar_sha256": "65995abd56d6aa99ee7f46e7cdaaaac2968554b16b26d38bf67e13706a12ca82",
+                "srcjar_sha256": "1acf655899a53e9acc577cb9d47e466095d83532cdfd1b17dd8e6f5c1c02642c",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/com/typesafe/config/1.3.2/config-1.3.2-sources.jar",
+                    "http://central.maven.org/maven2/com/typesafe/config/1.2.0/config-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1224,6 +1134,30 @@ def list_dependencies():
             },
             "lang": "java",
         },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_com_zaxxer_nuprocess",
+                "name": "jar/scala_annex_com/zaxxer/nuprocess",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": ["@scala_annex_net_java_dev_jna_jna"],
+                "jar_sha256": "1e56122ff6dba06f58dc97829fd1cbd2c5e82c99e0e1bc66214bfc3159838dd9",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/com/zaxxer/nuprocess/1.2.4/nuprocess-1.2.4.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_com_zaxxer_nuprocess",
+                "srcjar_sha256": "e9d60ef0f35ea1fde6f19d57679ea8a82306ccfa07cde23c7de1fac986d5a4e0",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/com/zaxxer/nuprocess/1.2.4/nuprocess-1.2.4-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        # duplicates in io.circe:circe-core_2.12 promoted to 0.9.3
+        # - ch.epfl.scala:bsp_2.12:1.0.0-M4 wanted version 0.9.0
+        # - io.circe:circe-parser_2.12:0.9.3 wanted version 0.9.3
         {
             "bind_args": {
                 "actual": "@scala_annex_io_circe_circe_core_2_12",
@@ -1255,7 +1189,6 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_io_circe_circe_core_2_12"],
                 "jar_sha256": "055edaacc4f4b4e8e3c49523b23cb313a24f11db64d7ab7bd210e14c6fc5d89f",
                 "jar_urls": [
                     "http://central.maven.org/maven2/io/circe/circe-derivation_2.12/0.9.0-M3/circe-derivation_2.12-0.9.0-M3.jar",
@@ -1317,15 +1250,15 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": ["@scala_annex_org_spire_math_jawn_parser_2_12"],
-                "jar_sha256": "f2e2a482e3f6ad50c8a71ff2f3478c64409aeefa0f092737d7d6c37a623c1e5b",
+                "jar_sha256": "0f3b99235b0180482a1a00dcfc2fe7604a42c027923dc4c1b5e99f7ffc507d9d",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-jawn_2.12/0.9.0/circe-jawn_2.12-0.9.0.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-jawn_2.12/0.9.3/circe-jawn_2.12-0.9.3.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_io_circe_circe_jawn_2_12",
-                "srcjar_sha256": "d9d2a299879edd001fe9ee410fe2cd027287c1006da2ad791e4f450d63865277",
+                "srcjar_sha256": "a2f0e0fb26bb000426af13fa0e6389642f06feb9f1b4e9620aa8c6e584ccdfd8",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-jawn_2.12/0.9.0/circe-jawn_2.12-0.9.0-sources.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-jawn_2.12/0.9.3/circe-jawn_2.12-0.9.3-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1357,16 +1290,19 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_io_circe_circe_jawn_2_12"],
-                "jar_sha256": "b919770a22956cd39326dcd5f23500ffd15a3dc7fee46f1e291a5ae35afd8b86",
+                "deps": [
+                    "@scala_annex_io_circe_circe_core_2_12",
+                    "@scala_annex_io_circe_circe_jawn_2_12",
+                ],
+                "jar_sha256": "35613794c8881186487beaf5a620cd0f6f128cffd4e7a2c777ef034cb4bd1f75",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-parser_2.12/0.9.0/circe-parser_2.12-0.9.0.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-parser_2.12/0.9.3/circe-parser_2.12-0.9.3.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_io_circe_circe_parser_2_12",
-                "srcjar_sha256": "c3c2a42825422c5a59786f22b7cc3750d494d251760e2066eea55318612b32f1",
+                "srcjar_sha256": "08e1cdf76c77951b8771f2485756f6e9137de6473bfbaaabd86c9f568827b0a1",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-parser_2.12/0.9.0/circe-parser_2.12-0.9.0-sources.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-parser_2.12/0.9.3/circe-parser_2.12-0.9.3-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1378,16 +1314,35 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_org_scalaz_scalaz_concurrent_2_12"],
-                "jar_sha256": "a0f4f23f60c6acad3e778769a741a15ce62173549291775488028e228a42e1b6",
+                "jar_sha256": "aaa00acfe8b99f986c42d6efcef5d67ff3b562a5c24da008c2348562127bff73",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/io/get-coursier/coursier-cache_2.12/1.0.0-RC8/coursier-cache_2.12-1.0.0-RC8.jar",
+                    "http://central.maven.org/maven2/io/get-coursier/coursier-cache_2.12/1.1.0-M3/coursier-cache_2.12-1.1.0-M3.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_io_get_coursier_coursier_cache_2_12",
-                "srcjar_sha256": "3c0fc30551c6b9830a8fd04a0a0419279f902762d20f8f2d5d540be53217b19e",
+                "srcjar_sha256": "ce5baf5872f2ede7f4cd6698c0e36f5bd4a40025b69f879706ec3a03dc9bb45f",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/get-coursier/coursier-cache_2.12/1.0.0-RC8/coursier-cache_2.12-1.0.0-RC8-sources.jar",
+                    "http://central.maven.org/maven2/io/get-coursier/coursier-cache_2.12/1.1.0-M3/coursier-cache_2.12-1.1.0-M3-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_io_get_coursier_coursier_scalaz_interop_2_12",
+                "name": "jar/scala_annex_io/get_coursier/coursier_scalaz_interop_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "108365bbad931ad21d858ac252256c1ee789761e15706647f624881b32b6832a",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/io/get-coursier/coursier-scalaz-interop_2.12/1.1.0-M3/coursier-scalaz-interop_2.12-1.1.0-M3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_io_get_coursier_coursier_scalaz_interop_2_12",
+                "srcjar_sha256": "aca9bedbd3eb226e5318aa9a90993dcc4f801e751cc6db2de01779d52d310be0",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/io/get-coursier/coursier-scalaz-interop_2.12/1.1.0-M3/coursier-scalaz-interop_2.12-1.1.0-M3-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1401,61 +1356,16 @@ def list_dependencies():
                 "default_visibility": ["//visibility:public"],
                 "deps": [
                     "@scala_annex_org_scala_lang_modules_scala_xml_2_12",
-                    "@scala_annex_org_scalaz_scalaz_core_2_12",
                 ],
-                "jar_sha256": "437d53c55fe4beb48574d886876956cf9320ecda85b4a1c30cfe42f64c3c455c",
+                "jar_sha256": "a4fc2994a83779d92413057128498620f99baf9772cc161ebdb865fc637ae370",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/io/get-coursier/coursier_2.12/1.0.0-RC8/coursier_2.12-1.0.0-RC8.jar",
+                    "http://central.maven.org/maven2/io/get-coursier/coursier_2.12/1.1.0-M3/coursier_2.12-1.1.0-M3.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_io_get_coursier_coursier_2_12",
-                "srcjar_sha256": "336bb9ab5874770230aa1200b14c92985afb9c91337cea0f7ae4e7f441010da2",
+                "srcjar_sha256": "6ddc5d5050751617b1f4d6279b3adf71d4cc7083a431fae0344839aaa5a08dc5",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/get-coursier/coursier_2.12/1.0.0-RC8/coursier_2.12-1.0.0-RC8-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_io_github_scalapb_json_scalapb_circe_2_12",
-                "name": "jar/scala_annex_io/github/scalapb_json/scalapb_circe_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_io_circe_circe_parser_2_12",
-                    "@scala_annex_io_github_scalapb_json_scalapb_json_common_2_12",
-                ],
-                "jar_sha256": "69160c32d4d61f861c542701bb9b054d36cdc5d393182d3a7c7b0cdb4b3a9c00",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/io/github/scalapb-json/scalapb-circe_2.12/0.1.1/scalapb-circe_2.12-0.1.1.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_io_github_scalapb_json_scalapb_circe_2_12",
-                "srcjar_sha256": "8b73f9af30e0ddf23e11d200995cbe960a65b2ee6e085338825b610256aa9932",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/github/scalapb-json/scalapb-circe_2.12/0.1.1/scalapb-circe_2.12-0.1.1-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_io_github_scalapb_json_scalapb_json_common_2_12",
-                "name": "jar/scala_annex_io/github/scalapb_json/scalapb_json_common_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "62ad356f48b1dcb0cee6bf10f62dcad5cea1207b49a6d33941d2a929139bd5bd",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/io/github/scalapb-json/scalapb-json-common_2.12/0.1.1/scalapb-json-common_2.12-0.1.1.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_io_github_scalapb_json_scalapb_json_common_2_12",
-                "srcjar_sha256": "4a0b927d5c14a9d0e801d79de7e5d9f3fe77df79dcf6d092669c29e57fb4fd0e",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/github/scalapb-json/scalapb-json-common_2.12/0.1.1/scalapb-json-common_2.12-0.1.1-sources.jar",
+                    "http://central.maven.org/maven2/io/get-coursier/coursier_2.12/1.1.0-M3/coursier_2.12-1.1.0-M3-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1467,64 +1377,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_org_junit_jupiter_junit_jupiter_api"],
-                "jar_sha256": "a86b5db50849431609585bc23883dba78cadbe0ba407a3522b0531a63b75fbcd",
+                "jar_sha256": "28bed4b1f8cc99a2fbf078213e52f7778a231a59614aab5ba2b9ca9c12617bf2",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/io/github/soc/directories/5/directories-5.jar",
+                    "http://central.maven.org/maven2/io/github/soc/directories/10/directories-10.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_io_github_soc_directories",
-                "srcjar_sha256": "c1dde43ee3ef3d5bd77fb939d4e838d190dc798f746917ad400c7e6ba4e2aa29",
+                "srcjar_sha256": "2bc1c4f7d3b6e96468dbb3bc542cd70155fb573a0ab1e51210a7e616b5fe9fbc",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/github/soc/directories/5/directories-5-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_io_methvin_directory_watcher_better_files_2_12",
-                "name": "jar/scala_annex_io/methvin/directory_watcher_better_files_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_com_github_pathikrit_better_files_2_12",
-                    "@scala_annex_io_methvin_directory_watcher",
-                ],
-                "jar_sha256": "89f294c5bea870ece5810d410e52939b9bdf70282a41dfa007facc1d54f040e8",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/io/methvin/directory-watcher-better-files_2.12/0.4.0/directory-watcher-better-files_2.12-0.4.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_io_methvin_directory_watcher_better_files_2_12",
-                "srcjar_sha256": "1d5a144368d97fa0f4067f629c226198dce11cb7b6bb73b8b00928e451a6de9f",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/methvin/directory-watcher-better-files_2.12/0.4.0/directory-watcher-better-files_2.12-0.4.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_io_methvin_directory_watcher",
-                "name": "jar/scala_annex_io/methvin/directory_watcher",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_com_google_guava_guava",
-                    "@scala_annex_org_slf4j_slf4j_api",
-                ],
-                "jar_sha256": "3106b9d72894704ea72b7880b3fdb1a686f14fe8ffdf74b1bb381e77fd781d1b",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/io/methvin/directory-watcher/0.4.0/directory-watcher-0.4.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_io_methvin_directory_watcher",
-                "srcjar_sha256": "1f3a9f1673bac9eae199b59846e34ce507e10cb5581dfd07bcf3c12f5ac6b16a",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/methvin/directory-watcher/0.4.0/directory-watcher-0.4.0-sources.jar",
+                    "http://central.maven.org/maven2/io/github/soc/directories/10/directories-10-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1657,8 +1518,56 @@ def list_dependencies():
             },
             "lang": "java",
         },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_me_vican_jorge_directory_watcher_better_files_2_12",
+                "name": "jar/scala_annex_me/vican/jorge/directory_watcher_better_files_2_12",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@scala_annex_com_github_pathikrit_better_files_2_12",
+                    "@scala_annex_me_vican_jorge_directory_watcher",
+                ],
+                "jar_sha256": "985576364f8c341592d1b24dabe1385d225df0480b6949cf1e12c13692912af3",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/me/vican/jorge/directory-watcher-better-files_2.12/0.5.2-a1c0e21c/directory-watcher-better-files_2.12-0.5.2-a1c0e21c.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_me_vican_jorge_directory_watcher_better_files_2_12",
+                "srcjar_sha256": "29379d5c34e8d577fed2664b13eacec20ed92418ef1c3e074941dddab21fabf3",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/me/vican/jorge/directory-watcher-better-files_2.12/0.5.2-a1c0e21c/directory-watcher-better-files_2.12-0.5.2-a1c0e21c-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_me_vican_jorge_directory_watcher",
+                "name": "jar/scala_annex_me/vican/jorge/directory_watcher",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@scala_annex_com_google_guava_guava",
+                    "@scala_annex_org_slf4j_slf4j_api",
+                ],
+                "jar_sha256": "011474987f98c35cf0344fd9151f5141aaf1d1f3bbc2995ee8c26ec53fbe95d5",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/me/vican/jorge/directory-watcher/0.5.2-a1c0e21c/directory-watcher-0.5.2-a1c0e21c.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_me_vican_jorge_directory_watcher",
+                "srcjar_sha256": "1bda4438176b5674488fd752fc12178653e26993a57d33b70206ef6bbb0a3e08",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/me/vican/jorge/directory-watcher/0.5.2-a1c0e21c/directory-watcher-0.5.2-a1c0e21c-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
         # duplicates in net.java.dev.jna:jna-platform promoted to 4.5.0
-        # - ch.epfl.scala:nailgun-server:51ddd0d9 wanted version 4.4.0
+        # - ch.epfl.scala:nailgun-server:0c8b937b wanted version 4.4.0
         # - org.scala-sbt:io_2.12:1.1.4 wanted version 4.5.0
         {
             "bind_args": {
@@ -1680,8 +1589,9 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in net.java.dev.jna:jna promoted to 4.5.0
-        # - ch.epfl.scala:nailgun-server:51ddd0d9 wanted version 4.4.0
+        # duplicates in net.java.dev.jna:jna promoted to 4.5.1
+        # - ch.epfl.scala:nailgun-server:0c8b937b wanted version 4.4.0
+        # - com.zaxxer:nuprocess:1.2.4 wanted version 4.5.1
         # - org.scala-sbt:io_2.12:1.1.4 wanted version 4.5.0
         {
             "bind_args": {
@@ -1690,15 +1600,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "617a8d75f66a57296255a13654a99f10f72f0964336e352211247ed046da3e94",
+                "jar_sha256": "fbc9de96a0cc193a125b4008dbc348e9ed54e5e13fc67b8ed40e645d303cc51b",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/net/java/dev/jna/jna/4.5.0/jna-4.5.0.jar",
+                    "http://central.maven.org/maven2/net/java/dev/jna/jna/4.5.1/jna-4.5.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_net_java_dev_jna_jna",
-                "srcjar_sha256": "e4da62978d75a5f47641d6c3548a6859c193fad8c5d0bc95a5f049d8ec1a0f79",
+                "srcjar_sha256": "74145556f7b10be10303b76e9bfb12a7d0d43934c60788ed006a7a8aed5517f4",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/net/java/dev/jna/jna/4.5.0/jna-4.5.0-sources.jar",
+                    "http://central.maven.org/maven2/net/java/dev/jna/jna/4.5.1/jna-4.5.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1825,70 +1735,6 @@ def list_dependencies():
         },
         {
             "bind_args": {
-                "actual": "@scala_annex_org_junit_jupiter_junit_jupiter_api",
-                "name": "jar/scala_annex_org/junit/jupiter/junit_jupiter_api",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_org_junit_platform_junit_platform_commons",
-                    "@scala_annex_org_opentest4j_opentest4j",
-                ],
-                "jar_sha256": "05f092a3e1a6dfe42ad38e7ec43e6abe4d4f56d5975124d9f8025b526d14ee05",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.0.1/junit-jupiter-api-5.0.1.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_junit_jupiter_junit_jupiter_api",
-                "srcjar_sha256": "d8188657c627244548a19d01d411ebf4a435b00693952953fef6c8309da78e10",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.0.1/junit-jupiter-api-5.0.1-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_junit_platform_junit_platform_commons",
-                "name": "jar/scala_annex_org/junit/platform/junit_platform_commons",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "dcaef05f575bc09d0adb87462dfffe090c5c1d8d446301baae5d4843ebc8099d",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/junit/platform/junit-platform-commons/1.0.1/junit-platform-commons-1.0.1.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_junit_platform_junit_platform_commons",
-                "srcjar_sha256": "b32201324b4b4c8930b4b482347075b9e61fba4b5adc5aa02da4e83fb5712572",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/junit/platform/junit-platform-commons/1.0.1/junit-platform-commons-1.0.1-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_opentest4j_opentest4j",
-                "name": "jar/scala_annex_org/opentest4j/opentest4j",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "6a05b14e8764a1fa51551ccef29e7271681d65fa907a8136136b94de92a0b862",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/opentest4j/opentest4j/1.0.0/opentest4j-1.0.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_opentest4j_opentest4j",
-                "srcjar_sha256": "68e5bbe7dbe3b8cfe2b98976a3271830a366ac5c5f5a450ed301c6b4f08bb822",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/opentest4j/opentest4j/1.0.0/opentest4j-1.0.0-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
                 "actual": "@scala_annex_org_reactivestreams_reactive_streams",
                 "name": "jar/scala_annex_org/reactivestreams/reactive_streams",
             },
@@ -1908,7 +1754,7 @@ def list_dependencies():
             "lang": "java",
         },
         # duplicates in org.scala-lang.modules:scala-parser-combinators_2.12 promoted to 1.0.5
-        # - ch.epfl.scala:zinc-compile-core_2.12:1.1.1+49-1c290cbb wanted version 1.0.5
+        # - ch.epfl.scala:zinc-compile-core_2.12:1.1.7+62-0f4ad9d5 wanted version 1.0.5
         # - org.scala-sbt:zinc-compile-core_2.12:1.1.3 wanted version 1.0.5
         # - org.scalatest:scalatest_2.12:3.0.4 wanted version 1.0.4
         {
@@ -1932,7 +1778,7 @@ def list_dependencies():
             "lang": "java",
         },
         # duplicates in org.scala-lang.modules:scala-xml_2.12 promoted to 1.0.6
-        # - io.get-coursier:coursier_2.12:1.0.0-RC8 wanted version 1.0.6
+        # - io.get-coursier:coursier_2.12:1.1.0-M3 wanted version 1.0.6
         # - org.scala-sbt:sbinary_2.12:0.4.4 wanted version 1.0.5
         # - org.scalatest:scalatest_2.12:3.0.4 wanted version 1.0.5
         {
@@ -2016,9 +1862,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-sbt:io_2.12 promoted to 1.1.4
-        # - ch.epfl.scala:zinc-core_2.12:1.1.1+49-1c290cbb wanted version 1.1.3
-        # - org.scala-sbt:zinc-core_2.12:1.1.3 wanted version 1.1.4
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_io_2_12",
@@ -2204,9 +2047,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-sbt:util-control_2.12 promoted to 1.1.3
-        # - ch.epfl.scala:zinc-compile-core_2.12:1.1.1+49-1c290cbb wanted version 1.1.2
-        # - org.scala-sbt:zinc-compile-core_2.12:1.1.3 wanted version 1.1.3
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_control_2_12",
@@ -2227,9 +2067,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-sbt:util-interface promoted to 1.1.3
-        # - ch.epfl.scala:compiler-interface:1.1.1+49-1c290cbb wanted version 1.1.2
-        # - org.scala-sbt:compiler-interface:1.1.3 wanted version 1.1.3
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_interface",
@@ -2250,9 +2087,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-sbt:util-logging_2.12 promoted to 1.1.3
-        # - ch.epfl.scala:zinc-core_2.12:1.1.1+49-1c290cbb wanted version 1.1.2
-        # - org.scala-sbt:zinc-core_2.12:1.1.3 wanted version 1.1.3
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_logging_2_12",
@@ -2302,9 +2136,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-sbt:util-relation_2.12 promoted to 1.1.3
-        # - ch.epfl.scala:zinc-core_2.12:1.1.1+49-1c290cbb wanted version 1.1.2
-        # - org.scala-sbt:zinc-core_2.12:1.1.3 wanted version 1.1.3
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_relation_2_12",
@@ -2560,71 +2391,6 @@ def list_dependencies():
         },
         {
             "bind_args": {
-                "actual": "@scala_annex_org_scalameta_common_2_12",
-                "name": "jar/scala_annex_org/scalameta/common_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "142cf1e5cd81542db650ff1709323f2f4fc31b9efbb6b665b6f48f0e1d1b7521",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/common_2.12/2.0.0-M3/common_2.12-2.0.0-M3.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_scalameta_common_2_12",
-                "srcjar_sha256": "eeed92845577d5a4aedaba92476c42b33ee46c254ea7f13d66fc4ba59d648fbd",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/common_2.12/2.0.0-M3/common_2.12-2.0.0-M3-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_scalameta_inputs_2_12",
-                "name": "jar/scala_annex_org/scalameta/inputs_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_org_scalameta_common_2_12",
-                    "@scala_annex_org_scalameta_io_2_12",
-                    "@scala_annex_org_scalameta_langmeta_2_12",
-                ],
-                "jar_sha256": "2a1b7d93e28b7c92ec02e9bc873d28f58d97e43e116b39fd0d22f6472663a17c",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/inputs_2.12/2.0.0-M3/inputs_2.12-2.0.0-M3.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_scalameta_inputs_2_12",
-                "srcjar_sha256": "9577cb773530e7bbb36b2aef5d7cfe0d65b3d83d61ec9ed063e2c68100955e96",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/inputs_2.12/2.0.0-M3/inputs_2.12-2.0.0-M3-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_scalameta_io_2_12",
-                "name": "jar/scala_annex_org/scalameta/io_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "ea945c2323215023ccce63a6839715ee902b7640e8389d96cbff40c5f4e77bcb",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/io_2.12/2.0.0-M3/io_2.12-2.0.0-M3.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_scalameta_io_2_12",
-                "srcjar_sha256": "da4a3cf952a521a4a34c86eb926a10fa5b7aa8bde7928a4cd2030f0a85a60d2c",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/io_2.12/2.0.0-M3/io_2.12-2.0.0-M3-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
                 "actual": "@scala_annex_org_scalameta_jsonrpc_2_12",
                 "name": "jar/scala_annex_org/scalameta/jsonrpc_2_12",
             },
@@ -2634,43 +2400,21 @@ def list_dependencies():
                     "@scala_annex_ch_qos_logback_logback_classic",
                     "@scala_annex_com_beachape_enumeratum_2_12",
                     "@scala_annex_com_beachape_enumeratum_circe_2_12",
+                    "@scala_annex_com_lihaoyi_pprint_2_12",
                     "@scala_annex_com_typesafe_scala_logging_scala_logging_2_12",
                     "@scala_annex_io_circe_circe_generic_2_12",
                     "@scala_annex_io_circe_circe_generic_extras_2_12",
                     "@scala_annex_org_codehaus_groovy_groovy",
                 ],
-                "jar_sha256": "add2d315c20c4943a339f8528d33584f859932f5911ca69e493a0db311dd733b",
+                "jar_sha256": "50c9aba9db630e174ccb522700cb163da5f96d8eb430d9776bf7bdcbe59a1879",
                 "jar_urls": [
-                    "https://dl.bintray.com/scalameta/maven/org/scalameta/jsonrpc_2.12/4d51e1ae/jsonrpc_2.12-4d51e1ae.jar",
+                    "http://central.maven.org/maven2/org/scalameta/jsonrpc_2.12/0.1.0/jsonrpc_2.12-0.1.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scalameta_jsonrpc_2_12",
-                "srcjar_sha256": "22bc3aa77b286493407857e284e4861b786c2491ad0a6ecce9dd9af7cfee82b6",
+                "srcjar_sha256": "69e82914de579a9c67a9fa2f41a9c4f5dd8c152fc14b18fe40be17d03f46d4cc",
                 "srcjar_urls": [
-                    "https://dl.bintray.com/scalameta/maven/org/scalameta/jsonrpc_2.12/4d51e1ae/jsonrpc_2.12-4d51e1ae-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_scalameta_langmeta_2_12",
-                "name": "jar/scala_annex_org/scalameta/langmeta_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
-                ],
-                "jar_sha256": "336471bdc61b4a6334e3fb62d593dc35d992d002d5229fca28ebf7cb9e9e3115",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/langmeta_2.12/2.0.0-M3/langmeta_2.12-2.0.0-M3.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_scalameta_langmeta_2_12",
-                "srcjar_sha256": "9e6be8ef7dabf21c9ca0ab315262be7417cfa306b4f5a129926c017ce504bbe7",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scalameta/langmeta_2.12/2.0.0-M3/langmeta_2.12-2.0.0-M3-sources.jar",
+                    "http://central.maven.org/maven2/org/scalameta/jsonrpc_2.12/0.1.0/jsonrpc_2.12-0.1.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2683,15 +2427,15 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": ["@scala_annex_org_scalameta_jsonrpc_2_12"],
-                "jar_sha256": "1cdc378f5b6859c592988e067fdd83a17616608e2c4161265051bac7b6e89322",
+                "jar_sha256": "51244a5ba585f438ba6cca0336e87faa7e4d85ff68725edba06cee780ed01b8e",
                 "jar_urls": [
-                    "https://dl.bintray.com/scalameta/maven/org/scalameta/lsp4s_2.12/4d51e1ae/lsp4s_2.12-4d51e1ae.jar",
+                    "http://central.maven.org/maven2/org/scalameta/lsp4s_2.12/0.1.0/lsp4s_2.12-0.1.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scalameta_lsp4s_2_12",
-                "srcjar_sha256": "0975d3d685fef1979a6e605a5ea88a687d79e41f8a628bff8ac54329215cf62e",
+                "srcjar_sha256": "50eec572818c2644a1c5d953ec1dcb9bbb61df678755eae1c39404206188a5c1",
                 "srcjar_urls": [
-                    "https://dl.bintray.com/scalameta/maven/org/scalameta/lsp4s_2.12/4d51e1ae/lsp4s_2.12-4d51e1ae-sources.jar",
+                    "http://central.maven.org/maven2/org/scalameta/lsp4s_2.12/0.1.0/lsp4s_2.12-0.1.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2731,15 +2475,15 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": ["@scala_annex_org_scalaz_scalaz_effect_2_12"],
-                "jar_sha256": "8b830657946d467b63324671d04dedae4e011447127cebed5d4de40afb684749",
+                "jar_sha256": "d046209a58e42b74f2545473671ecc71c14c874615c7bd2f816ea3d5e91564a6",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scalaz/scalaz-concurrent_2.12/7.2.13/scalaz-concurrent_2.12-7.2.13.jar",
+                    "http://central.maven.org/maven2/org/scalaz/scalaz-concurrent_2.12/7.2.20/scalaz-concurrent_2.12-7.2.20.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scalaz_scalaz_concurrent_2_12",
-                "srcjar_sha256": "2d236c7b2435c78abcd079056e5d13ce2149b4e2c6e25f428231a3672770f826",
+                "srcjar_sha256": "282d22a104a9b82b91d0f4a3307192a773574472125728d7806f3e79b4e579d9",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scalaz/scalaz-concurrent_2.12/7.2.13/scalaz-concurrent_2.12-7.2.13-sources.jar",
+                    "http://central.maven.org/maven2/org/scalaz/scalaz-concurrent_2.12/7.2.20/scalaz-concurrent_2.12-7.2.20-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2751,15 +2495,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "effcb6b3fa771e453043411bffb1aaf7acbc7c4b4119ac4472af01b626806006",
+                "jar_sha256": "5e69ee5c989b26c176534168c4beba1f0c9c0f0e7469c86bc9ef771245fc6867",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scalaz/scalaz-core_2.12/7.2.13/scalaz-core_2.12-7.2.13.jar",
+                    "http://central.maven.org/maven2/org/scalaz/scalaz-core_2.12/7.2.20/scalaz-core_2.12-7.2.20.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scalaz_scalaz_core_2_12",
-                "srcjar_sha256": "0065982795ea83fbb0f89eecbe6de912bbfe1ce12c5801721c876f48ec20ee2b",
+                "srcjar_sha256": "d5fb01a52285a96f437461bd8ffbaa37bbcec45ac954032e0aeba5900191d12e",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scalaz/scalaz-core_2.12/7.2.13/scalaz-core_2.12-7.2.13-sources.jar",
+                    "http://central.maven.org/maven2/org/scalaz/scalaz-core_2.12/7.2.20/scalaz-core_2.12-7.2.20-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2771,15 +2515,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "ba5770e9bee58a159de0bbaa507742847b41f0b903791c5300b7c3a756397946",
+                "jar_sha256": "c74e7ff8228125566fd6080a8abbda49ca50d40d15773a93a9ab973a07f2d4a4",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scalaz/scalaz-effect_2.12/7.2.13/scalaz-effect_2.12-7.2.13.jar",
+                    "http://central.maven.org/maven2/org/scalaz/scalaz-effect_2.12/7.2.20/scalaz-effect_2.12-7.2.20.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scalaz_scalaz_effect_2_12",
-                "srcjar_sha256": "196c6993ed84e4948632f0e6ae7077edc53180258322fd415cc1fa360afe4f4e",
+                "srcjar_sha256": "26df8bb9234332a334178096338ed09d8522e2246380f9170a34fbb65f99fc1b",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scalaz/scalaz-effect_2.12/7.2.13/scalaz-effect_2.12-7.2.13-sources.jar",
+                    "http://central.maven.org/maven2/org/scalaz/scalaz-effect_2.12/7.2.20/scalaz-effect_2.12-7.2.20-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2804,9 +2548,9 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.spire-math:jawn-parser_2.12 promoted to 0.11.0
+        # duplicates in org.spire-math:jawn-parser_2.12 promoted to 0.11.1
         # - com.eed3si9n:sjson-new-scalajson_2.12:0.8.2 wanted version 0.10.4
-        # - io.circe:circe-jawn_2.12:0.9.0 wanted version 0.11.0
+        # - io.circe:circe-jawn_2.12:0.9.3 wanted version 0.11.1
         {
             "bind_args": {
                 "actual": "@scala_annex_org_spire_math_jawn_parser_2_12",
@@ -2814,15 +2558,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "aea382b1d1df92da2a07a83d153f4c5178ba1f43a51a208f5ffa842a66ed2d43",
+                "jar_sha256": "a442dc3a1f399a0c1d5245e5b09ac292b01c5794ee303443efa3c8a625cbd6c4",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/spire-math/jawn-parser_2.12/0.11.0/jawn-parser_2.12-0.11.0.jar",
+                    "http://central.maven.org/maven2/org/spire-math/jawn-parser_2.12/0.11.1/jawn-parser_2.12-0.11.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_spire_math_jawn_parser_2_12",
-                "srcjar_sha256": "2627bf5180f9e63ba34993e51b23e28b2e81fe17b3412ca023344302a32c2038",
+                "srcjar_sha256": "7541d3cbde1c37f0bc75971608d717a9223bb8dd879c96fc0256718eed4220dd",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/spire-math/jawn-parser_2.12/0.11.0/jawn-parser_2.12-0.11.0-sources.jar",
+                    "http://central.maven.org/maven2/org/spire-math/jawn-parser_2.12/0.11.1/jawn-parser_2.12-0.11.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2929,26 +2673,6 @@ def list_dependencies():
                 "srcjar_sha256": "c748cbcda2e8828dd25e788617a4c559abf92960ef0f92f9f5d3ea67774c34c8",
                 "srcjar_urls": [
                     "http://central.maven.org/maven2/org/typelevel/macro-compat_2.12/1.1.1/macro-compat_2.12-1.1.1-sources.jar",
-                ],
-            },
-            "lang": "java",
-        },
-        {
-            "bind_args": {
-                "actual": "@scala_annex_org_typelevel_paiges_core_2_12",
-                "name": "jar/scala_annex_org/typelevel/paiges_core_2_12",
-            },
-            "import_args": {
-                "default_visibility": ["//visibility:public"],
-                "jar_sha256": "0051e89bfcb1efd0498c6a95cb1583bc1d097230da9627da76de0b416692e703",
-                "jar_urls": [
-                    "http://central.maven.org/maven2/org/typelevel/paiges-core_2.12/0.2.0/paiges-core_2.12-0.2.0.jar",
-                ],
-                "licenses": ["notice"],
-                "name": "scala_annex_org_typelevel_paiges_core_2_12",
-                "srcjar_sha256": "8df865fe550d2f55996e9c19ac008cb2c8e53571643c7ed88cbafffc7e38f036",
-                "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/typelevel/paiges-core_2.12/0.2.0/paiges-core_2.12-0.2.0-sources.jar",
                 ],
             },
             "lang": "java",
