@@ -56,10 +56,12 @@ annex_scala_library = rule(
     implementation = _annex_scala_library_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
+        "data": attr.label_list(allow_files = True, cfg = "data"),
         "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
+        "javacopts": attr.label_list(),
         "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
@@ -86,8 +88,11 @@ annex_scala_binary = rule(
     implementation = _annex_scala_binary_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
+        "data": attr.label_list(allow_files = True, cfg = "data"),
         "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
+        "javacopts": attr.label_list(),
+        "jvm_flags": attr.string_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "macro": attr.bool(default = False),
@@ -119,8 +124,11 @@ annex_scala_test = rule(
     implementation = _annex_scala_test_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
+        "data": attr.label_list(allow_files = True, cfg = "data"),
         "deps": attr.label_list(aspects = [_labeled_jars]),
         "deps_used_whitelist": attr.label_list(),
+        "javacopts": attr.label_list(),
+        "jvm_flags": attr.string_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
         "macro": attr.bool(default = False),
@@ -203,8 +211,9 @@ annex_scala_runner_toolchain = rule(
 
 def _annex_scala_deps_toolchain_implementation(ctx):
     return [platform_common.ToolchainInfo(
+        direct = ctx.attr.direct,
         runner = ctx.attr.runner,
-        flags = ctx.attr.flags,
+        used = ctx.attr.used,
     )]
 
 """
@@ -213,8 +222,9 @@ Configures the deps checker and options to use
 annex_scala_deps_toolchain = rule(
     implementation = _annex_scala_deps_toolchain_implementation,
     attrs = {
-        "flags": attr.string_list(default = []),
+        "direct": attr.string(),
         "runner": attr.label(allow_files = True, executable = True, cfg = "host"),
+        "used": attr.string(),
     },
 )
 

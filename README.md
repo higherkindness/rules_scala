@@ -141,19 +141,16 @@ $ bazel test :format
 ### Strict & unused deps
 
 This feature shares concepts with
-[Java strict and unused deps](https://blog.bazel.build/2017/06/28/sjd-unused_deps.html). The default toolchain uses two
-defines:
+[Java strict and unused deps](https://blog.bazel.build/2017/06/28/sjd-unused_deps.html). The default toolchain uses two defines (`--define=scala_deps_x=y`):
 
 * `scala_deps_direct` - Require that direct usages of libraries come only from immediately declared deps
 * `scala_deps_used` - Require that any immediate deps are deps are directly used.
 
 Each define may have a value of:
 
-* `check` - Check deps as a default output for the rule, but not a prerequisite to producing the jar.
-* `off` - Do not check deps.
-
-`check` is the default, as it promoting precise dependencies, while still allowing for easy experimentation, while still
-allowing for easy experimentation.
+* `error` - Check before creating the jar.
+* `check` - Check when building with --output_group=deps_check. (default)
+* `off` - Do not check.
 
 Failed checks emit suggested [buildozer](https://github.com/bazelbuild/buildtools/tree/master/buildozer) commands.
 

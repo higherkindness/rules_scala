@@ -9,12 +9,21 @@ trait ZincPersistence {
 
 class FilePersistence(cacheDir: Path, analysisFiles: AnalysisFiles, classDir: Path) extends ZincPersistence {
   private[this] val cacheAnalysisFiles =
-    AnalysisFiles(cacheDir.resolve("analysis.gz"), cacheDir.resolve("apis.gz"))
+    AnalysisFiles(
+      apis = cacheDir.resolve("apis.gz"),
+      miniSetup = cacheDir.resolve("setup.gz"),
+      relations = cacheDir.resolve("relations.gz"),
+      sourceInfos = cacheDir.resolve("infos.gz"),
+      stamps = cacheDir.resolve("stamps.gz"),
+    )
   private[this] val cacheClassDir = cacheDir.resolve("classes")
   def load() = {
     if (Files.exists(cacheDir)) {
-      Files.copy(cacheAnalysisFiles.analysis, analysisFiles.analysis)
       Files.copy(cacheAnalysisFiles.apis, analysisFiles.apis)
+      Files.copy(cacheAnalysisFiles.miniSetup, analysisFiles.miniSetup)
+      Files.copy(cacheAnalysisFiles.relations, analysisFiles.relations)
+      Files.copy(cacheAnalysisFiles.sourceInfos, analysisFiles.sourceInfos)
+      Files.copy(cacheAnalysisFiles.stamps, analysisFiles.stamps)
       FileUtil.copy(cacheClassDir, classDir)
     }
   }
@@ -23,8 +32,11 @@ class FilePersistence(cacheDir: Path, analysisFiles: AnalysisFiles, classDir: Pa
       FileUtil.delete(cacheDir)
     }
     Files.createDirectories(cacheDir)
-    Files.copy(analysisFiles.analysis, cacheAnalysisFiles.analysis)
     Files.copy(analysisFiles.apis, cacheAnalysisFiles.apis)
+    Files.copy(analysisFiles.miniSetup, cacheAnalysisFiles.miniSetup)
+    Files.copy(analysisFiles.relations, cacheAnalysisFiles.relations)
+    Files.copy(analysisFiles.sourceInfos, cacheAnalysisFiles.sourceInfos)
+    Files.copy(analysisFiles.stamps, cacheAnalysisFiles.stamps)
     FileUtil.copy(classDir, cacheClassDir)
   }
 }

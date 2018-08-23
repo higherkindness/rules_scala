@@ -63,7 +63,7 @@ object TestRunner {
       .help("Testing classpath")
       .metavar("path")
       .nargs("*")
-      .`type`(Arguments.fileType.verifyCanRead())
+      .`type`(Arguments.fileType.verifyCanRead().verifyExists())
     parser
   }
 
@@ -93,24 +93,20 @@ object TestRunner {
         .asScala
         .map(file => runPath.resolve(file.toPath).toUri.toURL)
 
-    val classLoader = new LoaderBase(urls, classOf[Framework].getClassLoader) {
-      override final def doLoadClass(className: String): Class[_] = {
-        if (className.startsWith("sbt.testing."))
-          defaultLoadClass(className)
-        else
-          try { findClass(className) } catch {
-            case _: ClassNotFoundException => defaultLoadClass(className)
-          }
-      }
+    val classLoader = new URLClassLoader(urls.toArray, null) {
+      private[this] val current = getClass.getClassLoader()
+      override protected def findClass(className: String): Class[_] =
+        if (className.startsWith("sbt.testing.")) current.loadClass(className) else super.findClass(className)
     }
 
-    val apisStream = Files.newInputStream(runPath.resolve(testNamespace.get[File]("apis").toPath))
+    val apisFile = runPath.resolve(testNamespace.get[File]("apis").toPath)
+    val apisStream = Files.newInputStream(apisFile)
     val apis = try {
-      val raw = try schema.APIsFile.parseFrom(new GZIPInputStream(apisStream))
+      val raw = try schema.APIs.parseFrom(new GZIPInputStream(apisStream))
       finally apisStream.close()
-      new ProtobufReaders(ReadMapper.getEmptyMapper).fromApisFile(raw)._1
+      new ProtobufReaders(ReadMapper.getEmptyMapper).fromApis(raw)
     } catch {
-      case NonFatal(e) => throw new Exception("Failed to load APIs", e)
+      case NonFatal(e) => throw new Exception(s"Failed to load APIs from $apisFile", e)
     }
 
     val loader = new TestFrameworkLoader(classLoader, logger)

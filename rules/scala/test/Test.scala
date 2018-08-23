@@ -47,41 +47,48 @@ class TestFramework(loader: ClassLoader, framework: Framework, logger: Logger) {
   }
 
   def execute(tests: Seq[TestDefinition]): Boolean = {
-    val runner = framework.runner(Array.empty, Array.empty, loader)
+    val thread = Thread.currentThread
+    val classLoader = thread.getContextClassLoader
+    thread.setContextClassLoader(loader)
     try {
-      val taskDefs = tests.map(test => new TaskDef(test.name, test.fingerprint, false, Array(new SuiteSelector)))
-      val tasks = runner.tasks(taskDefs.toArray)
-      logger.info(s"${framework.getClass.getName}: ${tests.size} tests")
-      logger.info("")
-      val failures = mutable.Set[String]()
-      def execute(task: Task): Unit = {
-        val tasks = task.execute(
-          event => {
-            event.status match {
-              case Status.Failure | Status.Error =>
-                failures += task.taskDef.fullyQualifiedName
-              case _ =>
-            }
-          },
-          Array(new PrefixedLogger(logger, "    ")),
-        )
-        tasks.foreach(execute)
-      }
-      tasks.foreach { task =>
-        logger.info(task.taskDef.fullyQualifiedName)
-        execute(task)
+      val runner = framework.runner(Array.empty, Array.empty, loader)
+      try {
+        val taskDefs = tests.map(test => new TaskDef(test.name, test.fingerprint, false, Array(new SuiteSelector)))
+        val tasks = runner.tasks(taskDefs.toArray)
+        logger.info(s"${framework.getClass.getName}: ${tests.size} tests")
         logger.info("")
-      }
-      if (failures.nonEmpty) {
-        logger.error(s"${failures.size} ${if (failures.size == 1) "failure" else "failures"}:")
-        failures.toSeq.sorted.foreach(name => logger.error(s"    $name"))
-        logger.error("")
-        false
-      } else {
-        true
+        val failures = mutable.Set[String]()
+        def execute(task: Task): Unit = {
+          val tasks = task.execute(
+            event => {
+              event.status match {
+                case Status.Failure | Status.Error =>
+                  failures += task.taskDef.fullyQualifiedName
+                case _ =>
+              }
+            },
+            Array(new PrefixedLogger(logger, "    ")),
+          )
+          tasks.foreach(execute)
+        }
+        tasks.foreach { task =>
+          logger.info(task.taskDef.fullyQualifiedName)
+          execute(task)
+          logger.info("")
+        }
+        if (failures.nonEmpty) {
+          logger.error(s"${failures.size} ${if (failures.size == 1) "failure" else "failures"}:")
+          failures.toSeq.sorted.foreach(name => logger.error(s"    $name"))
+          logger.error("")
+          false
+        } else {
+          true
+        }
+      } finally {
+        runner.done()
       }
     } finally {
-      runner.done()
+      thread.setContextClassLoader(classLoader)
     }
   }
 }

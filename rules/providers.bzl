@@ -67,7 +67,11 @@ declare_zinc_configuration = rule(
 ZincInfo = provider(
     doc = "Provides additional outputs from Zinc",
     fields = {
-        "analysis": "Zinc analysis file in binary form",
+        "apis": "API file",
+        "deps": "Depset",
+        "deps_files": "Depset of all files",
+        "label": "Label",
+        "relations": "Relations file",
     },
 )
 
