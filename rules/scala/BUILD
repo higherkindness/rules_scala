@@ -79,10 +79,9 @@ toolchain_type(
 )
 
 config_setting(
-    name = "config_deps_off",
+    name = "config_deps_used_error",
     define_values = {
-        "scala_deps_direct": "off",
-        "scala_deps_used": "off",
+        "scala_deps_used": "error",
     },
 )
 
@@ -90,6 +89,13 @@ config_setting(
     name = "config_deps_used_off",
     define_values = {
         "scala_deps_used": "off",
+    },
+)
+
+config_setting(
+    name = "config_deps_direct_error",
+    define_values = {
+        "scala_deps_direct": "error",
     },
 )
 
@@ -102,18 +108,16 @@ config_setting(
 
 annex_scala_deps_toolchain(
     name = "config_deps_toolchain_implementation",
-    flags =
-        select({
-            "@rules_scala_annex//rules/scala:config_deps_direct_off": [],
-            "//conditions:default": ["--require_direct=true"],
-        }) +
-        select({
-            "@rules_scala_annex//rules/scala:config_deps_used_off": [],
-            "//conditions:default": ["--require_used=true"],
-        }),
-    runner = select({
-        ":config_deps_off": None,
-        "//conditions:default": "@rules_scala_annex//rules/scala:deps",
+    direct = select({
+        ":config_deps_direct_error": "error",
+        ":config_deps_direct_off": "off",
+        "//conditions:default": "check",
+    }),
+    runner = ":deps",
+    used = select({
+        ":config_deps_used_error": "error",
+        ":config_deps_used_off": "off",
+        "//conditions:default": "check",
     }),
     visibility = ["//visibility:public"],
 )
@@ -150,7 +154,6 @@ annex_scala_binary(
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_test_interface",
         "@scala_annex_org_scala_sbt_zinc_apiinfo_2_12",
-        "@scala_annex_org_scala_sbt_zinc_classpath_2_12",
         "@scala_annex_org_scala_sbt_zinc_core_2_12",
         "@scala_annex_org_scala_sbt_zinc_persist_2_12",
     ],

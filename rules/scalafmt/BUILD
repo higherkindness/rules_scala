@@ -10,7 +10,6 @@ filegroup(
 annex_scala_binary(
     name = "scalafmt",
     srcs = glob(["scalafmt/**/*.scala"]),
-    main_class = "annex.scalafmt.ScalamftRunner",
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [

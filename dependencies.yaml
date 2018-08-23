@@ -17,7 +17,7 @@ dependencies:
     bloop:
       lang: scala
       modules: ["frontend", "backend", "config"]
-      version: "1.0.0-M9"
+      version: "1.0.0"
 
   net.sourceforge.argparse4j:
     argparse4j:
