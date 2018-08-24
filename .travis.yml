@@ -10,8 +10,6 @@ addons:
       - wget
       - pkg-config
 
-osx_image: code8
-
 cache:
     directories:
      - .bazel_cache
@@ -19,39 +17,61 @@ cache:
 before_install:
   - ./travis.sh install-bazel
 
+# some could be global, but these are OS-specific and ought not to be included
+# in the UI or the cache key
+_linux: &linux
+  jdk: oraclejdk8
+  os: linux
+_osx: &osx
+  os: osx
+  osx_image: xcode7.3
+
 jobs:
   include:
-
+# Build
     - stage: build
-      env: V=0.12.0
+      <<: *osx
+      env: V=0.14.1
       script: ./travis.sh build
-      os: osx
-    - env: V=0.12.0
+    - <<: *linux
+      env: V=0.14.1
       script: ./travis.sh build
-      os: linux
-    - env: V=0.13.0
+    - <<: *osx
+      env: V=0.15.2
       script: ./travis.sh build
-      os: osx
-    - env: V=0.13.0
+    - <<: *linux
+      env: V=0.15.2
       script: ./travis.sh build
-      os: linux
-
+    - <<: *osx
+      env: V=0.16.1
+      script: ./travis.sh build
+    - <<: *linux
+      env: V=0.16.1
+      script: ./travis.sh build
+# Lint
     - stage: test
-      env: V=0.12.0
+      <<: *osx
+      env: V=0.16.1
       script: ./travis.sh lint
-      os: osx
-    - env: V=0.12.0
+    - <<: *linux
+      env: V=0.16.1
       script: ./travis.sh lint
-      os: linux
-    - env: V=0.12.0
+# Test
+    - <<: *osx
+      env: V=0.14.1
       script: ./travis.sh test
-      os: osx
-    - env: V=0.12.0
+    - <<: *linux
+      env: V=0.14.1
       script: ./travis.sh test
-      os: linux
-    - env: V=0.13.0
+    - <<: *osx
+      env: V=0.15.2
       script: ./travis.sh test
-      os: osx
-    - env: V=0.13.0
+    - <<: *linux
+      env: V=0.15.2
       script: ./travis.sh test
-      os: linux
+    - <<: *osx
+      env: V=0.16.1
+      script: ./travis.sh test
+    - <<: *linux
+      env: V=0.16.1
+      script: ./travis.sh test

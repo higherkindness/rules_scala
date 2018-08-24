@@ -119,7 +119,7 @@ http_archive(
 )
 
 load(
-    "@io_bazel_rules_docker//scala:image.bzl",
+    "@io_bazel_rules_docker//java:image.bzl",  # https://github.com/bazelbuild/rules_docker/issues/503
     _scala_image_repos = "repositories",
 )
 

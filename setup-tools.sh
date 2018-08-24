@@ -2,8 +2,7 @@
 cd "$(dirname "$0")"
 
 BAZEL_OPTS=(
-    --experimental_local_disk_cache
-    --experimental_local_disk_cache_path=../../.bazel_cache
+    --disk_cache=../../.bazel_cache
     --experimental_strict_action_env
 )
 mkdir -p .bazel_cache
