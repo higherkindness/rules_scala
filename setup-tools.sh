@@ -3,10 +3,10 @@ cd "$(dirname "$0")"
 
 BAZEL_OPTS=(
     --experimental_local_disk_cache
-    --experimental_local_disk_cache_path=../.bazel_cache
+    --experimental_local_disk_cache_path=../../.bazel_cache
     --experimental_strict_action_env
 )
-mkdir -p external-tools/.bazel_cache
+mkdir -p .bazel_cache
 
 rm -fr external-tools/buildtools
 
