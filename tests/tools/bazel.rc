@@ -13,6 +13,6 @@ build --verbose_failures
 test  --test_output=streamed
 
 build --experimental_local_disk_cache
-build --experimental_local_disk_cache_path=.bazel_cache
+build --experimental_local_disk_cache_path=../.bazel_cache
 
 build --worker_sandboxing
