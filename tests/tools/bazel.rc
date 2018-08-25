@@ -1,7 +1,18 @@
 common --color yes
-common --define=scala_deps_direct=error
-common --define=scala_deps_used=error
+common --all_incompatible_changes
+common --incompatible_bzl_disallow_load_after_statement=false
+common --incompatible_depset_is_not_iterable=false
+common --incompatible_depset_union=false
+common --incompatible_disallow_filetype=false
+common --incompatible_disallow_legacy_javainfo=false
+common --incompatible_disallow_old_style_args_add=false
+common --incompatible_new_actions_api=false
+common --incompatible_package_name_is_a_function=false
+common --incompatible_remove_native_git_repository=false
+common --incompatible_remove_native_http_archive=false
 
+build --define=scala_deps_direct=error
+build --define=scala_deps_used=error
 build --experimental_strict_action_env
 
 build --javacopt="-source 8 -target 8"
@@ -10,9 +21,8 @@ build --worker_max_instances=4
 
 build --verbose_failures
 
+test  --nocache_test_results
 test  --test_output=streamed
 
-build --experimental_local_disk_cache
-build --experimental_local_disk_cache_path=../.bazel_cache
-
+build --disk_cache=../.bazel_cache
 build --worker_sandboxing

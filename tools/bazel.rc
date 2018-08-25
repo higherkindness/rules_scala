@@ -1,16 +1,10 @@
 import %workspace%/tools/deleted_packages.rc
 
 common --color yes
-common --incompatible_bzl_disallow_load_after_statement
-common --incompatible_depset_is_not_iterable
-common --incompatible_depset_union
-common --incompatible_disable_glob_tracking
-common --incompatible_disable_objc_provider_resources
-common --incompatible_disallow_dict_plus
-common --incompatible_new_actions_api
-common --incompatible_remove_native_git_repository
-common --incompatible_remove_native_http_archive
-common --incompatible_string_is_not_iterable
+common --all_incompatible_changes
+common --incompatible_disallow_filetype=false
+common --incompatible_disallow_legacy_javainfo=false
+common --incompatible_package_name_is_a_function=false
 
 build --define=scala_deps_direct=error
 build --define=scala_deps_used=error
@@ -26,8 +20,7 @@ test --define=scala_deps_direct=error
 test --define=scala_deps_used=error
 test  --test_output=all
 
-build --experimental_local_disk_cache
-build --experimental_local_disk_cache_path=.bazel_cache
+build --disk_cache=.bazel_cache
 
 build --worker_sandboxing
 

@@ -607,7 +607,7 @@ def list_dependencies():
         },
         # duplicates in com.eed3si9n:sjson-new-core_2.12 promoted to 0.8.2
         # - org.scala-sbt:librarymanagement-ivy_2.12:1.0.0 wanted version 0.8.0
-        # - org.scala-sbt:util-logging_2.12:1.1.3 wanted version 0.8.2
+        # - org.scala-sbt:util-logging_2.12:1.2.0 wanted version 0.8.2
         {
             "bind_args": {
                 "actual": "@scala_annex_com_eed3si9n_sjson_new_core_2_12",
@@ -1024,6 +1024,26 @@ def list_dependencies():
                 "srcjar_sha256": "6b7aca5e64927cea1a51b7200b1b5378b15fb1067330b628f987febef25c21c9",
                 "srcjar_urls": [
                     "http://central.maven.org/maven2/com/squareup/okio/okio/1.12.0/okio-1.12.0-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_com_swoval_apple_file_events",
+                "name": "jar/scala_annex_com/swoval/apple_file_events",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "7700198d313795f79a2f3ebece8ab85596d028fd8c454be4f85bab1c9d07be8a",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/com/swoval/apple-file-events/1.3.2/apple-file-events-1.3.2.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_com_swoval_apple_file_events",
+                "srcjar_sha256": "aabecf2ca251c1c1d39d001a008547d809d910ebac9ccb1d9337e5a092d89cd7",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/com/swoval/apple-file-events/1.3.2/apple-file-events-1.3.2-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1568,7 +1588,7 @@ def list_dependencies():
         },
         # duplicates in net.java.dev.jna:jna-platform promoted to 4.5.0
         # - ch.epfl.scala:nailgun-server:0c8b937b wanted version 4.4.0
-        # - org.scala-sbt:io_2.12:1.1.4 wanted version 4.5.0
+        # - org.scala-sbt:io_2.12:1.2.0 wanted version 4.5.0
         {
             "bind_args": {
                 "actual": "@scala_annex_net_java_dev_jna_jna_platform",
@@ -1592,7 +1612,7 @@ def list_dependencies():
         # duplicates in net.java.dev.jna:jna promoted to 4.5.1
         # - ch.epfl.scala:nailgun-server:0c8b937b wanted version 4.4.0
         # - com.zaxxer:nuprocess:1.2.4 wanted version 4.5.1
-        # - org.scala-sbt:io_2.12:1.1.4 wanted version 4.5.0
+        # - org.scala-sbt:io_2.12:1.2.0 wanted version 4.5.0
         {
             "bind_args": {
                 "actual": "@scala_annex_net_java_dev_jna_jna",
@@ -1755,7 +1775,7 @@ def list_dependencies():
         },
         # duplicates in org.scala-lang.modules:scala-parser-combinators_2.12 promoted to 1.0.5
         # - ch.epfl.scala:zinc-compile-core_2.12:1.1.7+62-0f4ad9d5 wanted version 1.0.5
-        # - org.scala-sbt:zinc-compile-core_2.12:1.1.3 wanted version 1.0.5
+        # - org.scala-sbt:zinc-compile-core_2.12:1.2.1 wanted version 1.0.5
         # - org.scalatest:scalatest_2.12:3.0.4 wanted version 1.0.4
         {
             "bind_args": {
@@ -1808,15 +1828,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "8b681302aac584f7234547eed04d2beeeb4a4f00032220e29d40943be6906a01",
+                "jar_sha256": "3023b07cc02f2b0217b2c04f8e636b396130b3a8544a8dfad498a19c3e57a863",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/scala-compiler/2.12.4/scala-compiler-2.12.4.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/scala-compiler/2.12.6/scala-compiler-2.12.6.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_lang_scala_compiler",
-                "srcjar_sha256": "675d1e5e163f4db1f8bde9b20ed7b30d5e6e635e18855cb0e4f3b5e672a88512",
+                "srcjar_sha256": "d3e9d7cc7b50c89676481959cebbf231275863c9f74102de28250dc92ffd4a6f",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/scala-compiler/2.12.4/scala-compiler-2.12.4-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/scala-compiler/2.12.6/scala-compiler-2.12.6-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1849,19 +1869,22 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": ["@scala_annex_org_scala_sbt_util_interface"],
-                "jar_sha256": "b4bf33b112d572752ca673ce7652f0419b87c838a07bb0eccb8667bec58bffb6",
+                "jar_sha256": "25c7fd6171a58775caa1b80170d0a2256ab57b2eb65022123ebcfc4ea564d961",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/compiler-interface/1.1.3/compiler-interface-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/compiler-interface/1.2.1/compiler-interface-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_compiler_interface",
-                "srcjar_sha256": "f5353e51b78fa621c2c2de5e48b8717c53165dff8b539e96494de12856c37818",
+                "srcjar_sha256": "bd4153820e556420eda1415df90236ee69662a7490849c0bbaf99019b360c79e",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/compiler-interface/1.1.3/compiler-interface-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/compiler-interface/1.2.1/compiler-interface-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
         },
+        # duplicates in org.scala-sbt:io_2.12 promoted to 1.2.0
+        # - ch.epfl.scala:zinc-core_2.12:1.1.7+62-0f4ad9d5 wanted version 1.1.4
+        # - org.scala-sbt:zinc-core_2.12:1.2.1 wanted version 1.2.0
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_io_2_12",
@@ -1870,18 +1893,19 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": [
+                    "@scala_annex_com_swoval_apple_file_events",
                     "@scala_annex_net_java_dev_jna_jna",
                     "@scala_annex_net_java_dev_jna_jna_platform",
                 ],
-                "jar_sha256": "f1f514b54b4126ad9d4a1b14769128c06e1e0e7d18643f457a499af171b7a87e",
+                "jar_sha256": "270b67412cf3e5a81f036bfe26bf098434d68f9ac427414996479847ce50fc31",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/io_2.12/1.1.4/io_2.12-1.1.4.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/io_2.12/1.2.0/io_2.12-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_io_2_12",
-                "srcjar_sha256": "f7a5811cdf568a46952e29385493a90ff3d812661ebe0498b5e4be02c112d887",
+                "srcjar_sha256": "411f890c43658fcd770680a48f084cc4de6a9a98a31381fc5ca8041936459de6",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/io_2.12/1.1.4/io_2.12-1.1.4-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/io_2.12/1.2.0/io_2.12-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1906,9 +1930,9 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-sbt:librarymanagement-core_2.12 promoted to 1.1.4
+        # duplicates in org.scala-sbt:librarymanagement-core_2.12 promoted to 1.2.0
         # - org.scala-sbt:librarymanagement-ivy_2.12:1.0.0 wanted version 1.0.0
-        # - org.scala-sbt:zinc-ivy-integration_2.12:1.1.3 wanted version 1.1.4
+        # - org.scala-sbt:zinc-ivy-integration_2.12:1.2.1 wanted version 1.2.0
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_librarymanagement_core_2_12",
@@ -1923,15 +1947,15 @@ def list_dependencies():
                     "@scala_annex_org_scala_sbt_util_cache_2_12",
                     "@scala_annex_org_scala_sbt_util_position_2_12",
                 ],
-                "jar_sha256": "6e00c7670de3403eb0c5382d67e123ddbaf8fd1619a340ef97f6fd702ad32cb6",
+                "jar_sha256": "c0b5fc0d7a32063a4eb61b9d80c3bf8b60490b620c5aed984d0e041563a13947",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/librarymanagement-core_2.12/1.1.4/librarymanagement-core_2.12-1.1.4.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/librarymanagement-core_2.12/1.2.0/librarymanagement-core_2.12-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_librarymanagement_core_2_12",
-                "srcjar_sha256": "a7250bc2d145cf143499d8ec9e4e1eb5b17570e08d88a80d88ac6b1dc6473fab",
+                "srcjar_sha256": "76257c211485653f4e3b5d59867b8aec5cd7af347b35b176e1d926d127831a62",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/librarymanagement-core_2.12/1.1.4/librarymanagement-core_2.12-1.1.4-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/librarymanagement-core_2.12/1.2.0/librarymanagement-core_2.12-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2034,19 +2058,22 @@ def list_dependencies():
                 "deps": [
                     "@scala_annex_com_eed3si9n_sjson_new_murmurhash_2_12",
                 ],
-                "jar_sha256": "3f69c0056db6a2bedd6b48fb5b5c69fa8260826bb2ec1fb0ffd4dfd7c2c7c66f",
+                "jar_sha256": "622fd806450b232442172b32ff76bc547f015ae8935950c90d336f8920dae07f",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-cache_2.12/1.1.3/util-cache_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-cache_2.12/1.2.0/util-cache_2.12-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_util_cache_2_12",
-                "srcjar_sha256": "8c9e9cfaa958e01bc6c4db5eb174003cd0983bcf7a6825fe2d47d4845d7b1995",
+                "srcjar_sha256": "dbb00a2a92d17d5c01e5eaf0e57bdfedf58d7f5b67a974641e6a026b38d14408",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-cache_2.12/1.1.3/util-cache_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-cache_2.12/1.2.0/util-cache_2.12-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
         },
+        # duplicates in org.scala-sbt:util-control_2.12 promoted to 1.2.0
+        # - ch.epfl.scala:zinc-compile-core_2.12:1.1.7+62-0f4ad9d5 wanted version 1.1.3
+        # - org.scala-sbt:zinc-compile-core_2.12:1.2.1 wanted version 1.2.0
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_control_2_12",
@@ -2054,19 +2081,22 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "7a291f8a3080d7843620b087ab5c797c0ee5f43460a1e4f3ce4422afb73ae799",
+                "jar_sha256": "87f8f8decb351e50415b5fabb7aa11a110e29bf0a31a4ba0e8662987cb9be580",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-control_2.12/1.1.3/util-control_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-control_2.12/1.2.0/util-control_2.12-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_util_control_2_12",
-                "srcjar_sha256": "988b1faeaa4fcb1d3ac3c7e8647b67f9325828021246b516a0eec3d3d9abcd53",
+                "srcjar_sha256": "220fc66fb3e7c5c18237e9d308fd3c2f3e988230ee2c4994a46ca09e2cab9597",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-control_2.12/1.1.3/util-control_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-control_2.12/1.2.0/util-control_2.12-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
         },
+        # duplicates in org.scala-sbt:util-interface promoted to 1.2.0
+        # - ch.epfl.scala:compiler-interface:1.1.7+62-0f4ad9d5 wanted version 1.1.3
+        # - org.scala-sbt:compiler-interface:1.2.1 wanted version 1.2.0
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_interface",
@@ -2074,19 +2104,22 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "c671b55697207eb7ac680fea390c249f383fdf2e445b3e98f8cae4f6bc324860",
+                "jar_sha256": "444bc23ec31e30ed76a34cd7e142c1a7e4fa84b9d838945b46c8f6f780a798c6",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-interface/1.1.3/util-interface-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-interface/1.2.0/util-interface-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_util_interface",
-                "srcjar_sha256": "2e194c784c8c9dd3d34603a4378bfa7193708c1decba0ddb9aafe5b1ceccb6ab",
+                "srcjar_sha256": "94aa85d25647d83e83b31fb55494be70927989542d025608d6eb5650529c738a",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-interface/1.1.3/util-interface-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-interface/1.2.0/util-interface-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
         },
+        # duplicates in org.scala-sbt:util-logging_2.12 promoted to 1.2.0
+        # - ch.epfl.scala:zinc-core_2.12:1.1.7+62-0f4ad9d5 wanted version 1.1.3
+        # - org.scala-sbt:zinc-core_2.12:1.2.1 wanted version 1.2.0
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_logging_2_12",
@@ -2103,15 +2136,15 @@ def list_dependencies():
                     "@scala_annex_org_apache_logging_log4j_log4j_core",
                     "@scala_annex_scala_2_12_scala_compiler//jar",
                 ],
-                "jar_sha256": "14ec8942b844658a7da7e04f60555751661ab1273f8b31b57cfd86b473be2653",
+                "jar_sha256": "d3eddf8ab0ed3cfa4065b0f2148babbe763141c034a443cdaeddc62d294a5b92",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-logging_2.12/1.1.3/util-logging_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-logging_2.12/1.2.0/util-logging_2.12-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_util_logging_2_12",
-                "srcjar_sha256": "d0315dec95a9da6a2faefaf785f3d53953cda084e1e4b8e6bdc030c7d3f9917d",
+                "srcjar_sha256": "369ce35ccf5dbcb8c24fc097144bb7292c0a7716250b327376a9b291dad8e992",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-logging_2.12/1.1.3/util-logging_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-logging_2.12/1.2.0/util-logging_2.12-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2123,19 +2156,22 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "20fd912315e925f7f122aced8ae9aca3f099ae1ce6f1b00a201e1fcff1cdd360",
+                "jar_sha256": "1197b8993602f157b6aea90027b6e579ed7fd5d98ce8a16c089709ed705cf747",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-position_2.12/1.1.3/util-position_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-position_2.12/1.2.0/util-position_2.12-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_util_position_2_12",
-                "srcjar_sha256": "7b0a5c848212de1ccda400d242074666423ddb47534af8100c0d4b474b6cf6be",
+                "srcjar_sha256": "8170807414a6fa87f557455ac223d650bf5cf0d672c2c028acd0f42f08ebb702",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-position_2.12/1.1.3/util-position_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-position_2.12/1.2.0/util-position_2.12-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
         },
+        # duplicates in org.scala-sbt:util-relation_2.12 promoted to 1.2.0
+        # - ch.epfl.scala:zinc-core_2.12:1.1.7+62-0f4ad9d5 wanted version 1.1.3
+        # - org.scala-sbt:zinc-core_2.12:1.2.1 wanted version 1.2.0
         {
             "bind_args": {
                 "actual": "@scala_annex_org_scala_sbt_util_relation_2_12",
@@ -2143,15 +2179,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "dff98263c5fd5fc374ac241221cb83619a6bcce328c060482589d810617c2287",
+                "jar_sha256": "dd7c1bd57e69032f30c16c4efbd4adcb9cb76374200e37bc39f6b4748cfd6235",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.1.3/util-relation_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.2.0/util-relation_2.12-1.2.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_util_relation_2_12",
-                "srcjar_sha256": "8a14088c870199b828ec3e87da6d9cbe39b0b766ce51c9cbf6ba294fe9fed3c0",
+                "srcjar_sha256": "920f15393ef0869645846b571ebddfc3173b399aa4c45cd528298e886e52222b",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.1.3/util-relation_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.2.0/util-relation_2.12-1.2.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2163,15 +2199,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "3e9070ce4a2f69646c0f64a334908827d90074448b3d0cb95b9141887b3d5f0c",
+                "jar_sha256": "4248a9ce6ea0f7d217a05fe18407fad4bcbcda5c433cc0c328b9aa46e24e81b2",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-apiinfo_2.12/1.1.3/zinc-apiinfo_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-apiinfo_2.12/1.2.1/zinc-apiinfo_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_apiinfo_2_12",
-                "srcjar_sha256": "e5dd905304cbf60b47a5ce1ebf698488b9834cb4d906675f4415b5e50dacaf63",
+                "srcjar_sha256": "9388d0ef0257a2d78acddac5ed43faf1950612fb7f4cbecce6d4b4045d6e5521",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-apiinfo_2.12/1.1.3/zinc-apiinfo_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-apiinfo_2.12/1.2.1/zinc-apiinfo_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2183,15 +2219,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "3c0df927855cfbfbde8fc7a1cdbf6c5ed18130bd353a05b2c5c4fca4214025c4",
+                "jar_sha256": "f15787066975b9da2bdca2b57b2c98c93a01e2d760f35ce040f61e5172b9ad3b",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classfile_2.12/1.1.3/zinc-classfile_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classfile_2.12/1.2.1/zinc-classfile_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_classfile_2_12",
-                "srcjar_sha256": "4dafe6057d5f707d6dee543e6b49fef4708b1e74b2ace302c56546c9ac584218",
+                "srcjar_sha256": "e34d26f7f2f3300eb05402030b165ab50c29bb3a90fd7ec7c2e6b5782319c2cf",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classfile_2.12/1.1.3/zinc-classfile_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classfile_2.12/1.2.1/zinc-classfile_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2204,15 +2240,15 @@ def list_dependencies():
             "import_args": {
                 "default_visibility": ["//visibility:public"],
                 "deps": ["@scala_annex_org_scala_lang_scala_compiler"],
-                "jar_sha256": "23195dafd114d78f1be351734d51fc1142b2bff33cdd7542a4d4a7eedf641be2",
+                "jar_sha256": "f955666b8b579bd0ab4c4c9810a25574aaf376976d3365c8810bac448a2f3e59",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classpath_2.12/1.1.3/zinc-classpath_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classpath_2.12/1.2.1/zinc-classpath_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_classpath_2_12",
-                "srcjar_sha256": "cc4850663022a20a64af2f24074c25d453c7e43aa24ecad05a1a54fdabac1d4e",
+                "srcjar_sha256": "c46f07e58e646914d8aa9cfdb185aca6b6eaf325c8eaffbd6bf779b92589eff7",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classpath_2.12/1.1.3/zinc-classpath_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-classpath_2.12/1.2.1/zinc-classpath_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2229,15 +2265,15 @@ def list_dependencies():
                     "@scala_annex_org_scala_sbt_launcher_interface",
                     "@scala_annex_org_scala_sbt_util_control_2_12",
                 ],
-                "jar_sha256": "faa85dd75e6fee87f526c1d432ff3ab4a1b7c89526cc838b20d88d836877c098",
+                "jar_sha256": "05c9f2b23350420de4f9cf08f36c98fdd1521a03776d32bb585160980a89de07",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-compile-core_2.12/1.1.3/zinc-compile-core_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-compile-core_2.12/1.2.1/zinc-compile-core_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_compile_core_2_12",
-                "srcjar_sha256": "f154d2d9e24c74c94fb4d69d31d33bc6882ba34a96596b88a531202ef077ef58",
+                "srcjar_sha256": "32aca2964bf88deaa74a0c5301c63229775057636029d0c30b6755c5cf649678",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-compile-core_2.12/1.1.3/zinc-compile-core_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-compile-core_2.12/1.2.1/zinc-compile-core_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2257,15 +2293,15 @@ def list_dependencies():
                     "@scala_annex_org_scala_sbt_zinc_apiinfo_2_12",
                     "@scala_annex_org_scala_sbt_zinc_classpath_2_12",
                 ],
-                "jar_sha256": "4f340bdf61d72d2373665f7c601ec931e44a3a28bfe2cf6b3450a0979d2cc27b",
+                "jar_sha256": "503c2a362be203769eb117d25be022f83a9f1160644b8db3b43c05b40f829eea",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-core_2.12/1.1.3/zinc-core_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-core_2.12/1.2.1/zinc-core_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_core_2_12",
-                "srcjar_sha256": "0032a7d5428916df25fbe0f1471ae3d9d1cb9453b3d11514690e2178a2126637",
+                "srcjar_sha256": "14fe32caa6e5dc0f5128cc9a525807015f45c9535ed3d11fd090cccc0c0f5ae4",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-core_2.12/1.1.3/zinc-core_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-core_2.12/1.2.1/zinc-core_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2280,15 +2316,15 @@ def list_dependencies():
                 "deps": [
                     "@scala_annex_org_scala_sbt_librarymanagement_core_2_12",
                 ],
-                "jar_sha256": "079c8ff8fe7459d877092dc78856a60d28344d255c088127316550b40e77c449",
+                "jar_sha256": "3f3d4997b0f3ffe0cc6e8b775135fefeb5ec3a3c03d1157c80f629ae2149c695",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-ivy-integration_2.12/1.1.3/zinc-ivy-integration_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-ivy-integration_2.12/1.2.1/zinc-ivy-integration_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_ivy_integration_2_12",
-                "srcjar_sha256": "23bf3f13bcdda9b7096737a365a99e9ff4502b1a6175324bc3c5555178b72d24",
+                "srcjar_sha256": "e15b18819da5f9e920b257ee8771d3ea4fcc2e90af26b8254f9708799ce1b69c",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-ivy-integration_2.12/1.1.3/zinc-ivy-integration_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-ivy-integration_2.12/1.2.1/zinc-ivy-integration_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2304,15 +2340,15 @@ def list_dependencies():
                     "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
                     "@scala_annex_org_scala_sbt_sbinary_2_12",
                 ],
-                "jar_sha256": "16ddeef691c3f1da7f562016e542e15ad600a9e857770364582059d9d4900d2d",
+                "jar_sha256": "6526d2d544da9228b5626cef766b70d9d1f365e671213e214d68b6b831818fbc",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.1.3/zinc-persist_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.2.1/zinc-persist_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_persist_2_12",
-                "srcjar_sha256": "c3cdda91c2a733bd6d358f48522135b43801d3525ea760b3bf4b78c2a041c996",
+                "srcjar_sha256": "8a2f0a6fb84cb0da520559f6f550026d8546e0b6e3b807bbebcb0ce811ff8019",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.1.3/zinc-persist_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.2.1/zinc-persist_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "java",
@@ -2332,15 +2368,15 @@ def list_dependencies():
                     "@scala_annex_org_scala_sbt_zinc_persist_2_12",
                     "@scala_annex_scala_2_12_scala_library//jar",
                 ],
-                "jar_sha256": "af1f9507af3f2898c94be71710e1c33ef00600ba2780b38d22148ce2ed326d03",
+                "jar_sha256": "6c6351556cc459f6ee59853de74cac37b0482b37bedb5e8189b6f48095e7c23d",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc_2.12/1.1.3/zinc_2.12-1.1.3.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc_2.12/1.2.1/zinc_2.12-1.2.1.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_org_scala_sbt_zinc_2_12",
-                "srcjar_sha256": "681d01345428352c46c54b0f7e8bf44b642558c8e239557254d96971f5f54ae2",
+                "srcjar_sha256": "7a176f1d0eb05810a8b450b93dbf81165e63a2b4de92a4a195e24d59196376c2",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-sbt/zinc_2.12/1.1.3/zinc_2.12-1.1.3-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-sbt/zinc_2.12/1.2.1/zinc_2.12-1.2.1-sources.jar",
                 ],
             },
             "lang": "scala",

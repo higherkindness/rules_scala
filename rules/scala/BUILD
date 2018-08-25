@@ -62,6 +62,7 @@ scalac_library(
     srcs = glob(["compiler/**/*.scala"]),
     scala = "//external:scala_annex_scala_basic",
     deps = [
+        "//rules/common:args",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
     ],
 )
@@ -136,6 +137,7 @@ scalac_binary(
     scala = "//external:scala_annex_scala_basic",
     visibility = ["//visibility:public"],
     deps = [
+        "//rules/common:args",
         "//rules/common:worker",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
     ],
@@ -149,6 +151,7 @@ annex_scala_binary(
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
+        "//rules/common:args",
         "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",

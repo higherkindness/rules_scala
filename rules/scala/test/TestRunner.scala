@@ -1,10 +1,12 @@
 package annex
 
+import annex.args.Implicits._
 import java.io.File
 import java.net.URLClassLoader
 import java.nio.file.attribute.FileTime
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
 import java.time.Instant
+import java.util.Collections
 import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
 import net.sourceforge.argparse4j.ArgumentParsers
@@ -20,12 +22,6 @@ import scala.util.control.NonFatal
 import xsbti.compile.analysis.ReadMapper
 
 object TestRunner {
-  implicit class SetDefault(argument: Argument) {
-    import scala.language.reflectiveCalls
-    // https://issues.scala-lang.org/browse/SI-2991
-    private[this] type SetDefault = { def setDefault(value: AnyRef) }
-    def setDefault_[A](value: A) = argument.asInstanceOf[SetDefault].setDefault(value.asInstanceOf[AnyRef])
-  }
 
   private[this] val argParser = {
     val parser = ArgumentParsers.newFor("test-runner").addHelp(true).fromFilePrefix("@").build()
@@ -57,13 +53,14 @@ object TestRunner {
       .help("Class names of sbt.testing.Framework implementations")
       .metavar("class")
       .nargs("*")
-      .required(true)
+      .setDefault_(Collections.emptyList)
     parser
       .addArgument("classpath")
       .help("Testing classpath")
       .metavar("path")
       .nargs("*")
       .`type`(Arguments.fileType.verifyCanRead().verifyExists())
+      .setDefault_(Collections.emptyList)
     parser
   }
 

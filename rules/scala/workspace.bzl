@@ -44,18 +44,18 @@ def annex_scala_repositories():
     http_archive(
         name = "compiler_bridge_2_11",
         build_file_content = scala_src_build,
-        sha256 = "a3fda3b74ad549e5234ecad73847856607d42f3866890fa8f2b48130eaf303ce",
-        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.1.3/compiler-bridge_2.11-1.1.3-sources.jar",
+        sha256 = "355abdd13ee514a239ed48b6bf8846f2a1d9d78bca8df836028d0156002ea08a",
+        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.2.1/compiler-bridge_2.11-1.2.1-sources.jar",
     )
 
     http_archive(
         name = "compiler_bridge_2_12",
         build_file_content = scala_src_build,
-        sha256 = "cec8a3423b04c1ac8060a7de21ca14fb0461186aa0256ddf0602f4f8fcb6c6d0",
-        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.1.3/compiler-bridge_2.12-1.1.3-sources.jar",
+        sha256 = "d7a5dbc384c2c86479b30539cef911c256b7b3861ced68699b116e05b9357c9b",
+        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.1/compiler-bridge_2.12-1.2.1-sources.jar",
     )
 
-    annex_scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
+    annex_scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.6"), "@compiler_bridge_2_12//:src")
 
     native.bind(
         name = "scala_annex_scala",

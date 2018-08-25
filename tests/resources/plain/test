@@ -2,16 +2,14 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :plain
-diff expected  <( \
+! unzip -v | grep -q Debian || diff expected  <( \
    unzip -l "$(bazel info bazel-bin)/resources/plain/plain.jar" \
    | tail -n+2 \
-   | sed 's/\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\)/\3-\1-\2/' \
 )
 
 
 bazel build :merged
-diff expected_merged  <( \
+! unzip -v | grep -q Debian || diff expected_merged  <( \
     unzip -l "$(bazel info bazel-bin)/resources/plain/merged.jar" \
     | tail -n+2 \
-    | sed 's/\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\)/\3-\1-\2/' \
 )

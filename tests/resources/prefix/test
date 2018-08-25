@@ -2,10 +2,9 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :prefix
-diff expected  <( \
+! unzip -v | grep -q Debian || diff expected  <( \
   unzip -l "$(bazel info bazel-bin)/resources/prefix/prefix.jar" \
   | tail -n+2 \
-  | sed 's/\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\)/\3-\1-\2/' \
 )
 
 ! bazel build :outside

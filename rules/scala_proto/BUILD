@@ -19,6 +19,7 @@ annex_scala_binary(
     scala = "@scala_annex_scala_2_12",
     visibility = ["//visibility:public"],
     deps = [
+        "//rules/common:args",
         "//rules/common:worker",
         "//rules/common/third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
