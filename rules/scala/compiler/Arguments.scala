@@ -1,7 +1,9 @@
 package annex.compiler
 
+import annex.args.Implicits._
+import java.util.Collections
 import net.sourceforge.argparse4j.impl.{Arguments => ArgumentsImpl}
-import net.sourceforge.argparse4j.inf.{Argument, ArgumentParser}
+import net.sourceforge.argparse4j.inf.ArgumentParser
 
 object Arguments {
 
@@ -13,22 +15,13 @@ object Arguments {
     val Warn = "warn"
   }
 
-  implicit class SetDefault(argument: Argument) {
-    import scala.language.reflectiveCalls
-
-    // https://issues.scala-lang.org/browse/SI-2991
-    private[this] type SetDefault = { def setDefault(value: AnyRef) }
-
-    def setDefault_[A](value: A) = argument.asInstanceOf[SetDefault].setDefault(value.asInstanceOf[AnyRef])
-  }
-
   def add(parser: ArgumentParser): Unit = {
     parser
       .addArgument("--analyses")
       .help("Analysis")
       .metavar("label=apis,relations=jar1,jar2,...")
       .nargs("*")
-      .required(true)
+      .setDefault_(Collections.emptyList)
     parser
       .addArgument("--compiler_bridge")
       .help("Compiler bridge")
@@ -40,8 +33,8 @@ object Arguments {
       .help("Compiler classpath")
       .metavar("path")
       .nargs("*")
-      .required(true)
       .`type`(ArgumentsImpl.fileType.verifyCanRead().verifyIsFile())
+      .setDefault_(Collections.emptyList)
     parser
       .addArgument("--compiler_option")
       .help("Compiler option")
@@ -53,6 +46,7 @@ object Arguments {
       .metavar("path")
       .nargs("*")
       .`type`(ArgumentsImpl.fileType.verifyCanRead.verifyIsFile)
+      .setDefault_(Collections.emptyList)
     parser
       .addArgument("--debug")
       .metavar("debug")
@@ -126,12 +120,14 @@ object Arguments {
       .metavar("path")
       .nargs("*")
       .`type`(ArgumentsImpl.fileType.verifyCanRead)
+      .setDefault_(Collections.emptyList)
     parser
       .addArgument("--source_jars")
       .help("Source jars")
       .metavar("path")
       .nargs("*")
       .`type`(ArgumentsImpl.fileType.verifyCanRead().verifyIsFile())
+      .setDefault_(Collections.emptyList)
     parser
       .addArgument("--tmp")
       .help("Temporary directory")
@@ -144,6 +140,7 @@ object Arguments {
       .metavar("source")
       .nargs("*")
       .`type`(ArgumentsImpl.fileType.verifyCanRead.verifyIsFile)
+      .setDefault_(Collections.emptyList)
   }
 
 }

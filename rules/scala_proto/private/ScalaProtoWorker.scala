@@ -12,8 +12,10 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.Collections
 
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
+import annex.args.Implicits._
 import annex.worker.SimpleMain
 
 object ScalaProtoWorker extends SimpleMain {
@@ -31,6 +33,7 @@ object ScalaProtoWorker extends SimpleMain {
       .metavar("source")
       .nargs("*")
       .`type`(Arguments.fileType.verifyCanRead.verifyIsFile)
+      .setDefault_(Collections.emptyList)
     parser
   }
 
