@@ -109,9 +109,16 @@ object TestRunner {
     val loader = new TestFrameworkLoader(classLoader, logger)
     val frameworks = testNamespace.getList[String]("frameworks").asScala.flatMap(loader.load)
 
-    val testPattern = sys.env
+    val testClass = sys.env
       .get("TESTBRIDGE_TEST_ONLY")
-      .map(text => Pattern.compile(raw"\Q${text.replace("*", raw"\E.*\Q")}\E"))
+      .map(text => Pattern.compile(if (text contains "#") raw"${text.replaceAll("#.*", "")}" else text))
+    val testScopeAndName = sys.env
+      .get("TESTBRIDGE_TEST_ONLY")
+      .map(
+        text =>
+          if (text contains "#") text.replaceAll(".*#", "").replaceAll("\\$", "").replace("\\Q", "").replace("\\E", "")
+          else ""
+      )
 
     var count = 0
     val passed = frameworks.forall { framework =>
@@ -121,12 +128,12 @@ object TestRunner {
         total <- sys.env.get("TEST_TOTAL_SHARDS").map(_.toInt)
       } yield (test: TestDefinition, i: Int) => i % total == index
       val filteredTests = tests.filter { test =>
-        testPattern.forall(_.matcher(test.name).matches) && {
+        testClass.forall(_.matcher(test.name).matches) && {
           count += 1
           filter.fold(true)(_(test, count))
         }
       }
-      filteredTests.isEmpty || framework.execute(filteredTests)
+      filteredTests.isEmpty || framework.execute(filteredTests, testScopeAndName.getOrElse(""))
     }
     sys.exit(if (passed) 0 else 1)
   }

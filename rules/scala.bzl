@@ -23,6 +23,8 @@ load(
 load(
     "//rules/scala:private/import.bzl",
     _scala_import_implementation = "scala_import_implementation",
+    _scala_import_private_attributes = "scala_import_private_attributes",
+
 )
 load(
     "//rules/scala:private/provider.bzl",
@@ -171,13 +173,13 @@ scala_import for use with bazel-deps
 """
 scala_import = rule(
     implementation = _scala_import_implementation,
-    attrs = {
+    attrs = dict({
         "jars": attr.label_list(allow_files = True),  #current hidden assumption is that these point to full, not ijar'd jars
         "srcjar": attr.label(allow_single_file = True),
         "deps": attr.label_list(),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
-    },
+    }, **_scala_import_private_attributes),
 )
 
 ##

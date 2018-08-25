@@ -83,9 +83,10 @@ def _scalac_common(ctx):
     compile_classpath_str = ":".join([file.path for file in compile_deps.to_list()])
 
     inputs = depset(
-        [jar, java, jar_creator] + ctx.files.srcs + scala.compiler_classpath,
+        [jar, java] + ctx.files.srcs + scala.compiler_classpath,
         transitive = [compile_deps],
     )
+    tools = [jar_creator]
 
     srcs = [
         file.path
@@ -107,6 +108,7 @@ def _scalac_common(ctx):
 
     ctx.actions.run_shell(
         inputs = inputs,
+        tools = tools,
         outputs = [output_jar],
         command = strip_margin(
             """
@@ -135,14 +137,27 @@ def _scalac_common(ctx):
         ),
     )
 
-    java_info = JavaInfo(
+    compile_jar = java_common.run_ijar(
+        ctx.actions,
+        jar = output_jar,
+        target_label = ctx.label,
+        java_toolchain = ctx.attr._java_toolchain,
+    )
+
+    source_jar = java_common.pack_sources(
+        ctx.actions,
         output_jar = output_jar,
         sources = ctx.files.srcs,
-        deps = deps,
-        runtime_deps = [dep[JavaInfo] for dep in ctx.attr.runtime_deps],
-        actions = ctx.actions,
         host_javabase = ctx.attr._host_javabase,
         java_toolchain = ctx.attr._java_toolchain,
+    )
+
+    java_info = JavaInfo(
+        output_jar = output_jar,
+        compile_jar = compile_jar,
+        source_jar = source_jar,
+        deps = deps,
+        runtime_deps = [dep[JavaInfo] for dep in ctx.attr.runtime_deps],
     )
 
     scala_info = ScalaInfo(

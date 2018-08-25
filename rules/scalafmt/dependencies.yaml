@@ -18,7 +18,7 @@ dependencies:
   com.geirsson:
     scalafmt-core:
       lang: scala
-      version: 1.2.0
+      version: 1.5.1
 
   net.sourceforge.argparse4j:
     argparse4j:

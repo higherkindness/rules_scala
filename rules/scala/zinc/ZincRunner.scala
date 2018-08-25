@@ -26,7 +26,7 @@ object ZincRunner extends WorkerMain[Namespace] {
 
   private[this] val classloaderCache = new ClassLoaderCache(null)
 
-  private[this] val compilerCache = CompilerCache.createCacheFor(1) // since classloaderCache has only soft references
+  private[this] val compilerCache = CompilerCache.fresh
 
   private[this] def labelToPath(label: String) = Paths.get(label.replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_"))
 

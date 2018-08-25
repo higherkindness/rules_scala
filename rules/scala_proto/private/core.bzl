@@ -17,10 +17,8 @@ def scala_proto_library_implementation(ctx):
     srcjar = ctx.outputs.srcjar
 
     args = ctx.actions.args()
-    args.add("--output_srcjar")
-    args.add(srcjar)
-    args.add("--")
-    args.add(transitive_sources)
+    args.add("--output_srcjar", srcjar)
+    args.add_all("--", transitive_sources)
 
     if compiler.compiler_supports_workers:
         supports_workers = "1"
