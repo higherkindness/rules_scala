@@ -25,13 +25,13 @@ annex_scala_register_toolchains()
 
 annex_scala_repository(
     "scala_2_11",
-    ("org.scala-lang", "2.11.11"),
+    ("org.scala-lang", "2.11.12"),
     "@compiler_bridge_2_11//:src",
 )
 
 annex_scala_repository(
     "scala_2_12",
-    ("org.scala-lang", "2.12.4"),
+    ("org.scala-lang", "2.12.6"),
     "@compiler_bridge_2_12//:src",
 )
 
