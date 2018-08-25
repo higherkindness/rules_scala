@@ -21,6 +21,7 @@ build --worker_max_instances=4
 
 build --verbose_failures
 
+test  --nocache_test_results
 test  --test_output=streamed
 
 build --disk_cache=../.bazel_cache
