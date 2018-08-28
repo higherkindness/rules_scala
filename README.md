@@ -4,9 +4,13 @@
 
 The Bazel Scala Annex is a prototyping area for [bazelbuild/rules_scala](https://github.com/bazelbuild/rules_scala) focused on exploring design changes required to support big and challenging feature asks.
 
+Annex strives to (1) follow Bazel best practices, (2) be flexible by building against standard interfaces, and (3) to be as simple and maintainable. If the right design principals are kept, implementing additional features should be simple and straightforward.
+
 At this time there isn't a formal plan on how to incorporate changes upstream other than: we want to!
 
-## Feature list
+## Features
+
+### Feature list
 
 - [x] Scala cross compilation
 - [x] Zinc based backend
@@ -19,7 +23,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [ ] tests for IntelliJ support
 - [x] scalafmt support
 
-### rules_scala compatibility
+Additionally, Annex can emulate @io_bazel_rules_scala.
 
 - [x] scala_library (partial)
 - [x] scala_macro_library (partial)
@@ -31,11 +35,28 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [ ] thrift_library
 - [ ] scalapb_proto_library
 
+### Differences with rules_scala
+
+* More correctly handles of macros and ijars. See [#445](https://github.com/bazelbuild/rules_scala/issues/445) and [#632](https://github.com/bazelbuild/bazel/issues/632#issuecomment-383318341).
+* More precisely and straightforwardly detects indirect and unused dependencies, via Zinc. See [#235](https://github.com/bazelbuild/rules_scala/issues/235) and [#335](https://github.com/bazelbuild/rules_scala/issues/335).
+* Optionally allows for fine-grained incrementality with stateful Zinc compilation. See [bazel-discuss](https://groups.google.com/forum/#!topic/bazel-discuss/3iUy5jxS3S0) and [#328](https://github.com/bazelbuild/rules_scala/issues/328).
+* Does not support intransitive classpaths, matching Java rules. See [#432](https://github.com/bazelbuild/rules_scala/pull/423).
+* Supports multiple Scala versions. See [#14](https://github.com/bazelbuild/rules_scala/issues/14). (Is this completely fixed in rules_scala with [#544](https://github.com/bazelbuild/rules_scala/pull/544)?)
+  * Includes 2.10-2.13, Typelevel, Dotty, and anything else compatible with Zinc's compiler-bridge.
+  * Allows for multiple Scala versions in the same workspace. See [#80](https://github.com/bazelbuild/rules_scala/issues/80).
+    * For example, rules_scala_annex tools use Scala 2.12, but that doesn't affect any client projects.
+* Robustly supports buildozer recommendations via an aspect.
+* Uses Starlark's [Args](https://docs.bazel.build/versions/master/skylark/lib/Args.html) for fast, memory efficient treatment of deps during analysis.
+* Supports for all Scala test frameworks via sbt [test-interface](https://github.com/sbt/test-interface).
+* Support test sharding, custom test framework arguments (including options to the JVM itself).
+* Supports scalafmt.
+* Has consistently formatted code, via buildifier and scalafmt. See [#74](https://github.com/bazelbuild/rules_scala/issues/474).
+* Reorganized and simplified file and code structure. Less than 8 KLOC excluding tests and dependency resolutions. (`git ls-files | grep -v '^test\|/maven.bzl$\|*.md' | xargs cat | wc -l`)
+* Reorganized Travis CI builds, including better cache reuse.
+* Easy dependency managment of internal tools using bazel-deps.
+* Tested against three most recent Bazel versions.
+
 ## Usage
-
-Don't.
-
-Eventually (we hope) useful and proven functionality will wind up in [bazelbuild/rules_scala](https://github.com/bazelbuild/rules_scala). Use rules_scala.
 
 ### Basic
 
