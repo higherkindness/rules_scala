@@ -175,6 +175,24 @@ Each define may have a value of:
 
 Failed checks emit suggested [buildozer](https://github.com/bazelbuild/buildtools/tree/master/buildozer) commands.
 
+
+### Workers
+
+To run JVM processes as persistent workers,
+
+```
+--strategy=ScalaCheckDeps=worker
+--strategy=ScalaCompile=worker
+--strategy=SingleJar=worker
+```
+
+You may pass additional flags to worker JVMs:
+
+```
+--worker_extra_flag=ScalaCompile=--jvm_flag=-Xmx=1g
+--worker_extra_flag=ScalaCompile=--jvm_flag=-XX:SoftRefLRUPolicyMSPerMB=50
+```
+
 ### Stateful compilation
 
 Beyond the normal per-target incremental compilation, [Zinc](https://github.com/sbt/zinc) can achieve even finer-grained
@@ -185,7 +203,11 @@ Bazel paradigm, and Bazel cannot enforce correctness. Technically, this caveat a
 performance is improving by maintaining state, but improper state may be shared across actions. In Zinc's case, the risk
 is higher, because the sharing is (intentionally) aggressive.
 
-To enable Zinc's stateful compilation, add `--worker_extra_flag=ScalaCompile=--persistent_dir=~/.cache/bazel-zinc`.
+To enable Zinc's stateful compilation, add
+
+```
+--worker_extra_flag=ScalaCompile=--persistent_dir=.bazel-zinc
+```
 
 ## Contributing
 

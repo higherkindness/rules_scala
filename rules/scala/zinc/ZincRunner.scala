@@ -22,11 +22,33 @@ import scala.util.control.NonFatal
 import xsbti.compile.{FileAnalysisStore => _, _}
 import xsbti.{Logger, Reporter}
 
+/**
+ * <strong>Caching</strong>
+ *
+ * Zinc has two caches:
+ *  1. a ClassLoaderCache which is a soft reference cache for classloaders of Scala compilers.
+ *  2. a CompilerCache which is a hard reference cache for (I think) Scala compiler instances.
+ *
+ * The CompilerCache has reproducibility issues, so it needs to be a no-op.
+ * The ClassLoaderCache needs to be reused else JIT reuse (i.e. the point of the worker strategy) doesn't happen.
+ *
+ * There are two sensible strategies for Bazel workers
+ *  A. Each worker compiles multiple Scala versions. Trust the ClassLoaderCache's timestamp check. Maintain a hard
+ *     reference to the classloader for the last version, and allow previous versions to be GC'ed subject to
+ *     free memory and -XX:SoftRefLRUPolicyMSPerMB.
+ *  B. Each worker compiles a single Scala version. Probably still use ClassLoaderCache + hard reference since
+ *     ClassLoaderCache is hard to remove. The compiler classpath is passed via the initial flags to the worker
+ *     (rather than the per-request arg file). Bazel worker management cycles out Scala compiler versions.
+ * Currently, this runner follows strategy A.
+ */
 object ZincRunner extends WorkerMain[Namespace] {
 
   private[this] val classloaderCache = new ClassLoaderCache(null)
 
   private[this] val compilerCache = CompilerCache.fresh
+
+  // prevents GC of the soft reference in classloaderCache
+  private[this] var lastCompiler: AnyRef = null
 
   private[this] def labelToPath(label: String) = Paths.get(label.replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_"))
 
@@ -76,6 +98,7 @@ object ZincRunner extends WorkerMain[Namespace] {
     val scalaCompiler = ZincUtil
       .scalaCompiler(scalaInstance, namespace.get[File]("compiler_bridge"))
       .withClassLoaderCache(classloaderCache)
+    lastCompiler = scalaCompiler
 
     val compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
