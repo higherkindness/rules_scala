@@ -39,6 +39,7 @@ Additionally, Annex can emulate @io_bazel_rules_scala.
 
 * More correctly handles of macros and ijars. See [#445](https://github.com/bazelbuild/rules_scala/issues/445) and [#632](https://github.com/bazelbuild/bazel/issues/632#issuecomment-383318341).
 * More precisely and straightforwardly detects indirect and unused dependencies, via Zinc. See [#235](https://github.com/bazelbuild/rules_scala/issues/235) and [#335](https://github.com/bazelbuild/rules_scala/issues/335).
+* Supports neverlink. See [#213](https://github.com/bazelbuild/rules_scala/issues/213).
 * Optionally allows for fine-grained incrementality with stateful Zinc compilation. See [bazel-discuss](https://groups.google.com/forum/#!topic/bazel-discuss/3iUy5jxS3S0) and [#328](https://github.com/bazelbuild/rules_scala/issues/328).
 * Does not support intransitive classpaths, matching Java rules. See [#432](https://github.com/bazelbuild/rules_scala/pull/423).
 * Supports multiple Scala versions. See [#14](https://github.com/bazelbuild/rules_scala/issues/14). (Is this completely fixed in rules_scala with [#544](https://github.com/bazelbuild/rules_scala/pull/544)?)

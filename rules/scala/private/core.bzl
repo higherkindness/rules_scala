@@ -78,6 +78,7 @@ def runner_common(ctx):
             compile_jar = compile_jar,
             source_jar = source_jar,
             deps = [sdeps],
+            neverlink = getattr(ctx.attr, "neverlink", False),
             runtime_deps = [sruntime_deps] + scala_configuration_runtime_deps,
             exports = [sexports],
         )

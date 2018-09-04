@@ -51,6 +51,7 @@ def scala_import_implementation(ctx):
             compile_jar = output_jar,
             source_jar = source_jar,
             deps = [dep[JavaInfo] for dep in ctx.attr.deps],
+            neverlink = ctx.attr.neverlink,
             runtime_deps = [runtime_dep[JavaInfo] for runtime_dep in ctx.attr.runtime_deps],
             exports = [export[JavaInfo] for export in ctx.attr.exports],
         )
