@@ -1,0 +1,5 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :binary
+bazel run :binary 2>&1 | grep -q 'java.lang.NoClassDefFoundError: Library'

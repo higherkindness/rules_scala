@@ -24,7 +24,6 @@ load(
     "//rules/scala:private/import.bzl",
     _scala_import_implementation = "scala_import_implementation",
     _scala_import_private_attributes = "scala_import_private_attributes",
-
 )
 load(
     "//rules/scala:private/provider.bzl",
@@ -65,6 +64,7 @@ annex_scala_library = rule(
         "exports": attr.label_list(),
         "javacopts": attr.label_list(),
         "macro": attr.bool(default = False),
+        "neverlink": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
             providers = [_ScalaConfiguration, _ZincConfiguration],
@@ -177,6 +177,7 @@ scala_import = rule(
         "jars": attr.label_list(allow_files = True),  #current hidden assumption is that these point to full, not ijar'd jars
         "srcjar": attr.label(allow_single_file = True),
         "deps": attr.label_list(),
+        "neverlink": attr.bool(default = False),
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
     }, **_scala_import_private_attributes),
