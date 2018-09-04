@@ -41,6 +41,9 @@ Additionally, Annex can emulate @io_bazel_rules_scala.
 * More precisely and straightforwardly detects indirect and unused dependencies, via Zinc. See [#235](https://github.com/bazelbuild/rules_scala/issues/235) and [#335](https://github.com/bazelbuild/rules_scala/issues/335).
 * Optionally allows for fine-grained incrementality with stateful Zinc compilation. See [bazel-discuss](https://groups.google.com/forum/#!topic/bazel-discuss/3iUy5jxS3S0) and [#328](https://github.com/bazelbuild/rules_scala/issues/328).
 * Does not support intransitive classpaths, matching Java rules. See [#432](https://github.com/bazelbuild/rules_scala/pull/423).
+* Tools written in Scala, using bootstrapping rules as necessary.
+* Uses [`depset`](https://docs.bazel.build/versions/master/skylark/lib/depset.html) and [`Args`](https://docs.bazel.build/versions/master/skylark/lib/Args.html)
+to completely defer expanding transitive dependency lists until execution time.
 * Supports multiple Scala versions. See [#14](https://github.com/bazelbuild/rules_scala/issues/14). (Is this completely fixed in rules_scala with [#544](https://github.com/bazelbuild/rules_scala/pull/544)?)
   * Includes 2.10-2.13, Typelevel, Dotty, and anything else compatible with Zinc's compiler-bridge.
   * Allows for multiple Scala versions in the same workspace. See [#80](https://github.com/bazelbuild/rules_scala/issues/80).
