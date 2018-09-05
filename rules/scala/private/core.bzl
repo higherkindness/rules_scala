@@ -29,7 +29,7 @@ runner_common_attributes = {
     ),
 }
 
-annex_scala_binary_private_attributes = dict({
+scala_binary_private_attributes = dict({
     "_java": attr.label(
         default = Label("@bazel_tools//tools/jdk:java"),
         executable = True,
@@ -40,7 +40,7 @@ annex_scala_binary_private_attributes = dict({
     ),
 }, **runner_common_attributes)
 
-annex_scala_test_private_attributes = annex_scala_binary_private_attributes
+scala_test_private_attributes = scala_binary_private_attributes
 
 def runner_common(ctx):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
@@ -269,9 +269,9 @@ def runner_common(ctx):
         mains_files = depset([mains_file]),
     )
 
-annex_scala_library_private_attributes = runner_common_attributes
+scala_library_private_attributes = runner_common_attributes
 
-def annex_scala_library_implementation(ctx):
+def scala_library_implementation(ctx):
     res = runner_common(ctx)
     return struct(
         providers = [
@@ -319,7 +319,7 @@ def _resource_path(file, strip_prefix):
             return rest
     return file.short_path
 
-def annex_scala_binary_implementation(ctx):
+def scala_binary_implementation(ctx):
     res = runner_common(ctx)
 
     # this is all super sketchy...
@@ -362,7 +362,7 @@ def annex_scala_binary_implementation(ctx):
         java = res.intellij_info,
     )
 
-def annex_scala_test_implementation(ctx):
+def scala_test_implementation(ctx):
     res = runner_common(ctx)
 
     files = ctx.files._java + [res.zinc_info.apis]

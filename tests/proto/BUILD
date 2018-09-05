@@ -4,7 +4,7 @@ load(
 )
 load(
     "@rules_scala_annex//rules:scala.bzl",
-    "annex_scala_library",
+    "scala_library",
 )
 
 proto_library(
@@ -18,7 +18,7 @@ scala_proto_library(
     deps = [":zero_proto"],
 )
 
-annex_scala_library(
+scala_library(
     name = "zero_scala",
     deps = [":zero_scala_proto"],
 )

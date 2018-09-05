@@ -1,7 +1,7 @@
 load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
 load("//rules/scalafmt/3rdparty:maven.bzl", "list_dependencies")
 
-def annex_scalafmt_repositories():
+def scalafmt_repositories():
     for dep in list_dependencies():
         java_import_external(**dep["import_args"])
 

@@ -3,10 +3,10 @@ set -o pipefail
 cd "$(dirname "$0")"
 
 if [ "$1" != check ]; then
-    bazel build $(bazel query 'kind("annex_scala_format_test", //...)')
-    bazel query 'kind("annex_scala_format_test", //...)' --output package | while read package; do bazel-bin/"$package"/*-format .; done
+    bazel build $(bazel query 'kind("scala_format_test", //...)')
+    bazel query 'kind("scala_format_test", //...)' --output package | while read package; do bazel-bin/"$package"/*-format .; done
 else
-    bazel query 'kind("annex_scala_format_test", //...)' | xargs bazel test
+    bazel query 'kind("scala_format_test", //...)' | xargs bazel test
 fi
 
 [ "$1" != check ] || BUILDIFIER_ARGS=-mode=check

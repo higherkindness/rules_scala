@@ -1,6 +1,6 @@
 load("//rules/common:private/utils.bzl", "write_launcher")
 
-annex_scala_format_private_attributes = {
+scala_format_private_attributes = {
     "_format": attr.label(
         cfg = "host",
         default = "@rules_scala_annex//rules/scalafmt",
@@ -12,7 +12,7 @@ annex_scala_format_private_attributes = {
     ),
 }
 
-def annex_scala_format_test_implementation(ctx):
+def scala_format_test_implementation(ctx):
     files = []
     runner_inputs, _, runner_manifests = ctx.resolve_command(tools = [ctx.attr._format])
 

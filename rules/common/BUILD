@@ -1,4 +1,4 @@
-load("//rules:scalafmt.bzl", "annex_scala_format_test")
+load("//rules:scalafmt.bzl", "scala_format_test")
 load("//rules:scalac.bzl", "scalac_library")
 
 scalac_library(
@@ -21,7 +21,7 @@ scalac_library(
     ],
 )
 
-annex_scala_format_test(
+scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),
 )

@@ -12,9 +12,9 @@ load(
 )
 load(
     "//rules:scala.bzl",
-    _annex_scala_library = "annex_scala_library",
-    _annex_scala_binary = "annex_scala_binary",
-    _annex_scala_test = "annex_scala_test",
+    _scala_library = "scala_library",
+    _scala_binary = "scala_binary",
+    _scala_test = "scala_test",
 )
 load(
     "//rules:common/private/utils.bzl",
@@ -73,7 +73,7 @@ def scala_library(
     if main_class != None:
         print("%s: main_class unsupported" % name)
 
-    _annex_scala_library(
+    _scala_library(
         name = name,
         srcs = srcs,
         deps = deps + _extra_deps,
@@ -184,7 +184,7 @@ def scala_binary(
         print("%s: classpath_resources unsupported" % name)
 
     scala_compiler_deps = [] if _scala in deps else [_scala]
-    _annex_scala_binary(
+    _scala_binary(
         name = name,
         main_class = main_class,
         srcs = srcs,
@@ -253,7 +253,7 @@ def scala_test(
         print("%s: full_stacktraces unsupported" % name)
 
     scala_compiler_deps = [] if _scala in deps else [_scala]
-    _annex_scala_test(
+    _scala_test(
         name = name,
         srcs = srcs,
         deps = deps + _scalatest_deps + _extra_deps,

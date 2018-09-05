@@ -14,34 +14,34 @@ local_repository(
 
 load(
     "@rules_scala_annex//rules/scala:workspace.bzl",
-    "annex_scala_register_toolchains",
-    "annex_scala_repository",
-    "annex_scala_repositories",
+    "scala_register_toolchains",
+    "scala_repository",
+    "scala_repositories",
 )
 
-annex_scala_repositories()
+scala_repositories()
 
-annex_scala_register_toolchains()
+scala_register_toolchains()
 
-annex_scala_repository(
+scala_repository(
     "scala_2_11",
     ("org.scala-lang", "2.11.12"),
     "@compiler_bridge_2_11//:src",
 )
 
-annex_scala_repository(
+scala_repository(
     "scala_2_12",
     ("org.scala-lang", "2.12.6"),
     "@compiler_bridge_2_12//:src",
 )
 
-annex_scala_repository(
+scala_repository(
     "typelevel_2_12",
     ("org.typelevel", "2.12.1"),
     "@compiler_bridge_2_12//:src",
 )
 
-annex_scala_repository(
+scala_repository(
     "scala",
     ("org.typelevel", "2.12.1"),
     "@compiler_bridge_2_12//:src",
@@ -76,9 +76,9 @@ emulate_rules_scala(
     scalatest = "@scalatest_2_11//jar",
 )
 
-load("@rules_scala_annex//rules/scalafmt:workspace.bzl", "annex_scalafmt_repositories", "scalafmt_default_config")
+load("@rules_scala_annex//rules/scalafmt:workspace.bzl", "scalafmt_repositories", "scalafmt_default_config")
 
-annex_scalafmt_repositories()
+scalafmt_repositories()
 
 scalafmt_default_config()
 
