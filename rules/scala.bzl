@@ -13,12 +13,12 @@ load(
 )
 load(
     "//rules/scala:private/core.bzl",
-    _annex_scala_library_implementation = "annex_scala_library_implementation",
-    _annex_scala_library_private_attributes = "annex_scala_library_private_attributes",
-    _annex_scala_binary_implementation = "annex_scala_binary_implementation",
-    _annex_scala_binary_private_attributes = "annex_scala_binary_private_attributes",
-    _annex_scala_test_implementation = "annex_scala_test_implementation",
-    _annex_scala_test_private_attributes = "annex_scala_test_private_attributes",
+    _scala_library_implementation = "scala_library_implementation",
+    _scala_library_private_attributes = "scala_library_private_attributes",
+    _scala_binary_implementation = "scala_binary_implementation",
+    _scala_binary_private_attributes = "scala_binary_private_attributes",
+    _scala_test_implementation = "scala_test_implementation",
+    _scala_test_private_attributes = "scala_test_private_attributes",
 )
 load(
     "//rules/scala:private/import.bzl",
@@ -27,8 +27,8 @@ load(
 )
 load(
     "//rules/scala:private/provider.bzl",
-    _annex_configure_basic_scala_implementation = "annex_configure_basic_scala_implementation",
-    _annex_configure_scala_implementation = "annex_configure_scala_implementation",
+    _configure_basic_scala_implementation = "configure_basic_scala_implementation",
+    _configure_scala_implementation = "configure_scala_implementation",
 )
 load(
     "//rules:scalac.bzl",
@@ -53,8 +53,8 @@ Args:
     ScalaConfiguration(s) to use for compiling sources.
 
 """
-annex_scala_library = rule(
-    implementation = _annex_scala_library_implementation,
+scala_library = rule(
+    implementation = _scala_library_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
         "data": attr.label_list(allow_files = True, cfg = "data"),
@@ -74,7 +74,7 @@ annex_scala_library = rule(
         "resource_strip_prefix": attr.string(),
         "resources": attr.label_list(allow_files = True),
         "resource_jars": attr.label_list(allow_files = [".jar"]),
-    }, **_annex_scala_library_private_attributes),
+    }, **_scala_library_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -86,8 +86,8 @@ annex_scala_library = rule(
 
 # scala_binary
 
-annex_scala_binary = rule(
-    implementation = _annex_scala_binary_implementation,
+scala_binary = rule(
+    implementation = _scala_binary_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
         "data": attr.label_list(allow_files = True, cfg = "data"),
@@ -108,7 +108,7 @@ annex_scala_binary = rule(
         "resource_strip_prefix": attr.string(),
         "resources": attr.label_list(allow_files = True),
         "resource_jars": attr.label_list(allow_files = [".jar"]),
-    }, **_annex_scala_binary_private_attributes),
+    }, **_scala_binary_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -122,8 +122,8 @@ annex_scala_binary = rule(
 
 # scala_test
 
-annex_scala_test = rule(
-    implementation = _annex_scala_test_implementation,
+scala_test = rule(
+    implementation = _scala_test_implementation,
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
         "data": attr.label_list(allow_files = True, cfg = "data"),
@@ -153,7 +153,7 @@ annex_scala_test = rule(
         "resources": attr.label_list(allow_files = True),
         "resource_jars": attr.label_list(allow_files = [".jar"]),
         "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
-    }, **_annex_scala_test_private_attributes),
+    }, **_scala_test_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -189,7 +189,7 @@ scala_import = rule(
 
 # scala_runner_toolchain
 
-def _annex_scala_runner_toolchain_implementation(ctx):
+def _scala_runner_toolchain_implementation(ctx):
     return [platform_common.ToolchainInfo(
         runner = ctx.attr.runner,
         scalacopts = ctx.attr.scalacopts,
@@ -198,8 +198,8 @@ def _annex_scala_runner_toolchain_implementation(ctx):
 """
 Configures which Scala runner to use
 """
-annex_scala_runner_toolchain = rule(
-    implementation = _annex_scala_runner_toolchain_implementation,
+scala_runner_toolchain = rule(
+    implementation = _scala_runner_toolchain_implementation,
     attrs = {
         "runner": attr.label(
             allow_files = True,
@@ -232,7 +232,7 @@ annex_scala_deps_toolchain = rule(
 )
 
 _annex_configure_basic_scala = rule(
-    implementation = _annex_configure_basic_scala_implementation,
+    implementation = _configure_basic_scala_implementation,
     attrs = {
         "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
         "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
@@ -240,8 +240,8 @@ _annex_configure_basic_scala = rule(
     },
 )
 
-_annex_configure_scala = rule(
-    implementation = _annex_configure_scala_implementation,
+_configure_scala = rule(
+    implementation = _configure_scala_implementation,
     attrs = {
         "version": attr.string(mandatory = True),
         "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
@@ -271,7 +271,7 @@ Args:
 
 """
 
-def annex_configure_scala(
+def configure_scala(
         name,
         compiler_bridge,
         compiler_bridge_classpath,
@@ -286,4 +286,4 @@ def annex_configure_scala(
         srcs = [compiler_bridge],
     )
 
-    _annex_configure_scala(name = name, compiler_bridge = ":{}_compiler_bridge".format(name), compiler_classpath = compiler_classpath, **kwargs)
+    _configure_scala(name = name, compiler_bridge = ":{}_compiler_bridge".format(name), compiler_classpath = compiler_classpath, **kwargs)

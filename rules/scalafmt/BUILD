@@ -1,5 +1,5 @@
-load("//rules:scala.bzl", "annex_scala_binary")
-load("//rules:scalafmt.bzl", "annex_scala_format_test")
+load("//rules:scala.bzl", "scala_binary")
+load("//rules:scalafmt.bzl", "scala_format_test")
 
 filegroup(
     name = "runner",
@@ -7,7 +7,7 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-annex_scala_binary(
+scala_binary(
     name = "scalafmt",
     srcs = glob(["scalafmt/**/*.scala"]),
     scala = "//external:scala_annex_scala",
@@ -20,7 +20,7 @@ annex_scala_binary(
     ],
 )
 
-annex_scala_format_test(
+scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),
 )

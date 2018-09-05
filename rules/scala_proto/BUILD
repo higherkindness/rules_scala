@@ -1,6 +1,6 @@
 load(
     "//rules:scala.bzl",
-    "annex_scala_binary",
+    "scala_binary",
 )
 load(
     "//rules:scala_proto.bzl",
@@ -12,7 +12,7 @@ toolchain_type(
     visibility = ["//visibility:public"],
 )
 
-annex_scala_binary(
+scala_binary(
     name = "worker",
     srcs = glob(["private/ScalaProtoWorker.scala"]),
     main_class = "annex.scala.proto.ScalaProtoWorker",

@@ -1,7 +1,7 @@
 load("@io_bazel_rules_docker//scala:image.bzl", "scala_image")
-load("@rules_scala_annex//rules:scala.bzl", "annex_scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "scala_library")
 
-annex_scala_library(
+scala_library(
     name = "dep",
     srcs = ["dep.scala"],
 )

@@ -1,11 +1,11 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
 load("//rules/common:private/utils.bzl", "safe_name", "strip_margin")
-load("//rules/scala:private/workspace.bzl", "annex_configure_scala_repository_implementation")
+load("//rules/scala:private/workspace.bzl", "configure_scala_repository_implementation")
 load("//3rdparty:maven.bzl", "list_dependencies")
 
-annex_configure_scala_repository = repository_rule(
-    implementation = annex_configure_scala_repository_implementation,
+configure_scala_repository = repository_rule(
+    implementation = configure_scala_repository_implementation,
     attrs = {
         "compiler_bridge": attr.string(),
         "organization": attr.string(),
@@ -13,7 +13,7 @@ annex_configure_scala_repository = repository_rule(
     },
 )
 
-def annex_scala_repositories():
+def scala_repositories():
     for dep in list_dependencies():
         java_import_external(**dep["import_args"])
 
@@ -55,7 +55,7 @@ def annex_scala_repositories():
         url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.1/compiler-bridge_2.12-1.2.1-sources.jar",
     )
 
-    annex_scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.6"), "@compiler_bridge_2_12//:src")
+    scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.6"), "@compiler_bridge_2_12//:src")
 
     native.bind(
         name = "scala_annex_scala",
@@ -66,12 +66,12 @@ def annex_scala_repositories():
         actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic",
     )
 
-def annex_scala_register_toolchains():
+def scala_register_toolchains():
     native.register_toolchains("@rules_scala_annex//rules/scala:config_runner_toolchain")
     native.register_toolchains("@rules_scala_annex//rules/scala:config_deps_toolchain")
 
-def annex_scala_repository(name, coordinates, compiler_bridge):
-    annex_configure_scala_repository(
+def scala_repository(name, coordinates, compiler_bridge):
+    configure_scala_repository(
         name = name,
         compiler_bridge = compiler_bridge,
         version = coordinates[1],

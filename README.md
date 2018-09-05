@@ -74,21 +74,21 @@ http_archive(
   url = "https://github.com/andyscott/rules_scala_annex/archive/<commit>.zip",
 )
 
-load("@rules_scala_annex//rules/scala:workspace.bzl", "annex_scala_register_toolchains", "annex_scala_repository" "annex_scala_repositories")
+load("@rules_scala_annex//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repository", "scala_repositories")
 
-annex_scala_repositories()
-annex_scala_register_toolchains()
+scala_repositories()
+scala_register_toolchains()
 
-# Add a @scala repo, which is the default scala provider used by annex_scala_*
-annex_scala_repository("scala", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
+# Add a @scala repo, which is the default scala provider used by scala_*
+scala_repository("scala", ("org.scala-lang", "2.12.4"), "@compiler_bridge_2_12//:src")
 ```
 
 BUILD
 
 ```python
-load("@rules_scala_annex//rules:scala.bzl", "annex_scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "scala_library")
 
-annex_scala_libray(
+scala_library(
   name = "example",
   src = glob(["**/*.scala"])
 )
@@ -96,7 +96,7 @@ annex_scala_libray(
 
 ### Tests
 
-annex_scala_test supports
+`scala_test` supports
 
 * Any test framework that implements the [sbt.testing.Framework interface](https://github.com/sbt/test-interface),
 e.g. ScalaTest, specs2, ScalaCheck, utest.
@@ -149,8 +149,8 @@ scalafmt_default()
 And in BUILD
 
 ```python
-load("@rules_scala_annex//rules:scalafmt.bzl", "annex_scala_format_test")
-annex_scala_format_test(
+load("@rules_scala_annex//rules:scalafmt.bzl", "scala_format_test")
+scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),
 )

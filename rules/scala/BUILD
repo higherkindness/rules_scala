@@ -1,6 +1,6 @@
-load("//rules:scala.bzl", "annex_scala_library", "annex_scala_binary", "annex_scala_deps_toolchain", "annex_scala_runner_toolchain")
+load("//rules:scala.bzl", "scala_library", "scala_binary", "annex_scala_deps_toolchain", "scala_runner_toolchain")
 load("//rules:scalac.bzl", "scalac_binary", "scalac_library")
-load("//rules:scalafmt.bzl", "annex_scala_format_test")
+load("//rules:scalafmt.bzl", "scala_format_test")
 
 # Bloop
 
@@ -26,7 +26,7 @@ toolchain(
     visibility = ["//visibility:public"],
 )
 
-annex_scala_runner_toolchain(
+scala_runner_toolchain(
     name = "bloop_toolchain_implementation",
     runner = ":bloop",
     visibility = ["//visibility:public"],
@@ -41,7 +41,7 @@ toolchain(
     visibility = ["//visibility:public"],
 )
 
-annex_scala_runner_toolchain(
+scala_runner_toolchain(
     name = "config_toolchain_implementation",
     runner = select({
         ":config_use_bloop": "@rules_scala_annex//rules/scala:bloop",
@@ -145,7 +145,7 @@ scalac_binary(
 
 # Test
 
-annex_scala_binary(
+scala_binary(
     name = "test",
     srcs = glob(["test/**/*.scala"]),
     scala = "//external:scala_annex_scala",
@@ -192,7 +192,7 @@ scalac_binary(
     ],
 )
 
-annex_scala_runner_toolchain(
+scala_runner_toolchain(
     name = "zinc_toolchain_implementation",
     runner = ":zinc",
     visibility = ["//visibility:public"],
@@ -207,7 +207,7 @@ toolchain(
 
 # Other
 
-annex_scala_format_test(
+scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),
 )
