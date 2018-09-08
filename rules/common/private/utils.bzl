@@ -27,8 +27,7 @@ def write_launcher(
         runtime_classpath,
         main_class,
         jvm_flags,
-        args = "",
-        wrapper_preamble = ""):
+        extra = ""):
     """Macro that writes out a launcher script shell script.
       Args:
         runtime_classpath: File containing the classpath required to launch this java target.
@@ -60,7 +59,7 @@ def write_launcher(
         substitutions = {
             "%classpath%": classpath,
             "%java_start_class%": main_class,
-            "%javabin%": "JAVABIN=\"$JAVA_RUNFILES/{}/{}\"".format(ctx.workspace_name, ctx.executable._java.short_path),
+            "%javabin%": "JAVABIN=\"$JAVA_RUNFILES/{}/{}\"\n{}".format(ctx.workspace_name, ctx.executable._java.short_path, extra),
             "%jvm_flags%": jvm_flags,
             "%needs_runfiles%": "1" if runfiles_enabled else "",
             "%runfiles_manifest_only%": "1" if runfiles_enabled else "",

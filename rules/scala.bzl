@@ -36,6 +36,11 @@ load(
     _configure_scala_implementation = "configure_scala_implementation",
 )
 load(
+    "//rules/scala:private/repl.bzl",
+    _scala_repl_implementation = "scala_repl_implementation",
+    _scala_repl_private_attributes = "scala_repl_private_attributes",
+)
+load(
     "//rules:scalac.bzl",
     _scalac_library = "scalac_library",
 )
@@ -168,6 +173,23 @@ scala_test = rule(
     outputs = {
         "bin": "%{name}-bin",
         "jar": "%{name}.jar",
+    },
+)
+
+# scala_repl
+
+scala_repl = rule(
+    implementation = _scala_repl_implementation,
+    attrs = dict({
+        "data": attr.label_list(allow_files = True, cfg = "data"),
+        "deps": attr.label_list(providers = [JavaInfo]),
+        "jvm_flags": attr.string_list(),
+        "scala": attr.label(default = "@scala", providers = [_ScalaConfiguration, _ZincConfiguration]),
+        "scalacopts": attr.string_list(),
+    }, **_scala_repl_private_attributes),
+    executable = True,
+    outputs = {
+        "bin": "%{name}-bin",
     },
 )
 
