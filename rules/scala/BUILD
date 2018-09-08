@@ -154,14 +154,11 @@ scala_binary(
         "//rules/common:worker",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
-        "@scala_annex_org_scala_sbt_io_2_12",
         "@scala_annex_org_scala_sbt_util_interface",
         "@scala_annex_org_scala_sbt_util_logging_2_12",
         "@scala_annex_org_scala_sbt_zinc_2_12",
         "@scala_annex_org_scala_sbt_zinc_classpath_2_12",
         "@scala_annex_org_scala_sbt_zinc_compile_core_2_12",
-        "@scala_annex_org_scala_sbt_zinc_core_2_12",
-        "@scala_annex_org_scala_sbt_zinc_persist_2_12",
     ],
 )
 
@@ -177,14 +174,10 @@ scala_binary(
         "//rules/common:args",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
-        "@scala_annex_org_scala_sbt_io_2_12",
         "@scala_annex_org_scala_sbt_util_interface",
         "@scala_annex_org_scala_sbt_util_logging_2_12",
         "@scala_annex_org_scala_sbt_zinc_2_12",
-        "@scala_annex_org_scala_sbt_zinc_classpath_2_12",
         "@scala_annex_org_scala_sbt_zinc_compile_core_2_12",
-        "@scala_annex_org_scala_sbt_zinc_core_2_12",
-        "@scala_annex_org_scala_sbt_zinc_persist_2_12",
     ],
 )
 

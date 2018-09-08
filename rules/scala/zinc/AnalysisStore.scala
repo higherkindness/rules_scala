@@ -3,16 +3,16 @@ package annex.zinc
 import com.google.devtools.build.buildjar.jarhelper.JarHelper
 import com.trueaccord.lenses.{Lens, Mutation}
 import com.trueaccord.scalapb.{GeneratedMessage, GeneratedMessageCompanion, Message}
-import java.io._
+import java.io.{File, InputStream, OutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
-import java.nio.file._
+import java.nio.file.{Files, NoSuchFileException, Path, Paths}
 import java.nio.file.attribute.FileTime
 import java.util.zip.{GZIPInputStream, GZIPOutputStream}
 import java.util.Optional
 import sbt.internal.inc.binary.converters.{ProtobufReaders, ProtobufWriters}
 import sbt.internal.inc.{APIs, Analysis, Relations, SourceInfos, Stamper, Stamps, schema, Stamp => StampImpl}
 import sbt.io.IO
-import xsbti.compile.analysis._
+import xsbti.compile.analysis.{GenericMapper, ReadMapper, ReadWriteMappers, Stamp, WriteMapper}
 import xsbti.compile.{AnalysisContents, AnalysisStore, MiniSetup}
 
 case class AnalysisFiles(apis: Path, miniSetup: Path, relations: Path, sourceInfos: Path, stamps: Path)

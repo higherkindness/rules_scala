@@ -1,34 +1,29 @@
 package annex.repl
 
 import annex.args.Implicits._
-import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
 import annex.compiler.Arguments.LogLevel
-import java.io.{File, PrintWriter}
-import java.net.URLClassLoader
-import java.nio.file._
-import java.util.function.Supplier
-import java.util.zip.ZipInputStream
-import java.util.{Collections, Optional, Properties}
+import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
+import java.io.File
+import java.nio.file.{Files, Paths}
+import java.util.Collections
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
-import net.sourceforge.argparse4j.inf.ArgumentParser
-import net.sourceforge.argparse4j.inf.Namespace
-import sbt.internal.inc.classpath.ClassLoaderCache
-import sbt.internal.inc.{Hash => _, ScalaInstance => _, _}
-import sbt.io.Hash
-import scala.annotation.tailrec
+import sbt.internal.inc.ZincUtil
 import scala.collection.JavaConverters._
-import scala.util.Try
-import scala.util.control.NonFatal
-import xsbti.compile.{FileAnalysisStore => _, _}
-import xsbti.{Logger, Reporter}
+import xsbti.Logger
 
 object ReplRunner {
 
-  private[this] val classloaderCache = new ClassLoaderCache(null)
+  private[this] val argParser =
+    ArgumentParsers.newFor("repl").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
+  argParser
+    .addArgument("--log_level")
+    .help("Log level")
+    .choices(LogLevel.Debug, LogLevel.Error, LogLevel.Info, LogLevel.None, LogLevel.Warn)
+    .setDefault_(LogLevel.Warn)
 
   private[this] val replArgParser =
-    ArgumentParsers.newFor("repl").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
+    ArgumentParsers.newFor("repl-args").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
   replArgParser
     .addArgument("--classpath")
     .help("Compilation classpath")
@@ -50,21 +45,17 @@ object ReplRunner {
     .`type`(Arguments.fileType)
     .setDefault_(Collections.emptyList)
   replArgParser
-    .addArgument("--option")
-    .help("option")
+    .addArgument("--compiler_option")
+    .help("Compiler option")
     .action(Arguments.append)
     .metavar("option")
-  replArgParser
-    .addArgument("--log_level")
-    .help("Log level")
-    .choices(LogLevel.Debug, LogLevel.Error, LogLevel.Info, LogLevel.None, LogLevel.Warn)
-    .setDefault_(LogLevel.Warn)
 
   def main(args: Array[String]): Unit = {
+    val namespace = argParser.parseArgsOrFail(args)
+
     val runPath = Paths.get(sys.props("bazel.runPath"))
 
     val replArgFile = Paths.get(sys.props("scalaAnnex.test.args"))
-    println(replArgFile)
     val replNamespace = replArgParser.parseArgsOrFail(Files.readAllLines(replArgFile).asScala.toArray)
 
     val urls =
@@ -81,11 +72,10 @@ object ReplRunner {
       compilerClasspath.toArray
     )
 
-    val logger = new AnxLogger(replNamespace.getString("log_level"))
+    val logger = new AnxLogger(namespace.getString("log_level"))
 
     val scalaCompiler = ZincUtil
       .scalaCompiler(scalaInstance, runPath.resolve(replNamespace.get[File]("compiler_bridge").toPath).toFile)
-      .withClassLoaderCache(classloaderCache)
 
     val classpath = replNamespace
       .getList[File]("classpath")
@@ -93,7 +83,7 @@ object ReplRunner {
       .map(file => runPath.resolve(file.toPath).toFile)
       .toSeq
 
-    val options = Option(replNamespace.getList[String]("option")).fold[Seq[String]](Nil)(_.asScala).toSeq
+    val options = Option(replNamespace.getList[String]("compiler_option")).fold[Seq[String]](Nil)(_.asScala).toSeq
     scalaCompiler.console(compilerClasspath ++ classpath, options, "", "", logger)()
   }
 }

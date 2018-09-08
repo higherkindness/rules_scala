@@ -4,22 +4,17 @@ import annex.compiler.{AnxLogger, AnxScalaInstance, Arguments, FileUtil}
 import annex.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
-import java.net.URLClassLoader
-import java.nio.file._
-import java.util.function.Supplier
-import java.util.zip.ZipInputStream
+import java.nio.file.{Files, NoSuchFileException, Path, Paths}
 import java.util.{Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.classpath.ClassLoaderCache
-import sbt.internal.inc.{Hash => _, ScalaInstance => _, _}
-import sbt.io.Hash
-import scala.annotation.tailrec
+import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locate, LoggedReporter, ZincUtil}
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.util.control.NonFatal
-import xsbti.compile.{FileAnalysisStore => _, _}
-import xsbti.{Logger, Reporter}
+import xsbti.compile.{AnalysisContents, ClasspathOptionsUtil, CompileAnalysis, CompileOptions, CompileResult, CompilerCache, DefinesClass, IncOptions, Inputs, PerClasspathEntryLookup, PreviousResult, Setup}
+import xsbti.Logger
 
 /**
  * <strong>Caching</strong>
@@ -127,7 +122,7 @@ object ZincRunner extends WorkerMain[Namespace] {
       }
       .toMap
 
-    val originalClasspath: Seq[Path] = namespace.getList[File]("classpath").asScala.map(_.toPath)
+    val originalClasspath = namespace.getList[File]("classpath").asScala.map(_.toPath)
 
     val deps = Dep.create(originalClasspath, analyses)
 
@@ -176,7 +171,7 @@ object ZincRunner extends WorkerMain[Namespace] {
           )
         )
     })
-    val reporter: Reporter = new LoggedReporter(10, logger)
+    val reporter = new LoggedReporter(10, logger)
     val incOptions = IncOptions.create()
 
     val setup: Setup =
@@ -184,7 +179,7 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     val inputs: Inputs = Inputs.of(compilers, compileOptions, setup, previousResult)
 
-    val compiler: IncrementalCompilerImpl = new IncrementalCompilerImpl()
+    val compiler = new IncrementalCompilerImpl()
     val compileResult: CompileResult =
       try compiler.compile(inputs, logger)
       catch {
