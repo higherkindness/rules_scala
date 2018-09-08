@@ -16,14 +16,11 @@ def list_dependencies():
                     "@scala_annex_io_get_coursier_coursier_cache_2_12",
                     "@scala_annex_io_get_coursier_coursier_scalaz_interop_2_12",
                     "@scala_annex_io_github_soc_directories",
-                    "@scala_annex_io_monix_monix_2_12",
                     "@scala_annex_me_vican_jorge_directory_watcher_better_files_2_12",
                     "@scala_annex_org_scala_sbt_librarymanagement_ivy_2_12",
                     "@scala_annex_org_scala_sbt_test_agent",
                     "@scala_annex_org_scala_sbt_test_interface",
                     "@scala_annex_org_scalaz_scalaz_concurrent_2_12",
-                    "@scala_annex_org_scalaz_scalaz_core_2_12",
-                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "62778a25e6d62ccb9efde50621d0469810dc957a01715a988c1da5939a2c6fe5",
                 "jar_urls": [
@@ -36,7 +33,7 @@ def list_dependencies():
                     "http://central.maven.org/maven2/ch/epfl/scala/bloop-backend_2.12/1.0.0/bloop-backend_2.12-1.0.0-sources.jar",
                 ],
             },
-            "lang": "scala",
+            "lang": "java",
         },
         {
             "bind_args": {
@@ -48,7 +45,6 @@ def list_dependencies():
                 "deps": [
                     "@scala_annex_io_circe_circe_derivation_2_12",
                     "@scala_annex_io_circe_circe_parser_2_12",
-                    "@scala_annex_scala_2_12_scala_library//jar",
                 ],
                 "jar_sha256": "1f9b0639dd36e74bc18cdeac3d6a1e815a7919d2f025d2729fe6ffca4a137bd0",
                 "jar_urls": [
@@ -61,7 +57,7 @@ def list_dependencies():
                     "http://central.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/1.0.0/bloop-config_2.12-1.0.0-sources.jar",
                 ],
             },
-            "lang": "scala",
+            "lang": "java",
         },
         {
             "bind_args": {
@@ -213,10 +209,7 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_net_java_dev_jna_jna",
-                    "@scala_annex_net_java_dev_jna_jna_platform",
-                ],
+                "deps": ["@scala_annex_net_java_dev_jna_jna_platform"],
                 "jar_sha256": "b5fbb84441e55c7e91540ee00d0808c8b656b0bfc2fc67907e754d3518ea66ea",
                 "jar_urls": [
                     "http://central.maven.org/maven2/ch/epfl/scala/nailgun-server/0c8b937b/nailgun-server-0c8b937b.jar",
@@ -1175,9 +1168,6 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in io.circe:circe-core_2.12 promoted to 0.9.3
-        # - ch.epfl.scala:bsp_2.12:1.0.0-M4 wanted version 0.9.0
-        # - io.circe:circe-parser_2.12:0.9.3 wanted version 0.9.3
         {
             "bind_args": {
                 "actual": "@scala_annex_io_circe_circe_core_2_12",
@@ -1189,15 +1179,15 @@ def list_dependencies():
                     "@scala_annex_io_circe_circe_numbers_2_12",
                     "@scala_annex_org_typelevel_cats_core_2_12",
                 ],
-                "jar_sha256": "256527a2ce81b91db1d3cc27f44dc920a8cb33ff32c1d6e6d9813799df774e20",
+                "jar_sha256": "ca627285dfa4a0f4a30ab2dbf48df2f0194129b80ad090c6e03b4474892dabee",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-core_2.12/0.9.3/circe-core_2.12-0.9.3.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-core_2.12/0.9.0/circe-core_2.12-0.9.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_io_circe_circe_core_2_12",
-                "srcjar_sha256": "a84c0f7651d1a1ef2c4fb7df802965b572680f88e6128f09f137be19759e9e78",
+                "srcjar_sha256": "455c4efe5da2459f95cb85d2944fc168155ce19c8af5e4674ac1d45233f0fb70",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-core_2.12/0.9.3/circe-core_2.12-0.9.3-sources.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-core_2.12/0.9.0/circe-core_2.12-0.9.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1290,15 +1280,15 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "49cd74886f74659b239b6a85f3ba8e24f212a9e6b299fb9a793e092905bc8fa3",
+                "jar_sha256": "ce8e089b833c6f38156ad257badc57298c75c3d08a160779f28f89c6531c5504",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-numbers_2.12/0.9.3/circe-numbers_2.12-0.9.3.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-numbers_2.12/0.9.0/circe-numbers_2.12-0.9.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "scala_annex_io_circe_circe_numbers_2_12",
-                "srcjar_sha256": "562f7bc8dab9917b5e903cd8931a52cfce22d6a2fa53df1919ad5088580b8eb2",
+                "srcjar_sha256": "3bf078d3d82998a8968a0142c7cfff9c4846d17e277ba70d7a14cad77f144971",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/io/circe/circe-numbers_2.12/0.9.3/circe-numbers_2.12-0.9.3-sources.jar",
+                    "http://central.maven.org/maven2/io/circe/circe-numbers_2.12/0.9.0/circe-numbers_2.12-0.9.0-sources.jar",
                 ],
             },
             "lang": "java",
@@ -1310,10 +1300,7 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": [
-                    "@scala_annex_io_circe_circe_core_2_12",
-                    "@scala_annex_io_circe_circe_jawn_2_12",
-                ],
+                "deps": ["@scala_annex_io_circe_circe_jawn_2_12"],
                 "jar_sha256": "35613794c8881186487beaf5a620cd0f6f128cffd4e7a2c777ef034cb4bd1f75",
                 "jar_urls": [
                     "http://central.maven.org/maven2/io/circe/circe-parser_2.12/0.9.3/circe-parser_2.12-0.9.3.jar",
@@ -1610,7 +1597,6 @@ def list_dependencies():
             "lang": "java",
         },
         # duplicates in net.java.dev.jna:jna promoted to 4.5.1
-        # - ch.epfl.scala:nailgun-server:0c8b937b wanted version 4.4.0
         # - com.zaxxer:nuprocess:1.2.4 wanted version 4.5.1
         # - org.scala-sbt:io_2.12:1.2.0 wanted version 4.5.0
         {
@@ -2679,7 +2665,6 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_scala_2_12_scala_compiler//jar"],
                 "jar_sha256": "b7e97638fa25ba02414b9b8387e9ecc2ea2fce4c9d9068ac3108ee5718b477a9",
                 "jar_urls": [
                     "http://central.maven.org/maven2/org/typelevel/machinist_2.12/0.6.2/machinist_2.12-0.6.2.jar",
