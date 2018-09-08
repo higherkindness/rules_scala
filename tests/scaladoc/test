@@ -1,0 +1,5 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../common.sh
+
+bazel build :a_doc
+grep -q '<title>//scaladoc:a_doc' "$(bazel info bazel-bin)/scaladoc/html/index.html"
