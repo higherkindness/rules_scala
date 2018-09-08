@@ -38,6 +38,7 @@ Additionally, Annex can emulate @io_bazel_rules_scala.
 ### Differences with rules_scala
 
 * More correctly handles of macros and ijars. See [#445](https://github.com/bazelbuild/rules_scala/issues/445) and [#632](https://github.com/bazelbuild/bazel/issues/632#issuecomment-383318341).
+  * Detect missing `macro = True` attribute. See [#366](https://github.com/bazelbuild/rules_scala/issues/366).
 * More precisely and straightforwardly detects indirect and unused dependencies, via Zinc. See [#235](https://github.com/bazelbuild/rules_scala/issues/235) and [#335](https://github.com/bazelbuild/rules_scala/issues/335).
 * Supports neverlink. See [#213](https://github.com/bazelbuild/rules_scala/issues/213).
 * Optionally allows for fine-grained incrementality with stateful Zinc compilation. See [bazel-discuss](https://groups.google.com/forum/#!topic/bazel-discuss/3iUy5jxS3S0) and [#328](https://github.com/bazelbuild/rules_scala/issues/328).
@@ -45,12 +46,10 @@ Additionally, Annex can emulate @io_bazel_rules_scala.
 * Tools written in Scala, using bootstrapping rules as necessary.
 * Uses [`depset`](https://docs.bazel.build/versions/master/skylark/lib/depset.html) and [`Args`](https://docs.bazel.build/versions/master/skylark/lib/Args.html)
 to completely defer expanding transitive dependency lists until execution time.
-* Supports multiple Scala versions. See [#14](https://github.com/bazelbuild/rules_scala/issues/14). (Is this completely fixed in rules_scala with [#544](https://github.com/bazelbuild/rules_scala/pull/544)?)
-  * Includes 2.10-2.13, Typelevel, Dotty, and anything else compatible with Zinc's compiler-bridge.
-  * Allows for multiple Scala versions in the same workspace. See [#80](https://github.com/bazelbuild/rules_scala/issues/80).
-    * For example, rules_scala_annex tools use Scala 2.12, but that doesn't affect any client projects.
+* Supports many Scala versions: 2.10-2.13, Typelevel, Dotty, and anything else compatible with Zinc's compiler-bridge.
+* Allows for multiple Scala versions in the same workspace. See [#80](https://github.com/bazelbuild/rules_scala/issues/80) and [#393](https://github.com/bazelbuild/rules_scala/issues/393).
+  * For example, rules_scala_annex tools use Scala 2.12, but that doesn't affect any client projects.
 * Robustly supports buildozer recommendations via an aspect.
-* Uses Starlark's [Args](https://docs.bazel.build/versions/master/skylark/lib/Args.html) for fast, memory efficient treatment of deps during analysis.
 * Supports for all Scala test frameworks via sbt [test-interface](https://github.com/sbt/test-interface).
 * Support test sharding, custom test framework arguments (including options to the JVM itself).
 * Supports scalafmt.
