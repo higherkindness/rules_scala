@@ -11,10 +11,8 @@ import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
-import net.sourceforge.argparse4j.inf.Argument
 import org.scalatools.testing.Framework
 import sbt.internal.inc.binary.converters.ProtobufReaders
-import sbt.internal.inc.classpath.LoaderBase
 import sbt.internal.inc.schema
 import sbt.testing.Logger
 import scala.collection.JavaConverters._

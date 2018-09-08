@@ -1,22 +1,17 @@
 package annex.scala.proto
 
-import net.sourceforge.argparse4j.ArgumentParsers
-import net.sourceforge.argparse4j.inf.ArgumentParser
-import net.sourceforge.argparse4j.impl.Arguments
-
-import protocbridge.ProtocBridge
-import scalapb.ScalaPbCodeGenerator
-
-import scala.collection.JavaConverters._
-import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.util.Collections
-
-import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import annex.args.Implicits._
 import annex.worker.SimpleMain
+import com.google.devtools.build.buildjar.jarhelper.JarCreator
+import java.io.File
+import java.nio.file.{Files, Paths}
+import java.util.Collections
+import net.sourceforge.argparse4j.ArgumentParsers
+import net.sourceforge.argparse4j.impl.Arguments
+import net.sourceforge.argparse4j.inf.ArgumentParser
+import protocbridge.ProtocBridge
+import scala.collection.JavaConverters._
+import scalapb.ScalaPbCodeGenerator
 
 object ScalaProtoWorker extends SimpleMain {
 
@@ -39,14 +34,12 @@ object ScalaProtoWorker extends SimpleMain {
 
   protected[this] def work(args: Array[String]) = {
     val namespace = argParser.parseArgs(args)
-    val sources: List[File] = namespace.getList[File]("sources").asScala.toList
+    val sources = namespace.getList[File]("sources").asScala.toList
 
-    val scalaOut: Path = Paths.get("tmp", "src")
+    val scalaOut = Paths.get("tmp", "src")
     Files.createDirectories(scalaOut)
 
-    val params: List[String] =
-      s"--scala_out=$scalaOut" ::
-      sources.map(_.getPath)
+    val params = s"--scala_out=$scalaOut" :: sources.map(_.getPath)
 
     ProtocBridge.runWithGenerators(
       protoc = a => com.github.os72.protocjar.Protoc.runProtoc(a.toArray),

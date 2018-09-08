@@ -4,25 +4,16 @@ import annex.args.Implicits._
 import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
 import annex.compiler.Arguments.LogLevel
 import annex.worker.SimpleMain
-import java.io.{File, PrintWriter}
-import java.net.URLClassLoader
-import java.nio.file._
-import java.util.function.Supplier
-import java.util.zip.ZipInputStream
+import java.io.File
+import java.nio.file.{Files, NoSuchFileException}
 import java.util.{Collections, Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
-import net.sourceforge.argparse4j.inf.ArgumentParser
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.classpath.ClassLoaderCache
-import sbt.internal.inc.{Hash => _, ScalaInstance => _, _}
-import sbt.io.Hash
-import scala.annotation.tailrec
+import sbt.internal.inc.{LoggedReporter, ZincUtil}
 import scala.collection.JavaConverters._
-import scala.util.Try
-import scala.util.control.NonFatal
-import xsbti.compile.{FileAnalysisStore => _, _}
-import xsbti.{Logger, Reporter}
+import xsbti.Logger
 
 object DocRunner extends SimpleMain {
 
