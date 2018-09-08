@@ -16,7 +16,7 @@ dependencies:
   ch.epfl.scala:
     bloop:
       lang: scala
-      modules: ["frontend", "backend", "config"]
+      modules: ["frontend"]
       version: "1.0.0"
 
   net.sourceforge.argparse4j:

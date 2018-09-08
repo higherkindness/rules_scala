@@ -7,15 +7,12 @@ load("//rules:scalafmt.bzl", "scala_format_test")
 scalac_binary(
     name = "bloop",
     srcs = glob(["bloop/**/*.scala"]),
-    main_class = "annex.BloopRunner",
+    main_class = "annex.bloop.BloopRunner",
     scala = "//external:scala_annex_scala_basic",
     visibility = ["//visibility:public"],
     deps = [
-        ":compiler",
         "//rules/common:worker",
-        "//rules/common/third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "@scala_annex_ch_epfl_scala_bloop_frontend_2_12",
-        "@scala_annex_org_scala_sbt_test_interface",
     ],
 )
 
