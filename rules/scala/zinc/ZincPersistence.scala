@@ -1,5 +1,6 @@
 package annex.zinc
 
+import annex.compiler.FileUtil
 import java.nio.file.{Files, Path}
 
 trait ZincPersistence {

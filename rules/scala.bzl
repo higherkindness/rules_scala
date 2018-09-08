@@ -21,6 +21,11 @@ load(
     _scala_test_private_attributes = "scala_test_private_attributes",
 )
 load(
+    "//rules/scala:private/doc.bzl",
+    _scaladoc_implementation = "scaladoc_implementation",
+    _scaladoc_private_attributes = "scaladoc_private_attributes",
+)
+load(
     "//rules/scala:private/import.bzl",
     _scala_import_implementation = "scala_import_implementation",
     _scala_import_private_attributes = "scala_import_private_attributes",
@@ -181,6 +186,23 @@ scala_import = rule(
         "runtime_deps": attr.label_list(),
         "exports": attr.label_list(),
     }, **_scala_import_private_attributes),
+)
+
+# scaladoc
+
+scaladoc = rule(
+    implementation = _scaladoc_implementation,
+    attrs = dict({
+        "compiler_deps": attr.label_list(allow_files = False, providers = [JavaInfo]),
+        "deps": attr.label_list(allow_files = False, providers = [JavaInfo]),
+        "srcs": attr.label_list(allow_files = [".java", ".scala", ".srcjar"]),
+        "scala": attr.label(
+            default = "@scala",
+            providers = [_ScalaConfiguration, _ZincConfiguration],
+        ),
+        "scalacopts": attr.string_list(default = []),
+        "title": attr.string(),
+    }, **_scaladoc_private_attributes),
 )
 
 ##

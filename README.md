@@ -53,6 +53,7 @@ to completely defer expanding transitive dependency lists until execution time.
 * Supports for all Scala test frameworks via sbt [test-interface](https://github.com/sbt/test-interface).
 * Support test sharding, custom test framework arguments (including options to the JVM itself).
 * Supports scalafmt.
+* Supports Scaladoc. See [#230](https://github.com/bazelbuild/rules_scala/issues/230) and [#256](https://github.com/bazelbuild/rules_scala/issues/256).
 * Has consistently formatted code, via buildifier and scalafmt. See [#74](https://github.com/bazelbuild/rules_scala/issues/474).
 * Reorganized and simplified file and code structure. Less than 8 KLOC excluding tests and dependency resolutions. (`git ls-files | grep -v '^test\|/maven.bzl$\|*.md' | xargs cat | wc -l`)
 * Reorganized Travis CI builds, including better cache reuse.

@@ -1,7 +1,6 @@
 package annex.zinc
 
-import annex.compiler.Arguments
-import annex.compiler.Arguments.LogLevel
+import annex.compiler.{AnxLogger, AnxScalaInstance, Arguments, FileUtil}
 import annex.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
@@ -103,31 +102,14 @@ object ZincRunner extends WorkerMain[Namespace] {
     val compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
     val sources = namespace.getList[File]("sources").asScala ++
-      namespace.getList[File]("source_jars").asScala.zipWithIndex.flatMap {
-        case (jar, i) =>
-          val fileStream = Files.newInputStream(jar.toPath)
-          try {
-            val zipStream = new ZipInputStream(fileStream)
-            @tailrec
-            def next(files: List[File]): List[File] = {
-              zipStream.getNextEntry match {
-                case null => files
-                case entry if entry.isDirectory =>
-                  zipStream.closeEntry()
-                  next(files)
-                case entry =>
-                  val file = tmpDir.resolve("src").resolve(i.toString).resolve(entry.getName)
-                  Files.createDirectories(file.getParent)
-                  Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
-                  zipStream.closeEntry()
-                  next(file.toFile :: files)
-              }
-            }
-            next(Nil)
-          } finally {
-            fileStream.close()
-          }
-      }
+      namespace
+        .getList[File]("source_jars")
+        .asScala
+        .zipWithIndex
+        .flatMap {
+          case (jar, i) => FileUtil.extractZip(jar.toPath, tmpDir.resolve("src").resolve(i.toString))
+        }
+        .map(_.toFile)
 
     val analyses = namespace
       .getList[String]("analyses")
@@ -260,58 +242,4 @@ final class AnxPerClasspathEntryLookup(analyses: Path => Option[CompileAnalysis]
     analyses(classpathEntry.toPath).fold(Optional.empty[CompileAnalysis])(Optional.of(_))
   override def definesClass(classpathEntry: File): DefinesClass =
     Locate.definesClass(classpathEntry)
-}
-
-final class AnxScalaInstance(val allJars: Array[File]) extends ScalaInstance {
-  lazy val actualVersion = {
-    val stream = loader.getResourceAsStream("compiler.properties")
-    try {
-      val props = new Properties
-      props.load(stream)
-      props.getProperty("version.number")
-    } finally stream.close()
-  }
-
-  def compilerJar = null
-
-  lazy val libraryJar = allJars
-    .find(f => new URLClassLoader(Array(f.toURI.toURL)).findResource("library.properties") != null)
-    .get
-
-  lazy val loader = new URLClassLoader(allJars.map(_.toURI.toURL), null)
-
-  def loaderLibraryOnly = null
-
-  def otherJars = null
-
-  def version = actualVersion
-}
-
-final class AnxLogger(level: String) extends Logger {
-
-  def debug(msg: Supplier[String]) = level match {
-    case LogLevel.Debug => System.err.println(msg.get)
-    case _              => Hash
-  }
-
-  def error(msg: Supplier[String]) = level match {
-    case LogLevel.Debug | LogLevel.Error | LogLevel.Info | LogLevel.Warn => println(msg.get)
-    case _                                                               =>
-  }
-
-  def info(msg: Supplier[String]) = level match {
-    case LogLevel.Debug | LogLevel.Info => System.err.println(msg.get)
-    case _                              =>
-  }
-
-  def trace(err: Supplier[Throwable]) = level match {
-    case LogLevel.Debug | LogLevel.Error | LogLevel.Info | LogLevel.Warn => err.get.printStackTrace()
-    case _                                                               =>
-  }
-
-  def warn(msg: Supplier[String]) = level match {
-    case LogLevel.Debug | LogLevel.Info | LogLevel.Warn => System.err.println(msg.get)
-    case _                                              =>
-  }
-
 }

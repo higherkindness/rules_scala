@@ -402,7 +402,7 @@ def list_dependencies():
             },
             "lang": "java",
         },
-        # duplicates in org.scala-lang.modules:scala-xml_2.12 promoted to 1.0.6
+        # duplicates in org.scala-lang.modules:scala-xml_2.12 fixed to 1.1.0
         # - org.scala-sbt:sbinary_2.12:0.4.4 wanted version 1.0.5
         # - org.scalatest:scalatest_2.12:3.0.4 wanted version 1.0.5
         # - org.specs2:specs2-common_2.12:4.0.3 wanted version 1.0.6
@@ -413,18 +413,19 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "jar_sha256": "7cc3b6ceb56e879cb977e8e043f4bfe2e062f78795efd7efa09f85003cb3230a",
+                "deps": ["@org_scala_lang_scala_library"],
+                "jar_sha256": "cf300196dbc0e4706a94e189d2c99b0c292d3f7650f94ce7c16de81b2a262346",
                 "jar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.6/scala-xml_2.12-1.0.6.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.1.0/scala-xml_2.12-1.1.0.jar",
                 ],
                 "licenses": ["notice"],
                 "name": "org_scala_lang_modules_scala_xml_2_12",
-                "srcjar_sha256": "a7e8aac79394df396afda98b35537791809d815ce15ab2224f7d31e50c753922",
+                "srcjar_sha256": "46a8f4be00c620b737b783a9f9107725d0d03c973e9b691c817e0336bc1f6192",
                 "srcjar_urls": [
-                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.6/scala-xml_2.12-1.0.6-sources.jar",
+                    "http://central.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.1.0/scala-xml_2.12-1.1.0-sources.jar",
                 ],
             },
-            "lang": "java",
+            "lang": "scala",
         },
         {
             "bind_args": {
@@ -448,6 +449,7 @@ def list_dependencies():
         },
         # duplicates in org.scala-lang:scala-library promoted to 2.12.4
         # - com.lihaoyi:utest_2.12:0.6.0 wanted version 2.12.3
+        # - org.scala-lang.modules:scala-xml_2.12:1.1.0 wanted version 2.12.4
         # - org.scala-sbt:zinc-persist_2.12:1.1.5 wanted version 2.12.4
         # - org.scalacheck:scalacheck_2.12:1.13.4 wanted version 2.12.0
         # - org.scalactic:scalactic_2.12:3.0.4 wanted version 2.12.3
@@ -585,7 +587,7 @@ def list_dependencies():
                     "http://central.maven.org/maven2/org/scala-sbt/sbinary_2.12/0.4.4/sbinary_2.12-0.4.4-sources.jar",
                 ],
             },
-            "lang": "java",
+            "lang": "scala",
         },
         {
             "bind_args": {
@@ -961,7 +963,7 @@ def list_dependencies():
                     "http://central.maven.org/maven2/org/specs2/specs2-common_2.12/4.0.3/specs2-common_2.12-4.0.3-sources.jar",
                 ],
             },
-            "lang": "java",
+            "lang": "scala",
         },
         {
             "bind_args": {
@@ -1072,7 +1074,7 @@ def list_dependencies():
                     "http://central.maven.org/maven2/org/specs2/specs2-matcher_2.12/4.0.3/specs2-matcher_2.12-4.0.3-sources.jar",
                 ],
             },
-            "lang": "java",
+            "lang": "scala",
         },
         {
             "bind_args": {

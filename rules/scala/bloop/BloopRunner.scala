@@ -76,7 +76,7 @@ object BloopRunner extends WorkerMain[Env] {
     val scalaCompiler: AnalyzingCompiler =
       ZincUtil.scalaCompiler(scalaInstance, compilerBridgeJar)
 
-    val compilers: Compilers = ZincUtil.compilers(scalaInstance, None, scalaCompiler)
+    val compilers: Compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
 
     val compileOptions: CompileOptions =
       CompileOptions.create
