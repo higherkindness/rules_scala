@@ -1,0 +1,4 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+echo 'Example.add(1, 1)' | bazel run --direct_run :lib.repl | grep -q 'res0: Int = 2'

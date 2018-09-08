@@ -16,6 +16,7 @@ At this time there isn't a formal plan on how to incorporate changes upstream ot
 - [x] Zinc based backend
 - [ ] Bloop based backend
 - [x] testing framework support (parity with SBT)
+- [x] REPL
 - [x] automatic main method detection
 - [x] errors on unused dependencies
 - [x] buildozer suggestions to fix unused dependency errors
