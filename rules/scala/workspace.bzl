@@ -66,9 +66,13 @@ def scala_repositories():
         actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic",
     )
 
+annex_scala_repositories = scala_repositories
+
 def scala_register_toolchains():
     native.register_toolchains("@rules_scala_annex//rules/scala:config_runner_toolchain")
     native.register_toolchains("@rules_scala_annex//rules/scala:config_deps_toolchain")
+
+annex_scala_register_toolchains = scala_register_toolchains
 
 def scala_repository(name, coordinates, compiler_bridge):
     configure_scala_repository(
@@ -93,3 +97,5 @@ def scala_repository(name, coordinates, compiler_bridge):
         name = "{}_scala_reflect".format(name),
         artifact = "%s:scala-reflect:%s" % (organization, version),
     )
+
+annex_scala_repository = scala_repository

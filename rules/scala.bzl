@@ -94,6 +94,8 @@ scala_library = rule(
     },
 )
 
+annex_scala_library = scala_library
+
 # scala_binary
 
 scala_binary = rule(
@@ -129,6 +131,8 @@ scala_binary = rule(
         "jar": "%{name}.jar",
     },
 )
+
+annex_scala_binary = scala_binary
 
 # scala_test
 
@@ -175,6 +179,8 @@ scala_test = rule(
         "jar": "%{name}.jar",
     },
 )
+
+annex_scala_test = scala_test
 
 # scala_repl
 
@@ -254,6 +260,8 @@ scala_runner_toolchain = rule(
     },
 )
 
+annex_scala_runner_toolchain = scala_runner_toolchain
+
 # scala_deps_toolchain
 
 def _annex_scala_deps_toolchain_implementation(ctx):
@@ -331,3 +339,5 @@ def configure_scala(
     )
 
     _configure_scala(name = name, compiler_bridge = ":{}_compiler_bridge".format(name), compiler_classpath = compiler_classpath, **kwargs)
+
+annex_configure_scala = configure_scala
