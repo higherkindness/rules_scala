@@ -13,9 +13,13 @@ def configure_basic_scala_implementation(ctx):
         ),
     ]
 
+annex_configure_basic_scala_implementation = configure_basic_scala_implementation
+
 def configure_scala_implementation(ctx):
     return ([
         new_ZincConfiguration(
             compiler_bridge = ctx.file.compiler_bridge,
         ),
     ] + configure_basic_scala_implementation(ctx))
+
+annex_configure_scala_implementation = configure_scala_implementation
