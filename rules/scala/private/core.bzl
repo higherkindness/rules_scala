@@ -171,7 +171,7 @@ def runner_common(ctx):
         outputs = outputs,
         executable = runner.runner.files_to_run.executable,
         input_manifests = input_manifests,
-        execution_requirements = {"supports-workers": "1"},
+        execution_requirements = {"no-sandbox": "1", "supports-workers": "1"},
         arguments = [args],
     )
 

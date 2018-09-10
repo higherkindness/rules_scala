@@ -8,7 +8,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.nio.file.SimpleFileVisitor
-import java.util.zip.ZipInputStream
+import java.util.zip.{ZipEntry, ZipInputStream, ZipOutputStream}
 import scala.annotation.tailrec
 
 class CopyFileVisitor(source: Path, target: Path) extends SimpleFileVisitor[Path] {
@@ -36,10 +36,29 @@ class DeleteFileVisitor extends SimpleFileVisitor[Path] {
   }
 }
 
+class ZipFileVisitor(root: Path, zip: ZipOutputStream) extends SimpleFileVisitor[Path] {
+  override def visitFile(file: Path, attributes: BasicFileAttributes) = {
+    val entry = new ZipEntry(root.relativize(file).toString())
+    zip.putNextEntry(entry)
+    Files.copy(file, zip)
+    zip.closeEntry()
+    FileVisitResult.CONTINUE
+  }
+}
+
 object FileUtil {
   def copy(source: Path, target: Path) = Files.walkFileTree(source, new CopyFileVisitor(source, target))
 
   def delete(path: Path) = Files.walkFileTree(path, new DeleteFileVisitor)
+
+  def createZip(input: Path, archive: Path) = {
+    val zip = new ZipOutputStream(Files.newOutputStream(archive))
+    try {
+      Files.walkFileTree(input, new ZipFileVisitor(input, zip))
+    } finally {
+      zip.close()
+    }
+  }
 
   def extractZip(archive: Path, output: Path) = {
     val fileStream = Files.newInputStream(archive)

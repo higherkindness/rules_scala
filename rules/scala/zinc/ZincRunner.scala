@@ -13,7 +13,7 @@ import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locat
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.util.control.NonFatal
-import xsbti.compile.{AnalysisContents, ClasspathOptionsUtil, CompileAnalysis, CompileOptions, CompileResult, CompilerCache, DefinesClass, IncOptions, Inputs, PerClasspathEntryLookup, PreviousResult, Setup}
+import xsbti.compile.{AnalysisContents, ClasspathOptionsUtil, CompileAnalysis, CompileOptions, CompilerCache, DefinesClass, IncOptions, Inputs, PerClasspathEntryLookup, PreviousResult, Setup}
 import xsbti.Logger
 
 /**
@@ -57,19 +57,49 @@ object ZincRunner extends WorkerMain[Namespace] {
     Arguments.add(parser)
     val namespace = parser.parseArgsOrFail(args)
 
-    val debug = namespace.getBoolean("debug")
-    val format = if (debug) AnxAnalysisStore.TextFormat else AnxAnalysisStore.BinaryFormat
-    val analysesFormat = new AnxAnalyses(format)
+    val logger = new AnxLogger(namespace.getString("log_level"))
 
     val tmpDir = namespace.get[File]("tmp").toPath
-    try FileUtil.delete(tmpDir)
-    catch { case _: NoSuchFileException => }
 
+    // extract srcjars
+    val sources = {
+      val sourcesDir = tmpDir.resolve("src")
+      namespace.getList[File]("sources").asScala ++
+        namespace
+          .getList[File]("source_jars")
+          .asScala
+          .zipWithIndex
+          .flatMap {
+            case (jar, i) => FileUtil.extractZip(jar.toPath, sourcesDir.resolve(i.toString))
+          }
+          .map(_.toFile)
+    }
+
+    // extract upstream classes
     val classesDir = tmpDir.resolve("classes")
-    val classesOutputDir = classesDir.resolve(labelToPath(namespace.getString("label")))
-    Files.createDirectories(classesOutputDir)
+    val outputJar = namespace.get[File]("output_jar").toPath
 
-    // https://github.com/sbt/zinc/pull/532
+    val deps = {
+      val analyses = namespace
+        .getList[String]("analyses")
+        .asScala
+        .flatMap { value =>
+          val Array(label, analyses, jars) = value.tail.split("=", 3)
+          val Array(apis, relations) = analyses.split(",", 2)
+          jars
+            .split(",")
+            .map(
+              jar =>
+                Paths.get(jar) -> (classesDir
+                  .resolve(labelToPath(label)), DepAnalysisFiles(Paths.get(apis), Paths.get(relations)))
+            )
+        }
+        .toMap
+      val originalClasspath = namespace.getList[File]("classpath").asScala.map(_.toPath)
+      Dep.create(originalClasspath, analyses)
+    }
+
+    // load persisted files
     val analysisFiles = AnalysisFiles(
       apis = namespace.get[File]("output_apis").toPath,
       miniSetup = namespace.get[File]("output_setup").toPath,
@@ -77,54 +107,53 @@ object ZincRunner extends WorkerMain[Namespace] {
       sourceInfos = namespace.get[File]("output_infos").toPath,
       stamps = namespace.get[File]("output_stamps").toPath,
     )
+    val analysesFormat = {
+      val debug = namespace.getBoolean("debug")
+      val format = if (debug) AnxAnalysisStore.TextFormat else AnxAnalysisStore.BinaryFormat
+      new AnxAnalyses(format)
+    }
     val analysisStore = new AnxAnalysisStore(analysisFiles, analysesFormat)
 
     val persistence = Option(worker.getString("persistence_dir")).fold[ZincPersistence](NullPersistence) { dir =>
       val rootDir = Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
       val path = namespace.getString("label").replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_")
-      new FilePersistence(rootDir.resolve(path), analysisFiles, classesOutputDir)
+      new FilePersistence(rootDir.resolve(path), analysisFiles, outputJar)
     }
 
-    val scalaInstance = new AnxScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
-
-    val logger = new AnxLogger(namespace.getString("log_level"))
-
-    val scalaCompiler = ZincUtil
-      .scalaCompiler(scalaInstance, namespace.get[File]("compiler_bridge"))
-      .withClassLoaderCache(classloaderCache)
-    lastCompiler = scalaCompiler
-
-    val compilers = ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
-
-    val sources = namespace.getList[File]("sources").asScala ++
-      namespace
-        .getList[File]("source_jars")
-        .asScala
-        .zipWithIndex
-        .flatMap {
-          case (jar, i) => FileUtil.extractZip(jar.toPath, tmpDir.resolve("src").resolve(i.toString))
+    val classesOutputDir = classesDir.resolve(labelToPath(namespace.getString("label")))
+    try {
+      persistence.load()
+      if (Files.exists(outputJar)) {
+        try FileUtil.extractZip(outputJar, classesOutputDir)
+        catch {
+          case NonFatal(e) =>
+            FileUtil.delete(classesOutputDir)
+            throw e
         }
-        .map(_.toFile)
-
-    val analyses = namespace
-      .getList[String]("analyses")
-      .asScala
-      .flatMap { value =>
-        val Array(label, analyses, jars) = value.tail.split("=", 3)
-        val Array(apis, relations) = analyses.split(",", 2)
-        jars
-          .split(",")
-          .map(
-            jar =>
-              Paths.get(jar) -> (classesDir
-                .resolve(labelToPath(label)), DepAnalysisFiles(Paths.get(apis), Paths.get(relations)))
-          )
       }
-      .toMap
+    } catch {
+      case NonFatal(e) =>
+        logger.warn(() => s"Failed to load cached analysis: $e")
+        Files.delete(analysisFiles.apis)
+        Files.delete(analysisFiles.miniSetup)
+        Files.delete(analysisFiles.relations)
+        Files.delete(analysisFiles.sourceInfos)
+        Files.delete(analysisFiles.stamps)
+    }
+    Files.createDirectories(classesOutputDir)
 
-    val originalClasspath = namespace.getList[File]("classpath").asScala.map(_.toPath)
+    val previousResult = Try(analysisStore.get())
+      .fold({ e =>
+        logger.warn(() => s"Failed to load previous analysis: $e")
+        Optional.empty[AnalysisContents]()
+      }, identity)
+      .map[PreviousResult](
+        contents => PreviousResult.of(Optional.of(contents.getAnalysis), Optional.of(contents.getMiniSetup))
+      )
+      .orElseGet(() => PreviousResult.of(Optional.empty(), Optional.empty()))
 
-    val deps = Dep.create(originalClasspath, analyses)
+    // setup compiler
+    val scalaInstance = new AnxScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
 
     val compileOptions =
       CompileOptions.create
@@ -139,49 +168,44 @@ object ZincRunner extends WorkerMain[Namespace] {
           )
         )
 
-    try persistence.load()
-    catch {
-      case NonFatal(e) =>
-        logger.warn(() => s"Failed to load cached analysis: $e".toString)
-        None
+    val compilers = {
+      val scalaCompiler = ZincUtil
+        .scalaCompiler(scalaInstance, namespace.get[File]("compiler_bridge"))
+        .withClassLoaderCache(classloaderCache)
+      lastCompiler = scalaCompiler
+      ZincUtil.compilers(scalaInstance, ClasspathOptionsUtil.boot, None, scalaCompiler)
     }
 
-    val previousResult = Try(analysisStore.get())
-      .fold({ e =>
-        logger.warn(() => s"Failed to load previous analysis: $e")
-        Optional.empty[AnalysisContents]()
-      }, identity)
-      .map[PreviousResult](
-        contents => PreviousResult.of(Optional.of(contents.getAnalysis), Optional.of(contents.getMiniSetup))
-      )
-      .orElseGet(() => PreviousResult.of(Optional.empty(), Optional.empty()))
-
-    val skip = false
-    val depMap = deps.collect {
-      case ExternalDep(_, classpath, files) => classpath -> files
-    }.toMap
-    val lookup = new AnxPerClasspathEntryLookup(file => {
-      depMap
-        .get(file)
-        .map(
-          files =>
-            Analysis.Empty.copy(
-              apis = analysesFormat.apis.read(files.apis),
-              relations = analysesFormat.relations.read(files.relations)
+    val lookup = {
+      val depMap = deps.collect {
+        case ExternalDep(_, classpath, files) => classpath -> files
+      }.toMap
+      new AnxPerClasspathEntryLookup(file => {
+        depMap
+          .get(file)
+          .map(
+            files =>
+              Analysis.Empty.copy(
+                apis = analysesFormat.apis.read(files.apis),
+                relations = analysesFormat.relations.read(files.relations)
+            )
           )
-        )
-    })
-    val reporter = new LoggedReporter(10, logger)
-    val incOptions = IncOptions.create()
+      })
+    }
 
-    val setup: Setup =
+    val setup = {
+      val incOptions = IncOptions.create()
+      val reporter = new LoggedReporter(10, logger)
+      val skip = false
       Setup.create(lookup, skip, null, compilerCache, incOptions, reporter, Optional.empty(), Array.empty)
+    }
 
-    val inputs: Inputs = Inputs.of(compilers, compileOptions, setup, previousResult)
+    val inputs = Inputs.of(compilers, compileOptions, setup, previousResult)
 
-    val compiler = new IncrementalCompilerImpl()
-    val compileResult: CompileResult =
-      try compiler.compile(inputs, logger)
+    // compile
+    val incrementalCompiler = new IncrementalCompilerImpl()
+    val compileResult =
+      try incrementalCompiler.compile(inputs, logger)
       catch {
         case _: CompileFailed => sys.exit(-1)
         case e: ClassFormatError =>
@@ -190,18 +214,16 @@ object ZincRunner extends WorkerMain[Namespace] {
           sys.exit(1)
       }
 
+    // create analyses
     analysisStore.set(AnalysisContents.create(compileResult.analysis, compileResult.setup))
 
-    try persistence.save()
-    catch {
-      case NonFatal(e) => logger.warn(() => s"Failed to save cached analysis: $e")
-    }
-
+    // create used deps
     val analysis = compileResult.analysis.asInstanceOf[Analysis]
     val usedDeps =
       deps.filter(Dep.used(deps, analysis.relations, lookup)).filter(_.file != scalaInstance.libraryJar.toPath)
     Files.write(namespace.get[File]("output_used").toPath, usedDeps.map(_.file.toString).sorted.asJava)
 
+    // create jar
     val mains =
       analysis.infos.allInfos.values.toList
         .flatMap(_.getMainClasses.toList)
@@ -211,7 +233,7 @@ object ZincRunner extends WorkerMain[Namespace] {
     try mains.foreach(pw.println)
     finally pw.close()
 
-    val jarCreator = new JarCreator(namespace.get[File]("output_jar").toPath)
+    val jarCreator = new JarCreator(outputJar)
     jarCreator.addDirectory(classesOutputDir)
     jarCreator.setCompression(true)
     jarCreator.setNormalize(true)
@@ -225,6 +247,13 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     jarCreator.execute()
 
+    // save persisted files
+    try persistence.save()
+    catch {
+      case NonFatal(e) => logger.warn(() => s"Failed to save cached analysis: $e")
+    }
+
+    // clear temporary files
     FileUtil.delete(tmpDir)
     Files.createDirectory(tmpDir)
 
