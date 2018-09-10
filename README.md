@@ -214,6 +214,10 @@ To enable Zinc's stateful compilation, add
 --worker_extra_flag=ScalaCompile=--persistent_dir=.bazel-zinc
 ```
 
+The directory is resolved relative to `bazel info execution_root`. It should be relative, so as to be scoped to the
+workspace. (It is not safe for use by multiple Bazel instances.) Stateful compilation is currently not compatible with
+`--worker_sandboxing`.
+
 ## Contributing
 
 #### Buildifier

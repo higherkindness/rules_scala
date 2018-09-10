@@ -1,5 +1,6 @@
 package annex.zinc
 
+import annex.compiler.FileUtil
 import java.io.File
 import java.nio.file.{Files, Path, StandardCopyOption}
 import java.util.zip.ZipInputStream
@@ -27,29 +28,7 @@ object Dep {
       analyses.get(original).fold[Option[Dep]](Some(LibraryDep(original))) { analysis =>
         val root = analysis._1
         if (roots.add(root)) {
-          val fileStream = Files.newInputStream(original)
-          try {
-            val zipStream = new ZipInputStream(fileStream)
-
-            @tailrec
-            def next(): Unit = {
-              zipStream.getNextEntry match {
-                case null =>
-                case entry if entry.isDirectory =>
-                  zipStream.closeEntry()
-                  next()
-                case entry =>
-                  val file = root.resolve(entry.getName)
-                  Files.createDirectories(file.getParent)
-                  Files.copy(zipStream, file, StandardCopyOption.REPLACE_EXISTING)
-                  zipStream.closeEntry()
-                  next()
-              }
-            }
-            next()
-          } finally {
-            fileStream.close()
-          }
+          FileUtil.extractZip(original, root)
           Some(ExternalDep(original, root, analysis._2))
         } else {
           None

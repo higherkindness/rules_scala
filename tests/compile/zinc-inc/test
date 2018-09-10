@@ -1,0 +1,6 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+echo "class A$(base32 /dev/urandom | head -c15)" > Example.gen.scala
+bazel build --noworker_sandboxing --worker_extra_flag=ScalaCompile=--persistence_dir=.bazel-zinc :lib
+[ "$(unzip -l "$(bazel info execution_root)/.bazel-zinc/compile/zinc_inc_lib/classes.jar" | grep '\.class' | wc -l | xargs echo)" = 1 ]

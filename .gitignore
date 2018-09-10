@@ -1,4 +1,5 @@
 bazel-*
+*.gen.scala
 *.swp
 *.idea
 hash1
