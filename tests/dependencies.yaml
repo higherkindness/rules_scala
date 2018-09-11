@@ -42,3 +42,8 @@ dependencies:
     utest:
       lang: scala
       version: "0.6.0"
+
+  com.thesamet.scalapb:
+    scalapb-runtime:
+      lang: scala
+      version: "0.7.4"
