@@ -68,11 +68,11 @@ scala_library = rule(
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
         "data": attr.label_list(allow_files = True, cfg = "data"),
-        "deps": attr.label_list(aspects = [_labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars], providers = [JavaInfo]),
         "deps_used_whitelist": attr.label_list(),
-        "runtime_deps": attr.label_list(),
-        "exports": attr.label_list(),
-        "javacopts": attr.label_list(),
+        "runtime_deps": attr.label_list(providers = [JavaInfo]),
+        "exports": attr.label_list(providers = [JavaInfo]),
+        "javacopts": attr.string_list(),
         "macro": attr.bool(default = False),
         "neverlink": attr.bool(default = False),
         "scala": attr.label(
@@ -80,7 +80,7 @@ scala_library = rule(
             providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
-        "plugins": attr.label_list(),
+        "plugins": attr.label_list(providers = [JavaInfo]),
         "resource_strip_prefix": attr.string(),
         "resources": attr.label_list(allow_files = True),
         "resource_jars": attr.label_list(allow_files = [".jar"]),
@@ -103,12 +103,12 @@ scala_binary = rule(
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
         "data": attr.label_list(allow_files = True, cfg = "data"),
-        "deps": attr.label_list(aspects = [_labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars], providers = [JavaInfo]),
         "deps_used_whitelist": attr.label_list(),
-        "javacopts": attr.label_list(),
+        "javacopts": attr.string_list(),
         "jvm_flags": attr.string_list(),
-        "runtime_deps": attr.label_list(),
-        "exports": attr.label_list(),
+        "runtime_deps": attr.label_list(providers = [JavaInfo]),
+        "exports": attr.label_list(providers = [JavaInfo]),
         "macro": attr.bool(default = False),
         "main_class": attr.string(),
         "scala": attr.label(
@@ -116,7 +116,7 @@ scala_binary = rule(
             providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
-        "plugins": attr.label_list(),
+        "plugins": attr.label_list(providers = [JavaInfo]),
         "resource_strip_prefix": attr.string(),
         "resources": attr.label_list(allow_files = True),
         "resource_jars": attr.label_list(allow_files = [".jar"]),
@@ -141,19 +141,19 @@ scala_test = rule(
     attrs = dict({
         "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
         "data": attr.label_list(allow_files = True, cfg = "data"),
-        "deps": attr.label_list(aspects = [_labeled_jars]),
+        "deps": attr.label_list(aspects = [_labeled_jars], providers = [JavaInfo]),
         "deps_used_whitelist": attr.label_list(),
-        "javacopts": attr.label_list(),
+        "javacopts": attr.string_list(),
         "jvm_flags": attr.string_list(),
-        "runtime_deps": attr.label_list(),
-        "exports": attr.label_list(),
+        "runtime_deps": attr.label_list(providers = [JavaInfo]),
+        "exports": attr.label_list(providers = [JavaInfo]),
         "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
             providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
         "scalacopts": attr.string_list(),
-        "plugins": attr.label_list(),
+        "plugins": attr.label_list(providers = [JavaInfo]),
         "frameworks": attr.string_list(
             default = [
                 "org.scalatest.tools.Framework",
@@ -207,12 +207,12 @@ scala_import for use with bazel-deps
 scala_import = rule(
     implementation = _scala_import_implementation,
     attrs = dict({
-        "jars": attr.label_list(allow_files = True),  #current hidden assumption is that these point to full, not ijar'd jars
-        "srcjar": attr.label(allow_single_file = True),
-        "deps": attr.label_list(),
+        "jars": attr.label_list(allow_files = True),
+	"srcjar": attr.label(allow_single_file = True),
+        "deps": attr.label_list(providers = [JavaInfo]),
         "neverlink": attr.bool(default = False),
-        "runtime_deps": attr.label_list(),
-        "exports": attr.label_list(),
+        "runtime_deps": attr.label_list(providers = [JavaInfo]),
+        "exports": attr.label_list(providers = [JavaInfo]),
     }, **_scala_import_private_attributes),
 )
 
@@ -221,14 +221,14 @@ scala_import = rule(
 scaladoc = rule(
     implementation = _scaladoc_implementation,
     attrs = dict({
-        "compiler_deps": attr.label_list(allow_files = False, providers = [JavaInfo]),
-        "deps": attr.label_list(allow_files = False, providers = [JavaInfo]),
+        "compiler_deps": attr.label_list(providers = [JavaInfo]),
+        "deps": attr.label_list(providers = [JavaInfo]),
         "srcs": attr.label_list(allow_files = [".java", ".scala", ".srcjar"]),
         "scala": attr.label(
             default = "@scala",
             providers = [_ScalaConfiguration, _ZincConfiguration],
         ),
-        "scalacopts": attr.string_list(default = []),
+        "scalacopts": attr.string_list(),
         "title": attr.string(),
     }, **_scaladoc_private_attributes),
 )
