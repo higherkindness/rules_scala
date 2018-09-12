@@ -29,7 +29,7 @@ def scala_format_test_implementation(ctx):
         )
         manifest_content.append("{} {}".format(src.short_path, file.short_path))
 
-    manifest = ctx.actions.declare_file("manifest.txt")
+    manifest = ctx.actions.declare_file("{}/manifest.txt".format(ctx.label.name))
     ctx.actions.write(manifest, "\n".join(manifest_content) + "\n")
 
     ctx.actions.expand_template(
