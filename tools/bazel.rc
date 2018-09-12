@@ -1,27 +1,22 @@
 import %workspace%/tools/deleted_packages.rc
 
-common --color yes
 common --all_incompatible_changes
+common --color=yes
 common --incompatible_package_name_is_a_function=false
 
 build --define=scala_deps_direct=error
 build --define=scala_deps_used=error
+build --disk_cache=.bazel_cache
 build --experimental_strict_action_env
 build --javacopt="-source 8 -target 8"
 build --strategy=ScalaCompile=worker
 build --worker_max_instances=4
-# build --worker_extra_flag=ScalaCompile=--persistence_dir=~/.cache/bazel-zinc
-
+build --worker_sandboxing
 build --verbose_failures
 
-test --define=scala_deps_direct=error
-test --define=scala_deps_used=error
 test  --test_output=all
 
-build --disk_cache=.bazel_cache
-
-build --worker_sandboxing
-
+# build --worker_extra_flag=ScalaCompile=--persistence_dir=~/.cache/bazel-zinc
 # build --worker_quit_after_build
 # build --worker_verbose
 # build --announce_rc
