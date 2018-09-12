@@ -3,7 +3,7 @@
 case "$1" in
 
     "build")
-        bazel build //...
+        bazel build --show_progress_rate_limit=2 //...
         ;;
 
     "test")
