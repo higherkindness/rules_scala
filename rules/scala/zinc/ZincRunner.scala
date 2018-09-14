@@ -7,6 +7,7 @@ import java.io.{File, PrintWriter}
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
 import java.util.{Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
+import net.sourceforge.argparse4j.impl.{Arguments => Arg}
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.classpath.ClassLoaderCache
 import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locate, LoggedReporter, ZincUtil}
@@ -49,6 +50,7 @@ object ZincRunner extends WorkerMain[Namespace] {
   protected[this] def init(args: Option[Array[String]]) = {
     val parser = ArgumentParsers.newFor("zinc-worker").addHelp(true).build
     parser.addArgument("--persistence_dir", /* deprecated */ "--persistenceDir").metavar("path")
+    parser.addArgument("--use_persistence").`type`(Arg.booleanType)
     parser.parseArgsOrFail(args.getOrElse(Array.empty))
   }
 
@@ -247,10 +249,16 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     jarCreator.execute()
 
+    val usePersistence: Boolean = worker.getBoolean("use_persistence") match {
+      case p: java.lang.Boolean => p
+      case _                    => true
+    }
     // save persisted files
-    try persistence.save()
-    catch {
-      case NonFatal(e) => logger.warn(() => s"Failed to save cached analysis: $e")
+    if (usePersistence) {
+      try persistence.save()
+      catch {
+        case NonFatal(e) => logger.warn(() => s"Failed to save cached analysis: $e")
+      }
     }
 
     // clear temporary files
