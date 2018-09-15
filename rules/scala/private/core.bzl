@@ -319,6 +319,26 @@ def _resource_path(file, strip_prefix):
             return rest
     return file.short_path
 
+def _build_deployable(ctx, jars_list):
+    # This calls bazels singlejar utility.
+    # For a full list of available command line options see:
+    # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
+    args = ctx.actions.args()
+    args.add("--normalize")
+    args.add("--sources")
+    args.add_all([j.path for j in jars_list])
+    if getattr(ctx.attr, "main_class", ""):
+        args.add_all(["--main_class", ctx.attr.main_class])
+    args.add_all(["--output", ctx.outputs.deploy_jar.path])
+
+    ctx.actions.run(
+        inputs = jars_list,
+        outputs = [ctx.outputs.deploy_jar],
+        executable = ctx.executable._singlejar,
+        mnemonic = "ScalaDeployJar",
+        progress_message = "scala deployable %s" % ctx.label,
+        arguments = [args])
+
 def scala_binary_implementation(ctx):
     res = runner_common(ctx)
 
@@ -327,6 +347,10 @@ def scala_binary_implementation(ctx):
 
     java_info = res.java_info
     mains_file = res.mains_files.to_list()[0]
+
+    transitive_rjars = res.java_info.transitive_runtime_jars
+    rjars = depset([ctx.outputs.jar], transitive = [transitive_rjars])
+    _build_deployable(ctx, rjars.to_list())
 
     files = write_launcher(
         ctx,

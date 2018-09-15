@@ -129,6 +129,7 @@ scala_binary = rule(
     outputs = {
         "bin": "%{name}-bin",
         "jar": "%{name}.jar",
+        "deploy_jar": "%{name}_deploy.jar",
     },
 )
 
