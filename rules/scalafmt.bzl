@@ -18,6 +18,7 @@ scala_format_test = rule(
         ),
     }, **_scala_format_private_attributes),
     test = True,
+    toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
     outputs = {
         "runner": "%{name}-format",
     },

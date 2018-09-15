@@ -15,17 +15,26 @@ scala_format_private_attributes = {
 def scala_format_test_implementation(ctx):
     files = []
     runner_inputs, _, runner_manifests = ctx.resolve_command(tools = [ctx.attr._format])
-
+    toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
     manifest_content = []
     for src in ctx.files.srcs:
         file = ctx.actions.declare_file(src.short_path)
         files.append(file)
+        args = ctx.actions.args()
+        args.add("--config")
+        args.add(ctx.file.config.path)
+        args.add(src.path)
+        args.add(file.path)
+        args.set_param_file_format("multiline")
+        args.use_param_file("@%s", use_always = True)
         ctx.actions.run(
-            arguments = ["--config", ctx.file.config.path, src.path, file.path],
+            arguments = ["--jvm_flag=-Dfile.encoding=" + toolchain.encoding, args],
             executable = ctx.executable._format,
             outputs = [file],
             input_manifests = runner_manifests,
             inputs = runner_inputs + [ctx.file.config, src],
+            execution_requirements = {"supports-workers": "1"},
+            mnemonic = "ScalaFmt",
         )
         manifest_content.append("{} {}".format(src.short_path, file.short_path))
 
