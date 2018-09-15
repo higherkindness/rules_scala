@@ -21,7 +21,6 @@ scala_binary(
     deps = [
         "//rules/common:args",
         "//rules/common:worker",
-        "//rules/common/third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_proto_com_github_os72_protoc_jar",
         "@scala_proto_com_thesamet_scalapb_compilerplugin_2_12",

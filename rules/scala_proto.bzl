@@ -8,6 +8,7 @@ scala_proto_library = rule(
     implementation = _scala_proto_library_implementation,
     attrs = dict({
         "deps": attr.label_list(),
+        "_zipper": attr.label(cfg = "host", default = "@bazel_tools//tools/zip:zipper", executable = True),
     }, **_scala_proto_library_private_attributes),
     toolchains = [
         "@rules_scala_annex//rules/scala_proto:compiler_toolchain_type",

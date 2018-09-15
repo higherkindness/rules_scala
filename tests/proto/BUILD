@@ -20,5 +20,10 @@ scala_proto_library(
 
 scala_library(
     name = "zero_scala",
-    deps = [":zero_scala_proto"],
+    srcs = [":zero_scala_proto"],
+    deps = [
+        "@com_google_protobuf_protobuf_java",
+        "@com_thesamet_scalapb_lenses_2_12",
+        "@com_thesamet_scalapb_scalapb_runtime_2_12",
+    ]
 )

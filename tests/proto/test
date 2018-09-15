@@ -2,5 +2,9 @@
 . "$(dirname "$0")"/../common.sh
 
 [[ "$(bazel version | head -n1 | cut -d: -f2 | tr -d ' ')" =~ 0.15.*|0.16.* ]] || bazel build :zero_scala_proto
-# todo: fix me!
-# bazel build :zero_scala
+
+bazel build :zero_scala
+! unzip -v | grep -q Debian || diff expected  <( \
+  unzip -l "$(bazel info bazel-bin)/proto/zero_scala.jar" \
+  | tail -n+2 \
+)

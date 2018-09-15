@@ -2,7 +2,6 @@ package annex.scala.proto
 
 import annex.args.Implicits._
 import annex.worker.SimpleMain
-import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.File
 import java.nio.file.{Files, Paths}
 import java.util.Collections
@@ -18,9 +17,9 @@ object ScalaProtoWorker extends SimpleMain {
   private[this] val argParser: ArgumentParser = {
     val parser = ArgumentParsers.newFor("proto").addHelp(true).fromFilePrefix("@").build
     parser
-      .addArgument("--output_srcjar")
-      .help("Output srcjar")
-      .metavar("output_srcjar")
+      .addArgument("--output_dir")
+      .help("Output dir")
+      .metavar("output_dir")
       .`type`(Arguments.fileType.verifyCanCreate)
     parser
       .addArgument("sources")
@@ -36,7 +35,7 @@ object ScalaProtoWorker extends SimpleMain {
     val namespace = argParser.parseArgs(args)
     val sources = namespace.getList[File]("sources").asScala.toList
 
-    val scalaOut = Paths.get("tmp", "src")
+    val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
 
     val params = s"--scala_out=$scalaOut" :: sources.map(_.getPath)
@@ -45,13 +44,6 @@ object ScalaProtoWorker extends SimpleMain {
       protoc = a => com.github.os72.protocjar.Protoc.runProtoc(a.toArray),
       namedGenerators = List("scala" -> ScalaPbCodeGenerator),
       params = params)
-
-    val jarCreator = new JarCreator(namespace.get[File]("output_srcjar").toPath)
-    jarCreator.addDirectory(scalaOut)
-    jarCreator.setCompression(true)
-    jarCreator.setNormalize(true)
-    jarCreator.setVerbose(false)
-    jarCreator.execute()
   }
 
 }

@@ -1,3 +1,8 @@
+load(
+    "//rules:common/private/utils.bzl",
+    _safe_name = "safe_name",
+)
+
 scala_proto_library_private_attributes = {}
 
 def scala_proto_library_implementation(ctx):
@@ -12,12 +17,17 @@ def scala_proto_library_implementation(ctx):
 
     compiler = ctx.toolchains["@rules_scala_annex//rules/scala_proto:compiler_toolchain_type"]
 
-    compiler_inputs, _, input_manifests = ctx.resolve_command(tools = [compiler.compiler])
+    compiler_inputs, _, _ = ctx.resolve_command(tools = [compiler.compiler])
 
     srcjar = ctx.outputs.srcjar
 
+    gendir_base_path = "tmp"
+    gendir = ctx.actions.declare_directory(
+        gendir_base_path + "/" + _safe_name(ctx.attr.name)
+    )
+
     args = ctx.actions.args()
-    args.add("--output_srcjar", srcjar)
+    args.add("--output_dir", gendir)
     args.add_all("--", transitive_sources)
 
     if compiler.compiler_supports_workers:
@@ -28,9 +38,18 @@ def scala_proto_library_implementation(ctx):
     ctx.actions.run(
         mnemonic = "ScalaProtoCompile",
         inputs = depset(direct = [], transitive = [transitive_sources]),
-        outputs = [srcjar],
+        outputs = [gendir],
         executable = compiler.compiler.files_to_run.executable,
-        input_manifests = input_manifests,
+        tools = compiler_inputs,
         execution_requirements = {"supports-workers": supports_workers},
         arguments = [args],
+    )
+
+    ctx.actions.run_shell(
+        inputs = [gendir],
+        outputs = [srcjar],
+        arguments = [ctx.executable._zipper.path, gendir.path, gendir.short_path, srcjar.path],
+        command = r"""$1 c $4 META-INF/= $(find -L $2 -type f | while read v; do echo ${v#"${2%$3}"}=$v; done)""",
+        progress_message = "Bundling compiled Scala into srcjar",
+        tools = [ctx.executable._zipper],
     )

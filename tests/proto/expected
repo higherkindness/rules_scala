@@ -1,0 +1,14 @@
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+        0  1980-01-01 00:00   META-INF/
+       48  1980-01-01 00:00   META-INF/MANIFEST.MF
+        0  1980-01-01 00:00   anx/
+        0  1980-01-01 00:00   anx/proto/
+        0  1980-01-01 00:00   anx/proto/zero/
+    14895  1980-01-01 00:00   anx/proto/zero/Zero$.class
+     4337  1980-01-01 00:00   anx/proto/zero/Zero$ZeroLens.class
+    19364  1980-01-01 00:00   anx/proto/zero/Zero.class
+     6429  1980-01-01 00:00   anx/proto/zero/ZeroProto$.class
+     1907  1980-01-01 00:00   anx/proto/zero/ZeroProto.class
+---------                     -------
+    46980                     10 files
