@@ -2,7 +2,7 @@ package annex
 
 import annex.args.Implicits._
 import java.io.File
-import java.net.URLClassLoader
+import java.net.{URL, URLClassLoader}
 import java.nio.file.attribute.FileTime
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
 import java.time.Instant
@@ -47,10 +47,22 @@ object TestRunner {
       .`type`(Arguments.fileType.verifyCanRead().verifyExists())
       .required(true)
     parser
+      .addArgument("--isolation")
+      .choices("classloader", "none", "process")
+      .help("Test isolation")
+      .setDefault_("none")
+    parser
       .addArgument("--frameworks")
       .help("Class names of sbt.testing.Framework implementations")
       .metavar("class")
       .nargs("*")
+      .setDefault_(Collections.emptyList)
+    parser
+      .addArgument("--shared_classpath")
+      .help("Classpath to share between tests")
+      .metavar("path")
+      .nargs("*")
+      .`type`(Arguments.fileType)
       .setDefault_(Collections.emptyList)
     parser
       .addArgument("classpath")
@@ -82,17 +94,25 @@ object TestRunner {
 
     val logger = new AnxLogger(namespace.getBoolean("color"), namespace.getString("verbosity"))
 
-    val urls =
-      testNamespace
-        .getList[File]("classpath")
-        .asScala
-        .map(file => runPath.resolve(file.toPath).toUri.toURL)
+    val classpath = testNamespace
+      .getList[File]("classpath")
+      .asScala
+      .map(file => runPath.resolve(file.toPath))
+    val sharedClasspath = testNamespace
+      .getList[File]("shared_classpath")
+      .asScala
+      .map(file => runPath.resolve(file.toPath))
 
-    val classLoader = new URLClassLoader(urls.toArray, null) {
+    val sharedUrls = classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL)
+
+    def testClassLoader(urls: Seq[URL]) = new URLClassLoader(urls.toArray, null) {
       private[this] val current = getClass.getClassLoader()
       override protected def findClass(className: String): Class[_] =
         if (className.startsWith("sbt.testing.")) current.loadClass(className) else super.findClass(className)
     }
+
+    val classLoader = testClassLoader(classpath.map(_.toUri.toURL))
+    val sharedClassLoader = testClassLoader(classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL))
 
     val apisFile = runPath.resolve(testNamespace.get[File]("apis").toPath)
     val apisStream = Files.newInputStream(apisFile)
@@ -120,7 +140,7 @@ object TestRunner {
 
     var count = 0
     val passed = frameworks.forall { framework =>
-      val tests = framework.discover(apis.internal.values.toSet).sortBy(_.name)
+      val tests = new TestDiscovery(framework)(apis.internal.values.toSet).sortBy(_.name)
       val filter = for {
         index <- sys.env.get("TEST_SHARD_INDEX").map(_.toInt)
         total <- sys.env.get("TEST_TOTAL_SHARDS").map(_.toInt)
@@ -131,7 +151,16 @@ object TestRunner {
           filter.fold(true)(_(test, count))
         }
       }
-      filteredTests.isEmpty || framework.execute(filteredTests, testScopeAndName.getOrElse(""))
+      filteredTests.isEmpty || {
+        val runner = testNamespace.getString("isolation") match {
+          case "classloader" =>
+            val urls = classpath.filterNot(sharedClasspath.toSet).map(_.toUri.toURL).toArray
+            def classLoaderProvider() = new URLClassLoader(urls, sharedClassLoader)
+            new ClassLoaderTestRunner(framework, classLoaderProvider, logger)
+          case "none" => new BasicTestRunner(framework, classLoader, logger)
+        }
+        runner.execute(filteredTests, testScopeAndName.getOrElse(""))
+      }
     }
     sys.exit(if (passed) 0 else 1)
   }

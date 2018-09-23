@@ -1,12 +1,22 @@
 package annex
 
-import sbt.testing.{AnnotatedFingerprint, Fingerprint, Framework, Logger, Status, SubclassFingerprint, SuiteSelector, Task, TaskDef, TestWildcardSelector}
+import sbt.testing.{AnnotatedFingerprint, Fingerprint, Framework, Logger, Status, SubclassFingerprint, SuiteSelector, Task, TaskDef}
 import scala.collection.{breakOut, mutable}
 import scala.util.control.NonFatal
 import xsbt.api.Discovery
 import xsbti.api.{AnalyzedClass, ClassLike, Definition}
 
-class TestDiscovery(subclassPrints: Iterable[SubclassFingerprint], annotatedPrints: Iterable[AnnotatedFingerprint]) {
+class TestDiscovery(framework: Framework) {
+  private[this] val (annotatedPrints, subclassPrints) = {
+    val annotatedPrints = mutable.ArrayBuffer.empty[AnnotatedFingerprint]
+    val subclassPrints = mutable.ArrayBuffer.empty[SubclassFingerprint]
+    framework.fingerprints.foreach {
+      case fingerprint: AnnotatedFingerprint => annotatedPrints += fingerprint
+      case fingerprint: SubclassFingerprint  => subclassPrints += fingerprint
+    }
+    (annotatedPrints, subclassPrints)
+  }
+
   private[this] def definitions(classes: Set[AnalyzedClass]) = {
     classes.toSeq
       .flatMap(`class` => Seq(`class`.api.classApi, `class`.api.objectApi))
@@ -35,74 +45,39 @@ class TestExecutor(loader: ClassLoader, logger: Logger, framework: Framework, ta
 
 class TestDefinition(val name: String, val fingerprint: Fingerprint)
 
-class TestFramework(loader: ClassLoader, framework: Framework, logger: Logger) {
-  def discover = {
-    val subclassPrints = mutable.ArrayBuffer.empty[SubclassFingerprint]
-    val annotatedPrints = mutable.ArrayBuffer.empty[AnnotatedFingerprint]
-    framework.fingerprints.foreach {
-      case fingerprint: SubclassFingerprint  => subclassPrints += fingerprint
-      case fingerprint: AnnotatedFingerprint => annotatedPrints += fingerprint
+class TestTaskExecutor(logger: Logger) {
+  def execute(task: Task, failures: mutable.Set[String]) = {
+    def execute(task: Task): Unit = {
+      val tasks = task.execute(
+        event =>
+          event.status match {
+            case Status.Failure | Status.Error =>
+              failures += task.taskDef.fullyQualifiedName
+            case _ =>
+        },
+        Array(new PrefixedLogger(logger, "    ")),
+      )
+      tasks.foreach(execute)
     }
-    new TestDiscovery(subclassPrints, annotatedPrints)
+    execute(task)
+  }
+}
+
+class TestReporter(logger: Logger) {
+  def post(failures: Traversable[String]) = if (failures.nonEmpty) {
+    logger.error(s"${failures.size} ${if (failures.size == 1) "failure" else "failures"}:")
+    failures.toSeq.sorted.foreach(name => logger.error(s"    $name"))
+    logger.error("")
   }
 
-  def execute(tests: Seq[TestDefinition], scopeAndTestName: String): Boolean = {
-    val thread = Thread.currentThread
-    val classLoader = thread.getContextClassLoader
-    thread.setContextClassLoader(loader)
-    try {
-      val runner = framework.runner(
-        Array.empty,
-        if (framework.name == "specs2") Array("-ex", scopeAndTestName.replaceAll(".*::", "")) else Array.empty,
-        loader
-      )
-      try {
-        val taskDefs = tests.map(
-          test =>
-            new TaskDef(
-              test.name,
-              test.fingerprint,
-              false,
-              Array(new TestWildcardSelector(scopeAndTestName.replace("::", " ")))
-          )
-        )
-        val tasks = runner.tasks(taskDefs.toArray)
-        logger.info(s"${framework.getClass.getName}: ${tests.size} tests")
-        logger.info("")
-        val failures = mutable.Set[String]()
-        def execute(task: Task): Unit = {
-          val tasks = task.execute(
-            event => {
-              event.status match {
-                case Status.Failure | Status.Error =>
-                  failures += task.taskDef.fullyQualifiedName
-                case _ =>
-              }
-            },
-            Array(new PrefixedLogger(logger, "    ")),
-          )
-          tasks.foreach(execute)
-        }
-        tasks.foreach { task =>
-          logger.info(task.taskDef.fullyQualifiedName)
-          execute(task)
-          logger.info("")
-        }
-        if (failures.nonEmpty) {
-          logger.error(s"${failures.size} ${if (failures.size == 1) "failure" else "failures"}:")
-          failures.toSeq.sorted.foreach(name => logger.error(s"    $name"))
-          logger.error("")
-          false
-        } else {
-          true
-        }
-      } finally {
-        runner.done()
-      }
-    } finally {
-      thread.setContextClassLoader(classLoader)
-    }
+  def postTask() = logger.info("")
+
+  def pre(framework: Framework, tasks: Traversable[Task]) = {
+    logger.info(s"${framework.getClass.getName}: ${tasks.size} tests")
+    logger.info("")
   }
+
+  def preTask(task: Task) = logger.info(task.taskDef.fullyQualifiedName)
 }
 
 class TestFrameworkLoader(loader: ClassLoader, logger: Logger) {
@@ -114,7 +89,7 @@ class TestFrameworkLoader(loader: ClassLoader, logger: Logger) {
       case NonFatal(e)               => throw new Exception(s"Failed to load framework $className", e)
     }
     framework.map {
-      case framework: Framework => new TestFramework(loader, framework, logger)
+      case framework: Framework => framework
       case _                    => throw new Exception(s"$className does not implement ${classOf[Framework].getName}")
     }
 

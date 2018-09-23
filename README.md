@@ -138,6 +138,8 @@ $ bazel test --test_arg=--verbosity=LOW
 $ bazel run --script_path=script :mytest
 ```
 
+The `isolation` attribute determines the isolation level of tests: `"none"` (default) or `"classloader"` (reloads all classes except those in `shared_deps`).
+
 ### Scalafmt
 
 Create .scalafmt.conf at the repo root (may be empty). And add to the WORKSPACE

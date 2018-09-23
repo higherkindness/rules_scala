@@ -1,0 +1,10 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :none
+! bazel test :none
+
+bazel test :classloader
+
+bazel build :classloader-shared
+! bazel test :classloader-shared
