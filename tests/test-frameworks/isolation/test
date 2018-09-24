@@ -1,0 +1,16 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :none :none-jvm
+! bazel test :none
+! bazel test :none-jvm
+
+bazel build :classloader-jvm
+bazel test :classloader
+! bazel test :classloader-jvm
+
+bazel build :classloader-shared
+! bazel test :classloader-shared
+
+bazel test :process
+bazel test :process-jvm

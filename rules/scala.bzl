@@ -148,6 +148,11 @@ scala_test = rule(
         "jvm_flags": attr.string_list(),
         "runtime_deps": attr.label_list(providers = [JavaInfo]),
         "exports": attr.label_list(providers = [JavaInfo]),
+        "isolation": attr.string(
+            default = "none",
+            doc = "The isolation level to apply",
+            values = ["classloader", "none", "process"],
+        ),
         "macro": attr.bool(default = False),
         "scala": attr.label(
             default = "@scala",
@@ -155,6 +160,10 @@ scala_test = rule(
         ),
         "scalacopts": attr.string_list(),
         "plugins": attr.label_list(providers = [JavaInfo]),
+        "shared_deps": attr.label_list(
+            doc = "If isolation is \"classloader\", the list of deps to keep loaded between tests",
+            providers = [JavaInfo],
+        ),
         "frameworks": attr.string_list(
             default = [
                 "org.scalatest.tools.Framework",

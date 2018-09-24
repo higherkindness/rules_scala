@@ -337,7 +337,8 @@ def _build_deployable(ctx, jars_list):
         executable = ctx.executable._singlejar,
         mnemonic = "ScalaDeployJar",
         progress_message = "scala deployable %s" % ctx.label,
-        arguments = [args])
+        arguments = [args],
+    )
 
 def scala_binary_implementation(ctx):
     res = runner_common(ctx)
@@ -397,6 +398,22 @@ def scala_test_implementation(ctx):
     args = ctx.actions.args()
     args.add("--apis", res.zinc_info.apis.short_path)
     args.add_all("--frameworks", ctx.attr.frameworks)
+    if ctx.attr.isolation == "classloader":
+        shared_deps = java_common.merge(_collect(JavaInfo, ctx.attr.shared_deps))
+        args.add("--isolation", "classloader")
+        args.add_all("--shared_classpath", shared_deps.transitive_runtime_deps, map_each = _short_path)
+    elif ctx.attr.isolation == "process":
+        subprocess_executable = ctx.actions.declare_file("{}/subprocess".format(ctx.label.name))
+        files += write_launcher(
+            ctx,
+            subprocess_executable,
+            runner_jars,
+            "annex.SubprocessTestRunner",
+            [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
+        )
+        files.append(subprocess_executable)
+        args.add("--isolation", "process")
+        args.add("--subprocess_exec", subprocess_executable.short_path)
     args.add_all("--", res.java_info.transitive_runtime_jars, map_each = _short_path)
     args.set_param_file_format("multiline")
     args_file = ctx.actions.declare_file("{}/test.params".format(ctx.label.name))
