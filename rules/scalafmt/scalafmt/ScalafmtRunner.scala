@@ -30,12 +30,6 @@ object ScalafmtRunner extends WorkerMain[Unit] {
 
     val source = FileOps.readFile(namespace.get[File]("input"))(Codec.UTF8)
 
-    System.getenv.forEach((name, value) => println(s"$name: $value"))
-
-    if (namespace.get[File]("input").toPath.toString.contains("Features")) {
-      println(source)
-    }
-
     val config = Config.fromHoconFile(namespace.get[File]("config")).get
     @tailrec
     def format(code: String): String = {
