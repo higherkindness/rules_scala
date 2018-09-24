@@ -53,6 +53,7 @@ to completely defer expanding transitive dependency lists until execution time.
 * Robustly supports buildozer recommendations via an aspect.
 * Supports for all Scala test frameworks via sbt [test-interface](https://github.com/sbt/test-interface).
 * Support test sharding, custom test framework arguments (including options to the JVM itself).
+* Supports optional classloader and process-level isolation for tests, similar to sbt's `fork := true`.
 * Supports scalafmt.
 * Supports Scaladoc. See [#230](https://github.com/bazelbuild/rules_scala/issues/230) and [#256](https://github.com/bazelbuild/rules_scala/issues/256).
 * Has consistently formatted code, via buildifier and scalafmt. See [#74](https://github.com/bazelbuild/rules_scala/issues/474).
@@ -138,7 +139,12 @@ $ bazel test --test_arg=--verbosity=LOW
 $ bazel run --script_path=script :mytest
 ```
 
-The `isolation` attribute determines the isolation level of tests: `"none"` (default) or `"classloader"` (reloads all classes except those in `shared_deps`).
+The `isolation` parameter determines how tests are isolated from each other.
+
+* `"none"` (default) - Tests in a shard are run in the same JVM process. This is fastest.
+* `"classloader"` - Each test is run in a separate classloader. This protects against most global state. Any deps listed `shared_deps` do not have their classes reloaded.
+* `"process"` - Each test runs in a new JVM process. This protects against global state and memory leaks. `jvm_flags` applies to both the parent process and the subprocess.
+JVM flags added via `--test_arg=` apply only to the parent, unless `--test_arg=--subprocess_arg=` is used, e.g. `--test_arg=--subprocess_arg=--debug=5005`.
 
 ### Scalafmt
 

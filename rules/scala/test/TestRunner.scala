@@ -31,6 +31,10 @@ object TestRunner {
       .`type`(Arguments.booleanType)
       .setDefault_(true)
     parser
+      .addArgument("--subprocess_arg")
+      .action(Arguments.append)
+      .help("Argument for tests run in new JVM process")
+    parser
       .addArgument("--verbosity")
       .help("Verbosity")
       .choices("HIGH", "MEDIUM", "LOW")
@@ -46,6 +50,10 @@ object TestRunner {
       .metavar("class")
       .`type`(Arguments.fileType.verifyCanRead().verifyExists())
       .required(true)
+    parser
+      .addArgument("--subprocess_exec")
+      .help("Executable for SubprocessTestRunner")
+      .`type`(Arguments.fileType)
     parser
       .addArgument("--isolation")
       .choices("classloader", "none", "process")
@@ -157,6 +165,10 @@ object TestRunner {
             val urls = classpath.filterNot(sharedClasspath.toSet).map(_.toUri.toURL).toArray
             def classLoaderProvider() = new URLClassLoader(urls, sharedClassLoader)
             new ClassLoaderTestRunner(framework, classLoaderProvider, logger)
+          case "process" =>
+            val executable = runPath.resolve(testNamespace.get[File]("subprocess_exec").toPath)
+            val arguments = Option(namespace.getList[String]("subprocess_arg")).fold[Seq[String]](Nil)(_.asScala)
+            new ProcessTestRunner(framework, classpath, new ProcessCommand(executable.toString, arguments), logger)
           case "none" => new BasicTestRunner(framework, classLoader, logger)
         }
         runner.execute(filteredTests, testScopeAndName.getOrElse(""))
@@ -166,7 +178,7 @@ object TestRunner {
   }
 }
 
-final class AnxLogger(color: Boolean, verbosity: String) extends Logger {
+final class AnxLogger(color: Boolean, verbosity: String) extends Logger with Serializable {
   def ansiCodesSupported = color
 
   def error(msg: String) = println(s"$msg")

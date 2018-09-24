@@ -151,7 +151,7 @@ scala_test = rule(
         "isolation": attr.string(
             default = "none",
             doc = "The isolation level to apply",
-            values = ["classloader", "none"],
+            values = ["classloader", "none", "process"],
         ),
         "macro": attr.bool(default = False),
         "scala": attr.label(

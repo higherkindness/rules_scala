@@ -6,15 +6,20 @@ import scala.util.control.NonFatal
 import xsbt.api.Discovery
 import xsbti.api.{AnalyzedClass, ClassLike, Definition}
 
+class ProcessCommand(
+  val executable: String,
+  val arguments: Seq[String]
+) extends Serializable
+
 class TestDiscovery(framework: Framework) {
   private[this] val (annotatedPrints, subclassPrints) = {
-    val annotatedPrints = mutable.ArrayBuffer.empty[AnnotatedFingerprint]
-    val subclassPrints = mutable.ArrayBuffer.empty[SubclassFingerprint]
+    val annotatedPrints = mutable.ArrayBuffer.empty[TestAnnotatedFingerprint]
+    val subclassPrints = mutable.ArrayBuffer.empty[TestSubclassFingerprint]
     framework.fingerprints.foreach {
-      case fingerprint: AnnotatedFingerprint => annotatedPrints += fingerprint
-      case fingerprint: SubclassFingerprint  => subclassPrints += fingerprint
+      case fingerprint: AnnotatedFingerprint => annotatedPrints += TestAnnotatedFingerprint(fingerprint)
+      case fingerprint: SubclassFingerprint  => subclassPrints += TestSubclassFingerprint(fingerprint)
     }
-    (annotatedPrints, subclassPrints)
+    (annotatedPrints.toSet, subclassPrints.toSet)
   }
 
   private[this] def definitions(classes: Set[AnalyzedClass]) = {
@@ -43,7 +48,7 @@ class TestDiscovery(framework: Framework) {
 
 class TestExecutor(loader: ClassLoader, logger: Logger, framework: Framework, taskDefs: Seq[TaskDef]) {}
 
-class TestDefinition(val name: String, val fingerprint: Fingerprint)
+class TestDefinition(val name: String, val fingerprint: Fingerprint with Serializable) extends Serializable
 
 class TestTaskExecutor(logger: Logger) {
   def execute(task: Task, failures: mutable.Set[String]) = {
