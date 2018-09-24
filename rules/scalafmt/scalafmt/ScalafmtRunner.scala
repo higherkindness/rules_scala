@@ -15,9 +15,7 @@ import scala.io.Codec
 
 object ScalafmtRunner extends WorkerMain[Unit] {
 
-  protected[this] def init(args: Option[Array[String]]): Unit = {
-
-  }
+  protected[this] def init(args: Option[Array[String]]): Unit = {}
 
   protected[this] def work(worker: Unit, args: Array[String]): Unit = {
 

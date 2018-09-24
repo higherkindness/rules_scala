@@ -12,7 +12,7 @@ case "$1" in
 
     "lint")
         ./setup-tools.sh --skip-deps
-        ./format.sh -mode=check
+        ./format.sh check
         ;;
     "install-bazel")
         if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
