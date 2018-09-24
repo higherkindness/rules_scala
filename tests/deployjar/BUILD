@@ -11,6 +11,6 @@ scala_binary(
 )
 
 scala_library(
-	name = "TestClass",
-	srcs = ["TestClass.scala"],
+    name = "TestClass",
+    srcs = ["TestClass.scala"],
 )

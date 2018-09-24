@@ -337,7 +337,8 @@ def _build_deployable(ctx, jars_list):
         executable = ctx.executable._singlejar,
         mnemonic = "ScalaDeployJar",
         progress_message = "scala deployable %s" % ctx.label,
-        arguments = [args])
+        arguments = [args],
+    )
 
 def scala_binary_implementation(ctx):
     res = runner_common(ctx)

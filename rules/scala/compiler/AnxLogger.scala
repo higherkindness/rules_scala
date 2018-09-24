@@ -31,7 +31,7 @@ final class AnxLogger(level: String) extends Logger {
       val trace = new StringWriter();
       err.get.printStackTrace(new PrintWriter(trace));
       println(format(trace.toString))
-    case _                                                               =>
+    case _ =>
   }
 
   def warn(msg: Supplier[String]) = level match {

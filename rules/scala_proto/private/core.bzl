@@ -23,7 +23,7 @@ def scala_proto_library_implementation(ctx):
 
     gendir_base_path = "tmp"
     gendir = ctx.actions.declare_directory(
-        gendir_base_path + "/" + _safe_name(ctx.attr.name)
+        gendir_base_path + "/" + _safe_name(ctx.attr.name),
     )
 
     args = ctx.actions.args()
@@ -49,7 +49,7 @@ def scala_proto_library_implementation(ctx):
         inputs = [gendir],
         outputs = [srcjar],
         arguments = [ctx.executable._zipper.path, gendir.path, gendir.short_path, srcjar.path],
-        command = r"""$1 c $4 META-INF/= $(find -L $2 -type f | while read v; do echo ${v#"${2%$3}"}=$v; done)""",
+        command = """$1 c $4 META-INF/= $(find -L $2 -type f | while read v; do echo ${v#"${2%$3}"}=$v; done)""",
         progress_message = "Bundling compiled Scala into srcjar",
         tools = [ctx.executable._zipper],
     )

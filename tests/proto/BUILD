@@ -25,5 +25,5 @@ scala_library(
         "@com_google_protobuf_protobuf_java",
         "@com_thesamet_scalapb_lenses_2_12",
         "@com_thesamet_scalapb_scalapb_runtime_2_12",
-    ]
+    ],
 )
