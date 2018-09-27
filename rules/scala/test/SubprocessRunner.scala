@@ -2,7 +2,6 @@ package annex
 
 import java.io.ObjectInputStream
 import java.nio.file.Paths
-import java.net.URLClassLoader
 import java.nio.file.Path
 import sbt.testing.Logger
 import scala.collection.mutable
@@ -21,7 +20,7 @@ object SubprocessTestRunner {
     val input = new ObjectInputStream(System.in)
     val request = input.readObject().asInstanceOf[TestRequest]
 
-    val classLoader = new URLClassLoader(request.classpath.map(path => Paths.get(path).toUri.toURL).toArray)
+    val classLoader = ClassLoader.sbtTestClassLoader(request.classpath.map(path => Paths.get(path).toUri.toURL))
 
     val loader = new TestFrameworkLoader(classLoader, request.logger)
     val framework = loader.load(request.framework).get

@@ -12,5 +12,4 @@ bazel test :classloader
 bazel build :classloader-shared
 ! bazel test :classloader-shared
 
-bazel test :process
-bazel test :process-jvm
+bazel test :process :process-2_11 :process-jvm
