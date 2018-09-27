@@ -25,7 +25,7 @@ object SubprocessTestRunner {
     val loader = new TestFrameworkLoader(classLoader, request.logger)
     val framework = loader.load(request.framework).get
 
-    val success = ClassLoader.withContextClassLoader(classLoader) {
+    val passed = ClassLoader.withContextClassLoader(classLoader) {
       TestFrameworkRunner.withRunner(framework, request.scopeAndTestName, classLoader) { runner =>
         val tasks = runner.tasks(Array(TestFrameworkRunner.taskDef(request.test, request.scopeAndTestName)))
         tasks.length == 0 || {
@@ -42,9 +42,7 @@ object SubprocessTestRunner {
       }
     }
 
-    if (!success) {
-      sys.exit(1)
-    }
+    sys.exit(if (passed) 0 else 1)
   }
 
 }
