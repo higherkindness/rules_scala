@@ -83,6 +83,19 @@ scala_test(
 )
 
 scala_test(
+    name = "process-2_11",
+    srcs = ["Test.scala"],
+    isolation = "process",
+    scala = "@scala_2_11",
+    deps = [
+        ":global",
+        "@org_specs2_specs2_common_2_11",
+        "@org_specs2_specs2_core_2_11",
+        "@org_specs2_specs2_matcher_2_11",
+    ],
+)
+
+scala_test(
     name = "process-jvm",
     srcs = ["TestJvm.scala"],
     isolation = "process",

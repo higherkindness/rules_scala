@@ -2,7 +2,7 @@ package annex
 
 import annex.args.Implicits._
 import java.io.File
-import java.net.{URL, URLClassLoader}
+import java.net.URLClassLoader
 import java.nio.file.attribute.FileTime
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
 import java.time.Instant
@@ -113,14 +113,8 @@ object TestRunner {
 
     val sharedUrls = classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL)
 
-    def testClassLoader(urls: Seq[URL]) = new URLClassLoader(urls.toArray, null) {
-      private[this] val current = getClass.getClassLoader()
-      override protected def findClass(className: String): Class[_] =
-        if (className.startsWith("sbt.testing.")) current.loadClass(className) else super.findClass(className)
-    }
-
-    val classLoader = testClassLoader(classpath.map(_.toUri.toURL))
-    val sharedClassLoader = testClassLoader(classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL))
+    val classLoader = ClassLoader.sbtTestClassLoader(classpath.map(_.toUri.toURL))
+    val sharedClassLoader = ClassLoader.sbtTestClassLoader(classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL))
 
     val apisFile = runPath.resolve(testNamespace.get[File]("apis").toPath)
     val apisStream = Files.newInputStream(apisFile)
