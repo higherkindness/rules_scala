@@ -8,8 +8,13 @@ import java.io.InputStream
 import java.io.PrintStream
 import java.lang.SecurityManager
 import java.security.Permission
+import java.util.concurrent.Executors
 import scala.annotation.tailrec
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.util.control.NonFatal
+import scala.util.Success
+import scala.util.Failure
 
 trait WorkerMain[S] {
 
@@ -17,7 +22,7 @@ trait WorkerMain[S] {
 
   protected[this] def init(args: Option[Array[String]]): S
 
-  protected[this] def work(ctx: S, args: Array[String]): Unit
+  protected[this] def work(ctx: S, args: Array[String], out: PrintStream): Unit
 
   final def main(args: Array[String]): Unit = {
     args.toList match {
@@ -36,12 +41,11 @@ trait WorkerMain[S] {
           }
         })
 
-        val outStream = new ByteArrayOutputStream
-        val out = new PrintStream(outStream)
+        val garbageOut = new PrintStream(new ByteArrayOutputStream)
 
         System.setIn(new ByteArrayInputStream(Array.emptyByteArray))
-        System.setOut(out)
-        System.setErr(out)
+        System.setOut(garbageOut)
+        System.setErr(garbageOut)
 
         try {
           @tailrec
@@ -49,26 +53,50 @@ trait WorkerMain[S] {
             val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(stdin)
             val args = request.getArgumentsList.toArray(Array.empty[String])
 
-            val code =
+            val outStream = new ByteArrayOutputStream
+            val out = new PrintStream(outStream)
+            val requestId = request.getRequestId()
+
+            val f: Future[Int] = Future {
               try {
-                work(ctx, args)
+                work(ctx, args, out)
                 0
               } catch {
                 case ExitTrapped(code) => code
                 case NonFatal(e) =>
-                  e.printStackTrace()
+                  e.printStackTrace(out)
                   1
               }
+            }
 
-            WorkerProtocol.WorkResponse.newBuilder
-              .setOutput(outStream.toString)
-              .setExitCode(code)
-              .build
-              .writeDelimitedTo(stdout)
+            f.onComplete {
+              case Success(code) =>
+                synchronized {
 
-            out.flush()
-            outStream.reset()
+                  WorkerProtocol.WorkResponse.newBuilder
+                    .setRequestId(requestId)
+                    .setOutput(outStream.toString)
+                    .setExitCode(code)
+                    .build
+                    .writeDelimitedTo(stdout)
 
+                  out.flush()
+                  outStream.reset()
+                }
+              case Failure(e) => {
+                e.printStackTrace(out)
+
+                WorkerProtocol.WorkResponse.newBuilder
+                  .setRequestId(requestId)
+                  .setOutput(outStream.toString)
+                  .setExitCode(-1)
+                  .build
+                  .writeDelimitedTo(stdout)
+
+                out.flush()
+                outStream.reset()
+              }
+            }
             process(ctx)
           }
           process(init(Some(args.toArray)))
@@ -78,8 +106,11 @@ trait WorkerMain[S] {
           System.setErr(stderr)
         }
 
-      case args => work(init(None), args.toArray)
+      case args => {
+        val outStream = new ByteArrayOutputStream
+        val out = new PrintStream(outStream)
+        work(init(None), args.toArray, out)
+      }
     }
   }
-
 }

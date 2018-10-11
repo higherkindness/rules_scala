@@ -8,7 +8,7 @@ import workers.common.FileUtil
 import workers.common.LoggedReporter
 import common.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
-import java.io.{File, PrintWriter}
+import java.io.{File, PrintStream, PrintWriter}
 import java.net.URLClassLoader
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
 import java.text.SimpleDateFormat
@@ -80,7 +80,7 @@ object ZincRunner extends WorkerMain[Namespace] {
     Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
   }
 
-  protected[this] def work(worker: Namespace, args: Array[String]) = {
+  protected[this] def work(worker: Namespace, args: Array[String], out: PrintStream) = {
     val usePersistence: Boolean = worker.getBoolean("use_persistence") match {
       case p: java.lang.Boolean => p
       case _                    => true
@@ -94,7 +94,7 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     val depsCache = pathFrom(worker, "extracted_file_cache")
 
-    val logger = new AnnexLogger(namespace.getString("log_level"))
+    val logger = new AnnexLogger(namespace.getString("log_level"), out)
 
     val tmpDir = namespace.get[File]("tmp").toPath
 

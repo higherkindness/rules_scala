@@ -2,7 +2,7 @@ package annex.scalafmt
 
 import higherkindness.rules_scala.common.worker.WorkerMain
 import higherkindness.rules_scala.workers.common.Color
-import java.io.File
+import java.io.{File, PrintStream}
 import java.nio.file.Files
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
@@ -16,7 +16,7 @@ object ScalafmtRunner extends WorkerMain[Unit] {
 
   protected[this] def init(args: Option[Array[String]]): Unit = {}
 
-  protected[this] def work(worker: Unit, args: Array[String]): Unit = {
+  protected[this] def work(worker: Unit, args: Array[String], out: PrintStream): Unit = {
 
     val parser = ArgumentParsers.newFor("scalafmt").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build
     parser.addArgument("--config").required(true).`type`(Arguments.fileType)

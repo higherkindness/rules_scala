@@ -2,7 +2,7 @@ package annex.scala.proto
 
 import higherkindness.rules_scala.common.args.implicits._
 import higherkindness.rules_scala.common.worker.WorkerMain
-import java.io.File
+import java.io.{File, PrintStream}
 import java.nio.file.{Files, Paths}
 import java.util.Collections
 import net.sourceforge.argparse4j.ArgumentParsers
@@ -33,7 +33,7 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
 
   override def init(args: Option[Array[String]]): Unit = ()
 
-  protected[this] def work(ctx: Unit, args: Array[String]): Unit = {
+  protected[this] def work(ctx: Unit, args: Array[String], out: PrintStream): Unit = {
     val namespace = argParser.parseArgs(args)
     val sources = namespace.getList[File]("sources").asScala.toList
 
