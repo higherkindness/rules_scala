@@ -31,12 +31,6 @@ jobs:
 # Build
     - stage: build
       <<: *osx
-      env: V=0.14.1
-      script: ./travis.sh build
-    - <<: *linux
-      env: V=0.14.1
-      script: ./travis.sh build
-    - <<: *osx
       env: V=0.15.2
       script: ./travis.sh build
     - <<: *linux
@@ -47,23 +41,23 @@ jobs:
       script: ./travis.sh build
     - <<: *linux
       env: V=0.16.1
+      script: ./travis.sh build
+    - <<: *osx
+      env: V=0.17.2
+      script: ./travis.sh build
+    - <<: *linux
+      env: V=0.17.2
       script: ./travis.sh build
 # Lint
     - stage: test
       <<: *osx
-      env: V=0.16.1
+      env: V=0.17.2
       script: ./travis.sh lint
     - <<: *linux
-      env: V=0.16.1
+      env: V=0.17.2
       script: ./travis.sh lint
 # Test
     - <<: *osx
-      env: V=0.14.1
-      script: ./travis.sh test
-    - <<: *linux
-      env: V=0.14.1
-      script: ./travis.sh test
-    - <<: *osx
       env: V=0.15.2
       script: ./travis.sh test
     - <<: *linux
@@ -74,4 +68,10 @@ jobs:
       script: ./travis.sh test
     - <<: *linux
       env: V=0.16.1
+      script: ./travis.sh test
+    - <<: *osx
+      env: V=0.17.2
+      script: ./travis.sh test
+    - <<: *linux
+      env: V=0.17.2
       script: ./travis.sh test

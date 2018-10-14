@@ -4,6 +4,7 @@ common --incompatible_bzl_disallow_load_after_statement=false
 common --incompatible_depset_is_not_iterable=false
 common --incompatible_depset_union=false
 common --incompatible_new_actions_api=false
+common --incompatible_no_support_tools_in_action_inputs=false
 common --incompatible_package_name_is_a_function=false
 common --incompatible_remove_native_git_repository=false
 common --incompatible_remove_native_http_archive=false

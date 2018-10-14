@@ -1,0 +1,2 @@
+common --incompatible_disable_deprecated_attr_params=false
+common --incompatible_disallow_data_transition=false
