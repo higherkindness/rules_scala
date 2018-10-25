@@ -151,8 +151,9 @@ JVM flags added via `--test_arg=` apply only to the parent, unless `--test_arg=-
 Create .scalafmt.conf at the repo root (may be empty). And add to the WORKSPACE
 
 ```python
-load("@rules_scala_annex//rules/scalafmt:workspace.bzl", "scalafmt_default")
-scalafmt_default()
+load("@rules_scala_annex//rules/scalafmt:workspace.bzl", "scalafmt_repositories", "scalafmt_default_config")
+scalafmt_repositories()
+scalafmt_default_config()
 ```
 
 And in BUILD
