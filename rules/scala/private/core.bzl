@@ -148,7 +148,7 @@ def runner_common(ctx):
     args.add("--output_used", used)
     args.add_all("--plugins", splugins.transitive_runtime_deps)
     args.add_all("--source_jars", src_jars)
-    args.add("--tmp", tmp)
+    args.add("--tmp", tmp.path)
     args.add_all("--", srcs)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)

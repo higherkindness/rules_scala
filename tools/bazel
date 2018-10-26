@@ -7,10 +7,12 @@ mkdir -p "$WORKSPACE"/.bazel_cache
 "$WORKSPACE/tools/gen-ignores.sh" > /dev/null
 
 IFS=. read -r BAZEL_VERSION_MAJOR BAZEL_VERSION_MINOR BAZEL_VERSION_PATCH < <("$BAZEL_REAL" version | head -n1 | cut -d: -f2 | tr -d ' ')
-if ([ 0 -le "$BAZEL_VERSION_MAJOR" ] && [ 16 -le "$BAZEL_VERSION_MINOR" ]); then
+if ([ 0 -le "$BAZEL_VERSION_MAJOR" ] && [ 18 -le "$BAZEL_VERSION_MINOR" ]); then
+    BAZEL_OPTS="--bazelrc=$TOOLS/bazel-0.18.rc"
+elif ([ 0 -le "$BAZEL_VERSION_MAJOR" ] && [ 17 -le "$BAZEL_VERSION_MINOR" ]); then
+    BAZEL_OPTS="--bazelrc=$TOOLS/bazel-0.17.rc"
+elif ([ 0 -le "$BAZEL_VERSION_MAJOR" ] && [ 16 -le "$BAZEL_VERSION_MINOR" ]); then
     BAZEL_OPTS="--bazelrc=$TOOLS/bazel-0.16.rc"
-elif ([ 0 -le "$BAZEL_VERSION_MAJOR" ] && [ 15 -le "$BAZEL_VERSION_MINOR" ]); then
-    BAZEL_OPTS="--bazelrc=$TOOLS/bazel-0.15.rc"
 fi
 
 exec "$BAZEL_REAL" $BAZEL_OPTS "$@"

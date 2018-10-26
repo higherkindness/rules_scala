@@ -2,7 +2,8 @@ import %workspace%/tools/deleted_packages.rc
 
 common --all_incompatible_changes
 common --color=yes
-common --incompatible_package_name_is_a_function=false
+common --incompatible_disallow_data_transition=false
+common --incompatible_no_support_tools_in_action_inputs=false
 
 build --define=scala_deps_direct=error
 build --define=scala_deps_used=error
