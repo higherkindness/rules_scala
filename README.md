@@ -166,10 +166,11 @@ scala_format_test(
 ```
 
 ```
-# format files
-$ bazel run :format "$(bazel info | grep workspace: | cut -d' ' -f2)"
-# check format
+# check format, with diffs and non-zero exit in case of differences
 $ bazel test :format
+
+# format files in-place
+$ bazel run :format
 ```
 
 ### Strict & unused deps

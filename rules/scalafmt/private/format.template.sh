@@ -4,7 +4,7 @@ RUNPATH="${TEST_SRCDIR-$0.runfiles}"/%workspace%
 while read original formatted; do
     if ! cmp -s "$RUNPATH/$original" "$RUNPATH/$formatted"; then
         echo $original
-        if [ -z "$1" ]; then
+        if [ -z "$BUILD_WORKSPACE_DIRECTORY" ]; then
             diff "$RUNPATH/$original" "$RUNPATH/$formatted" || true
             EXIT=1
         else
