@@ -5,8 +5,6 @@ def scalafmt_repositories():
     for dep in list_dependencies():
         java_import_external(**dep["import_args"])
 
-annex_scalafmt_repositories = scalafmt_repositories
-
 def scalafmt_default_config(path = ".scalafmt.conf"):
     build = []
     build.append("filegroup(")
