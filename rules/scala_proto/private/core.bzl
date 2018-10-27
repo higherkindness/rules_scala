@@ -27,7 +27,7 @@ def scala_proto_library_implementation(ctx):
     )
 
     args = ctx.actions.args()
-    args.add("--output_dir", gendir)
+    args.add("--output_dir", gendir.path)
     args.add_all("--", transitive_sources)
 
     if compiler.compiler_supports_workers:
