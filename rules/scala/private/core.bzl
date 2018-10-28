@@ -1,13 +1,13 @@
 load(
     "@rules_scala_annex//rules:providers.bzl",
-    "LabeledJars",
-    "ScalaConfiguration",
-    "ScalaInfo",
-    "ZincConfiguration",
-    "ZincInfo",
+    _LabeledJars = "LabeledJars",
+    _ScalaConfiguration = "ScalaConfiguration",
+    _ScalaInfo = "ScalaInfo",
+    _ZincConfiguration = "ZincConfiguration",
+    _ZincInfo = "ZincInfo",
 )
-load("//rules/common:private/utils.bzl", "write_launcher")
-load(":private/import.bzl", "create_intellij_info")
+load("//rules/common:private/utils.bzl", _write_launcher = "write_launcher")
+load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
 
 runner_common_attributes = {
     "_java_toolchain": attr.label(
@@ -37,6 +37,7 @@ scala_binary_private_attributes = dict({
     ),
     "_java_stub_template": attr.label(
         default = Label("@anx_java_stub_template//file"),
+        allow_single_file = True,
     ),
 }, **runner_common_attributes)
 
@@ -45,10 +46,10 @@ scala_test_private_attributes = scala_binary_private_attributes
 def runner_common(ctx):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
 
-    scala_configuration = ctx.attr.scala[ScalaConfiguration]
+    scala_configuration = ctx.attr.scala[_ScalaConfiguration]
     scala_configuration_runtime_deps = _collect(JavaInfo, scala_configuration.runtime_classpath)
 
-    zinc_configuration = ctx.attr.scala[ZincConfiguration]
+    zinc_configuration = ctx.attr.scala[_ZincConfiguration]
 
     sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
@@ -94,7 +95,7 @@ def runner_common(ctx):
     macro_classpath = [
         dep[JavaInfo].transitive_runtime_jars
         for dep in ctx.attr.deps
-        if ScalaInfo in dep and dep[ScalaInfo].macro
+        if _ScalaInfo in dep and dep[_ScalaInfo].macro
     ]
     compile_classpath = depset(order = "preorder", transitive = macro_classpath + [sdeps.transitive_compile_time_jars])
 
@@ -128,7 +129,7 @@ def runner_common(ctx):
 
     javacopts = [ctx.expand_location(option, ctx.attr.data) for option in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")]
 
-    zincs = [dep[ZincInfo] for dep in ctx.attr.deps if ZincInfo in dep]
+    zincs = [dep[_ZincInfo] for dep in ctx.attr.deps if _ZincInfo in dep]
 
     args = ctx.actions.args()
     args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _analysis)
@@ -179,7 +180,7 @@ def runner_common(ctx):
 
     deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
     deps_checks = {}
-    labeled_jars = depset(transitive = [dep[LabeledJars].values for dep in ctx.attr.deps])
+    labeled_jars = depset(transitive = [dep[_LabeledJars].values for dep in ctx.attr.deps])
     deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_toolchain.runner])
     for name in ("direct", "used"):
         deps_check = ctx.actions.declare_file("{}/deps_check_{}".format(ctx.label.name, name))
@@ -237,7 +238,7 @@ def runner_common(ctx):
     for jar in java_info.outputs.jars:
         jars.append(jar.class_jar)
         jars.append(jar.ijar)
-    zinc_info = ZincInfo(
+    zinc_info = _ZincInfo(
         apis = apis,
         label = ctx.label,
         relations = relations,
@@ -262,9 +263,9 @@ def runner_common(ctx):
     return struct(
         deps_check = deps_check,
         java_info = java_info,
-        scala_info = ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
+        scala_info = _ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
         zinc_info = zinc_info,
-        intellij_info = create_intellij_info(ctx.label, ctx.attr.deps, java_info),
+        intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, java_info),
         files = depset(files),
         mains_files = depset([mains_file]),
     )
@@ -299,9 +300,6 @@ def _collect(index, iterable):
 
 def _analysis(analysis):
     return (["--analysis", str(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])
-"""
-Ew. Bazel 0.13.0's map_each will allow us to produce multiple args from each item.
-"""
 
 def _labeled_group(labeled_jars):
     return (["--group", "_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars.to_list()])
@@ -355,7 +353,7 @@ def scala_binary_implementation(ctx):
     rjars = depset([ctx.outputs.jar], transitive = [transitive_rjars])
     _build_deployable(ctx, rjars.to_list())
 
-    files = write_launcher(
+    files = _write_launcher(
         ctx,
         ctx.outputs.bin,
         java_info.transitive_runtime_deps,
@@ -406,7 +404,7 @@ def scala_test_implementation(ctx):
         args.add_all("--shared_classpath", shared_deps.transitive_runtime_deps, map_each = _short_path)
     elif ctx.attr.isolation == "process":
         subprocess_executable = ctx.actions.declare_file("{}/subprocess".format(ctx.label.name))
-        files += write_launcher(
+        files += _write_launcher(
             ctx,
             subprocess_executable,
             runner_jars,
@@ -422,7 +420,7 @@ def scala_test_implementation(ctx):
     ctx.actions.write(args_file, args)
     files.append(args_file)
 
-    files += write_launcher(
+    files += _write_launcher(
         ctx,
         ctx.outputs.bin,
         runner_jars,
@@ -453,11 +451,5 @@ def scala_test_implementation(ctx):
         java = res.intellij_info,
     )
 
-def _analyses(analyses):
-    return [_analysis(analysis) for analysis in analyses]
-
 def _short_path(file):
     return file.short_path
-
-def _short_paths(files):
-    return [file.short_path for file in files]
