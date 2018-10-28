@@ -17,11 +17,11 @@ object Arguments {
 
   def add(parser: ArgumentParser): Unit = {
     parser
-      .addArgument("--analyses")
-      .help("Analysis")
-      .metavar("label=apis,relations=jar1,jar2,...")
+      .addArgument("--analysis")
+      .action(ArgumentsImpl.append)
+      .help("Analysis, given as: label apis relations [jar ...]")
+      .metavar("args")
       .nargs("*")
-      .setDefault_(Collections.emptyList)
     parser
       .addArgument("--compiler_bridge")
       .help("Compiler bridge")

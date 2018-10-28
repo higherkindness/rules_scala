@@ -131,7 +131,7 @@ def runner_common(ctx):
     zincs = [dep[ZincInfo] for dep in ctx.attr.deps if ZincInfo in dep]
 
     args = ctx.actions.args()
-    args.add_all("--analyses", depset(transitive = [zinc.deps for zinc in zincs]), map_each = _analysis)
+    args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _analysis)
     args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
     args.add_all("--compiler_classpath", scala_configuration.compiler_classpath)
     args.add_all("--classpath", compile_classpath)
@@ -297,6 +297,8 @@ def _collect(index, iterable):
         if index in entry
     ]
 
+def _analysis(analysis):
+    return (["--analysis", str(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])
 """
 Ew. Bazel 0.13.0's map_each will allow us to produce multiple args from each item.
 """
@@ -450,9 +452,6 @@ def scala_test_implementation(ctx):
         ],
         java = res.intellij_info,
     )
-
-def _analysis(analysis):
-    return "_{}={},{}={}".format(analysis.label, analysis.apis.path, analysis.relations.path, ",".join([jar.path for jar in analysis.jars]))
 
 def _analyses(analyses):
     return [_analysis(analysis) for analysis in analyses]
