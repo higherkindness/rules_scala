@@ -31,6 +31,7 @@ _common_private_attributes = {
 scalac_library_private_attributes = _common_private_attributes
 scalac_binary_private_attributes = dict({
     "_java_stub_template": attr.label(
+        allow_single_file = True,
         default = Label("@anx_java_stub_template//file"),
     ),
 }, **_common_private_attributes)

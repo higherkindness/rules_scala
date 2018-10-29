@@ -1,5 +1,3 @@
-load("//rules/common:private/utils.bzl", "write_launcher")
-
 scala_format_private_attributes = {
     "_format": attr.label(
         cfg = "host",

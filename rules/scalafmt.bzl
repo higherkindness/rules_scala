@@ -23,5 +23,3 @@ scala_format_test = rule(
         "runner": "%{name}-format",
     },
 )
-
-annex_scala_format_test = scala_format_test

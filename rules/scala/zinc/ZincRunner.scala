@@ -5,7 +5,7 @@ import annex.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
-import java.util.{Optional, Properties}
+import java.util.{List => JList, Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.{Arguments => Arg}
 import net.sourceforge.argparse4j.inf.Namespace
@@ -82,14 +82,13 @@ object ZincRunner extends WorkerMain[Namespace] {
     val outputJar = namespace.get[File]("output_jar").toPath
 
     val deps = {
-      val analyses = namespace
-        .getList[String]("analyses")
-        .asScala
+      val analyses = Option(
+        namespace
+          .getList[JList[String]]("analysis")
+      ).fold[Seq[JList[String]]](Nil)(_.asScala)
         .flatMap { value =>
-          val Array(label, analyses, jars) = value.tail.split("=", 3)
-          val Array(apis, relations) = analyses.split(",", 2)
+          val label +: apis +: relations +: jars = value.asScala.toList
           jars
-            .split(",")
             .map(
               jar =>
                 Paths.get(jar) -> (classesDir

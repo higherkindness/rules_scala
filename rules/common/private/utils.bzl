@@ -37,20 +37,15 @@ def write_launcher(
     """
 
     classpath_args = ctx.actions.args()
-    if hasattr(classpath_args, "add_all"):  # Bazel 0.13.0+
-        classpath_args.add_joined(runtime_classpath, format_each = "${RUNPATH}%s", join_with = ":", map_each = _short_path)
-    else:
-        classpath_args.add(runtime_classpath, format = "${RUNPATH}%s", join_with = ":", map_fn = _short_paths)
+    classpath_args.add_joined(runtime_classpath, format_each = "${RUNPATH}%s", join_with = ":", map_each = _short_path)
     classpath_args.set_param_file_format("multiline")
     classpath_file = ctx.actions.declare_file("{}/classpath.params".format(ctx.label.name))
     ctx.actions.write(classpath_file, classpath_args)
 
     classpath = "\"$(eval echo \"$(cat ${{RUNPATH}}{})\")\"".format(classpath_file.short_path)
 
-    #jvm_flags = " ".join([ctx.expand_location(f, ctx.attr.data) for f in jvm_flags])
     jvm_flags = " ".join(jvm_flags)
-    template = ctx.attr._java_stub_template.files.to_list()[0]
-
+    template = ctx.file._java_stub_template
     runfiles_enabled = False
 
     ctx.actions.expand_template(
@@ -78,6 +73,3 @@ def safe_name(value):
 
 def _short_path(file):
     return file.short_path
-
-def _short_paths(files):
-    return [file.short_path for file in files]

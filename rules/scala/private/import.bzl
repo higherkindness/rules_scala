@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:providers.bzl", "IntellijInfo")
+load("@rules_scala_annex//rules:providers.bzl", _IntellijInfo = "IntellijInfo")
 
 scala_import_private_attributes = {
     "_java_toolchain": attr.label(
@@ -71,10 +71,10 @@ def scala_import_implementation(ctx):
 
 def create_intellij_info(label, deps, java_info):
     # note: tried using transitive_exports from a JavaInfo that was given non-empty exports, but it was always empty
-    return IntellijInfo(
+    return _IntellijInfo(
         outputs = java_info.outputs,
         transitive_exports = depset(
             [label],
-            transitive = [(dep[IntellijInfo] if IntellijInfo in dep else dep[JavaInfo]).transitive_exports for dep in deps],
+            transitive = [(dep[_IntellijInfo] if _IntellijInfo in dep else dep[JavaInfo]).transitive_exports for dep in deps],
         ),
     )

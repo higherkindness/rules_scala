@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "scala_library", "scala_binary", "annex_scala_deps_toolchain", "scala_runner_toolchain")
+load("//rules:scala.bzl", "scala_library", "scala_binary", "scala_deps_toolchain", "scala_runner_toolchain")
 load("//rules:scalac.bzl", "scalac_binary", "scalac_library")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
@@ -106,7 +106,7 @@ config_setting(
     },
 )
 
-annex_scala_deps_toolchain(
+scala_deps_toolchain(
     name = "config_deps_toolchain_implementation",
     direct = select({
         ":config_deps_direct_error": "error",

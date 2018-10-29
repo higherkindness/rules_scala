@@ -94,8 +94,6 @@ scala_library = rule(
     },
 )
 
-annex_scala_library = scala_library
-
 # scala_binary
 
 scala_binary = rule(
@@ -132,8 +130,6 @@ scala_binary = rule(
         "deploy_jar": "%{name}_deploy.jar",
     },
 )
-
-annex_scala_binary = scala_binary
 
 # scala_test
 
@@ -189,8 +185,6 @@ scala_test = rule(
         "jar": "%{name}.jar",
     },
 )
-
-annex_scala_test = scala_test
 
 # scala_repl
 
@@ -272,11 +266,9 @@ scala_runner_toolchain = rule(
     },
 )
 
-annex_scala_runner_toolchain = scala_runner_toolchain
-
 # scala_deps_toolchain
 
-def _annex_scala_deps_toolchain_implementation(ctx):
+def scala_deps_toolchain_implementation(ctx):
     return [platform_common.ToolchainInfo(
         direct = ctx.attr.direct,
         runner = ctx.attr.runner,
@@ -286,8 +278,8 @@ def _annex_scala_deps_toolchain_implementation(ctx):
 """
 Configures the deps checker and options to use
 """
-annex_scala_deps_toolchain = rule(
-    implementation = _annex_scala_deps_toolchain_implementation,
+scala_deps_toolchain = rule(
+    implementation = scala_deps_toolchain_implementation,
     attrs = {
         "direct": attr.string(),
         "runner": attr.label(allow_files = True, executable = True, cfg = "host"),
@@ -295,7 +287,7 @@ annex_scala_deps_toolchain = rule(
     },
 )
 
-_annex_configure_basic_scala = rule(
+_configure_basic_scala = rule(
     implementation = _configure_basic_scala_implementation,
     attrs = {
         "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
@@ -341,7 +333,7 @@ def configure_scala(
         compiler_bridge_classpath,
         compiler_classpath,
         **kwargs):
-    _annex_configure_basic_scala(name = "{}_basic".format(name), compiler_classpath = compiler_classpath, **kwargs)
+    _configure_basic_scala(name = "{}_basic".format(name), compiler_classpath = compiler_classpath, **kwargs)
 
     _scalac_library(
         name = "{}_compiler_bridge".format(name),
@@ -351,5 +343,3 @@ def configure_scala(
     )
 
     _configure_scala(name = name, compiler_bridge = ":{}_compiler_bridge".format(name), compiler_classpath = compiler_classpath, **kwargs)
-
-annex_configure_scala = configure_scala
