@@ -106,7 +106,7 @@ load("@rules_scala_annex//rules:scala.bzl", "scala_library")
 
 scala_library(
   name = "example",
-  src = glob(["**/*.scala"])
+  srcs = glob(["**/*.scala"])
 )
 ```
 
