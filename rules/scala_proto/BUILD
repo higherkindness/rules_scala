@@ -41,3 +41,9 @@ toolchain(
     toolchain_type = "@rules_scala_annex//rules/scala_proto:compiler_toolchain_type",
     visibility = ["//visibility:public"],
 )
+
+filegroup(
+    name = "bzl",
+    srcs = glob(["**/*.bzl"]),
+    visibility = ["//rules:__pkg__"],
+)

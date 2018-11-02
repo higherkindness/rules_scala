@@ -24,3 +24,9 @@ scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),
 )
+
+filegroup(
+    name = "bzl",
+    srcs = glob(["**/*.bzl"]),
+    visibility = ["//rules:__pkg__"],
+)

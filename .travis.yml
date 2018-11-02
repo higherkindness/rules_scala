@@ -32,16 +32,16 @@ jobs:
     - stage: build
       <<: *osx
       env: V=0.16.1
-      script: ./travis.sh build
+      script: ./travis.sh build-sans-doc
     - <<: *linux
       env: V=0.16.1
-      script: ./travis.sh build
+      script: ./travis.sh build-sans-doc
     - <<: *osx
       env: V=0.17.2
-      script: ./travis.sh build
+      script: ./travis.sh build-sans-doc
     - <<: *linux
       env: V=0.17.2
-      script: ./travis.sh build
+      script: ./travis.sh build-sans-doc
     - <<: *osx
       env: V=0.18.0
       script: ./travis.sh build
