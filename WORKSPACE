@@ -3,10 +3,24 @@ workspace(name = "rules_scala_annex")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
+    name = "io_bazel",
+    sha256 = "148d03ea395901052dc3d8a54bf04c02bb229b20f89d654047b426d56ef5f188",
+    strip_prefix = "bazel-6595aefe2b3a755dd0c795e20cbf67f60a56528c",
+    urls = ["https://github.com/bazelbuild/bazel/archive/6595aefe2b3a755dd0c795e20cbf67f60a56528c.zip"],
+)
+
+http_archive(
+    name = "io_bazel_skydoc",
+    sha256 = "4e9bd9ef65af54dedd997b408fa26c2e70c30ee8e078bcc1b51a33cf7d7f9d7e",
+    strip_prefix = "skydoc-77e5399258f6d91417d23634fce97d73b40cf337",
+    urls = ["https://github.com/bazelbuild/skydoc/archive/77e5399258f6d91417d23634fce97d73b40cf337.zip"],
+)
+
+http_archive(
     name = "bazel_skylib",
-    sha256 = "c0289fef5237c31e8462042b4cc3bdf831a3d3d135bb4a0d493a5072acecb074",
-    strip_prefix = "bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b",
-    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.zip"],
+    sha256 = "d54e5372d784ceb365f7d38c3dad7773f73b3b8ebc8fb90d58435a92b6a20256",
+    strip_prefix = "bazel-skylib-8cecf885c8bf4c51e82fd6b50b9dd68d2c98f757",
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/8cecf885c8bf4c51e82fd6b50b9dd68d2c98f757.zip"],
 )
 
 http_archive(

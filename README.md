@@ -108,3 +108,5 @@ See [contributing guidlines](CONTRIBUTING.md) for help on contributing to this p
 * [Core usage](docs/scala.md)
 * [Stateful compilation](docs/stateful.md)
 * [Scalamft](docs/scalafmt.md)
+
+For all rules and attributes, see the [Stardoc](docs/stardoc).

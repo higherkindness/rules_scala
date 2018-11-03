@@ -246,6 +246,12 @@ toolchain(
 
 # Other
 
+filegroup(
+    name = "bzl",
+    srcs = glob(["**/*.bzl"]),
+    visibility = ["//rules:__pkg__"],
+)
+
 scala_format_test(
     name = "format",
     srcs = glob(["**/*.scala"]),

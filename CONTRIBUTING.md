@@ -2,6 +2,14 @@
 
 Contributions should follow the [principals](../README.md#principals) of rules_scala_annex.
 
+## Documentation
+
+To generate the [Stardoc](https://github.com/bazelbuild/skydoc),
+
+```
+$ ./gen-docs.sh
+```
+
 ## Formatting
 
 [Buildifier](https://github.com/bazelbuild/buildtools/blob/master/buildifier) is used to format Skylark files,

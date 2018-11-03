@@ -2,6 +2,8 @@ import %workspace%/tools/deleted_packages.rc
 
 common --all_incompatible_changes
 common --color=yes
+common --incompatible_bzl_disallow_load_after_statement=false
+common --incompatible_depset_is_not_iterable=false
 common --incompatible_disallow_data_transition=false
 common --incompatible_no_support_tools_in_action_inputs=false
 

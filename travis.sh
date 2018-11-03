@@ -6,6 +6,10 @@ case "$1" in
         bazel build --show_progress_rate_limit=2 //...
         ;;
 
+    "build-sans-doc")
+        bazel query '//... except(//rules:*)' | xargs bazel build --show_progress_rate_limit=2
+        ;;
+
     "test")
         ./test.sh
         ;;
@@ -13,6 +17,7 @@ case "$1" in
     "lint")
         ./setup-tools.sh --skip-deps
         ./format.sh check
+        ./gen-docs.sh && git diff --exit-code
         ;;
     "install-bazel")
         if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
