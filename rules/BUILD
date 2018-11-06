@@ -48,4 +48,5 @@ bzl_library(
         "//rules/scalac:bzl",
         "//rules/scalafmt:bzl",
     ],
+    deps = ["@bazel_skylib//lib:dicts"],
 )

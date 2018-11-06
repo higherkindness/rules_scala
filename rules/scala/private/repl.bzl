@@ -1,3 +1,4 @@
+load("@bazel_skylib//lib:dicts.bzl", _dicts = "dicts")
 load(
     "@rules_scala_annex//rules:providers.bzl",
     _ScalaConfiguration = "ScalaConfiguration",
@@ -6,13 +7,16 @@ load(
 load("//rules/common:private/utils.bzl", "write_launcher")
 load(":private/core.bzl", _scala_binary_private_attributes = "scala_binary_private_attributes")
 
-scala_repl_private_attributes = dict({
-    "_runner": attr.label(
-        cfg = "host",
-        executable = True,
-        default = "@rules_scala_annex//rules/scala:repl",
-    ),
-}, **_scala_binary_private_attributes)
+scala_repl_private_attributes = _dicts.add(
+    _scala_binary_private_attributes,
+    {
+        "_runner": attr.label(
+            cfg = "host",
+            executable = True,
+            default = "@rules_scala_annex//rules/scala:repl",
+        ),
+    },
+)
 
 def scala_repl_implementation(ctx):
     scala_configuration = ctx.attr.scala[_ScalaConfiguration]

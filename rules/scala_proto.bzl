@@ -1,3 +1,4 @@
+load("@bazel_skylib//lib:dicts.bzl", _dicts = "dicts")
 load(
     "//rules/scala_proto:private/core.bzl",
     _scala_proto_library_implementation = "scala_proto_library_implementation",
@@ -6,10 +7,13 @@ load(
 
 scala_proto_library = rule(
     implementation = _scala_proto_library_implementation,
-    attrs = dict({
-        "deps": attr.label_list(),
-        "_zipper": attr.label(cfg = "host", default = "@bazel_tools//tools/zip:zipper", executable = True),
-    }, **_scala_proto_library_private_attributes),
+    attrs = _dicts.add(
+        _scala_proto_library_private_attributes,
+        {
+            "deps": attr.label_list(),
+            "_zipper": attr.label(cfg = "host", default = "@bazel_tools//tools/zip:zipper", executable = True),
+        },
+    ),
     toolchains = [
         "@rules_scala_annex//rules/scala_proto:compiler_toolchain_type",
     ],

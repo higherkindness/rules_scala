@@ -28,12 +28,18 @@ scala_format_test(name, config, srcs)
       <td><code>config</code></td>
       <td>
         Label; optional
+        <p>
+          The Scalafmt configuration file.
+        </p>
       </td>
     </tr>
     <tr id="#scala_format_test_srcs">
       <td><code>srcs</code></td>
       <td>
         List of labels; optional
+        <p>
+          The Scala files.
+        </p>
       </td>
     </tr>
   </tbody>

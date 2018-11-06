@@ -5,7 +5,7 @@
 declare_scala_configuration(name, compiler_classpath, runtime_classpath, version)
 </pre>
 
-
+Creates a `ScalaConfiguration`.
 
 ### Attributes
 
@@ -28,18 +28,27 @@ declare_scala_configuration(name, compiler_classpath, runtime_classpath, version
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
+        <p>
+          The compiler classpath.
+        </p>
       </td>
     </tr>
     <tr id="#declare_scala_configuration_runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
+        <p>
+          The runtime classpath.
+        </p>
       </td>
     </tr>
     <tr id="#declare_scala_configuration_version">
       <td><code>version</code></td>
       <td>
         String; required
+        <p>
+          The Scala full version.
+        </p>
       </td>
     </tr>
   </tbody>
@@ -53,7 +62,7 @@ declare_scala_configuration(name, compiler_classpath, runtime_classpath, version
 declare_zinc_configuration(name, compiler_bridge)
 </pre>
 
-
+Creates a `ZincConfiguration`.
 
 ### Attributes
 
@@ -121,7 +130,7 @@ join_configurations(name, configurations)
 <a name="#ScalaConfiguration"></a>
 ## ScalaConfiguration
 
-Provides access to the Scala compiler jars
+Scala compile-time and runtime configuration
 
 ### Fields
 
@@ -134,19 +143,19 @@ Provides access to the Scala compiler jars
     <tr id="#ScalaConfiguration_version">
       <td><code>version</code></td>
       <td>
-        <p>the Scala full version</p>
+        <p>The Scala full version.</p>
       </td>
     </tr>
     <tr id="#ScalaConfiguration_compiler_classpath">
       <td><code>compiler_classpath</code></td>
       <td>
-        <p>the compiler classpath</p>
+        <p>The compiler classpath.</p>
       </td>
     </tr>
     <tr id="#ScalaConfiguration_runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
-        <p>the minimal runtime classpath</p>
+        <p>The runtime classpath.</p>
       </td>
     </tr>
   </tbody>
@@ -156,7 +165,7 @@ Provides access to the Scala compiler jars
 <a name="#ScalaInfo"></a>
 ## ScalaInfo
 
-Provider for cross versioned scala rule outputs
+Scala library.
 
 ### Fields
 
@@ -175,7 +184,7 @@ Provider for cross versioned scala rule outputs
     <tr id="#ScalaInfo_scala_configuration">
       <td><code>scala_configuration</code></td>
       <td>
-        <p>the scala configuration associated with this output</p>
+        <p>ScalaConfiguration associated with this output</p>
       </td>
     </tr>
   </tbody>
@@ -185,7 +194,7 @@ Provider for cross versioned scala rule outputs
 <a name="#ZincConfiguration"></a>
 ## ZincConfiguration
 
-Provides additional items needed by Zinc
+Zinc configuration.
 
 ### Fields
 
@@ -198,7 +207,7 @@ Provides additional items needed by Zinc
     <tr id="#ZincConfiguration_compiler_bridge">
       <td><code>compiler_bridge</code></td>
       <td>
-        <p>the compiled Zinc compiler bridge</p>
+        <p>compiled Zinc compiler bridge</p>
       </td>
     </tr>
   </tbody>
@@ -208,7 +217,7 @@ Provides additional items needed by Zinc
 <a name="#ZincInfo"></a>
 ## ZincInfo
 
-Provides additional outputs from Zinc
+Zinc-specific outputs.
 
 ### Fields
 
@@ -221,31 +230,31 @@ Provides additional outputs from Zinc
     <tr id="#ZincInfo_apis">
       <td><code>apis</code></td>
       <td>
-        <p>API file</p>
+        <p>The API file.</p>
       </td>
     </tr>
     <tr id="#ZincInfo_deps">
       <td><code>deps</code></td>
       <td>
-        <p>Depset</p>
+        <p>The depset of library dependency outputs.</p>
       </td>
     </tr>
     <tr id="#ZincInfo_deps_files">
       <td><code>deps_files</code></td>
       <td>
-        <p>Depset of all files</p>
+        <p>The depset of all Zinc files.</p>
       </td>
     </tr>
     <tr id="#ZincInfo_label">
       <td><code>label</code></td>
       <td>
-        <p>Label</p>
+        <p>The label for this output.</p>
       </td>
     </tr>
     <tr id="#ZincInfo_relations">
       <td><code>relations</code></td>
       <td>
-        <p>Relations file</p>
+        <p>The relations file.</p>
       </td>
     </tr>
   </tbody>
@@ -255,7 +264,7 @@ Provides additional outputs from Zinc
 <a name="#IntellijInfo"></a>
 ## IntellijInfo
 
-Provider for IntelliJ
+Provider for IntelliJ.
 
 ### Fields
 
@@ -284,7 +293,7 @@ Provider for IntelliJ
 <a name="#LabeledJars"></a>
 ## LabeledJars
 
-Exported jars and their labels
+Exported jars and their labels.
 
 ### Fields
 
@@ -297,7 +306,7 @@ Exported jars and their labels
     <tr id="#LabeledJars_values">
       <td><code>values</code></td>
       <td>
-        <p>Preorder depset of label and jars</p>
+        <p>The preorder depset of label and jars.</p>
       </td>
     </tr>
   </tbody>

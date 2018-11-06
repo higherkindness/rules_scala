@@ -5,7 +5,7 @@
 <unknown name>(name, compiler_bridge)
 </pre>
 
-
+Creates a `ZincConfiguration`.
 
 ### Attributes
 
@@ -41,7 +41,7 @@
 <unknown name>(name, compiler_classpath, runtime_classpath, version)
 </pre>
 
-
+Creates a `ScalaConfiguration`.
 
 ### Attributes
 
@@ -64,18 +64,27 @@
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
+        <p>
+          The compiler classpath.
+        </p>
       </td>
     </tr>
     <tr id="#<unknown name>_runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
+        <p>
+          The runtime classpath.
+        </p>
       </td>
     </tr>
     <tr id="#<unknown name>_version">
       <td><code>version</code></td>
       <td>
         String; required
+        <p>
+          The Scala full version.
+        </p>
       </td>
     </tr>
   </tbody>
