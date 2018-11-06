@@ -2,6 +2,7 @@
 ## top level rules
 ##
 
+load("@bazel_skylib//lib:dicts.bzl", _dicts = "dicts")
 load(
     "@rules_scala_annex//rules:jvm.bzl",
     _labeled_jars = "labeled_jars",
@@ -45,46 +46,76 @@ load(
     _scalac_library = "scalac_library",
 )
 
-# scala_library
+_library_common_attributes = {
+    "srcs": attr.label_list(
+        doc = "The source Scala and Java files (and `.srcjar` files of those).",
+        allow_files = [".scala", ".java", ".srcjar"],
+    ),
+    "data": attr.label_list(
+        doc = "The additional runtime files needed by this library.",
+        allow_files = True,
+        cfg = "data",
+    ),
+    "deps": attr.label_list(
+        aspects = [_labeled_jars],
+        doc = "The JVM library dependencies.",
+        providers = [JavaInfo],
+    ),
+    "deps_used_whitelist": attr.label_list(
+        doc = "The JVM library dependencies to always consider used for `scala_deps_used` checks.",
+        providers = [JavaInfo],
+    ),
+    "exports": attr.label_list(
+        doc = "The JVM libraries to add as dependencies to any libraries dependent on this one.",
+        providers = [JavaInfo],
+    ),
+    "runtime_deps": attr.label_list(
+        doc = "The JVM runtime-only library dependencies.",
+        providers = [JavaInfo],
+    ),
+    "javacopts": attr.string_list(
+        doc = "The Javac options.",
+    ),
+    "macro": attr.bool(
+        default = False,
+        doc = "Whether this library provides macros.",
+    ),
+    "neverlink": attr.bool(
+        default = False,
+        doc = "Whether this library should be excluded at runtime.",
+    ),
+    "plugins": attr.label_list(
+        doc = "The Scalac plugins.",
+        providers = [JavaInfo],
+    ),
+    "resource_strip_prefix": attr.string(
+        doc = "The path prefix to strip from classpath resources.",
+    ),
+    "resources": attr.label_list(
+        allow_files = True,
+        doc = "The files to include as classpath resources.",
+    ),
+    "resource_jars": attr.label_list(
+        allow_files = [".jar"],
+        doc = "The JARs to merge into the output JAR.",
+    ),
+    "scala": attr.label(
+        default = "@scala",
+        doc = "The `ScalaConfiguration`.",
+        providers = [_ScalaConfiguration, _ZincConfiguration],
+    ),
+    "scalacopts": attr.string_list(
+        doc = "The Scalac options.",
+    ),
+}
 
-"""
-Compiles and links Scala/Java sources into a .jar file.
-
-Args:
-
-  srcs:
-    The list of source files that are processed to create the target.
-
-  deps:
-    The list of libraries to link into this library. Deps can include
-    standard Java libraries as well as cross compiled Scala libraries.
-
-  scala:
-    ScalaConfiguration(s) to use for compiling sources.
-
-"""
 scala_library = rule(
     implementation = _scala_library_implementation,
-    attrs = dict({
-        "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "data": attr.label_list(allow_files = True, cfg = "data"),
-        "deps": attr.label_list(aspects = [_labeled_jars], providers = [JavaInfo]),
-        "deps_used_whitelist": attr.label_list(),
-        "runtime_deps": attr.label_list(providers = [JavaInfo]),
-        "exports": attr.label_list(providers = [JavaInfo]),
-        "javacopts": attr.string_list(),
-        "macro": attr.bool(default = False),
-        "neverlink": attr.bool(default = False),
-        "scala": attr.label(
-            default = "@scala",
-            providers = [_ScalaConfiguration, _ZincConfiguration],
-        ),
-        "scalacopts": attr.string_list(),
-        "plugins": attr.label_list(providers = [JavaInfo]),
-        "resource_strip_prefix": attr.string(),
-        "resources": attr.label_list(allow_files = True),
-        "resource_jars": attr.label_list(allow_files = [".jar"]),
-    }, **_scala_library_private_attributes),
+    attrs = _dicts.add(
+        _library_common_attributes,
+        _scala_library_private_attributes,
+    ),
+    doc = "Compiles a Scala JVM library.",
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -94,31 +125,29 @@ scala_library = rule(
     },
 )
 
-# scala_binary
+_runner_common_attributes = {
+    "jvm_flags": attr.string_list(
+        doc = "The JVM runtime flags.",
+    ),
+    "runtime_deps": attr.label_list(
+        doc = "The JVM runtime-only library dependencies.",
+        providers = [JavaInfo],
+    ),
+}
 
 scala_binary = rule(
     implementation = _scala_binary_implementation,
-    attrs = dict({
-        "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "data": attr.label_list(allow_files = True, cfg = "data"),
-        "deps": attr.label_list(aspects = [_labeled_jars], providers = [JavaInfo]),
-        "deps_used_whitelist": attr.label_list(),
-        "javacopts": attr.string_list(),
-        "jvm_flags": attr.string_list(),
-        "runtime_deps": attr.label_list(providers = [JavaInfo]),
-        "exports": attr.label_list(providers = [JavaInfo]),
-        "macro": attr.bool(default = False),
-        "main_class": attr.string(),
-        "scala": attr.label(
-            default = "@scala",
-            providers = [_ScalaConfiguration, _ZincConfiguration],
-        ),
-        "scalacopts": attr.string_list(),
-        "plugins": attr.label_list(providers = [JavaInfo]),
-        "resource_strip_prefix": attr.string(),
-        "resources": attr.label_list(allow_files = True),
-        "resource_jars": attr.label_list(allow_files = [".jar"]),
-    }, **_scala_binary_private_attributes),
+    attrs = _dicts.add(
+        _library_common_attributes,
+        _runner_common_attributes,
+        _scala_binary_private_attributes,
+        {
+            "main_class": attr.string(
+                doc = "The main class. If not provided, it will be inferred by its type signature.",
+            ),
+        },
+    ),
+    doc = "Compiles and links a Scala JVM executable.",
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -131,49 +160,35 @@ scala_binary = rule(
     },
 )
 
-# scala_test
-
 scala_test = rule(
     implementation = _scala_test_implementation,
-    attrs = dict({
-        "srcs": attr.label_list(allow_files = [".scala", ".java", ".srcjar"]),
-        "data": attr.label_list(allow_files = True, cfg = "data"),
-        "deps": attr.label_list(aspects = [_labeled_jars], providers = [JavaInfo]),
-        "deps_used_whitelist": attr.label_list(),
-        "javacopts": attr.string_list(),
-        "jvm_flags": attr.string_list(),
-        "runtime_deps": attr.label_list(providers = [JavaInfo]),
-        "exports": attr.label_list(providers = [JavaInfo]),
-        "isolation": attr.string(
-            default = "none",
-            doc = "The isolation level to apply",
-            values = ["classloader", "none", "process"],
-        ),
-        "macro": attr.bool(default = False),
-        "scala": attr.label(
-            default = "@scala",
-            providers = [_ScalaConfiguration, _ZincConfiguration],
-        ),
-        "scalacopts": attr.string_list(),
-        "plugins": attr.label_list(providers = [JavaInfo]),
-        "shared_deps": attr.label_list(
-            doc = "If isolation is \"classloader\", the list of deps to keep loaded between tests",
-            providers = [JavaInfo],
-        ),
-        "frameworks": attr.string_list(
-            default = [
-                "org.scalatest.tools.Framework",
-                "org.scalacheck.ScalaCheckFramework",
-                "org.specs2.runner.Specs2Framework",
-                "minitest.runner.Framework",
-                "utest.runner.Framework",
-            ],
-        ),
-        "resource_strip_prefix": attr.string(),
-        "resources": attr.label_list(allow_files = True),
-        "resource_jars": attr.label_list(allow_files = [".jar"]),
-        "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
-    }, **_scala_test_private_attributes),
+    attrs = _dicts.add(
+        _library_common_attributes,
+        _runner_common_attributes,
+        _scala_test_private_attributes,
+        {
+            "isolation": attr.string(
+                default = "none",
+                doc = "The isolation level to apply",
+                values = ["classloader", "none", "process"],
+            ),
+            "scalacopts": attr.string_list(),
+            "shared_deps": attr.label_list(
+                doc = "If isolation is \"classloader\", the list of deps to keep loaded between tests",
+                providers = [JavaInfo],
+            ),
+            "frameworks": attr.string_list(
+                default = [
+                    "org.scalatest.tools.Framework",
+                    "org.scalacheck.ScalaCheckFramework",
+                    "org.specs2.runner.Specs2Framework",
+                    "minitest.runner.Framework",
+                    "utest.runner.Framework",
+                ],
+            ),
+            "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
+        },
+    ),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -190,51 +205,73 @@ scala_test = rule(
 
 scala_repl = rule(
     implementation = _scala_repl_implementation,
-    attrs = dict({
-        "data": attr.label_list(allow_files = True, cfg = "data"),
-        "deps": attr.label_list(providers = [JavaInfo]),
-        "jvm_flags": attr.string_list(),
-        "scala": attr.label(default = "@scala", providers = [_ScalaConfiguration, _ZincConfiguration]),
-        "scalacopts": attr.string_list(),
-    }, **_scala_repl_private_attributes),
+    attrs = _dicts.add(
+        _scala_repl_private_attributes,
+        {
+            "data": attr.label_list(
+                doc = "The additional runtime files needed by this REPL.",
+                allow_files = True,
+                cfg = "data",
+            ),
+            "deps": attr.label_list(providers = [JavaInfo]),
+            "jvm_flags": attr.string_list(
+                doc = "The JVM runtime flags.",
+            ),
+            "scala": attr.label(
+                default = "@scala",
+                doc = "The `ScalaConfiguration`.",
+                providers = [_ScalaConfiguration, _ZincConfiguration],
+            ),
+            "scalacopts": attr.string_list(
+                doc = "The Scalac options.",
+            ),
+        },
+    ),
     executable = True,
     outputs = {
         "bin": "%{name}-bin",
     },
 )
 
-# scala_import
-
-"""
-scala_import for use with bazel-deps
-"""
 scala_import = rule(
     implementation = _scala_import_implementation,
-    attrs = dict({
-        "jars": attr.label_list(allow_files = True),
-        "srcjar": attr.label(allow_single_file = True),
-        "deps": attr.label_list(providers = [JavaInfo]),
-        "neverlink": attr.bool(default = False),
-        "runtime_deps": attr.label_list(providers = [JavaInfo]),
-        "exports": attr.label_list(providers = [JavaInfo]),
-    }, **_scala_import_private_attributes),
-)
+    attrs = _dicts.add(
+        _scala_import_private_attributes,
+        {
+            "deps": attr.label_list(providers = [JavaInfo]),
+            "exports": attr.label_list(providers = [JavaInfo]),
+            "jars": attr.label_list(allow_files = True),
+            "neverlink": attr.bool(default = False),
+            "runtime_deps": attr.label_list(providers = [JavaInfo]),
+            "srcjar": attr.label(allow_single_file = True),
+        },
+    ),
+    doc = """
+Creates a Scala JVM library.
 
-# scaladoc
+Use this only for libraries with macros. Otherwise, use `java_import`.
+""",
+)
 
 scaladoc = rule(
     implementation = _scaladoc_implementation,
-    attrs = dict({
-        "compiler_deps": attr.label_list(providers = [JavaInfo]),
-        "deps": attr.label_list(providers = [JavaInfo]),
-        "srcs": attr.label_list(allow_files = [".java", ".scala", ".srcjar"]),
-        "scala": attr.label(
-            default = "@scala",
-            providers = [_ScalaConfiguration, _ZincConfiguration],
-        ),
-        "scalacopts": attr.string_list(),
-        "title": attr.string(),
-    }, **_scaladoc_private_attributes),
+    attrs = _dicts.add(
+        _scaladoc_private_attributes,
+        {
+            "compiler_deps": attr.label_list(providers = [JavaInfo]),
+            "deps": attr.label_list(providers = [JavaInfo]),
+            "srcs": attr.label_list(allow_files = [".java", ".scala", ".srcjar"]),
+            "scala": attr.label(
+                default = "@scala",
+                providers = [_ScalaConfiguration, _ZincConfiguration],
+            ),
+            "scalacopts": attr.string_list(),
+            "title": attr.string(),
+        },
+    ),
+    doc = """
+Generates Scaladocs.
+""",
 )
 
 ##
@@ -250,9 +287,6 @@ def _scala_runner_toolchain_implementation(ctx):
         encoding = ctx.attr.encoding,
     )]
 
-"""
-Configures which Scala runner to use
-"""
 scala_runner_toolchain = rule(
     implementation = _scala_runner_toolchain_implementation,
     attrs = {
@@ -264,6 +298,7 @@ scala_runner_toolchain = rule(
         "scalacopts": attr.string_list(),
         "encoding": attr.string(),
     },
+    doc = "Configures the Scala runner to use.",
 )
 
 # scala_deps_toolchain
@@ -275,9 +310,6 @@ def scala_deps_toolchain_implementation(ctx):
         used = ctx.attr.used,
     )]
 
-"""
-Configures the deps checker and options to use
-"""
 scala_deps_toolchain = rule(
     implementation = scala_deps_toolchain_implementation,
     attrs = {
@@ -285,6 +317,7 @@ scala_deps_toolchain = rule(
         "runner": attr.label(allow_files = True, executable = True, cfg = "host"),
         "used": attr.string(),
     },
+    doc = "Configures the deps checker and options to use.",
 )
 
 _configure_basic_scala = rule(

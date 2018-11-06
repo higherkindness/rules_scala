@@ -1,9 +1,15 @@
+load(
+    "//rules/common:private/utils.bzl",
+    _collect = "collect",
+    _collect_optionally = "collect_optionally",
+)
+
 ScalaConfiguration = provider(
-    doc = "Provides access to the Scala compiler jars",
+    doc = "Scala compile-time and runtime configuration",
     fields = {
-        "version": "the Scala full version",
-        "compiler_classpath": "the compiler classpath",
-        "runtime_classpath": "the minimal runtime classpath",
+        "version": "The Scala full version.",
+        "compiler_classpath": "The compiler classpath.",
+        "runtime_classpath": "The runtime classpath.",
     },
 )
 
@@ -18,16 +24,20 @@ def _declare_scala_configuration_implementation(ctx):
     ]
 
 declare_scala_configuration = rule(
+    doc = "Creates a `ScalaConfiguration`.",
     implementation = _declare_scala_configuration_implementation,
     attrs = {
         "version": attr.string(
+            doc = "The Scala full version.",
             mandatory = True,
         ),
         "compiler_classpath": attr.label_list(
+            doc = "The compiler classpath.",
             mandatory = True,
             providers = [JavaInfo],
         ),
         "runtime_classpath": attr.label_list(
+            doc = "The runtime classpath.",
             mandatory = True,
             providers = [JavaInfo],
         ),
@@ -35,17 +45,17 @@ declare_scala_configuration = rule(
 )
 
 ScalaInfo = provider(
-    doc = "Provider for cross versioned scala rule outputs",
+    doc = "Scala library.",
     fields = {
         "macro": "whether the jar contains macros",
-        "scala_configuration": "the scala configuration associated with this output",
+        "scala_configuration": "ScalaConfiguration associated with this output",
     },
 )
 
 ZincConfiguration = provider(
-    doc = "Provides additional items needed by Zinc",
+    doc = "Zinc configuration.",
     fields = {
-        "compiler_bridge": "the compiled Zinc compiler bridge",
+        "compiler_bridge": "compiled Zinc compiler bridge",
     },
 )
 
@@ -55,6 +65,7 @@ def _declare_zinc_configuration_implementation(ctx):
     )]
 
 declare_zinc_configuration = rule(
+    doc = "Creates a `ZincConfiguration`.",
     implementation = _declare_zinc_configuration_implementation,
     attrs = {
         "compiler_bridge": attr.label(
@@ -65,27 +76,20 @@ declare_zinc_configuration = rule(
 )
 
 ZincInfo = provider(
-    doc = "Provides additional outputs from Zinc",
+    doc = "Zinc-specific outputs.",
     fields = {
-        "apis": "API file",
-        "deps": "Depset",
-        "deps_files": "Depset of all files",
-        "label": "Label",
-        "relations": "Relations file",
+        "apis": "The API file.",
+        "deps": "The depset of library dependency outputs.",
+        "deps_files": "The depset of all Zinc files.",
+        "label": "The label for this output.",
+        "relations": "The relations file.",
     },
 )
 
-def _collect(index, entries):
-    return [
-        entry[index]
-        for entry in entries
-        if index in entry
-    ]
-
 def _join_configurations_implementation(ctx):
     return (
-        _collect(ScalaConfiguration, ctx.attr.configurations) +
-        _collect(ZincConfiguration, ctx.attr.configurations)
+        _collect_optionally(ScalaConfiguration, ctx.attr.configurations) +
+        _collect_optionally(ZincConfiguration, ctx.attr.configurations)
     )
 
 join_configurations = rule(
@@ -102,16 +106,17 @@ join_configurations = rule(
 # TODO: implement these with an aspect?
 
 IntellijInfo = provider(
-    doc = "Provider for IntelliJ",
+    doc = "Provider for IntelliJ.",
     fields = {
         "outputs": "java_output_jars",
         "transitive_exports": "labels of transitive dependencies",
     },
 )
 
+# TODO: compare to JavaInfo's owner
 LabeledJars = provider(
-    doc = "Exported jars and their labels",
+    doc = "Exported jars and their labels.",
     fields = {
-        "values": "Preorder depset of label and jars",
+        "values": "The preorder depset of label and jars.",
     },
 )
