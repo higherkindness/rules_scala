@@ -2,17 +2,7 @@ package annex
 
 import java.io.ObjectInputStream
 import java.nio.file.Paths
-import java.nio.file.Path
-import sbt.testing.Logger
 import scala.collection.mutable
-
-class TestRequest(
-  val framework: String,
-  val test: TestDefinition,
-  val scopeAndTestName: String,
-  val classpath: Seq[String],
-  val logger: Logger with Serializable
-) extends Serializable
 
 object SubprocessTestRunner {
 
@@ -26,8 +16,8 @@ object SubprocessTestRunner {
     val framework = loader.load(request.framework).get
 
     val passed = ClassLoader.withContextClassLoader(classLoader) {
-      TestFrameworkRunner.withRunner(framework, request.scopeAndTestName, classLoader) { runner =>
-        val tasks = runner.tasks(Array(TestFrameworkRunner.taskDef(request.test, request.scopeAndTestName)))
+      TestHelper.withRunner(framework, request.scopeAndTestName, classLoader) { runner =>
+        val tasks = runner.tasks(Array(TestHelper.taskDef(request.test, request.scopeAndTestName)))
         tasks.length == 0 || {
           val reporter = new TestReporter(request.logger)
           val taskExecutor = new TestTaskExecutor(request.logger)

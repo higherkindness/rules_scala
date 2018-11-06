@@ -430,7 +430,7 @@ Compiles and links a Scala JVM executable.
 ## scala_test
 
 <pre>
-scala_test(name, data, deps, deps_used_whitelist, exports, frameworks, isolation, javacopts, jvm_flags, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runner, runtime_deps, scala, scalacopts, shared_deps, srcs)
+scala_test(name, data, deps, deps_used_whitelist, exports, frameworks, isolation, javacopts, jvm_flags, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runner, runtime_deps, scala, scalacopts, shared_deps, srcs, subprocess_runner)
 </pre>
 
 
@@ -621,6 +621,12 @@ scala_test(name, data, deps, deps_used_whitelist, exports, frameworks, isolation
         <p>
           The source Scala and Java files (and `.srcjar` files of those).
         </p>
+      </td>
+    </tr>
+    <tr id="#scala_test_subprocess_runner">
+      <td><code>subprocess_runner</code></td>
+      <td>
+        Label; optional
       </td>
     </tr>
   </tbody>

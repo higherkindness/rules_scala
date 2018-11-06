@@ -2,39 +2,15 @@ package annex
 
 import java.io.ObjectOutputStream
 import java.nio.file.Path
-import sbt.testing.{Framework, Logger, Runner, Task, TaskDef, TestWildcardSelector}
+import sbt.testing.{Framework, Logger}
 import scala.collection.mutable
-
-trait TestFrameworkRunner {
-  def execute(tests: Seq[TestDefinition], scopeAndTestName: String): Boolean
-}
-
-object TestFrameworkRunner {
-  def withRunner[A](framework: Framework, scopeAndTestName: String, classLoader: ClassLoader)(
-    f: Runner => A
-  ) = {
-    val options =
-      if (framework.name == "specs2") Array("-ex", scopeAndTestName.replaceAll(".*::", "")) else Array.empty[String]
-    val runner = framework.runner(Array.empty, options, classLoader)
-    try f(runner)
-    finally runner.done()
-  }
-
-  def taskDef(test: TestDefinition, scopeAndTestName: String) =
-    new TaskDef(
-      test.name,
-      test.fingerprint,
-      false,
-      Array(new TestWildcardSelector(scopeAndTestName.replace("::", " ")))
-    )
-}
 
 class BasicTestRunner(framework: Framework, classLoader: ClassLoader, logger: Logger) extends TestFrameworkRunner {
   def execute(tests: Seq[TestDefinition], scopeAndTestName: String) =
     ClassLoader.withContextClassLoader(classLoader) {
-      TestFrameworkRunner.withRunner(framework, scopeAndTestName, classLoader) { runner =>
+      TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
         val reporter = new TestReporter(logger)
-        val tasks = runner.tasks(tests.map(TestFrameworkRunner.taskDef(_, scopeAndTestName)).toArray)
+        val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)
         val taskExecutor = new TestTaskExecutor(logger)
         val failures = mutable.Set[String]()
@@ -56,8 +32,8 @@ class ClassLoaderTestRunner(framework: Framework, classLoaderProvider: () => Cla
 
     val classLoader = framework.getClass.getClassLoader
     ClassLoader.withContextClassLoader(classLoader) {
-      TestFrameworkRunner.withRunner(framework, scopeAndTestName, classLoader) { runner =>
-        val tasks = runner.tasks(tests.map(TestFrameworkRunner.taskDef(_, scopeAndTestName)).toArray)
+      TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
+        val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)
       }
     }
@@ -67,9 +43,9 @@ class ClassLoaderTestRunner(framework: Framework, classLoaderProvider: () => Cla
     tests.foreach { test =>
       val classLoader = classLoaderProvider()
       val isolatedFramework = new TestFrameworkLoader(classLoader, logger).load(framework.getClass.getName).get
-      TestFrameworkRunner.withRunner(isolatedFramework, scopeAndTestName, classLoader) { runner =>
+      TestHelper.withRunner(isolatedFramework, scopeAndTestName, classLoader) { runner =>
         ClassLoader.withContextClassLoader(classLoader) {
-          val tasks = runner.tasks(Array(TestFrameworkRunner.taskDef(test, scopeAndTestName)))
+          val tasks = runner.tasks(Array(TestHelper.taskDef(test, scopeAndTestName)))
           tasks.foreach { task =>
             reporter.preTask(task)
             taskExecutor.execute(task, failures)
@@ -83,6 +59,11 @@ class ClassLoaderTestRunner(framework: Framework, classLoaderProvider: () => Cla
   }
 }
 
+class ProcessCommand(
+  val executable: String,
+  val arguments: Seq[String]
+) extends Serializable
+
 class ProcessTestRunner(
   framework: Framework,
   classpath: Seq[Path],
@@ -94,8 +75,8 @@ class ProcessTestRunner(
 
     val classLoader = framework.getClass.getClassLoader
     ClassLoader.withContextClassLoader(classLoader) {
-      TestFrameworkRunner.withRunner(framework, scopeAndTestName, classLoader) { runner =>
-        val tasks = runner.tasks(tests.map(TestFrameworkRunner.taskDef(_, scopeAndTestName)).toArray)
+      TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
+        val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)
       }
     }
@@ -126,4 +107,8 @@ class ProcessTestRunner(
     reporter.post(failures.toSeq)
     !failures.nonEmpty
   }
+}
+
+trait TestFrameworkRunner {
+  def execute(tests: Seq[TestDefinition], scopeAndTestName: String): Boolean
 }

@@ -187,6 +187,7 @@ scala_test = rule(
                 ],
             ),
             "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
+            "subprocess_runner": attr.label(default = "@rules_scala_annex//rules/scala:test_subprocess"),
         },
     ),
     toolchains = [

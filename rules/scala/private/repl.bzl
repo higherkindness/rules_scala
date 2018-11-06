@@ -36,6 +36,7 @@ def scala_repl_implementation(ctx):
 
     launcher_files = write_launcher(
         ctx,
+        "{}/".format(ctx.label.name),
         ctx.outputs.bin,
         runner_classpath,
         "annex.repl.ReplRunner",
