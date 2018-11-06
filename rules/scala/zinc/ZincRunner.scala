@@ -87,7 +87,8 @@ object ZincRunner extends WorkerMain[Namespace] {
           .getList[JList[String]]("analysis")
       ).fold[Seq[JList[String]]](Nil)(_.asScala)
         .flatMap { value =>
-          val label +: apis +: relations +: jars = value.asScala.toList
+          val prefixedLabel +: apis +: relations +: jars = value.asScala.toList
+          val label = prefixedLabel.stripPrefix("_")
           jars
             .map(
               jar =>

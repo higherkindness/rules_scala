@@ -292,7 +292,7 @@ def scala_library_implementation(ctx):
     )
 
 def _analysis(analysis):
-    return (["--analysis", str(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])
+    return (["--analysis", "_{}".format(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])
 
 def _labeled_group(labeled_jars):
     return (["--group", "_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars.to_list()])
