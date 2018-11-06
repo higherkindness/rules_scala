@@ -6,7 +6,7 @@ load(
     _ZincConfiguration = "ZincConfiguration",
     _ZincInfo = "ZincInfo",
 )
-load("//rules/common:private/utils.bzl", _write_launcher = "write_launcher")
+load("//rules/common:private/utils.bzl", _collect = "collect", _write_launcher = "write_launcher")
 load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
 
 runner_common_attributes = {
@@ -290,13 +290,6 @@ def scala_library_implementation(ctx):
         ],
         java = res.intellij_info,
     )
-
-def _collect(index, iterable):
-    return [
-        entry[index]
-        for entry in iterable
-        if index in entry
-    ]
 
 def _analysis(analysis):
     return (["--analysis", str(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])

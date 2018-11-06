@@ -1,3 +1,9 @@
+load(
+    "//rules/common:private/utils.bzl",
+    _collect = "collect",
+    _collect_optionally = "collect_optionally",
+)
+
 ScalaConfiguration = provider(
     doc = "Scala compile-time and runtime configuration",
     fields = {
@@ -80,17 +86,10 @@ ZincInfo = provider(
     },
 )
 
-def _collect(index, entries):
-    return [
-        entry[index]
-        for entry in entries
-        if index in entry
-    ]
-
 def _join_configurations_implementation(ctx):
     return (
-        _collect(ScalaConfiguration, ctx.attr.configurations) +
-        _collect(ZincConfiguration, ctx.attr.configurations)
+        _collect_optionally(ScalaConfiguration, ctx.attr.configurations) +
+        _collect_optionally(ZincConfiguration, ctx.attr.configurations)
     )
 
 join_configurations = rule(

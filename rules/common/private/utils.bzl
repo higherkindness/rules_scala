@@ -2,6 +2,12 @@
 # Helper utilities
 #
 
+def collect(index, iterable):
+    return [entry[index] for entry in iterable]
+
+def collect_optionally(index, iterable):
+    return [entry[index] for entry in iterable if index in entry]
+
 def strip_margin(str, delim = "|"):
     """
     For every line in str:
