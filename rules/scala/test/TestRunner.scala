@@ -14,7 +14,6 @@ import net.sourceforge.argparse4j.impl.Arguments
 import org.scalatools.testing.Framework
 import sbt.internal.inc.binary.converters.ProtobufReaders
 import sbt.internal.inc.schema
-import sbt.testing.Logger
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
 import xsbti.compile.analysis.ReadMapper
@@ -170,23 +169,4 @@ object TestRunner {
     }
     sys.exit(if (passed) 0 else 1)
   }
-}
-
-final class AnxLogger(color: Boolean, verbosity: String) extends Logger with Serializable {
-  def ansiCodesSupported = color
-
-  def error(msg: String) = println(s"$msg")
-
-  def warn(msg: String) = println(s"$msg")
-
-  def info(msg: String) = verbosity match {
-    case "HIGH" | "MEDIUM" => println(s"$msg")
-    case _                 =>
-  }
-
-  def debug(msg: String) = verbosity match {
-    case "HIGH" => println(s"$msg")
-  }
-
-  def trace(err: Throwable) = println(s"${err.getMessage}")
 }

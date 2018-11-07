@@ -29,6 +29,7 @@ def _strip_margin_line(line, delim):
 
 def write_launcher(
         ctx,
+        prefix,
         output,
         runtime_classpath,
         main_class,
@@ -45,7 +46,7 @@ def write_launcher(
     classpath_args = ctx.actions.args()
     classpath_args.add_joined(runtime_classpath, format_each = "${RUNPATH}%s", join_with = ":", map_each = _short_path)
     classpath_args.set_param_file_format("multiline")
-    classpath_file = ctx.actions.declare_file("{}/classpath.params".format(ctx.label.name))
+    classpath_file = ctx.actions.declare_file("{}classpath.params".format(prefix))
     ctx.actions.write(classpath_file, classpath_args)
 
     classpath = "\"$(eval echo \"$(cat ${{RUNPATH}}{})\")\"".format(classpath_file.short_path)

@@ -292,7 +292,7 @@ def scala_library_implementation(ctx):
     )
 
 def _analysis(analysis):
-    return (["--analysis", str(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])
+    return (["--analysis", "_{}".format(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])
 
 def _labeled_group(labeled_jars):
     return (["--group", "_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars.to_list()])
@@ -348,6 +348,7 @@ def scala_binary_implementation(ctx):
 
     files = _write_launcher(
         ctx,
+        "{}/".format(ctx.label.name),
         ctx.outputs.bin,
         java_info.transitive_runtime_deps,
         main_class = ctx.attr.main_class or "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
@@ -387,6 +388,7 @@ def scala_test_implementation(ctx):
 
     test_jars = res.java_info.transitive_runtime_deps
     runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps
+    all_jars = [test_jars, runner_jars]
 
     args = ctx.actions.args()
     args.add("--apis", res.zinc_info.apis.short_path)
@@ -397,10 +399,13 @@ def scala_test_implementation(ctx):
         args.add_all("--shared_classpath", shared_deps.transitive_runtime_deps, map_each = _short_path)
     elif ctx.attr.isolation == "process":
         subprocess_executable = ctx.actions.declare_file("{}/subprocess".format(ctx.label.name))
+        subprocess_runner_jars = ctx.attr.subprocess_runner[JavaInfo].transitive_runtime_deps
+        all_jars.append(subprocess_runner_jars)
         files += _write_launcher(
             ctx,
+            "{}/subprocess-".format(ctx.label.name),
             subprocess_executable,
-            runner_jars,
+            subprocess_runner_jars,
             "annex.SubprocessTestRunner",
             [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
         )
@@ -415,6 +420,7 @@ def scala_test_implementation(ctx):
 
     files += _write_launcher(
         ctx,
+        "{}/".format(ctx.label.name),
         ctx.outputs.bin,
         runner_jars,
         "annex.TestRunner",
@@ -427,7 +433,12 @@ def scala_test_implementation(ctx):
     test_info = DefaultInfo(
         executable = ctx.outputs.bin,
         files = res.files,
-        runfiles = ctx.runfiles(collect_default = True, collect_data = True, files = files, transitive_files = depset([], transitive = [runner_jars, test_jars])),
+        runfiles = ctx.runfiles(
+            collect_data = True,
+            collect_default = True,
+            files = files,
+            transitive_files = depset([], transitive = all_jars),
+        ),
     )
     return struct(
         providers = [

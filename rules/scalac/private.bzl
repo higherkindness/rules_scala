@@ -44,6 +44,7 @@ def scalac_binary_implementation(ctx):
     launcher = ctx.actions.declare_file("%s.sh" % ctx.label.name)
     files = write_launcher(
         ctx,
+        "{}/".format(ctx.label.name),
         launcher,
         res["java_info"].transitive_runtime_deps,
         main_class = ctx.attr.main_class,

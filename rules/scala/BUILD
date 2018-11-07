@@ -184,12 +184,13 @@ scala_binary(
 
 # Test
 
-scala_binary(
+scala_library(
     name = "test",
     srcs = glob(["test/**/*.scala"]),
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
+        ":test_common",
         "//rules/common:args",
         "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
@@ -198,6 +199,27 @@ scala_binary(
         "@scala_annex_org_scala_sbt_zinc_apiinfo_2_12",
         "@scala_annex_org_scala_sbt_zinc_core_2_12",
         "@scala_annex_org_scala_sbt_zinc_persist_2_12",
+    ],
+)
+
+scala_library(
+    name = "test_common",
+    srcs = glob(["test_common/**/*.scala"]),
+    scala = "//external:scala_annex_scala",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@scala_annex_org_scala_sbt_test_interface",
+    ],
+)
+
+scala_library(
+    name = "test_subprocess",
+    srcs = glob(["test_subprocess/**/*.scala"]),
+    scala = "//external:scala_annex_scala",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":test_common",
+        "@scala_annex_org_scala_sbt_test_interface",
     ],
 )
 
