@@ -38,7 +38,7 @@ object ScalafmtRunner extends WorkerMain[Unit] {
     val output = try {
       format(source)
     } catch {
-      case e: Throwable => {
+      case e: org.scalafmt.Error => {
         System.err.println(Console.YELLOW + "WARN: " + Console.WHITE + "Unable to format file due to bug in scalafmt")
         System.err.println(Console.YELLOW + "WARN: " + Console.WHITE + e)
         source
