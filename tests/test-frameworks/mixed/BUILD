@@ -6,7 +6,12 @@ scala_test(
     scala = "@scala_2_12",
     shard_count = 2,
     tags = ["manual"],
+    runtime_deps = [
+        "@hamcrest_core//jar",
+        "@junit_interface//jar",
+    ],
     deps = [
+        "@junit//jar",
         "@org_scalacheck_scalacheck_2_12",
         "@org_scalactic_scalactic_2_12",
         "@org_scalatest_scalatest_2_12",
@@ -19,8 +24,8 @@ scala_test(
 scala_test(
     name = "mixed_2_11",
     srcs = [
-        "DummyProperties.scala",
-        "DummySpec2.scala",
+        "scalacheck.scala",
+        "specs2.scala",
     ],
     scala = "@scala_2_11",
     tags = ["manual"],
