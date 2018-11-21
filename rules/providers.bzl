@@ -10,6 +10,7 @@ ScalaConfiguration = provider(
         "version": "The Scala full version.",
         "compiler_classpath": "The compiler classpath.",
         "runtime_classpath": "The runtime classpath.",
+        "global_plugins": "Globally enabled compiler plugins",
     },
 )
 
@@ -17,31 +18,31 @@ def _declare_scala_configuration_implementation(ctx):
     return [
         java_common.merge(_collect(JavaInfo, ctx.attr.compiler_classpath)),
         ScalaConfiguration(
-            version = ctx.attr.version,
             compiler_classpath = ctx.files.compiler_classpath,
+            global_plugins = ctx.attr.global_plugins,
             runtime_classpath = ctx.attr.runtime_classpath,
+            version = ctx.attr.version,
         ),
     ]
 
 declare_scala_configuration = rule(
-    doc = "Creates a `ScalaConfiguration`.",
-    implementation = _declare_scala_configuration_implementation,
     attrs = {
-        "version": attr.string(
-            doc = "The Scala full version.",
-            mandatory = True,
-        ),
-        "compiler_classpath": attr.label_list(
-            doc = "The compiler classpath.",
+        "version": attr.string(mandatory = True),
+        "runtime_classpath": attr.label_list(
             mandatory = True,
             providers = [JavaInfo],
         ),
-        "runtime_classpath": attr.label_list(
-            doc = "The runtime classpath.",
+        "compiler_classpath": attr.label_list(
             mandatory = True,
+            providers = [JavaInfo],
+        ),
+        "global_plugins": attr.label_list(
+            doc = "Scalac plugins that will always be enabled.",
             providers = [JavaInfo],
         ),
     },
+    doc = "Creates a `ScalaConfiguration`.",
+    implementation = _declare_scala_configuration_implementation,
 )
 
 ScalaInfo = provider(
@@ -65,14 +66,14 @@ def _declare_zinc_configuration_implementation(ctx):
     )]
 
 declare_zinc_configuration = rule(
-    doc = "Creates a `ZincConfiguration`.",
-    implementation = _declare_zinc_configuration_implementation,
     attrs = {
         "compiler_bridge": attr.label(
             allow_single_file = True,
             mandatory = True,
         ),
     },
+    doc = "Creates a `ZincConfiguration`.",
+    implementation = _declare_zinc_configuration_implementation,
 )
 
 ZincInfo = provider(
@@ -93,13 +94,16 @@ def _join_configurations_implementation(ctx):
     )
 
 join_configurations = rule(
-    implementation = _join_configurations_implementation,
     attrs = {
         "configurations": attr.label_list(
             mandatory = True,
-            providers = [[ScalaConfiguration], [ZincConfiguration]],
+            providers = [
+                [ScalaConfiguration],
+                [ZincConfiguration],
+            ],
         ),
     },
+    implementation = _join_configurations_implementation,
 )
 
 # TODO: move these to another file?

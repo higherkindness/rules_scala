@@ -5,12 +5,12 @@ load("//rules/scala:private/workspace.bzl", "configure_scala_repository_implemen
 load("//3rdparty:maven.bzl", "list_dependencies")
 
 configure_scala_repository = repository_rule(
-    implementation = configure_scala_repository_implementation,
     attrs = {
         "compiler_bridge": attr.string(),
         "organization": attr.string(),
         "version": attr.string(),
     },
+    implementation = configure_scala_repository_implementation,
 )
 
 def scala_repositories():
@@ -27,11 +27,11 @@ def scala_repositories():
 
     http_file(
         name = "anx_java_stub_template",
+        sha256 = "2cbba7c512e400df0e7d4376e667724a38d1155db5baaa81b72ad785c6d761d1",
         urls = [
             "https://mirror.bazel.build/%s" % java_stub_template_url,
             "https://%s" % java_stub_template_url,
         ],
-        sha256 = "2cbba7c512e400df0e7d4376e667724a38d1155db5baaa81b72ad785c6d761d1",
     )
 
     scala_src_build = strip_margin("""
@@ -63,7 +63,7 @@ def scala_repositories():
     )
     native.bind(
         name = "scala_annex_scala_basic",
-        actual = "@scala_annex_scala_2_12//:scala_annex_scala_2_12_basic",
+        actual = "@scala_annex_scala_2_12//:basic",
     )
 
 def scala_register_toolchains():
