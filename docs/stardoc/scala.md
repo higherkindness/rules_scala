@@ -1,83 +1,3 @@
-<a name="#_scalac_library"></a>
-## _scalac_library
-
-<pre>
-_scalac_library(name, deps, macro, runtime_deps, scala, srcs)
-</pre>
-
-
-Compiles a Scala JVM library.
-
-This is a low-level rule used to bootstrap higher-level rules.
-You probably don't want to use this directly.
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#_scalac_library_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#_scalac_library_deps">
-      <td><code>deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#_scalac_library_macro">
-      <td><code>macro</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library provides macros.
-        </p>
-      </td>
-    </tr>
-    <tr id="#_scalac_library_runtime_deps">
-      <td><code>runtime_deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM runtime-only library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#_scalac_library_scala">
-      <td><code>scala</code></td>
-      <td>
-        Label; required
-        <p>
-          The `ScalaConfiguration`.
-        </p>
-      </td>
-    </tr>
-    <tr id="#_scalac_library_srcs">
-      <td><code>srcs</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The source Scala and Java files (and `.srcjar` files of those).
-        </p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
 <a name="#scala_library"></a>
 ## scala_library
 
@@ -939,11 +859,11 @@ Configures the deps checker and options to use.
 </table>
 
 
-<a name="#_configure_basic_scala"></a>
-## _configure_basic_scala
+<a name="#configure_basic_scala"></a>
+## configure_basic_scala
 
 <pre>
-_configure_basic_scala(name, compiler_classpath, runtime_classpath, version)
+configure_basic_scala(name, compiler_classpath, global_plugins, runtime_classpath, version)
 </pre>
 
 
@@ -956,7 +876,7 @@ _configure_basic_scala(name, compiler_classpath, runtime_classpath, version)
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#_configure_basic_scala_name">
+    <tr id="#configure_basic_scala_name">
       <td><code>name</code></td>
       <td>
         String; required
@@ -965,19 +885,28 @@ _configure_basic_scala(name, compiler_classpath, runtime_classpath, version)
         </p>
       </td>
     </tr>
-    <tr id="#_configure_basic_scala_compiler_classpath">
+    <tr id="#configure_basic_scala_compiler_classpath">
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#_configure_basic_scala_runtime_classpath">
+    <tr id="#configure_basic_scala_global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          Scalac plugins that will always be enabled.
+        </p>
+      </td>
+    </tr>
+    <tr id="#configure_basic_scala_runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#_configure_basic_scala_version">
+    <tr id="#configure_basic_scala_version">
       <td><code>version</code></td>
       <td>
         String; required
@@ -987,11 +916,11 @@ _configure_basic_scala(name, compiler_classpath, runtime_classpath, version)
 </table>
 
 
-<a name="#_configure_scala"></a>
-## _configure_scala
+<a name="#configure_scala"></a>
+## configure_scala
 
 <pre>
-_configure_scala(name, compiler_bridge, compiler_classpath, runtime_classpath, version)
+configure_scala(name, compiler_bridge, compiler_classpath, global_plugins, runtime_classpath, version)
 </pre>
 
 
@@ -1004,7 +933,7 @@ _configure_scala(name, compiler_bridge, compiler_classpath, runtime_classpath, v
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#_configure_scala_name">
+    <tr id="#configure_scala_name">
       <td><code>name</code></td>
       <td>
         String; required
@@ -1013,25 +942,34 @@ _configure_scala(name, compiler_bridge, compiler_classpath, runtime_classpath, v
         </p>
       </td>
     </tr>
-    <tr id="#_configure_scala_compiler_bridge">
+    <tr id="#configure_scala_compiler_bridge">
       <td><code>compiler_bridge</code></td>
       <td>
         Label; required
       </td>
     </tr>
-    <tr id="#_configure_scala_compiler_classpath">
+    <tr id="#configure_scala_compiler_classpath">
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#_configure_scala_runtime_classpath">
+    <tr id="#configure_scala_global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          Scalac plugins that will always be enabled.
+        </p>
+      </td>
+    </tr>
+    <tr id="#configure_scala_runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#_configure_scala_version">
+    <tr id="#configure_scala_version">
       <td><code>version</code></td>
       <td>
         String; required
@@ -1081,7 +1019,7 @@ Creates a `ZincConfiguration`.
 ## <unknown name>
 
 <pre>
-<unknown name>(name, compiler_classpath, runtime_classpath, version)
+<unknown name>(name, compiler_classpath, global_plugins, runtime_classpath, version)
 </pre>
 
 Creates a `ScalaConfiguration`.
@@ -1107,8 +1045,14 @@ Creates a `ScalaConfiguration`.
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
+      </td>
+    </tr>
+    <tr id="#<unknown name>_global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        List of labels; optional
         <p>
-          The compiler classpath.
+          Scalac plugins that will always be enabled.
         </p>
       </td>
     </tr>
@@ -1116,18 +1060,12 @@ Creates a `ScalaConfiguration`.
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
-        <p>
-          The runtime classpath.
-        </p>
       </td>
     </tr>
     <tr id="#<unknown name>_version">
       <td><code>version</code></td>
       <td>
         String; required
-        <p>
-          The Scala full version.
-        </p>
       </td>
     </tr>
   </tbody>
@@ -1170,95 +1108,6 @@ Creates a `ScalaConfiguration`.
 </table>
 
 
-<a name="#<unknown name>"></a>
-## <unknown name>
-
-<pre>
-<unknown name>(name, deps, macro, main_class, runtime_deps, scala, srcs)
-</pre>
-
-
-Compiles and link a Scala JVM executable.
-
-This is a low-level rule used to bootstrap higher-level rules.
-You probably don't want to use this directly.
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#<unknown name>_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#<unknown name>_deps">
-      <td><code>deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#<unknown name>_macro">
-      <td><code>macro</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library provides macros.
-        </p>
-      </td>
-    </tr>
-    <tr id="#<unknown name>_main_class">
-      <td><code>main_class</code></td>
-      <td>
-        String; required
-        <p>
-          The main class.
-        </p>
-      </td>
-    </tr>
-    <tr id="#<unknown name>_runtime_deps">
-      <td><code>runtime_deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM runtime-only library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#<unknown name>_scala">
-      <td><code>scala</code></td>
-      <td>
-        Label; required
-        <p>
-          The `ScalaConfiguration`.
-        </p>
-      </td>
-    </tr>
-    <tr id="#<unknown name>_srcs">
-      <td><code>srcs</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The source Scala and Java files (and `.srcjar` files of those).
-        </p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
 <a name="#_ScalaConfiguration"></a>
 ## _ScalaConfiguration
 
@@ -1288,6 +1137,12 @@ Scala compile-time and runtime configuration
       <td><code>runtime_classpath</code></td>
       <td>
         <p>The runtime classpath.</p>
+      </td>
+    </tr>
+    <tr id="#_ScalaConfiguration_global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        <p>Globally enabled compiler plugins</p>
       </td>
     </tr>
   </tbody>

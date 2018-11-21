@@ -38,7 +38,7 @@ Creates a `ZincConfiguration`.
 ## <unknown name>
 
 <pre>
-<unknown name>(name, compiler_classpath, runtime_classpath, version)
+<unknown name>(name, compiler_classpath, global_plugins, runtime_classpath, version)
 </pre>
 
 Creates a `ScalaConfiguration`.
@@ -64,8 +64,14 @@ Creates a `ScalaConfiguration`.
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
+      </td>
+    </tr>
+    <tr id="#<unknown name>_global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        List of labels; optional
         <p>
-          The compiler classpath.
+          Scalac plugins that will always be enabled.
         </p>
       </td>
     </tr>
@@ -73,18 +79,12 @@ Creates a `ScalaConfiguration`.
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
-        <p>
-          The runtime classpath.
-        </p>
       </td>
     </tr>
     <tr id="#<unknown name>_version">
       <td><code>version</code></td>
       <td>
         String; required
-        <p>
-          The Scala full version.
-        </p>
       </td>
     </tr>
   </tbody>
