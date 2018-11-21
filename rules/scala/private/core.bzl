@@ -29,20 +29,17 @@ runner_common_attributes = {
     ),
 }
 
-scala_binary_private_attributes = dict(
-    {
-        "_java": attr.label(
-            default = Label("@bazel_tools//tools/jdk:java"),
-            executable = True,
-            cfg = "host",
-        ),
-        "_java_stub_template": attr.label(
-            default = Label("@anx_java_stub_template//file"),
-            allow_single_file = True,
-        ),
-    },
-    **runner_common_attributes
-)
+scala_binary_private_attributes = dict({
+    "_java": attr.label(
+        default = Label("@bazel_tools//tools/jdk:java"),
+        executable = True,
+        cfg = "host",
+    ),
+    "_java_stub_template": attr.label(
+        default = Label("@anx_java_stub_template//file"),
+        allow_single_file = True,
+    ),
+}, **runner_common_attributes)
 
 scala_test_private_attributes = scala_binary_private_attributes
 
