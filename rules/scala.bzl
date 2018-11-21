@@ -184,6 +184,7 @@ scala_test = rule(
                     "org.specs2.runner.Specs2Framework",
                     "minitest.runner.Framework",
                     "utest.runner.Framework",
+                    "com.novocode.junit.JUnitFramework",
                 ],
             ),
             "runner": attr.label(default = "@rules_scala_annex//rules/scala:test"),
