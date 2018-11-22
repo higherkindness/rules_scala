@@ -288,7 +288,7 @@ def _phase_singlejar(ctx, g):
         args.add("--sources")
         args.add(file)
 
-    for v in [getattr(g, k) for k in dir(g) if k not in ["to_json", "to_proto"]]:
+    for v in [getattr(g, k) for k in dir(g)[::-1] if k not in ["to_json", "to_proto"]]:
         if hasattr(v, "jar"):
             jar = getattr(v, "jar")
             args.add("--sources", jar)
