@@ -1,0 +1,4 @@
+<plugin>
+  <name>anx-macro-spoor</name>
+  <classname>anx.MacroSpoorPlugin</classname>
+</plugin>

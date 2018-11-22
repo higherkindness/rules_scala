@@ -99,7 +99,7 @@ def runner_common(ctx):
     ]
     compile_classpath = depset(order = "preorder", transitive = macro_classpath + [sdeps.transitive_compile_time_jars])
 
-    zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
+    zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])    
 
     if ctx.files.resources:
         resource_jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
@@ -107,8 +107,9 @@ def runner_common(ctx):
         args.add("c", resource_jar)
         args.set_param_file_format("multiline")
         args.use_param_file("@%s")
+        strip_prefix = ctx.label.package + "/" + ctx.attr.resource_strip_prefix
         for file in ctx.files.resources:
-            args.add("{}={}".format(_resource_path(file, ctx.attr.resource_strip_prefix), file.path))
+            args.add("{}={}".format(_resource_path(file, strip_prefix), file.path))
         ctx.actions.run(
             arguments = [args],
             executable = ctx.executable._zipper,
@@ -298,10 +299,13 @@ def _labeled_group(labeled_jars):
     return (["--group", "_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars.to_list()])
 
 def _resource_path(file, strip_prefix):
+    print(file.short_path)
+    print(strip_prefix)
     if strip_prefix:
         if not file.short_path.startswith(strip_prefix):
-            fail("{} does not have prefix {}".format(file.short_path, strip_prefix))
-        return file.short_path[len(strip_prefix) + 1 - int(file.short_path.endswith("/")):]
+            fail("{} does not have prefix {}".format(file.short_path, strip_prefix))        
+        return file.short_path[len(strip_prefix):]
+    # todo: consider removing custom automatic handling?
     conventional = [
         "src/main/resources/",
         "src/test/resources/",
