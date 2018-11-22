@@ -220,6 +220,35 @@ Zinc configuration.
 </table>
 
 
+<a name="#ScalaRulePhase"></a>
+## ScalaRulePhase
+
+A Scala compiler plugin
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="#ScalaRulePhase_name">
+      <td><code>name</code></td>
+      <td>
+        <p>the phase name</p>
+      </td>
+    </tr>
+    <tr id="#ScalaRulePhase_function">
+      <td><code>function</code></td>
+      <td>
+        <p>just testing for now</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <a name="#ZincInfo"></a>
 ## ZincInfo
 

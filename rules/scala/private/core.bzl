@@ -395,7 +395,6 @@ def run_phases(ctx):
     gd = {"init": init}
     g = struct(**gd)
     for (name, function) in phases:
-        print("phase: %s" % name)
         p = function(ctx, g)
         if p != None:
             gd[name] = p
