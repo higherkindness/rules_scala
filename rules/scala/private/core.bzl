@@ -3,6 +3,7 @@ load(
     _LabeledJars = "LabeledJars",
     _ScalaConfiguration = "ScalaConfiguration",
     _ScalaInfo = "ScalaInfo",
+    _ScalaRulePhase = "ScalaRulePhase",
     _ZincConfiguration = "ZincConfiguration",
     _ZincInfo = "ZincInfo",
 )
@@ -29,21 +30,107 @@ runner_common_attributes = {
     ),
 }
 
-scala_binary_private_attributes = dict({
-    "_java": attr.label(
-        default = Label("@bazel_tools//tools/jdk:java"),
-        executable = True,
-        cfg = "host",
-    ),
-    "_java_stub_template": attr.label(
-        default = Label("@anx_java_stub_template//file"),
-        allow_single_file = True,
-    ),
-}, **runner_common_attributes)
+scala_binary_private_attributes = dict(
+    {
+        "_java": attr.label(
+            default = Label("@bazel_tools//tools/jdk:java"),
+            executable = True,
+            cfg = "host",
+        ),
+        "_java_stub_template": attr.label(
+            default = Label("@anx_java_stub_template//file"),
+            allow_single_file = True,
+        ),
+    },
+    **runner_common_attributes,
+)
 
 scala_test_private_attributes = scala_binary_private_attributes
 
 _SINGLE_JAR_MNEMONIC = "SingleJar"
+
+def _phase_singlejar(ctx, g):
+    inputs = [g.class_jar] + ctx.files.resource_jars
+    args = ctx.actions.args()
+    args.add("--exclude_build_data")
+    args.add("--normalize")
+    args.add("--sources", g.class_jar)
+    if g.resource_jar:
+        args.add("--sources", g.resource_jar)
+        inputs.append(g.resource_jar)
+    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
+        args.add("--sources")
+        args.add(file)
+    args.add("--output", ctx.outputs.jar)
+    args.add("--warn_duplicate_resources")
+    args.set_param_file_format("multiline")
+    args.use_param_file("@%s", use_always = True)
+
+    # TODO: add documentation/note about the kind of
+    # elegant trick being used to fail the build in
+    # an ergonomic manner
+
+    for k in dir(g):
+        if k not in ["to_json", "to_proto"]:
+            v = getattr(g, k)
+            if hasattr(v, "outputs"):
+                inputs.extend(getattr(v, "outputs"))
+
+    ctx.actions.run(
+        arguments = [args],
+        executable = ctx.executable._singlejar,
+        execution_requirements = {"supports-workers": "1"},
+        mnemonic = _SINGLE_JAR_MNEMONIC,
+        inputs = inputs,
+        outputs = [ctx.outputs.jar],
+    )
+
+def _phase_depscheck(ctx, g):
+    deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
+    deps_checks = {}
+    labeled_jars = depset(transitive = [dep[_LabeledJars].values for dep in ctx.attr.deps])
+    deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_toolchain.runner])
+    for name in ("direct", "used"):
+        deps_check = ctx.actions.declare_file("{}/depscheck_{}.success".format(ctx.label.name, name))
+        deps_args = ctx.actions.args()
+        deps_args.add(name, format = "--check_%s=true")
+        deps_args.add_all("--direct", [dep.label for dep in ctx.attr.deps], format_each = "_%s")
+        deps_args.add_all(labeled_jars, map_each = _labeled_group)
+        deps_args.add("--label", ctx.label, format = "_%s")
+        deps_args.add_all("--whitelist", [dep.label for dep in ctx.attr.deps_used_whitelist], format_each = "_%s")
+        deps_args.add("--")
+        deps_args.add(g.used)
+        deps_args.add(deps_check)
+        deps_args.set_param_file_format("multiline")
+        deps_args.use_param_file("@%s", use_always = True)
+        ctx.actions.run(
+            mnemonic = "ScalaCheckDeps",
+            inputs = [g.used] + deps_inputs,
+            outputs = [deps_check],
+            executable = deps_toolchain.runner.files_to_run.executable,
+            input_manifests = deps_input_manifests,
+            execution_requirements = {"supports-workers": "1"},
+            arguments = [deps_args],
+        )
+        deps_checks[name] = deps_check
+
+    outputs = []
+
+    if deps_toolchain.direct == "error":
+        outputs.append(deps_checks["direct"])
+    if deps_toolchain.used == "error":
+        outputs.append(deps_checks["used"])
+
+    return struct(
+        toolchain = deps_toolchain,
+        checks = deps_checks,
+        outputs = outputs,
+    )
+
+_default_phases = [
+    ("depscheck", _phase_depscheck),
+    ("singlejar", _phase_singlejar),
+]
 
 def runner_common(ctx):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
@@ -57,6 +144,11 @@ def runner_common(ctx):
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
     splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins + scala_configuration.global_plugins))
+
+    phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
+
+    # TODO: allow plugins to select insertion point
+    phases = [(pp.name, pp.function) for pp in phase_providers] + _default_phases
 
     if len(ctx.attr.srcs) == 0:
         java_info = java_common.merge([sdeps, sexports])
@@ -180,61 +272,19 @@ def runner_common(ctx):
 
     files = [ctx.outputs.jar]
 
-    deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
-    deps_checks = {}
-    labeled_jars = depset(transitive = [dep[_LabeledJars].values for dep in ctx.attr.deps])
-    deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_toolchain.runner])
-    for name in ("direct", "used"):
-        deps_check = ctx.actions.declare_file("{}/deps_check_{}".format(ctx.label.name, name))
-        deps_args = ctx.actions.args()
-        deps_args.add(name, format = "--check_%s=true")
-        deps_args.add_all("--direct", [dep.label for dep in ctx.attr.deps], format_each = "_%s")
-        deps_args.add_all(labeled_jars, map_each = _labeled_group)
-        deps_args.add("--label", ctx.label, format = "_%s")
-        deps_args.add_all("--whitelist", [dep.label for dep in ctx.attr.deps_used_whitelist], format_each = "_%s")
-        deps_args.add("--")
-        deps_args.add(used)
-        deps_args.add(deps_check)
-        deps_args.set_param_file_format("multiline")
-        deps_args.use_param_file("@%s", use_always = True)
-        ctx.actions.run(
-            mnemonic = "ScalaCheckDeps",
-            inputs = [used] + deps_inputs,
-            outputs = [deps_check],
-            executable = deps_toolchain.runner.files_to_run.executable,
-            input_manifests = deps_input_manifests,
-            execution_requirements = {"supports-workers": "1"},
-            arguments = [deps_args],
-        )
-        deps_checks[name] = deps_check
+    gd = {
+        "used": used,
+        "class_jar": class_jar,
+        "resource_jar": resource_jar,
+    }
 
-    inputs = [class_jar] + ctx.files.resource_jars
-    args = ctx.actions.args()
-    args.add("--exclude_build_data")
-    args.add("--normalize")
-    args.add("--sources", class_jar)
-    if resource_jar:
-        args.add("--sources", resource_jar)
-        inputs.append(resource_jar)
-    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
-        args.add("--sources")
-        args.add(file)
-    args.add("--output", ctx.outputs.jar)
-    args.add("--warn_duplicate_resources")
-    args.set_param_file_format("multiline")
-    args.use_param_file("@%s", use_always = True)
-    if deps_toolchain.direct == "error":
-        inputs.append(deps_checks["direct"])
-    if deps_toolchain.used == "error":
-        inputs.append(deps_checks["used"])
-    ctx.actions.run(
-        arguments = [args],
-        executable = ctx.executable._singlejar,
-        execution_requirements = {"supports-workers": "1"},
-        mnemonic = _SINGLE_JAR_MNEMONIC,
-        inputs = inputs,
-        outputs = [ctx.outputs.jar],
-    )
+    g = struct(**gd)
+    for (name, function) in phases:
+        print("phase: %s" % name)
+        p = function(ctx, g)
+        if p != None:
+            gd[name] = p
+            g = struct(**gd)
 
     jars = []
     for jar in java_info.outputs.jars:
@@ -256,20 +306,14 @@ def runner_common(ctx):
         ),
     )
 
-    deps_check = []
-    if deps_toolchain.direct != "off":
-        deps_check.append(deps_checks["direct"])
-    if deps_toolchain.used != "off":
-        deps_check.append(deps_checks["used"])
-
     return struct(
-        deps_check = deps_check,
         files = depset(files),
         intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, java_info),
         java_info = java_info,
         mains_files = depset([mains_file]),
         scala_info = _ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
         zinc_info = zinc_info,
+        **gd,
     )
 
 scala_library_private_attributes = runner_common_attributes
@@ -288,7 +332,7 @@ def scala_library_implementation(ctx):
             ),
             OutputGroupInfo(
                 # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
-                deps = depset(res.deps_check),
+                depscheck = depset(res.depscheck.outputs),
             ),
         ],
     )
@@ -380,7 +424,7 @@ def scala_binary_implementation(ctx):
                 ),
             ),
             OutputGroupInfo(
-                deps_check = depset(res.deps_check),
+                depscheck = depset(res.depscheck.outputs),
             ),
         ],
     )
@@ -454,7 +498,7 @@ def scala_test_implementation(ctx):
             test_info,
             OutputGroupInfo(
                 # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
-                deps_check = depset(res.deps_check),
+                depscheck = depset(res.depscheck.outputs),
             ),
         ],
     )

@@ -60,6 +60,14 @@ ZincConfiguration = provider(
     },
 )
 
+ScalaRulePhase = provider(
+    doc = "A Scala compiler plugin",
+    fields = {
+        "name": "the phase name",
+        "function": "just testing for now",
+    },
+)
+
 def _declare_zinc_configuration_implementation(ctx):
     return [ZincConfiguration(
         compiler_bridge = ctx.files.compiler_bridge,
