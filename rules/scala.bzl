@@ -14,10 +14,10 @@ load(
 )
 load(
     "//rules/scala:private/core.bzl",
-    _scala_library_implementation = "scala_library_implementation",
-    _scala_library_private_attributes = "scala_library_private_attributes",
     _scala_binary_implementation = "scala_binary_implementation",
     _scala_binary_private_attributes = "scala_binary_private_attributes",
+    _scala_library_implementation = "scala_library_implementation",
+    _scala_library_private_attributes = "scala_library_private_attributes",
     _scala_test_implementation = "scala_test_implementation",
     _scala_test_private_attributes = "scala_test_private_attributes",
 )
@@ -41,15 +41,15 @@ load(
     _scala_repl_implementation = "scala_repl_implementation",
     _scala_repl_private_attributes = "scala_repl_private_attributes",
 )
-load(
-    "//rules:scalac.bzl",
-    _scalac_library = "scalac_library",
-)
 
 _library_common_attributes = {
     "srcs": attr.label_list(
         doc = "The source Scala and Java files (and `.srcjar` files of those).",
-        allow_files = [".scala", ".java", ".srcjar"],
+        allow_files = [
+            ".scala",
+            ".java",
+            ".srcjar",
+        ],
     ),
     "data": attr.label_list(
         doc = "The additional runtime files needed by this library.",
@@ -102,7 +102,10 @@ _library_common_attributes = {
     "scala": attr.label(
         default = "@scala",
         doc = "The `ScalaConfiguration`.",
-        providers = [_ScalaConfiguration, _ZincConfiguration],
+        providers = [
+            _ScalaConfiguration,
+            _ZincConfiguration,
+        ],
     ),
     "scalacopts": attr.string_list(
         doc = "The Scalac options.",
@@ -110,19 +113,19 @@ _library_common_attributes = {
 }
 
 scala_library = rule(
-    implementation = _scala_library_implementation,
     attrs = _dicts.add(
         _library_common_attributes,
         _scala_library_private_attributes,
     ),
     doc = "Compiles a Scala JVM library.",
+    outputs = {
+        "jar": "%{name}.jar",
+    },
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
     ],
-    outputs = {
-        "jar": "%{name}.jar",
-    },
+    implementation = _scala_library_implementation,
 )
 
 _runner_common_attributes = {
@@ -136,7 +139,6 @@ _runner_common_attributes = {
 }
 
 scala_binary = rule(
-    implementation = _scala_binary_implementation,
     attrs = _dicts.add(
         _library_common_attributes,
         _runner_common_attributes,
@@ -148,20 +150,20 @@ scala_binary = rule(
         },
     ),
     doc = "Compiles and links a Scala JVM executable.",
-    toolchains = [
-        "@rules_scala_annex//rules/scala:deps_toolchain_type",
-        "@rules_scala_annex//rules/scala:runner_toolchain_type",
-    ],
     executable = True,
     outputs = {
         "bin": "%{name}-bin",
         "jar": "%{name}.jar",
         "deploy_jar": "%{name}_deploy.jar",
     },
+    toolchains = [
+        "@rules_scala_annex//rules/scala:deps_toolchain_type",
+        "@rules_scala_annex//rules/scala:runner_toolchain_type",
+    ],
+    implementation = _scala_binary_implementation,
 )
 
 scala_test = rule(
-    implementation = _scala_test_implementation,
     attrs = _dicts.add(
         _library_common_attributes,
         _runner_common_attributes,
@@ -170,7 +172,11 @@ scala_test = rule(
             "isolation": attr.string(
                 default = "none",
                 doc = "The isolation level to apply",
-                values = ["classloader", "none", "process"],
+                values = [
+                    "classloader",
+                    "none",
+                    "process",
+                ],
             ),
             "scalacopts": attr.string_list(),
             "shared_deps": attr.label_list(
@@ -191,22 +197,22 @@ scala_test = rule(
             "subprocess_runner": attr.label(default = "@rules_scala_annex//rules/scala:test_subprocess"),
         },
     ),
-    toolchains = [
-        "@rules_scala_annex//rules/scala:deps_toolchain_type",
-        "@rules_scala_annex//rules/scala:runner_toolchain_type",
-    ],
-    test = True,
     executable = True,
     outputs = {
         "bin": "%{name}-bin",
         "jar": "%{name}.jar",
     },
+    test = True,
+    toolchains = [
+        "@rules_scala_annex//rules/scala:deps_toolchain_type",
+        "@rules_scala_annex//rules/scala:runner_toolchain_type",
+    ],
+    implementation = _scala_test_implementation,
 )
 
 # scala_repl
 
 scala_repl = rule(
-    implementation = _scala_repl_implementation,
     attrs = _dicts.add(
         _scala_repl_private_attributes,
         {
@@ -222,7 +228,10 @@ scala_repl = rule(
             "scala": attr.label(
                 default = "@scala",
                 doc = "The `ScalaConfiguration`.",
-                providers = [_ScalaConfiguration, _ZincConfiguration],
+                providers = [
+                    _ScalaConfiguration,
+                    _ZincConfiguration,
+                ],
             ),
             "scalacopts": attr.string_list(
                 doc = "The Scalac options.",
@@ -233,10 +242,10 @@ scala_repl = rule(
     outputs = {
         "bin": "%{name}-bin",
     },
+    implementation = _scala_repl_implementation,
 )
 
 scala_import = rule(
-    implementation = _scala_import_implementation,
     attrs = _dicts.add(
         _scala_import_private_attributes,
         {
@@ -253,19 +262,26 @@ Creates a Scala JVM library.
 
 Use this only for libraries with macros. Otherwise, use `java_import`.
 """,
+    implementation = _scala_import_implementation,
 )
 
 scaladoc = rule(
-    implementation = _scaladoc_implementation,
     attrs = _dicts.add(
         _scaladoc_private_attributes,
         {
             "compiler_deps": attr.label_list(providers = [JavaInfo]),
             "deps": attr.label_list(providers = [JavaInfo]),
-            "srcs": attr.label_list(allow_files = [".java", ".scala", ".srcjar"]),
+            "srcs": attr.label_list(allow_files = [
+                ".java",
+                ".scala",
+                ".srcjar",
+            ]),
             "scala": attr.label(
                 default = "@scala",
-                providers = [_ScalaConfiguration, _ZincConfiguration],
+                providers = [
+                    _ScalaConfiguration,
+                    _ZincConfiguration,
+                ],
             ),
             "scalacopts": attr.string_list(),
             "title": attr.string(),
@@ -274,6 +290,7 @@ scaladoc = rule(
     doc = """
 Generates Scaladocs.
 """,
+    implementation = _scaladoc_implementation,
 )
 
 ##
@@ -290,7 +307,6 @@ def _scala_runner_toolchain_implementation(ctx):
     )]
 
 scala_runner_toolchain = rule(
-    implementation = _scala_runner_toolchain_implementation,
     attrs = {
         "runner": attr.label(
             allow_files = True,
@@ -301,6 +317,7 @@ scala_runner_toolchain = rule(
         "encoding": attr.string(),
     },
     doc = "Configures the Scala runner to use.",
+    implementation = _scala_runner_toolchain_implementation,
 )
 
 # scala_deps_toolchain
@@ -313,68 +330,57 @@ def scala_deps_toolchain_implementation(ctx):
     )]
 
 scala_deps_toolchain = rule(
-    implementation = scala_deps_toolchain_implementation,
     attrs = {
         "direct": attr.string(),
-        "runner": attr.label(allow_files = True, executable = True, cfg = "host"),
+        "runner": attr.label(
+            allow_files = True,
+            executable = True,
+            cfg = "host",
+        ),
         "used": attr.string(),
     },
     doc = "Configures the deps checker and options to use.",
+    implementation = scala_deps_toolchain_implementation,
 )
 
-_configure_basic_scala = rule(
+configure_basic_scala = rule(
+    attrs = {
+        "version": attr.string(mandatory = True),
+        "compiler_classpath": attr.label_list(
+            mandatory = True,
+            providers = [JavaInfo],
+        ),
+        "runtime_classpath": attr.label_list(
+            mandatory = True,
+            providers = [JavaInfo],
+        ),
+        "global_plugins": attr.label_list(
+            doc = "Scalac plugins that will always be enabled.",
+            providers = [JavaInfo],
+        ),
+    },
     implementation = _configure_basic_scala_implementation,
-    attrs = {
-        "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
-        "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
-        "version": attr.string(mandatory = True),
-    },
 )
 
-_configure_scala = rule(
+configure_scala = rule(
+    attrs = {
+        "version": attr.string(mandatory = True),
+        "runtime_classpath": attr.label_list(
+            mandatory = True,
+            providers = [JavaInfo],
+        ),
+        "compiler_classpath": attr.label_list(
+            mandatory = True,
+            providers = [JavaInfo],
+        ),
+        "compiler_bridge": attr.label(
+            allow_single_file = True,
+            mandatory = True,
+        ),
+        "global_plugins": attr.label_list(
+            doc = "Scalac plugins that will always be enabled.",
+            providers = [JavaInfo],
+        ),
+    },
     implementation = _configure_scala_implementation,
-    attrs = {
-        "version": attr.string(mandatory = True),
-        "runtime_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
-        "compiler_classpath": attr.label_list(mandatory = True, providers = [JavaInfo]),
-        "compiler_bridge": attr.label(allow_single_file = True, mandatory = True),
-    },
 )
-
-"""
-Configures a Scala provider for use by library, binary, and test rules.
-
-Args:
-
-  version:
-    The full Scala version string, such as "2.12.5"
-
-  runtime_classpath:
-    The full Scala runtime classpath for use in library, binary, and test rules;
-    i.e. scala-library + scala-reflect + ...
-
-  compiler_classpath:
-    The full Scala compiler classpath required to invoke the Scala compiler;
-    i.e.. scala-compiler + scala-library +  scala-reflect + ...
-
-  compiler_bridge:
-    The Zinc compiler bridge with attached sources.
-
-"""
-
-def configure_scala(
-        name,
-        compiler_bridge,
-        compiler_bridge_classpath,
-        compiler_classpath,
-        **kwargs):
-    _configure_basic_scala(name = "{}_basic".format(name), compiler_classpath = compiler_classpath, **kwargs)
-
-    _scalac_library(
-        name = "{}_compiler_bridge".format(name),
-        deps = compiler_classpath + compiler_bridge_classpath,
-        scala = ":{}_basic".format(name),
-        srcs = [compiler_bridge],
-    )
-
-    _configure_scala(name = name, compiler_bridge = ":{}_compiler_bridge".format(name), compiler_classpath = compiler_classpath, **kwargs)

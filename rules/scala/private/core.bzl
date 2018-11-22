@@ -54,7 +54,7 @@ def runner_common(ctx):
     sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
-    splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins))
+    splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins + scala_configuration.global_plugins))
 
     if len(ctx.attr.srcs) == 0:
         java_info = java_common.merge([sdeps, sexports])
@@ -75,13 +75,13 @@ def runner_common(ctx):
         )
 
         java_info = JavaInfo(
-            output_jar = ctx.outputs.jar,
             compile_jar = compile_jar,
-            source_jar = source_jar,
-            deps = [sdeps],
             neverlink = getattr(ctx.attr, "neverlink", False),
-            runtime_deps = [sruntime_deps] + scala_configuration_runtime_deps,
+            output_jar = ctx.outputs.jar,
+            source_jar = source_jar,
             exports = [sexports],
+            runtime_deps = [sruntime_deps] + scala_configuration_runtime_deps,
+            deps = [sdeps],
         )
 
     apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
@@ -240,18 +240,18 @@ def runner_common(ctx):
         jars.append(jar.ijar)
     zinc_info = _ZincInfo(
         apis = apis,
+        deps_files = depset([apis, relations], transitive = [zinc.deps_files for zinc in zincs]),
         label = ctx.label,
         relations = relations,
         deps = depset(
             [struct(
                 apis = apis,
+                jars = jars,
                 label = ctx.label,
                 relations = relations,
-                jars = jars,
             )],
             transitive = [zinc.deps for zinc in zincs],
         ),
-        deps_files = depset([apis, relations], transitive = [zinc.deps_files for zinc in zincs]),
     )
 
     deps_check = []
@@ -262,12 +262,12 @@ def runner_common(ctx):
 
     return struct(
         deps_check = deps_check,
+        files = depset(files),
+        intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, java_info),
         java_info = java_info,
+        mains_files = depset([mains_file]),
         scala_info = _ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
         zinc_info = zinc_info,
-        intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, java_info),
-        files = depset(files),
-        mains_files = depset([mains_file]),
     )
 
 scala_library_private_attributes = runner_common_attributes
@@ -275,6 +275,7 @@ scala_library_private_attributes = runner_common_attributes
 def scala_library_implementation(ctx):
     res = runner_common(ctx)
     return struct(
+        java = res.intellij_info,
         providers = [
             res.java_info,
             res.scala_info,
@@ -288,7 +289,6 @@ def scala_library_implementation(ctx):
                 deps = depset(res.deps_check),
             ),
         ],
-        java = res.intellij_info,
     )
 
 def _analysis(analysis):
@@ -351,11 +351,12 @@ def scala_binary_implementation(ctx):
         "{}/".format(ctx.label.name),
         ctx.outputs.bin,
         java_info.transitive_runtime_deps,
-        main_class = ctx.attr.main_class or "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
         jvm_flags = [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
+        main_class = ctx.attr.main_class or "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
     )
 
     return struct(
+        java = res.intellij_info,
         providers = [
             res.java_info,
             res.scala_info,
@@ -367,8 +368,8 @@ def scala_binary_implementation(ctx):
                 runfiles = ctx.runfiles(
                     files = files + ctx.files.data + [mains_file],
                     transitive_files = depset(
-                        order = "default",
                         direct = [ctx.executable._java],
+                        order = "default",
                         transitive = [java_info.transitive_runtime_deps],
                     ),
                     collect_default = True,
@@ -378,7 +379,6 @@ def scala_binary_implementation(ctx):
                 deps_check = depset(res.deps_check),
             ),
         ],
-        java = res.intellij_info,
     )
 
 def scala_test_implementation(ctx):
@@ -441,6 +441,7 @@ def scala_test_implementation(ctx):
         ),
     )
     return struct(
+        java = res.intellij_info,
         providers = [
             res.java_info,
             res.scala_info,
@@ -452,7 +453,6 @@ def scala_test_implementation(ctx):
                 deps_check = depset(res.deps_check),
             ),
         ],
-        java = res.intellij_info,
     )
 
 def _short_path(file):
