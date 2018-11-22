@@ -43,6 +43,8 @@ scala_binary_private_attributes = dict({
 
 scala_test_private_attributes = scala_binary_private_attributes
 
+_SINGLE_JAR_MNEMONIC = "SingleJar"
+
 def runner_common(ctx):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
 
@@ -229,7 +231,7 @@ def runner_common(ctx):
         arguments = [args],
         executable = ctx.executable._singlejar,
         execution_requirements = {"supports-workers": "1"},
-        mnemonic = "SingleJar",
+        mnemonic = _SINGLE_JAR_MNEMONIC,
         inputs = inputs,
         outputs = [ctx.outputs.jar],
     )
@@ -318,6 +320,7 @@ def _build_deployable(ctx, jars_list):
     # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
     args = ctx.actions.args()
     args.add("--normalize")
+    args.add("--compression")
     args.add("--sources")
     args.add_all([j.path for j in jars_list])
     if getattr(ctx.attr, "main_class", ""):
@@ -328,7 +331,8 @@ def _build_deployable(ctx, jars_list):
         inputs = jars_list,
         outputs = [ctx.outputs.deploy_jar],
         executable = ctx.executable._singlejar,
-        mnemonic = "ScalaDeployJar",
+        execution_requirements = {"supports-workers": "1"},
+        mnemonic = _SINGLE_JAR_MNEMONIC,
         progress_message = "scala deployable %s" % ctx.label,
         arguments = [args],
     )
