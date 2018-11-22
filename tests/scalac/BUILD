@@ -1,7 +1,7 @@
 load(
     "@rules_scala_annex//rules:scalac.bzl",
-    "scalac_library",
     "scalac_binary",
+    "scalac_library",
 )
 
 scalac_library(

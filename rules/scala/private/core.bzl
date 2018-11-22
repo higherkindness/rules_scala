@@ -129,8 +129,7 @@ def _phase_compile(ctx, g):
 
     javacopts = [
         ctx.expand_location(option, ctx.attr.data)
-        for option
-        in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")
+        for option in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")
     ]
 
     zincs = [dep[_ZincInfo] for dep in ctx.attr.deps if _ZincInfo in dep]
@@ -310,7 +309,7 @@ def _phase_singlejar(ctx, g):
         executable = ctx.executable._singlejar,
         execution_requirements = {"supports-workers": "1"},
         mnemonic = _SINGLE_JAR_MNEMONIC,
-        inputs = inputs, # TODO: build up inputs as a depset
+        inputs = inputs,  # TODO: build up inputs as a depset
         outputs = [ctx.outputs.jar],
     )
 
@@ -354,7 +353,7 @@ def _phase_javainfo(ctx, g):
         )
 
     return struct(
-        java_info = java_info
+        java_info = java_info,
     )
 
 #
@@ -372,29 +371,28 @@ def _phase_ijinfo(ctx, g):
 #
 
 _default_phases = [
-    ('javainfo',  _phase_javainfo),
-    ('resources', _phase_resources),
-    ('compile',   _phase_compile),
-    ('depscheck', _phase_depscheck),
-    ('singlejar', _phase_singlejar),
-    ('ijinfo',    _phase_ijinfo)
+    ("javainfo", _phase_javainfo),
+    ("resources", _phase_resources),
+    ("compile", _phase_compile),
+    ("depscheck", _phase_depscheck),
+    ("singlejar", _phase_singlejar),
+    ("ijinfo", _phase_ijinfo),
 ]
 
 def run_phases(ctx):
-
     scala_configuration = ctx.attr.scala[_ScalaConfiguration]
     sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
     init = struct(
         scala_configuration = scala_configuration,
         # todo: probably can remove this from init
-        sdeps = sdeps
+        sdeps = sdeps,
     )
 
     # TODO: allow plugins to select insertion point
     phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
     phases = [(pp.name, pp.function) for pp in phase_providers] + _default_phases
 
-    gd = { "init": init }
+    gd = {"init": init}
     g = struct(**gd)
     for (name, function) in phases:
         print("phase: %s" % name)

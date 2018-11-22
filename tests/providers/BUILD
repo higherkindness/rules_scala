@@ -10,9 +10,9 @@ load(
 )
 load(
     ":build.bzl",
+    "consume_scala_and_zinc_configuration",
     "consume_scala_configuration",
     "consume_zinc_configuration",
-    "consume_scala_and_zinc_configuration",
 )
 
 declare_scala_configuration(

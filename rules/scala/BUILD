@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "scala_library", "scala_binary", "scala_deps_toolchain", "scala_runner_toolchain")
+load("//rules:scala.bzl", "scala_binary", "scala_deps_toolchain", "scala_library", "scala_runner_toolchain")
 load("//rules:scalac.bzl", "scalac_binary", "scalac_library")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
