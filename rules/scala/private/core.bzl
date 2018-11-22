@@ -10,7 +10,7 @@ load(
 load("//rules/common:private/utils.bzl", _collect = "collect", _write_launcher = "write_launcher")
 load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
 
-runner_common_attributes = {
+run_phases_attributes = {
     "_java_toolchain": attr.label(
         default = Label("@bazel_tools//tools/jdk:current_java_toolchain"),
     ),
@@ -30,60 +30,197 @@ runner_common_attributes = {
     ),
 }
 
-scala_binary_private_attributes = dict(
-    {
-        "_java": attr.label(
-            default = Label("@bazel_tools//tools/jdk:java"),
-            executable = True,
-            cfg = "host",
-        ),
-        "_java_stub_template": attr.label(
-            default = Label("@anx_java_stub_template//file"),
-            allow_single_file = True,
-        ),
-    },
-    **runner_common_attributes,
-)
+scala_binary_private_attributes = dict({
+    "_java": attr.label(
+        default = Label("@bazel_tools//tools/jdk:java"),
+        executable = True,
+        cfg = "host",
+    ),
+    "_java_stub_template": attr.label(
+        default = Label("@anx_java_stub_template//file"),
+        allow_single_file = True,
+    ),
+}, **run_phases_attributes)
 
 scala_test_private_attributes = scala_binary_private_attributes
 
 _SINGLE_JAR_MNEMONIC = "SingleJar"
 
-def _phase_singlejar(ctx, g):
-    inputs = [g.class_jar] + ctx.files.resource_jars
+#
+# PHASE: resources
+#
+# Resource files are merged into a zip archive.
+#
+# The output is returned in the jar field so the singlejar
+# phase will merge it into the final jar.
+#
+
+def _phase_resources(ctx, g):
+    zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
+
+    if ctx.files.resources:
+        jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
+        args = ctx.actions.args()
+        args.add("c", jar)
+        args.set_param_file_format("multiline")
+        args.use_param_file("@%s")
+        for file in ctx.files.resources:
+            args.add("{}={}".format(_resources_make_path(file, ctx.attr.resource_strip_prefix), file.path))
+        ctx.actions.run(
+            arguments = [args],
+            executable = ctx.executable._zipper,
+            inputs = ctx.files.resources,
+            input_manifests = zipper_manifests,
+            outputs = [jar],
+            tools = zipper_inputs,
+        )
+        return struct(jar = jar)
+    else:
+        return struct()
+
+def _resources_make_path(file, strip_prefix):
+    if strip_prefix:
+        if not file.short_path.startswith(strip_prefix):
+            fail("{} does not have prefix {}".format(file.short_path, strip_prefix))
+        return file.short_path[len(strip_prefix) + 1 - int(file.short_path.endswith("/")):]
+    conventional = [
+        "src/main/resources/",
+        "src/test/resources/",
+    ]
+    for path in conventional:
+        dir1, dir2, rest = file.short_path.partition(path)
+        if rest:
+            return rest
+    return file.short_path
+
+#
+# PHASE: compile
+#
+# Compiles Scala sources ;)
+#
+
+def _phase_compile(ctx, g):
+    runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
+    class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
+
+    splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins + g.init.scala_configuration.global_plugins))
+
+    zinc_configuration = ctx.attr.scala[_ZincConfiguration]
+
+    srcs = [file for file in ctx.files.srcs if file.extension.lower() in ["java", "scala"]]
+    src_jars = [file for file in ctx.files.srcs if file.extension.lower() in ["srcjar"]]
+
+    apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
+    infos = ctx.actions.declare_file("{}/infos.gz".format(ctx.label.name))
+    mains_file = ctx.actions.declare_file("{}.jar.mains.txt".format(ctx.label.name))
+    relations = ctx.actions.declare_file("{}/relations.gz".format(ctx.label.name))
+    setup = ctx.actions.declare_file("{}/setup.gz".format(ctx.label.name))
+    stamps = ctx.actions.declare_file("{}/stamps.gz".format(ctx.label.name))
+    used = ctx.actions.declare_file("{}/deps_used.txt".format(ctx.label.name))
+
+    macro_classpath = [
+        dep[JavaInfo].transitive_runtime_jars
+        for dep in ctx.attr.deps
+        if _ScalaInfo in dep and dep[_ScalaInfo].macro
+    ]
+    compile_classpath = depset(order = "preorder", transitive = macro_classpath + [g.init.sdeps.transitive_compile_time_jars])
+
+    tmp = ctx.actions.declare_directory("{}/tmp".format(ctx.label.name))
+
+    javacopts = [
+        ctx.expand_location(option, ctx.attr.data)
+        for option
+        in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")
+    ]
+
+    zincs = [dep[_ZincInfo] for dep in ctx.attr.deps if _ZincInfo in dep]
+
     args = ctx.actions.args()
-    args.add("--exclude_build_data")
-    args.add("--normalize")
-    args.add("--sources", g.class_jar)
-    if g.resource_jar:
-        args.add("--sources", g.resource_jar)
-        inputs.append(g.resource_jar)
-    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
-        args.add("--sources")
-        args.add(file)
-    args.add("--output", ctx.outputs.jar)
-    args.add("--warn_duplicate_resources")
+    args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _compile_analysis)
+    args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
+    args.add_all("--compiler_classpath", g.init.scala_configuration.compiler_classpath)
+    args.add_all("--classpath", compile_classpath)
+    args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
+    args.add_all(javacopts, format_each = "--java_compiler_option=%s")
+    args.add(ctx.label, format = "--label=%s")
+    args.add("--main_manifest", mains_file)
+    args.add("--output_apis", apis)
+    args.add("--output_infos", infos)
+    args.add("--output_jar", class_jar)
+    args.add("--output_relations", relations)
+    args.add("--output_setup", setup)
+    args.add("--output_stamps", stamps)
+    args.add("--output_used", used)
+    args.add_all("--plugins", splugins.transitive_runtime_deps)
+    args.add_all("--source_jars", src_jars)
+    args.add("--tmp", tmp.path)
+    args.add_all("--", srcs)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
 
-    # TODO: add documentation/note about the kind of
-    # elegant trick being used to fail the build in
-    # an ergonomic manner
-
-    for k in dir(g):
-        if k not in ["to_json", "to_proto"]:
-            v = getattr(g, k)
-            if hasattr(v, "outputs"):
-                inputs.extend(getattr(v, "outputs"))
-
-    ctx.actions.run(
-        arguments = [args],
-        executable = ctx.executable._singlejar,
-        execution_requirements = {"supports-workers": "1"},
-        mnemonic = _SINGLE_JAR_MNEMONIC,
-        inputs = inputs,
-        outputs = [ctx.outputs.jar],
+    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner.runner])
+    inputs = depset(
+        [zinc_configuration.compiler_bridge] + g.init.scala_configuration.compiler_classpath + ctx.files.data + ctx.files.srcs + runner_inputs,
+        transitive = [
+            splugins.transitive_runtime_deps,
+            compile_classpath,
+        ] + [zinc.deps_files for zinc in zincs],
     )
+
+    outputs = [class_jar, mains_file, apis, infos, relations, setup, stamps, used, tmp]
+
+    # todo: different execution path for nosrc jar?
+    ctx.actions.run(
+        mnemonic = "ScalaCompile",
+        inputs = inputs,
+        outputs = outputs,
+        executable = runner.runner.files_to_run.executable,
+        input_manifests = input_manifests,
+        execution_requirements = {"no-sandbox": "1", "supports-workers": "1"},
+        arguments = [args],
+    )
+
+    jars = []
+    for jar in g.javainfo.java_info.outputs.jars:
+        jars.append(jar.class_jar)
+        jars.append(jar.ijar)
+    zinc_info = _ZincInfo(
+        apis = apis,
+        deps_files = depset([apis, relations], transitive = [zinc.deps_files for zinc in zincs]),
+        label = ctx.label,
+        relations = relations,
+        deps = depset(
+            [struct(
+                apis = apis,
+                jars = jars,
+                label = ctx.label,
+                relations = relations,
+            )],
+            transitive = [zinc.deps for zinc in zincs],
+        ),
+    )
+
+    return struct(
+        jar = class_jar,
+        # todo: see about cleaning up & generalizing fields below
+        zinc_info = zinc_info,
+        used = used,
+        mains_file = mains_file,
+    )
+
+def _compile_analysis(analysis):
+    return [
+        "--analysis",
+        "_{}".format(analysis.label),
+        analysis.apis.path,
+        analysis.relations.path,
+    ] + [jar.path for jar in analysis.jars]
+
+#
+# PHASE: depscheck
+# Dependencies are checked to see if they are used/unused.
+# Success files are outputted if dependency checking was "successful"
+# according to the configuration/options.
 
 def _phase_depscheck(ctx, g):
     deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
@@ -95,17 +232,17 @@ def _phase_depscheck(ctx, g):
         deps_args = ctx.actions.args()
         deps_args.add(name, format = "--check_%s=true")
         deps_args.add_all("--direct", [dep.label for dep in ctx.attr.deps], format_each = "_%s")
-        deps_args.add_all(labeled_jars, map_each = _labeled_group)
+        deps_args.add_all(labeled_jars, map_each = _depscheck_labeled_group)
         deps_args.add("--label", ctx.label, format = "_%s")
         deps_args.add_all("--whitelist", [dep.label for dep in ctx.attr.deps_used_whitelist], format_each = "_%s")
         deps_args.add("--")
-        deps_args.add(g.used)
+        deps_args.add(g.compile.used)
         deps_args.add(deps_check)
         deps_args.set_param_file_format("multiline")
         deps_args.use_param_file("@%s", use_always = True)
         ctx.actions.run(
             mnemonic = "ScalaCheckDeps",
-            inputs = [g.used] + deps_inputs,
+            inputs = [g.compile.used] + deps_inputs,
             outputs = [deps_check],
             executable = deps_toolchain.runner.files_to_run.executable,
             input_manifests = deps_input_manifests,
@@ -127,31 +264,69 @@ def _phase_depscheck(ctx, g):
         outputs = outputs,
     )
 
-_default_phases = [
-    ("depscheck", _phase_depscheck),
-    ("singlejar", _phase_singlejar),
-]
+def _depscheck_labeled_group(labeled_jars):
+    return (["--group", "_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars.to_list()])
 
-def runner_common(ctx):
-    runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
+#
+# PHASE: singlejar
+#
+# Creates a single jar output from any resource jars as well
+# as any jar entries from previous phases. The output is the
+# output is written to ctx.outputs.jar.
+#
+# Additionally, this phase checks for missing outputs from previous
+# phases. This allows phases to error, cleanly, by declaring a file
+# in the outputs field but _without_ actually creating it.
+#
 
-    scala_configuration = ctx.attr.scala[_ScalaConfiguration]
-    scala_configuration_runtime_deps = _collect(JavaInfo, scala_configuration.runtime_classpath)
+def _phase_singlejar(ctx, g):
+    inputs = [g.compile.jar] + ctx.files.resource_jars
+    args = ctx.actions.args()
+    args.add("--exclude_build_data")
+    args.add("--normalize")
 
-    zinc_configuration = ctx.attr.scala[_ZincConfiguration]
+    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
+        args.add("--sources")
+        args.add(file)
 
-    sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
+    for v in [getattr(g, k) for k in dir(g) if k not in ["to_json", "to_proto"]]:
+        if hasattr(v, "jar"):
+            jar = getattr(v, "jar")
+            args.add("--sources", jar)
+            inputs.append(jar)
+        if hasattr(v, "outputs"):
+            # Declare all phase outputs as inputs but _don't_ include them in the args
+            # for singlejar to process. This will cause the build to fail, cleanly, if
+            # any declared outputs are missing from previous phases.
+            inputs.extend(getattr(v, "outputs"))
+
+    args.add("--output", ctx.outputs.jar)
+    args.add("--warn_duplicate_resources")
+    args.set_param_file_format("multiline")
+    args.use_param_file("@%s", use_always = True)
+
+    ctx.actions.run(
+        arguments = [args],
+        executable = ctx.executable._singlejar,
+        execution_requirements = {"supports-workers": "1"},
+        mnemonic = _SINGLE_JAR_MNEMONIC,
+        inputs = inputs, # TODO: build up inputs as a depset
+        outputs = [ctx.outputs.jar],
+    )
+
+#
+# PHASE: javainfo
+#
+# Builds up the JavaInfo provider
+#
+
+def _phase_javainfo(ctx, g):
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
-    splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins + scala_configuration.global_plugins))
-
-    phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
-
-    # TODO: allow plugins to select insertion point
-    phases = [(pp.name, pp.function) for pp in phase_providers] + _default_phases
+    scala_configuration_runtime_deps = _collect(JavaInfo, g.init.scala_configuration.runtime_classpath)
 
     if len(ctx.attr.srcs) == 0:
-        java_info = java_common.merge([sdeps, sexports])
+        java_info = java_common.merge([g.init.sdeps, sexports])
     else:
         compile_jar = java_common.run_ijar(
             ctx.actions,
@@ -175,109 +350,51 @@ def runner_common(ctx):
             source_jar = source_jar,
             exports = [sexports],
             runtime_deps = [sruntime_deps] + scala_configuration_runtime_deps,
-            deps = [sdeps],
+            deps = [g.init.sdeps],
         )
 
-    apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
-    infos = ctx.actions.declare_file("{}/infos.gz".format(ctx.label.name))
-    mains_file = ctx.actions.declare_file("{}.jar.mains.txt".format(ctx.label.name))
-    relations = ctx.actions.declare_file("{}/relations.gz".format(ctx.label.name))
-    setup = ctx.actions.declare_file("{}/setup.gz".format(ctx.label.name))
-    stamps = ctx.actions.declare_file("{}/stamps.gz".format(ctx.label.name))
-    used = ctx.actions.declare_file("{}/deps_used.txt".format(ctx.label.name))
-
-    macro_classpath = [
-        dep[JavaInfo].transitive_runtime_jars
-        for dep in ctx.attr.deps
-        if _ScalaInfo in dep and dep[_ScalaInfo].macro
-    ]
-    compile_classpath = depset(order = "preorder", transitive = macro_classpath + [sdeps.transitive_compile_time_jars])
-
-    zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
-
-    if ctx.files.resources:
-        resource_jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
-        args = ctx.actions.args()
-        args.add("c", resource_jar)
-        args.set_param_file_format("multiline")
-        args.use_param_file("@%s")
-        for file in ctx.files.resources:
-            args.add("{}={}".format(_resource_path(file, ctx.attr.resource_strip_prefix), file.path))
-        ctx.actions.run(
-            arguments = [args],
-            executable = ctx.executable._zipper,
-            inputs = ctx.files.resources,
-            input_manifests = zipper_manifests,
-            outputs = [resource_jar],
-            tools = zipper_inputs,
-        )
-    else:
-        resource_jar = None
-
-    class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
-
-    srcs = [file for file in ctx.files.srcs if file.extension.lower() in ["java", "scala"]]
-    src_jars = [file for file in ctx.files.srcs if file.extension.lower() in ["srcjar"]]
-
-    tmp = ctx.actions.declare_directory("{}/tmp".format(ctx.label.name))
-
-    javacopts = [ctx.expand_location(option, ctx.attr.data) for option in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")]
-
-    zincs = [dep[_ZincInfo] for dep in ctx.attr.deps if _ZincInfo in dep]
-
-    args = ctx.actions.args()
-    args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _analysis)
-    args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
-    args.add_all("--compiler_classpath", scala_configuration.compiler_classpath)
-    args.add_all("--classpath", compile_classpath)
-    args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
-    args.add_all(javacopts, format_each = "--java_compiler_option=%s")
-    args.add(ctx.label, format = "--label=%s")
-    args.add("--main_manifest", mains_file)
-    args.add("--output_apis", apis)
-    args.add("--output_infos", infos)
-    args.add("--output_jar", class_jar)
-    args.add("--output_relations", relations)
-    args.add("--output_setup", setup)
-    args.add("--output_stamps", stamps)
-    args.add("--output_used", used)
-    args.add_all("--plugins", splugins.transitive_runtime_deps)
-    args.add_all("--source_jars", src_jars)
-    args.add("--tmp", tmp.path)
-    args.add_all("--", srcs)
-    args.set_param_file_format("multiline")
-    args.use_param_file("@%s", use_always = True)
-
-    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner.runner])
-    inputs = depset(
-        [zinc_configuration.compiler_bridge] + scala_configuration.compiler_classpath + ctx.files.data + ctx.files.srcs + runner_inputs,
-        transitive = [
-            splugins.transitive_runtime_deps,
-            compile_classpath,
-        ] + [zinc.deps_files for zinc in zincs],
+    return struct(
+        java_info = java_info
     )
 
-    outputs = [class_jar, mains_file, apis, infos, relations, setup, stamps, used, tmp]
-
-    # todo: different execution path for nosrc jar?
-    ctx.actions.run(
-        mnemonic = "ScalaCompile",
-        inputs = inputs,
-        outputs = outputs,
-        executable = runner.runner.files_to_run.executable,
-        input_manifests = input_manifests,
-        execution_requirements = {"no-sandbox": "1", "supports-workers": "1"},
-        arguments = [args],
+#
+# PHASE: ijinfo
+#
+# Creates IntelliJ info
+#
+def _phase_ijinfo(ctx, g):
+    return struct(
+        intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, g.javainfo.java_info),
     )
 
-    files = [ctx.outputs.jar]
+#
+# phase runner
+#
 
-    gd = {
-        "used": used,
-        "class_jar": class_jar,
-        "resource_jar": resource_jar,
-    }
+_default_phases = [
+    ('javainfo',  _phase_javainfo),
+    ('resources', _phase_resources),
+    ('compile',   _phase_compile),
+    ('depscheck', _phase_depscheck),
+    ('singlejar', _phase_singlejar),
+    ('ijinfo',    _phase_ijinfo)
+]
 
+def run_phases(ctx):
+
+    scala_configuration = ctx.attr.scala[_ScalaConfiguration]
+    sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
+    init = struct(
+        scala_configuration = scala_configuration,
+        # todo: probably can remove this from init
+        sdeps = sdeps
+    )
+
+    # TODO: allow plugins to select insertion point
+    phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
+    phases = [(pp.name, pp.function) for pp in phase_providers] + _default_phases
+
+    gd = { "init": init }
     g = struct(**gd)
     for (name, function) in phases:
         print("phase: %s" % name)
@@ -286,40 +403,21 @@ def runner_common(ctx):
             gd[name] = p
             g = struct(**gd)
 
-    jars = []
-    for jar in java_info.outputs.jars:
-        jars.append(jar.class_jar)
-        jars.append(jar.ijar)
-    zinc_info = _ZincInfo(
-        apis = apis,
-        deps_files = depset([apis, relations], transitive = [zinc.deps_files for zinc in zincs]),
-        label = ctx.label,
-        relations = relations,
-        deps = depset(
-            [struct(
-                apis = apis,
-                jars = jars,
-                label = ctx.label,
-                relations = relations,
-            )],
-            transitive = [zinc.deps for zinc in zincs],
-        ),
-    )
-
+    # TODO: deprecate this entire structure and just return g from above!
     return struct(
-        files = depset(files),
-        intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, java_info),
-        java_info = java_info,
-        mains_files = depset([mains_file]),
+        files = depset([ctx.outputs.jar]),
+        intellij_info = g.ijinfo.intellij_info,
+        java_info = g.javainfo.java_info,
+        mains_files = depset([g.compile.mains_file]),
         scala_info = _ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
-        zinc_info = zinc_info,
-        **gd,
+        zinc_info = g.compile.zinc_info,
+        **gd
     )
 
-scala_library_private_attributes = runner_common_attributes
+scala_library_private_attributes = run_phases_attributes
 
 def scala_library_implementation(ctx):
-    res = runner_common(ctx)
+    res = run_phases(ctx)
     return struct(
         java = res.intellij_info,
         providers = [
@@ -336,27 +434,6 @@ def scala_library_implementation(ctx):
             ),
         ],
     )
-
-def _analysis(analysis):
-    return (["--analysis", "_{}".format(analysis.label), analysis.apis.path, analysis.relations.path] + [jar.path for jar in analysis.jars])
-
-def _labeled_group(labeled_jars):
-    return (["--group", "_{}".format(labeled_jars.label)] + [jar.path for jar in labeled_jars.jars.to_list()])
-
-def _resource_path(file, strip_prefix):
-    if strip_prefix:
-        if not file.short_path.startswith(strip_prefix):
-            fail("{} does not have prefix {}".format(file.short_path, strip_prefix))
-        return file.short_path[len(strip_prefix) + 1 - int(file.short_path.endswith("/")):]
-    conventional = [
-        "src/main/resources/",
-        "src/test/resources/",
-    ]
-    for path in conventional:
-        dir1, dir2, rest = file.short_path.partition(path)
-        if rest:
-            return rest
-    return file.short_path
 
 def _build_deployable(ctx, jars_list):
     # This calls bazels singlejar utility.
@@ -382,7 +459,7 @@ def _build_deployable(ctx, jars_list):
     )
 
 def scala_binary_implementation(ctx):
-    res = runner_common(ctx)
+    res = run_phases(ctx)
 
     # this is all super sketchy...
     # for the time being
@@ -430,7 +507,7 @@ def scala_binary_implementation(ctx):
     )
 
 def scala_test_implementation(ctx):
-    res = runner_common(ctx)
+    res = run_phases(ctx)
 
     files = ctx.files._java + [res.zinc_info.apis]
 
