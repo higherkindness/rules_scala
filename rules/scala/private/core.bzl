@@ -10,7 +10,7 @@ load(
 load("//rules/common:private/utils.bzl", _collect = "collect", _write_launcher = "write_launcher")
 load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
 
-run_phases_attributes = {
+runner_common_attributes = {
     "_java_toolchain": attr.label(
         default = Label("@bazel_tools//tools/jdk:current_java_toolchain"),
     ),
@@ -30,6 +30,8 @@ run_phases_attributes = {
     ),
 }
 
+scala_library_private_attributes = runner_common_attributes
+
 scala_binary_private_attributes = dict({
     "_java": attr.label(
         default = Label("@bazel_tools//tools/jdk:java"),
@@ -40,9 +42,41 @@ scala_binary_private_attributes = dict({
         default = Label("@anx_java_stub_template//file"),
         allow_single_file = True,
     ),
-}, **run_phases_attributes)
+}, **runner_common_attributes)
 
 scala_test_private_attributes = scala_binary_private_attributes
+
+
+def run_phases(ctx, phases):
+    scala_configuration = ctx.attr.scala[_ScalaConfiguration]
+    sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
+    init = struct(
+        scala_configuration = scala_configuration,
+        # todo: probably can remove this from init
+        sdeps = sdeps,
+    )
+
+    # TODO: allow plugins to select insertion point
+    phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
+    phases = [(pp.name, pp.function) for pp in phase_providers] + phases
+
+    print("phases: %s" % ", ".join([name for (name, _) in phases]))
+
+    gd = {
+        "init": init,
+        "out": struct(
+            providers = [],
+            output_groups = {},
+        ),
+    }
+    g = struct(**gd)
+    for (name, function) in phases:
+        p = function(ctx, g)
+        if p != None:
+            gd[name] = p
+            g = struct(**gd)
+
+    return g
 
 _SINGLE_JAR_MNEMONIC = "SingleJar"
 
@@ -199,6 +233,7 @@ def _phase_compile(ctx, g):
         ),
     )
 
+    g.out.providers.append(zinc_info)
     return struct(
         jar = class_jar,
         # todo: see about cleaning up & generalizing fields below
@@ -256,6 +291,8 @@ def _phase_depscheck(ctx, g):
         outputs.append(deps_checks["direct"])
     if deps_toolchain.used == "error":
         outputs.append(deps_checks["used"])
+
+    g.out.output_groups["depscheck"] = depset(outputs)
 
     return struct(
         toolchain = deps_toolchain,
@@ -316,7 +353,8 @@ def _phase_singlejar(ctx, g):
 #
 # PHASE: javainfo
 #
-# Builds up the JavaInfo provider
+# Builds up the JavaInfo provider. And the ScalaInfo, while we're at it.
+# And DefaultInfo.
 #
 
 def _phase_javainfo(ctx, g):
@@ -352,8 +390,25 @@ def _phase_javainfo(ctx, g):
             deps = [g.init.sdeps],
         )
 
+    scala_info = _ScalaInfo(
+        macro = ctx.attr.macro,
+        scala_configuration = g.init.scala_configuration,
+    )
+
+    output_group_info = OutputGroupInfo(
+        **g.out.output_groups
+    )
+
+    g.out.providers.extend([
+        output_group_info,
+        java_info,
+        scala_info,
+    ])
+
     return struct(
+        output_group_info = output_group_info,
         java_info = java_info,
+        scala_info = scala_info,
     )
 
 #
@@ -361,78 +416,35 @@ def _phase_javainfo(ctx, g):
 #
 # Creates IntelliJ info
 #
+
 def _phase_ijinfo(ctx, g):
-    return struct(
-        intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, g.javainfo.java_info),
-    )
+    intellij_info = _create_intellij_info(ctx.label, ctx.attr.deps, g.javainfo.java_info)
+    g.out.providers.append(intellij_info)
+    return struct(intellij_info = intellij_info)
 
 #
-# phase runner
+# PHASE: library_defaultinfo
+#
+# Creates DefaultInfo for Scala libraries
 #
 
-_default_phases = [
-    ("javainfo", _phase_javainfo),
-    ("resources", _phase_resources),
-    ("compile", _phase_compile),
-    ("depscheck", _phase_depscheck),
-    ("singlejar", _phase_singlejar),
-    ("ijinfo", _phase_ijinfo),
-]
-
-def run_phases(ctx):
-    scala_configuration = ctx.attr.scala[_ScalaConfiguration]
-    sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
-    init = struct(
-        scala_configuration = scala_configuration,
-        # todo: probably can remove this from init
-        sdeps = sdeps,
-    )
-
-    # TODO: allow plugins to select insertion point
-    phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
-    phases = [(pp.name, pp.function) for pp in phase_providers] + _default_phases
-
-    gd = {"init": init}
-    g = struct(**gd)
-    for (name, function) in phases:
-        p = function(ctx, g)
-        if p != None:
-            gd[name] = p
-            g = struct(**gd)
-
-    # TODO: deprecate this entire structure and just return g from above!
-    return struct(
+def _phase_library_defaultinfo(ctx, g):
+    g.out.providers.append(DefaultInfo(
         files = depset([ctx.outputs.jar]),
-        intellij_info = g.ijinfo.intellij_info,
-        java_info = g.javainfo.java_info,
-        mains_files = depset([g.compile.mains_file]),
-        scala_info = _ScalaInfo(macro = ctx.attr.macro, scala_configuration = scala_configuration),
-        zinc_info = g.compile.zinc_info,
-        **gd
-    )
+    ))
 
-scala_library_private_attributes = run_phases_attributes
+#
+# PHASE: binary_deployjar
+#
+# Writes the optional deploy jar that includes all of the dependencies
+#
 
-def scala_library_implementation(ctx):
-    res = run_phases(ctx)
-    return struct(
-        java = res.intellij_info,
-        providers = [
-            res.java_info,
-            res.scala_info,
-            res.zinc_info,
-            res.intellij_info,
-            DefaultInfo(
-                files = res.files,
-            ),
-            OutputGroupInfo(
-                # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
-                depscheck = depset(res.depscheck.outputs),
-            ),
-        ],
-    )
+def _phase_binary_deployjar(ctx, g):
+    transitive_rjars = g.javainfo.java_info.transitive_runtime_jars
+    rjars = depset([ctx.outputs.jar], transitive = [transitive_rjars])
+    _binary_deployjar_build_deployable(ctx, rjars.to_list())
 
-def _build_deployable(ctx, jars_list):
+def _binary_deployjar_build_deployable(ctx, jars_list):
     # This calls bazels singlejar utility.
     # For a full list of available command line options see:
     # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
@@ -455,70 +467,58 @@ def _build_deployable(ctx, jars_list):
         arguments = [args],
     )
 
-def scala_binary_implementation(ctx):
-    res = run_phases(ctx)
+#
+# PHASE: binary_launcher
+#
+# Writes a Scala binary launcher
+#
 
-    # this is all super sketchy...
-    # for the time being
-
-    java_info = res.java_info
-    mains_file = res.mains_files.to_list()[0]
-
-    transitive_rjars = res.java_info.transitive_runtime_jars
-    rjars = depset([ctx.outputs.jar], transitive = [transitive_rjars])
-    _build_deployable(ctx, rjars.to_list())
-
+def _phase_binary_launcher(ctx, g):
+    mains_file = g.compile.mains_file
     files = _write_launcher(
         ctx,
         "{}/".format(ctx.label.name),
         ctx.outputs.bin,
-        java_info.transitive_runtime_deps,
+        g.javainfo.java_info.transitive_runtime_deps,
         jvm_flags = [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
         main_class = ctx.attr.main_class or "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
     )
 
-    return struct(
-        java = res.intellij_info,
-        providers = [
-            res.java_info,
-            res.scala_info,
-            res.zinc_info,
-            res.intellij_info,
-            DefaultInfo(
-                executable = ctx.outputs.bin,
-                files = depset([ctx.outputs.bin], transitive = [res.files]),
-                runfiles = ctx.runfiles(
-                    files = files + ctx.files.data + [mains_file],
-                    transitive_files = depset(
-                        direct = [ctx.executable._java],
-                        order = "default",
-                        transitive = [java_info.transitive_runtime_deps],
-                    ),
-                    collect_default = True,
-                ),
+    g.out.providers.append(DefaultInfo(
+        executable = ctx.outputs.bin,
+        files = depset([ctx.outputs.bin, ctx.outputs.jar]),
+        runfiles = ctx.runfiles(
+            files = files + ctx.files.data + [mains_file],
+            transitive_files = depset(
+                direct = [ctx.executable._java],
+                order = "default",
+                transitive = [g.javainfo.java_info.transitive_runtime_deps],
             ),
-            OutputGroupInfo(
-                depscheck = depset(res.depscheck.outputs),
-            ),
-        ],
-    )
+            collect_default = True,
+        ),
+    ))
 
-def scala_test_implementation(ctx):
-    res = run_phases(ctx)
+#
+# PHASE: test_launcher
+#
+# Writes a Scala test launcher
+#
 
-    files = ctx.files._java + [res.zinc_info.apis]
+def _phase_test_launcher(ctx, g):
 
-    test_jars = res.java_info.transitive_runtime_deps
+    files = ctx.files._java + [g.compile.zinc_info.apis]
+
+    test_jars = g.javainfo.java_info.transitive_runtime_deps
     runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps
     all_jars = [test_jars, runner_jars]
 
     args = ctx.actions.args()
-    args.add("--apis", res.zinc_info.apis.short_path)
+    args.add("--apis", g.compile.zinc_info.apis.short_path)
     args.add_all("--frameworks", ctx.attr.frameworks)
     if ctx.attr.isolation == "classloader":
         shared_deps = java_common.merge(_collect(JavaInfo, ctx.attr.shared_deps))
         args.add("--isolation", "classloader")
-        args.add_all("--shared_classpath", shared_deps.transitive_runtime_deps, map_each = _short_path)
+        args.add_all("--shared_classpath", shared_deps.transitive_runtime_deps, map_each = _test_launcher_short_path)
     elif ctx.attr.isolation == "process":
         subprocess_executable = ctx.actions.declare_file("{}/subprocess".format(ctx.label.name))
         subprocess_runner_jars = ctx.attr.subprocess_runner[JavaInfo].transitive_runtime_deps
@@ -534,7 +534,7 @@ def scala_test_implementation(ctx):
         files.append(subprocess_executable)
         args.add("--isolation", "process")
         args.add("--subprocess_exec", subprocess_executable.short_path)
-    args.add_all("--", res.java_info.transitive_runtime_jars, map_each = _short_path)
+    args.add_all("--", g.javainfo.java_info.transitive_runtime_jars, map_each = _test_launcher_short_path)
     args.set_param_file_format("multiline")
     args_file = ctx.actions.declare_file("{}/test.params".format(ctx.label.name))
     ctx.actions.write(args_file, args)
@@ -552,30 +552,81 @@ def scala_test_implementation(ctx):
         ],
     )
 
-    test_info = DefaultInfo(
+    g.out.providers.append(DefaultInfo(
         executable = ctx.outputs.bin,
-        files = res.files,
+        files = depset([ctx.outputs.jar]),
         runfiles = ctx.runfiles(
             collect_data = True,
             collect_default = True,
             files = files,
             transitive_files = depset([], transitive = all_jars),
         ),
-    )
+    ))
+
+def _test_launcher_short_path(file):
+    return file.short_path
+
+#
+# PHASE: coda
+#
+# Creates the final rule return structure
+#
+
+def _phase_coda(ctx, g):
     return struct(
-        java = res.intellij_info,
-        providers = [
-            res.java_info,
-            res.scala_info,
-            res.zinc_info,
-            res.intellij_info,
-            test_info,
-            OutputGroupInfo(
-                # analysis = depset([res.zinc_info.analysis, res.zinc_info.apis]),
-                depscheck = depset(res.depscheck.outputs),
-            ),
-        ],
+        java = g.ijinfo.intellij_info,
+        providers = g.out.providers,
     )
 
-def _short_path(file):
-    return file.short_path
+
+shared_prologue = [
+    ("javainfo", _phase_javainfo),
+    ("resources", _phase_resources),
+    ("compile", _phase_compile),
+    ("depscheck", _phase_depscheck),
+    ("singlejar", _phase_singlejar),
+    ("ijinfo", _phase_ijinfo),
+]
+
+scala_library_phases = [
+    ("javainfo", _phase_javainfo),
+    ("resources", _phase_resources),
+    ("compile", _phase_compile),
+    ("depscheck", _phase_depscheck),
+    ("singlejar", _phase_singlejar),
+    ("ijinfo", _phase_ijinfo),
+    ("library_defaultinfo", _phase_library_defaultinfo),
+    ("coda", _phase_coda),
+]
+
+scala_binary_phases = [
+    ("javainfo", _phase_javainfo),
+    ("resources", _phase_resources),
+    ("compile", _phase_compile),
+    ("depscheck", _phase_depscheck),
+    ("singlejar", _phase_singlejar),
+    ("ijinfo", _phase_ijinfo),
+    ("binary_deployjar", _phase_binary_deployjar),
+    ("binary_launcher", _phase_binary_launcher),
+    ("coda", _phase_coda),
+]
+
+scala_test_phases = [
+    ("javainfo", _phase_javainfo),
+    ("resources", _phase_resources),
+    ("compile", _phase_compile),
+    ("depscheck", _phase_depscheck),
+    ("singlejar", _phase_singlejar),
+    ("ijinfo", _phase_ijinfo),
+    ("test_launcher", _phase_test_launcher),
+    ("coda", _phase_coda),
+]
+
+def scala_library_implementation(ctx):
+    return run_phases(ctx, scala_library_phases).coda
+
+def scala_binary_implementation(ctx):
+    return run_phases(ctx, scala_binary_phases).coda
+
+def scala_test_implementation(ctx):
+    return run_phases(ctx, scala_test_phases).coda
