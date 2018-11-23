@@ -233,16 +233,10 @@ A Scala compiler plugin
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#ScalaRulePhase_name">
-      <td><code>name</code></td>
+    <tr id="#ScalaRulePhase_phases">
+      <td><code>phases</code></td>
       <td>
-        <p>the phase name</p>
-      </td>
-    </tr>
-    <tr id="#ScalaRulePhase_function">
-      <td><code>function</code></td>
-      <td>
-        <p>just testing for now</p>
+        <p>the phases to add</p>
       </td>
     </tr>
   </tbody>

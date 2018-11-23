@@ -3,7 +3,18 @@ load(
     _ScalaRulePhase = "ScalaRulePhase",
 )
 
-def _my_plugin_phase(ctx, g):
+def _foo_before_javainfo(ctx, g):
+    if hasattr(g, "javainfo"):
+        fail("javainfo shouldn't be in the globals, yet")
+
+def _foo_after_javainfo(ctx, g):
+    if not hasattr(g, "javainfo"):
+        fail("javainfo should be in the globals by now")
+
+def _foo_after_coda(ctx, g):
+    if not hasattr(g, "compile"):
+        fail("expected to run after compilation")
+
     print("plugin phase success")
 
 def _my_plugin_implementation(ctx):
@@ -11,8 +22,11 @@ def _my_plugin_implementation(ctx):
     return [
         sdeps,
         _ScalaRulePhase(
-            name = "my_plugin",
-            function = _my_plugin_phase,
+            phases = [
+                ("-", "javainfo", "foo_before_javainfo", _foo_before_javainfo),
+                ("+", "javainfo", "foo_after_javainfo", _foo_after_javainfo),
+                ("+", "coda", "foo_after_coda", _foo_after_coda),
+            ],
         ),
     ]
 

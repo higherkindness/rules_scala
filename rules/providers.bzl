@@ -63,8 +63,7 @@ ZincConfiguration = provider(
 ScalaRulePhase = provider(
     doc = "A Scala compiler plugin",
     fields = {
-        "name": "the phase name",
-        "function": "just testing for now",
+        "phases": "the phases to add",
     },
 )
 
