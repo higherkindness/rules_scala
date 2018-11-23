@@ -878,7 +878,10 @@ def list_dependencies():
             },
             "import_args": {
                 "default_visibility": ["//visibility:public"],
-                "deps": ["@scala_annex_com_lihaoyi_fansi_2_12"],
+                "deps": [
+                    "@scala_annex_com_lihaoyi_fansi_2_12",
+                    "@scala_annex_com_lihaoyi_sourcecode_2_12",
+                ],
                 "jar_sha256": "2e18aa0884870537bf5c562255fc759d4ebe360882b5cb2141b30eda4034c71d",
                 "jar_urls": [
                     "http://central.maven.org/maven2/com/lihaoyi/pprint_2.12/0.5.3/pprint_2.12-0.5.3.jar",
@@ -895,6 +898,7 @@ def list_dependencies():
         # duplicates in com.lihaoyi:sourcecode_2.12 promoted to 0.1.4
         # - ch.epfl.scala:bloop-backend_2.12:1.0.0 wanted version 0.1.4
         # - com.lihaoyi:fastparse_2.12:0.4.2 wanted version 0.1.3
+        # - com.lihaoyi:pprint_2.12:0.5.3 wanted version 0.1.4
         {
             "bind_args": {
                 "actual": "@scala_annex_com_lihaoyi_sourcecode_2_12",
@@ -2458,6 +2462,30 @@ def list_dependencies():
                 "srcjar_sha256": "50eec572818c2644a1c5d953ec1dcb9bbb61df678755eae1c39404206188a5c1",
                 "srcjar_urls": [
                     "http://central.maven.org/maven2/org/scalameta/lsp4s_2.12/0.1.0/lsp4s_2.12-0.1.0-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_org_scalameta_semanticdb_scalac_2_12_7",
+                "name": "jar/scala_annex_org/scalameta/semanticdb_scalac_2_12_7",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@scala_annex_com_lihaoyi_pprint_2_12",
+                    "@scala_annex_scala_2_12_scala_library//jar",
+                ],
+                "jar_sha256": "62be6eb517912026e8824f95533a1ed4ae7c886bab5d266ee39ca98dd416a4dc",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/scalameta/semanticdb-scalac_2.12.7/4.0.0/semanticdb-scalac_2.12.7-4.0.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_scalameta_semanticdb_scalac_2_12_7",
+                "srcjar_sha256": "91970337ec5b6cc5ad0ae0162c452f1bb4a77bf1880644235dc8e62fa3dfd694",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/scalameta/semanticdb-scalac_2.12.7/4.0.0/semanticdb-scalac_2.12.7-4.0.0-sources.jar",
                 ],
             },
             "lang": "java",

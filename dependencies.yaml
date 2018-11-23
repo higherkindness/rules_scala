@@ -19,6 +19,11 @@ dependencies:
       modules: ["frontend"]
       version: "1.0.0"
 
+  org.scalameta:
+    semanticdb-scalac_2.12.7:
+      lang: java
+      version: "4.0.0"
+
   net.sourceforge.argparse4j:
     argparse4j:
       lang: java

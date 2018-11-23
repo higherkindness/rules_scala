@@ -15,6 +15,7 @@ def run_phases(ctx, phases):
     sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
     init = struct(
         scala_configuration = scala_configuration,
+        scalacopts = ctx.attr.scalacopts[:],
         # todo: probably can remove this from init
         sdeps = sdeps,
     )
@@ -109,6 +110,8 @@ def phase_compile(ctx, g):
 
     splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins + g.init.scala_configuration.global_plugins))
 
+    print(splugins.transitive_runtime_deps.to_list())
+
     zinc_configuration = ctx.attr.scala[_ZincConfiguration]
 
     srcs = [file for file in ctx.files.srcs if file.extension.lower() in ["java", "scala"]]
@@ -138,12 +141,13 @@ def phase_compile(ctx, g):
 
     zincs = [dep[_ZincInfo] for dep in ctx.attr.deps if _ZincInfo in dep]
 
+    scalacopts = runner.scalacopts + g.init.scalacopts
     args = ctx.actions.args()
     args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _compile_analysis)
     args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
     args.add_all("--compiler_classpath", g.init.scala_configuration.compiler_classpath)
     args.add_all("--classpath", compile_classpath)
-    args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
+    args.add_all(scalacopts, format_each = "--compiler_option=%s")
     args.add_all(javacopts, format_each = "--java_compiler_option=%s")
     args.add(ctx.label, format = "--label=%s")
     args.add("--main_manifest", mains_file)
