@@ -291,11 +291,7 @@ def phase_singlejar(ctx, g):
     args.add("--exclude_build_data")
     args.add("--normalize")
 
-    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
-        args.add("--sources")
-        args.add(file)
-
-    for v in [getattr(g, k) for k in dir(g)[::-1] if k not in ["to_json", "to_proto"]]:
+    for v in [getattr(g, k) for k in dir(g) if k not in ["to_json", "to_proto"]]:
         if hasattr(v, "jar"):
             jar = getattr(v, "jar")
             args.add("--sources", jar)
@@ -305,6 +301,10 @@ def phase_singlejar(ctx, g):
             # for singlejar to process. This will cause the build to fail, cleanly, if
             # any declared outputs are missing from previous phases.
             inputs.extend(getattr(v, "outputs"))
+
+    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
+        args.add("--sources")
+        args.add(file)
 
     args.add("--output", ctx.outputs.jar)
     args.add("--warn_duplicate_resources")
