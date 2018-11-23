@@ -38,7 +38,7 @@ scala_repository(
 
 scala_repository(
     "scala_2_12",
-    ("org.scala-lang", "2.12.6"),
+    ("org.scala-lang", "2.12.7"),
     "@compiler_bridge_2_12//:src",
 )
 

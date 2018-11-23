@@ -38,7 +38,7 @@ object DepsRunner extends SimpleMain {
     parser
   }
 
-  protected[this] def work(args: Array[String]) = {
+  protected[this] def work(args: Array[String]): Unit = {
     val namespace = argParser.parseArgs(args)
 
     val label = namespace.getString("label").tail
@@ -75,11 +75,10 @@ object DepsRunner extends SimpleMain {
       println(s"buildozer 'add deps $depLabel' $label")
     }
 
-    if (add.nonEmpty || remove.nonEmpty) {
-      sys.exit(1)
+    if (add.isEmpty && remove.isEmpty) {
+      try Files.createFile(namespace.get[File]("success").toPath)
+      catch { case _: FileAlreadyExistsException => }
     }
 
-    try Files.createFile(namespace.get[File]("success").toPath)
-    catch { case _: FileAlreadyExistsException => }
   }
 }

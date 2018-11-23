@@ -1,0 +1,4 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :usage 2>&1 | grep "plugin phase success"
