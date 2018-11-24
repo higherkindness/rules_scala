@@ -15,5 +15,5 @@ rules_scala_annex=$(pwd)
       --announce_rc \
       --disk_cache="$rules_scala_annex/.bazel_cache" \
       --override_repository=rules_scala_annex="$rules_scala_annex" \
-      --config=quick ...
+      --config=quick //repos:test_suite
 )
