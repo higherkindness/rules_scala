@@ -14,6 +14,10 @@ load(
 )
 load(
     "//rules/scala:private/core.bzl",
+    _bootstrap_scala_binary_implementation = "bootstrap_scala_binary_implementation",
+    _bootstrap_scala_binary_private_attributes = "bootstrap_scala_binary_private_attributes",
+    _bootstrap_scala_library_implementation = "bootstrap_scala_library_implementation",
+    _bootstrap_scala_library_private_attributes = "bootstrap_scala_library_private_attributes",
     _scala_binary_implementation = "scala_binary_implementation",
     _scala_binary_private_attributes = "scala_binary_private_attributes",
     _scala_library_implementation = "scala_library_implementation",
@@ -104,7 +108,7 @@ _library_common_attributes = {
         doc = "The `ScalaConfiguration`.",
         providers = [
             _ScalaConfiguration,
-            _ZincConfiguration,
+            #_ZincConfiguration,
         ],
     ),
     "scalacopts": attr.string_list(
@@ -126,6 +130,18 @@ scala_library = rule(
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
     ],
     implementation = _scala_library_implementation,
+)
+
+bootstrap_scala_library = rule(
+    attrs = _dicts.add(
+        _library_common_attributes,
+        _bootstrap_scala_library_private_attributes,
+    ),
+    doc = "Compiles a Scala JVM library.",
+    outputs = {
+        "jar": "%{name}.jar",
+    },
+    implementation = _bootstrap_scala_library_implementation,
 )
 
 _runner_common_attributes = {
@@ -161,6 +177,27 @@ scala_binary = rule(
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
     ],
     implementation = _scala_binary_implementation,
+)
+
+bootstrap_scala_binary = rule(
+    attrs = _dicts.add(
+        _library_common_attributes,
+        _runner_common_attributes,
+        _bootstrap_scala_binary_private_attributes,
+        {
+            "main_class": attr.string(
+                mandatory = True,
+            ),
+        },
+    ),
+    doc = "Compiles and links a Scala JVM executable.",
+    executable = True,
+    outputs = {
+        "bin": "%{name}-bin",
+        "jar": "%{name}.jar",
+        "deploy_jar": "%{name}_deploy.jar",
+    },
+    implementation = _bootstrap_scala_binary_implementation,
 )
 
 scala_test = rule(

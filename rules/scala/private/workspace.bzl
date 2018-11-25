@@ -8,13 +8,9 @@ def configure_scala_repository_implementation(ctx):
       |
       |load(
       |    "@rules_scala_annex//rules:scala.bzl",
+      |    _bootstrap_scala_library = "bootstrap_scala_library",
       |    _configure_basic_scala = "configure_basic_scala",
       |    _configure_scala = "configure_scala",
-      |)
-      |
-      |load(
-      |    "@rules_scala_annex//rules:scalac.bzl",
-      |    _scalac_library = "scalac_library",
       |)
       |
       |_compiler_classpath = [
@@ -40,7 +36,7 @@ def configure_scala_repository_implementation(ctx):
       |    '@scala_annex_org_scala_sbt_util_interface//jar',
       |]
       |
-      |_scalac_library(
+      |_bootstrap_scala_library(
       |    name = "compiler_bridge",
       |    srcs = ['{compiler_bridge}'],
       |    scala = ":basic",

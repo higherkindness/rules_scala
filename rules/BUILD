@@ -45,7 +45,6 @@ bzl_library(
         "//rules/jvm:bzl",
         "//rules/scala:bzl",
         "//rules/scala_proto:bzl",
-        "//rules/scalac:bzl",
         "//rules/scalafmt:bzl",
     ],
     deps = ["@bazel_skylib//lib:dicts"],
