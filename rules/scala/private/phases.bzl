@@ -8,6 +8,7 @@ load(
     _ZincInfo = "ZincInfo",
 )
 load("//rules/common:private/utils.bzl", _collect = "collect", _strip_margin = "strip_margin", _write_launcher = "write_launcher")
+load("//rules/scalafmt:private/test.bzl", _build_format = "build_format", _format_runner = "format_runner", _format_tester = "format_tester")
 load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
 
 def run_phases(ctx, phases):
@@ -496,6 +497,29 @@ def phase_library_defaultinfo(ctx, g):
     g.out.providers.append(DefaultInfo(
         files = depset([ctx.outputs.jar]),
     ))
+
+#
+# PHASE: non_default_format
+#
+# Format the scala files when it is explicitly specified
+#
+
+def phase_non_default_format(ctx, g):
+    if ctx.attr.format:
+        manifest, files = _build_format(ctx)
+        _format_runner(ctx, manifest, files)
+        _format_tester(ctx, manifest, files)
+    else:
+        ctx.actions.write(
+            output = ctx.outputs.runner,
+            content = "",
+            is_executable = True,
+        )
+        ctx.actions.write(
+            output = ctx.outputs.testrunner,
+            content = "",
+            is_executable = True,
+        )
 
 #
 # PHASE: binary_deployjar

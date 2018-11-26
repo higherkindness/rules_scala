@@ -2,7 +2,7 @@
 ## scala_library
 
 <pre>
-scala_library(name, data, deps, deps_used_whitelist, exports, javacopts, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
+scala_library(name, config, data, deps, deps_used_whitelist, exports, format, javacopts, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
 </pre>
 
 Compiles a Scala JVM library.
@@ -21,6 +21,15 @@ Compiles a Scala JVM library.
         String; required
         <p>
           A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="#scala_library_config">
+      <td><code>config</code></td>
+      <td>
+        Label; optional
+        <p>
+          The Scalafmt configuration file.
         </p>
       </td>
     </tr>
@@ -58,6 +67,12 @@ Compiles a Scala JVM library.
         <p>
           The JVM libraries to add as dependencies to any libraries dependent on this one.
         </p>
+      </td>
+    </tr>
+    <tr id="#scala_library_format">
+      <td><code>format</code></td>
+      <td>
+        Boolean; optional
       </td>
     </tr>
     <tr id="#scala_library_javacopts">
@@ -332,7 +347,7 @@ Compiles a Scala JVM library.
 ## scala_binary
 
 <pre>
-scala_binary(name, data, deps, deps_used_whitelist, exports, javacopts, jvm_flags, macro, main_class, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
+scala_binary(name, config, data, deps, deps_used_whitelist, exports, format, javacopts, jvm_flags, macro, main_class, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
 </pre>
 
 Compiles and links a Scala JVM executable.
@@ -351,6 +366,15 @@ Compiles and links a Scala JVM executable.
         String; required
         <p>
           A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="#scala_binary_config">
+      <td><code>config</code></td>
+      <td>
+        Label; optional
+        <p>
+          The Scalafmt configuration file.
         </p>
       </td>
     </tr>
@@ -388,6 +412,12 @@ Compiles and links a Scala JVM executable.
         <p>
           The JVM libraries to add as dependencies to any libraries dependent on this one.
         </p>
+      </td>
+    </tr>
+    <tr id="#scala_binary_format">
+      <td><code>format</code></td>
+      <td>
+        Boolean; optional
       </td>
     </tr>
     <tr id="#scala_binary_javacopts">
@@ -695,7 +725,7 @@ Compiles and links a Scala JVM executable.
 ## scala_test
 
 <pre>
-scala_test(name, data, deps, deps_used_whitelist, exports, frameworks, isolation, javacopts, jvm_flags, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runner, runtime_deps, scala, scalacopts, shared_deps, srcs, subprocess_runner)
+scala_test(name, config, data, deps, deps_used_whitelist, exports, format, frameworks, isolation, javacopts, jvm_flags, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runner, runtime_deps, scala, scalacopts, shared_deps, srcs, subprocess_runner)
 </pre>
 
 
@@ -714,6 +744,15 @@ scala_test(name, data, deps, deps_used_whitelist, exports, frameworks, isolation
         String; required
         <p>
           A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="#scala_test_config">
+      <td><code>config</code></td>
+      <td>
+        Label; optional
+        <p>
+          The Scalafmt configuration file.
         </p>
       </td>
     </tr>
@@ -751,6 +790,12 @@ scala_test(name, data, deps, deps_used_whitelist, exports, frameworks, isolation
         <p>
           The JVM libraries to add as dependencies to any libraries dependent on this one.
         </p>
+      </td>
+    </tr>
+    <tr id="#scala_test_format">
+      <td><code>format</code></td>
+      <td>
+        Boolean; optional
       </td>
     </tr>
     <tr id="#scala_test_frameworks">

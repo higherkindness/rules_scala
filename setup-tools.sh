@@ -11,7 +11,7 @@ rm -fr external-tools/buildtools
 
 mkdir -p external-tools/buildtools
 echo Downloading buildtools
-curl -L -sS https://github.com/bazelbuild/buildtools/archive/e5e9711c13fc2d3b4060ed5421b2d71aba83702f.tar.gz | tar zxf - --strip 1 -C external-tools/buildtools
+curl -L -sS https://github.com/bazelbuild/buildtools/archive/3f6a2256863cb60d56b63b883dc797225b888e15.tar.gz | tar zxf - --strip 1 -C external-tools/buildtools
 echo Building buildifier
 (cd external-tools/buildtools; bazel run "${BAZEL_OPTS[@]}" --script_path=../buildifier.sh buildifier)
 
