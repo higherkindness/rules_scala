@@ -9,10 +9,10 @@ load(
 )
 load(
     "//rules/scalac:private.bzl",
-    _scalac_library_implementation = "scalac_library_implementation",
-    _scalac_library_private_attributes = "scalac_library_private_attributes",
     _scalac_binary_implementation = "scalac_binary_implementation",
     _scalac_binary_private_attributes = "scalac_binary_private_attributes",
+    _scalac_library_implementation = "scalac_library_implementation",
+    _scalac_library_private_attributes = "scalac_library_private_attributes",
 )
 
 scalac_library = rule(

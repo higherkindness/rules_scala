@@ -1,0 +1,3 @@
+package annex
+
+object Plugin

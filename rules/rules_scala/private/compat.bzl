@@ -12,8 +12,8 @@ load(
 )
 load(
     "//rules:scala.bzl",
-    _scala_library = "scala_library",
     _scala_binary = "scala_binary",
+    _scala_library = "scala_library",
     _scala_test = "scala_test",
 )
 load(

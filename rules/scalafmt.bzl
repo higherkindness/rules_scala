@@ -1,10 +1,8 @@
 load("@bazel_skylib//lib:dicts.bzl", _dicts = "dicts")
 load(
     "//rules/scalafmt:private/test.bzl",
-    _scala_format_test_implementation =
-        "scala_format_test_implementation",
-    _scala_format_private_attributes =
-        "scala_format_private_attributes",
+    _scala_format_private_attributes = "scala_format_private_attributes",
+    _scala_format_test_implementation = "scala_format_test_implementation",
 )
 
 """

@@ -30,13 +30,13 @@ http_archive(
     urls = ["https://github.com/google/protobuf/archive/0038ff49af882463c2af9049356eed7df45c3e8e.zip"],
 )
 
-load("//rules/scala:workspace.bzl", "scala_repositories", "scala_register_toolchains")
+load("//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")
 
 scala_repositories()
 
 scala_register_toolchains()
 
-load("//rules/scalafmt:workspace.bzl", "scalafmt_repositories", "scalafmt_default_config")
+load("//rules/scalafmt:workspace.bzl", "scalafmt_default_config", "scalafmt_repositories")
 
 scalafmt_repositories()
 
@@ -44,8 +44,8 @@ scalafmt_default_config(".scalafmt.conf")
 
 load(
     "//rules/scala_proto:workspace.bzl",
-    "scala_proto_repositories",
     "scala_proto_register_toolchains",
+    "scala_proto_repositories",
 )
 
 scala_proto_repositories()
