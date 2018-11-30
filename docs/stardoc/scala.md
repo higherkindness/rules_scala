@@ -163,6 +163,171 @@ Compiles a Scala JVM library.
 </table>
 
 
+<a name="#bootstrap_scala_library"></a>
+## bootstrap_scala_library
+
+<pre>
+bootstrap_scala_library(name, data, deps, deps_used_whitelist, exports, javacopts, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
+</pre>
+
+Compiles a Scala JVM library.
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="#bootstrap_scala_library_name">
+      <td><code>name</code></td>
+      <td>
+        String; required
+        <p>
+          A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_data">
+      <td><code>data</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The additional runtime files needed by this library.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_deps">
+      <td><code>deps</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_deps_used_whitelist">
+      <td><code>deps_used_whitelist</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM library dependencies to always consider used for `scala_deps_used` checks.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_exports">
+      <td><code>exports</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM libraries to add as dependencies to any libraries dependent on this one.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_javacopts">
+      <td><code>javacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Javac options.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_macro">
+      <td><code>macro</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library provides macros.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_neverlink">
+      <td><code>neverlink</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library should be excluded at runtime.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_plugins">
+      <td><code>plugins</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The Scalac plugins.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_resource_jars">
+      <td><code>resource_jars</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JARs to merge into the output JAR.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_resource_strip_prefix">
+      <td><code>resource_strip_prefix</code></td>
+      <td>
+        String; optional
+        <p>
+          The path prefix to strip from classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_resources">
+      <td><code>resources</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The files to include as classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_runtime_deps">
+      <td><code>runtime_deps</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM runtime-only library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_scala">
+      <td><code>scala</code></td>
+      <td>
+        Label; optional
+        <p>
+          The `ScalaConfiguration`.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_scalacopts">
+      <td><code>scalacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Scalac options.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_library_srcs">
+      <td><code>srcs</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The source Scala and Java files (and `.srcjar` files of those).
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <a name="#scala_binary"></a>
 ## scala_binary
 
@@ -334,6 +499,186 @@ Compiles and links a Scala JVM executable.
       </td>
     </tr>
     <tr id="#scala_binary_srcs">
+      <td><code>srcs</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The source Scala and Java files (and `.srcjar` files of those).
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#bootstrap_scala_binary"></a>
+## bootstrap_scala_binary
+
+<pre>
+bootstrap_scala_binary(name, data, deps, deps_used_whitelist, exports, javacopts, jvm_flags, macro, main_class, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
+</pre>
+
+Compiles and links a Scala JVM executable.
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="#bootstrap_scala_binary_name">
+      <td><code>name</code></td>
+      <td>
+        String; required
+        <p>
+          A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_data">
+      <td><code>data</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The additional runtime files needed by this library.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_deps">
+      <td><code>deps</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_deps_used_whitelist">
+      <td><code>deps_used_whitelist</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM library dependencies to always consider used for `scala_deps_used` checks.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_exports">
+      <td><code>exports</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM libraries to add as dependencies to any libraries dependent on this one.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_javacopts">
+      <td><code>javacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Javac options.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_jvm_flags">
+      <td><code>jvm_flags</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The JVM runtime flags.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_macro">
+      <td><code>macro</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library provides macros.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_main_class">
+      <td><code>main_class</code></td>
+      <td>
+        String; required
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_neverlink">
+      <td><code>neverlink</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library should be excluded at runtime.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_plugins">
+      <td><code>plugins</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The Scalac plugins.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_resource_jars">
+      <td><code>resource_jars</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JARs to merge into the output JAR.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_resource_strip_prefix">
+      <td><code>resource_strip_prefix</code></td>
+      <td>
+        String; optional
+        <p>
+          The path prefix to strip from classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_resources">
+      <td><code>resources</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The files to include as classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_runtime_deps">
+      <td><code>runtime_deps</code></td>
+      <td>
+        List of labels; optional
+        <p>
+          The JVM runtime-only library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_scala">
+      <td><code>scala</code></td>
+      <td>
+        Label; optional
+        <p>
+          The `ScalaConfiguration`.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_scalacopts">
+      <td><code>scalacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Scalac options.
+        </p>
+      </td>
+    </tr>
+    <tr id="#bootstrap_scala_binary_srcs">
       <td><code>srcs</code></td>
       <td>
         List of labels; optional

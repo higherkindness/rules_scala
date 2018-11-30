@@ -5,8 +5,8 @@ load(
     "join_configurations",
 )
 load(
-    "@rules_scala_annex//rules:scalac.bzl",
-    "scalac_library",
+    "@rules_scala_annex//rules:scala.bzl",
+    "bootstrap_scala_library",
 )
 load(
     ":build.bzl",
@@ -28,7 +28,7 @@ declare_scala_configuration(
     version = "2.12.4",
 )
 
-scalac_library(
+bootstrap_scala_library(
     name = "compiler_bridge",
     srcs = ["@compiler_bridge_2_12//:src"],
     scala = ":provided_scala_configuration",

@@ -1,10 +1,9 @@
-load("//rules:scala.bzl", "scala_binary", "scala_deps_toolchain", "scala_library", "scala_runner_toolchain")
-load("//rules:scalac.bzl", "scalac_binary", "scalac_library")
+load("//rules:scala.bzl", "bootstrap_scala_binary", "bootstrap_scala_library", "scala_binary", "scala_deps_toolchain", "scala_library", "scala_runner_toolchain")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
 # Bloop
 
-scalac_binary(
+bootstrap_scala_binary(
     name = "bloop",
     srcs = glob(["bloop/**/*.scala"]),
     main_class = "annex.bloop.BloopRunner",
@@ -55,7 +54,7 @@ config_setting(
     },
 )
 
-scalac_library(
+bootstrap_scala_library(
     name = "compiler",
     srcs = glob(["compiler/**/*.scala"]),
     scala = "//external:scala_annex_scala_basic",
@@ -129,7 +128,7 @@ toolchain(
     visibility = ["//visibility:public"],
 )
 
-scalac_binary(
+bootstrap_scala_binary(
     name = "deps",
     srcs = glob(["deps/**/*.scala"]),
     main_class = "annex.deps.DepsRunner",
@@ -235,7 +234,7 @@ java_proto_library(
     deps = [":zinc_options_proto"],
 )
 
-scalac_binary(
+bootstrap_scala_binary(
     name = "zinc",
     srcs = glob(["zinc/**/*.scala"]),
     main_class = "annex.zinc.ZincRunner",

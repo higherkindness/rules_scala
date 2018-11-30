@@ -7,7 +7,7 @@ load(
     _ZincConfiguration = "ZincConfiguration",
     _ZincInfo = "ZincInfo",
 )
-load("//rules/common:private/utils.bzl", _collect = "collect", _write_launcher = "write_launcher")
+load("//rules/common:private/utils.bzl", _collect = "collect", _strip_margin = "strip_margin", _write_launcher = "write_launcher")
 load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
 
 def run_phases(ctx, phases):
@@ -221,10 +221,104 @@ def _compile_analysis(analysis):
     ] + [jar.path for jar in analysis.jars]
 
 #
+# PHASE: bootstrap compile
+#
+# An alternative compile phase that shells out to scalac directly
+#
+def phase_boostrap_compile(ctx, g):
+    # TODO: This code was copied in from the scalac rules. The setup
+    # is very similar to the regular compile phase, so we should refactor
+    # the common parts into a new 'pre' compile phase. I think...
+
+    name = ctx.label.name
+    java = ctx.executable._java
+    jar_creator = ctx.executable._jar_creator
+
+    class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
+    scala = g.init.scala_configuration
+
+    deps = [dep[JavaInfo] for dep in scala.runtime_classpath + ctx.attr.deps]
+    sdep = java_common.merge(deps)
+
+    macro_classpath = [
+        dep[JavaInfo].transitive_runtime_jars
+        for dep in ctx.attr.deps
+        if _ScalaInfo in dep and dep[_ScalaInfo].macro
+    ]
+
+    # Note: we pull in transitive_compile_time_jars for the time being
+    # to make development of runners way easier (bloop/zinc have big dep graphs).
+    # Consider removing transitive_compile_time_jars in the future.
+    compile_deps = depset(order = "preorder", transitive = macro_classpath + [sdep.transitive_compile_time_jars])
+    runtime_deps = sdep.transitive_runtime_jars
+
+    compiler_classpath_str = ":".join([file.path for file in scala.compiler_classpath])
+    compile_classpath_str = ":".join([file.path for file in compile_deps.to_list()])
+
+    inputs = depset(
+        [java] + ctx.files.srcs + scala.compiler_classpath,
+        transitive = [compile_deps],
+    )
+    tools = [jar_creator]
+
+    srcs = [
+        file.path
+        for file in ctx.files.srcs
+        if file.path.endswith(".java") or file.path.endswith(".scala")
+    ]
+
+    src_jars = [
+        file.path
+        for file in ctx.files.srcs
+        if file.path.endswith(".srcjar")
+    ]
+
+    if src_jars:
+        fail("source jars aren't yet supported for direct scalac rules")
+
+    srcs_string = " ".join(srcs)
+    src_jars_string = " ".join(src_jars)
+
+    ctx.actions.run_shell(
+        inputs = inputs,
+        tools = tools,
+        outputs = [class_jar],
+        command = _strip_margin(
+            """
+            |set -eo pipefail
+            |
+            |mkdir -p tmp/classes
+            |
+            |{java} \\
+            |  -cp {compiler_classpath} \\
+            |  scala.tools.nsc.Main \\
+            |  -cp {compile_classpath} \\
+            |  -d tmp/classes \\
+            |  {srcs}
+            |
+            |{jar_creator} {output_jar} tmp/classes 2> /dev/null
+            |""".format(
+                java = java.path,
+                jar_creator = jar_creator.path,
+                compiler_classpath = compiler_classpath_str,
+                compile_classpath = compile_classpath_str,
+                srcs = srcs_string,
+                src_jars = src_jars_string,
+                output_jar = class_jar.path,
+            ),
+        ),
+    )
+
+    return struct(
+        jar = class_jar,
+    )
+
+#
 # PHASE: depscheck
 # Dependencies are checked to see if they are used/unused.
 # Success files are outputted if dependency checking was "successful"
 # according to the configuration/options.
+#
 
 def phase_depscheck(ctx, g):
     deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
@@ -444,21 +538,29 @@ def _binary_deployjar_build_deployable(ctx, jars_list):
 #
 
 def phase_binary_launcher(ctx, g):
-    mains_file = g.compile.mains_file
+    inputs = ctx.files.data
+
+    if ctx.attr.main_class != "":
+        main_class = ctx.attr.main_class
+    else:
+        mains_file = g.compile.mains_file
+        inputs = inputs + [mains_file]
+        main_class = "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path)
+
     files = _write_launcher(
         ctx,
         "{}/".format(ctx.label.name),
         ctx.outputs.bin,
         g.javainfo.java_info.transitive_runtime_deps,
         jvm_flags = [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
-        main_class = ctx.attr.main_class or "$(head -1 $JAVA_RUNFILES/{}/{})".format(ctx.workspace_name, mains_file.short_path),
+        main_class = main_class,
     )
 
     g.out.providers.append(DefaultInfo(
         executable = ctx.outputs.bin,
         files = depset([ctx.outputs.bin, ctx.outputs.jar]),
         runfiles = ctx.runfiles(
-            files = files + ctx.files.data + [mains_file],
+            files = inputs + files,
             transitive_files = depset(
                 direct = [ctx.executable._java],
                 order = "default",
