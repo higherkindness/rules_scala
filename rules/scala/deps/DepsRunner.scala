@@ -1,7 +1,7 @@
 package annex.deps
 
 import annex.args.Implicits._
-import annex.worker.SimpleMain
+import annex.worker.WorkerMain
 import java.io.File
 import java.nio.file.{FileAlreadyExistsException, Files}
 import java.util.Collections
@@ -9,7 +9,7 @@ import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
 import scala.collection.JavaConverters._
 
-object DepsRunner extends SimpleMain {
+object DepsRunner extends WorkerMain[Unit] {
   private[this] val argParser = {
     val parser = ArgumentParsers.newFor("deps").addHelp(true).fromFilePrefix("@").build
     parser.addArgument("--check_direct").`type`(Arguments.booleanType)
@@ -38,7 +38,9 @@ object DepsRunner extends SimpleMain {
     parser
   }
 
-  protected[this] def work(args: Array[String]): Unit = {
+  override def init(args: Option[Array[String]]): Unit = ()
+
+  override def work(ctx: Unit, args: Array[String]): Unit = {
     val namespace = argParser.parseArgs(args)
 
     val label = namespace.getString("label").tail

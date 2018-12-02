@@ -1,8 +1,9 @@
 package annex.bloop
 
-import annex.worker.SimpleMain
+import annex.worker.WorkerMain
 import bloop.Bloop
 
-object BloopRunner extends SimpleMain {
-  protected[this] def work(args: Array[String]): Unit = Bloop
+object BloopRunner extends WorkerMain[Unit] {
+  override def init(args: Option[Array[String]]): Unit = ()
+  override def work(ctx: Unit, args: Array[String]): Unit = Bloop
 }

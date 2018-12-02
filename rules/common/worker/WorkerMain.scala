@@ -16,7 +16,7 @@ trait WorkerMain[S] {
 
   protected[this] def init(args: Option[Array[String]]): S
 
-  protected[this] def work(state: S, args: Array[String]): S
+  protected[this] def work(ctx: S, args: Array[String]): Unit
 
   final def main(args: Array[String]): Unit = {
     args.toList match {
@@ -44,16 +44,18 @@ trait WorkerMain[S] {
 
         try {
           @tailrec
-          def process(state: S): S = process {
+          def process(ctx: S): S = {
             val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(stdin)
             val args = request.getArgumentsList.toArray(Array.empty[String])
 
-            val (newState, code) = try work(state, args) -> 0
-            catch {
-              case ExitTrapped(code) => state -> code
+            val code = try {
+              work(ctx, args)
+              0
+            } catch {
+              case ExitTrapped(code) => code
               case NonFatal(e) =>
                 e.printStackTrace()
-                state -> 1
+                1
             }
 
             WorkerProtocol.WorkResponse.newBuilder
@@ -65,7 +67,7 @@ trait WorkerMain[S] {
             out.flush()
             outStream.reset()
 
-            newState
+            process(ctx)
           }
           process(init(Some(args.toArray)))
         } finally {

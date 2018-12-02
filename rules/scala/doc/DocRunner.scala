@@ -3,7 +3,7 @@ package annex.doc
 import annex.args.Implicits._
 import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
 import annex.compiler.Arguments.LogLevel
-import annex.worker.SimpleMain
+import annex.worker.WorkerMain
 import java.io.File
 import java.nio.file.{Files, NoSuchFileException}
 import java.util.{Collections, Optional, Properties}
@@ -15,7 +15,7 @@ import sbt.internal.inc.{LoggedReporter, ZincUtil}
 import scala.collection.JavaConverters._
 import xsbti.Logger
 
-object DocRunner extends SimpleMain {
+object DocRunner extends WorkerMain[Unit] {
 
   private[this] val classloaderCache = new ClassLoaderCache(null)
 
@@ -78,7 +78,9 @@ object DocRunner extends SimpleMain {
     .`type`(Arguments.fileType.verifyCanRead.verifyIsFile)
     .setDefault_(Collections.emptyList)
 
-  def work(args: Array[String]): Unit = {
+  override def init(args: Option[Array[String]]): Unit = ()
+
+  override def work(ctx: Unit, args: Array[String]): Unit = {
     val namespace = parser.parseArgsOrFail(args)
 
     val tmpDir = namespace.get[File]("tmp").toPath
