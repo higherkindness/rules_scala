@@ -1,7 +1,7 @@
 package annex.scala.proto
 
 import annex.args.Implicits._
-import annex.worker.SimpleMain
+import annex.worker.WorkerMain
 import java.io.File
 import java.nio.file.{Files, Paths}
 import java.util.Collections
@@ -12,7 +12,7 @@ import protocbridge.ProtocBridge
 import scala.collection.JavaConverters._
 import scalapb.ScalaPbCodeGenerator
 
-object ScalaProtoWorker extends SimpleMain {
+object ScalaProtoWorker extends WorkerMain[Unit] {
 
   private[this] val argParser: ArgumentParser = {
     val parser = ArgumentParsers.newFor("proto").addHelp(true).fromFilePrefix("@").build
@@ -31,7 +31,9 @@ object ScalaProtoWorker extends SimpleMain {
     parser
   }
 
-  protected[this] def work(args: Array[String]) = {
+  override def init(args: Option[Array[String]]): Unit = ()
+
+  protected[this] def work(ctx: Unit, args: Array[String]): Unit = {
     val namespace = argParser.parseArgs(args)
     val sources = namespace.getList[File]("sources").asScala.toList
 

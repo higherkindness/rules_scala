@@ -264,8 +264,6 @@ object ZincRunner extends WorkerMain[Namespace] {
     // clear temporary files
     FileUtil.delete(tmpDir)
     Files.createDirectory(tmpDir)
-
-    worker
   }
 }
 
