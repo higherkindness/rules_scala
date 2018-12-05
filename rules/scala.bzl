@@ -45,6 +45,11 @@ load(
     _scala_repl_implementation = "scala_repl_implementation",
     _scala_repl_private_attributes = "scala_repl_private_attributes",
 )
+load(
+    "//rules/scalafmt:private/test.bzl",
+    _scala_format_attributes = "scala_format_attributes",
+    _scala_non_default_format_attributes = "scala_non_default_format_attributes",
+)
 
 _library_common_attributes = {
     "srcs": attr.label_list(
@@ -116,15 +121,25 @@ _library_common_attributes = {
     ),
 }
 
+_common_outputs = {
+    "runner": "%{name}.format",
+    "testrunner": "%{name}.format-test",
+}
+
 scala_library = rule(
     attrs = _dicts.add(
         _library_common_attributes,
         _scala_library_private_attributes,
+        _scala_format_attributes,
+        _scala_non_default_format_attributes,
     ),
     doc = "Compiles a Scala JVM library.",
-    outputs = {
-        "jar": "%{name}.jar",
-    },
+    outputs = _dicts.add(
+        {
+            "jar": "%{name}.jar",
+        },
+        _common_outputs,
+    ),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -159,6 +174,8 @@ scala_binary = rule(
         _library_common_attributes,
         _runner_common_attributes,
         _scala_binary_private_attributes,
+        _scala_format_attributes,
+        _scala_non_default_format_attributes,
         {
             "main_class": attr.string(
                 doc = "The main class. If not provided, it will be inferred by its type signature.",
@@ -167,11 +184,14 @@ scala_binary = rule(
     ),
     doc = "Compiles and links a Scala JVM executable.",
     executable = True,
-    outputs = {
-        "bin": "%{name}-bin",
-        "jar": "%{name}.jar",
-        "deploy_jar": "%{name}_deploy.jar",
-    },
+    outputs = _dicts.add(
+        {
+            "bin": "%{name}-bin",
+            "jar": "%{name}.jar",
+            "deploy_jar": "%{name}_deploy.jar",
+        },
+        _common_outputs,
+    ),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
         "@rules_scala_annex//rules/scala:runner_toolchain_type",
@@ -205,6 +225,8 @@ scala_test = rule(
         _library_common_attributes,
         _runner_common_attributes,
         _scala_test_private_attributes,
+        _scala_format_attributes,
+        _scala_non_default_format_attributes,
         {
             "isolation": attr.string(
                 default = "none",
@@ -235,10 +257,13 @@ scala_test = rule(
         },
     ),
     executable = True,
-    outputs = {
-        "bin": "%{name}-bin",
-        "jar": "%{name}.jar",
-    },
+    outputs = _dicts.add(
+        {
+            "bin": "%{name}-bin",
+            "jar": "%{name}.jar",
+        },
+        _common_outputs,
+    ),
     test = True,
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",

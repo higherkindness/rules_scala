@@ -1,5 +1,5 @@
 load(
-    "//rules:common/private/utils.bzl",
+    "//rules/common:private/utils.bzl",
     _safe_name = "safe_name",
 )
 

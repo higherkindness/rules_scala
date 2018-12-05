@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "scala_binary")
+load("//rules:scala.bzl", "bootstrap_scala_binary", "scala_binary")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
 filegroup(
@@ -7,9 +7,16 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-scala_binary(
+filegroup(
+    name = "testrunner",
+    srcs = ["private/format-test.template.sh"],
+    visibility = ["//visibility:public"],
+)
+
+bootstrap_scala_binary(
     name = "scalafmt",
     srcs = glob(["scalafmt/**/*.scala"]),
+    main_class = "annex.scalafmt.ScalafmtRunner",
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [

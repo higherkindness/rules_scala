@@ -1,5 +1,46 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
-bazel test :formatted
+# scala_format_test
+## check
+bazel test :formatted || false
 ! bazel test :unformatted || false
+## copy
+cp unformatted.template.scala unformatted.tmp.scala
+! bazel test :unformatted-copy || false
+bazel run :unformatted-copy
+bazel test :unformatted-copy || false
+rm unformatted.tmp.scala
+
+# non-default output format test: binary
+## check
+bazel run :formatted-binary.format-test || false
+! bazel run :unformatted-binary.format-test || false
+## copy
+cp unformatted.template.scala unformatted.tmp.scala
+! bazel run :unformatted-binary-copy.format-test || false
+bazel run :unformatted-binary-copy.format
+bazel run :unformatted-binary-copy.format-test || false
+rm unformatted.tmp.scala
+
+# non-default output format test: library
+## check
+bazel run :formatted-library.format-test || false
+! bazel run :unformatted-library.format-test || false
+## copy
+cp unformatted.template.scala unformatted.tmp.scala
+! bazel run :unformatted-library-copy.format-test || false
+bazel run :unformatted-library-copy.format
+bazel run :unformatted-library-copy.format-test || false
+rm unformatted.tmp.scala
+
+# non-default output format test: test
+## check
+bazel run :formatted-test.format-test || false
+! bazel run :unformatted-test.format-test || false
+## copy
+cp unformatted.template.scala unformatted.tmp.scala
+! bazel run :unformatted-test-copy.format-test || false
+bazel run :unformatted-test-copy.format
+bazel run :unformatted-test-copy.format-test || false
+rm unformatted.tmp.scala
