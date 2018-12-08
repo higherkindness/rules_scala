@@ -3,6 +3,7 @@ load(
     _ScalaConfiguration = "ScalaConfiguration",
     _ZincConfiguration = "ZincConfiguration",
 )
+load("//rules/common:private/utils.bzl", _collect = "collect")
 
 scaladoc_private_attributes = {
     "_runner": attr.label(
@@ -16,13 +17,18 @@ def scaladoc_implementation(ctx):
     scala_configuration = ctx.attr.scala[_ScalaConfiguration]
     zinc_configuration = ctx.attr.scala[_ZincConfiguration]
 
+    scompiler_classpath = java_common.merge(
+        _collect(JavaInfo, scala_configuration.compiler_classpath),
+    )
+
     html = ctx.actions.declare_directory("html")
     tmp = ctx.actions.declare_directory("tmp")
 
     classpath = depset(transitive = [dep[JavaInfo].transitive_compile_time_deps for dep in ctx.attr.deps])
     compiler_classpath = depset(
-        scala_configuration.compiler_classpath,
-        transitive = [dep[JavaInfo].transitive_runtime_deps for dep in ctx.attr.compiler_deps],
+        transitive =
+            [scompiler_classpath.transitive_runtime_deps] +
+            [dep[JavaInfo].transitive_runtime_deps for dep in ctx.attr.compiler_deps],
     )
 
     srcs = [file for file in ctx.files.srcs if file.extension.lower() in ["java", "scala"]]
