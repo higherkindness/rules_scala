@@ -18,7 +18,7 @@ def _declare_scala_configuration_implementation(ctx):
     return [
         java_common.merge(_collect(JavaInfo, ctx.attr.compiler_classpath)),
         ScalaConfiguration(
-            compiler_classpath = ctx.files.compiler_classpath,
+            compiler_classpath = ctx.attr.compiler_classpath,
             global_plugins = ctx.attr.global_plugins,
             runtime_classpath = ctx.attr.runtime_classpath,
             version = ctx.attr.version,

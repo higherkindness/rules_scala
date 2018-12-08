@@ -4,7 +4,7 @@ load(
     _ScalaConfiguration = "ScalaConfiguration",
     _ZincConfiguration = "ZincConfiguration",
 )
-load("//rules/common:private/utils.bzl", "write_launcher")
+load("//rules/common:private/utils.bzl", "write_launcher", _collect = "collect")
 load(":private/core.bzl", _scala_binary_private_attributes = "scala_binary_private_attributes")
 
 scala_repl_private_attributes = _dicts.add(
@@ -22,12 +22,16 @@ def scala_repl_implementation(ctx):
     scala_configuration = ctx.attr.scala[_ScalaConfiguration]
     zinc_configuration = ctx.attr.scala[_ZincConfiguration]
 
+    scompiler_classpath = java_common.merge(
+        _collect(JavaInfo, scala_configuration.compiler_classpath),
+    )
+
     classpath = depset(transitive = [dep[JavaInfo].transitive_runtime_deps for dep in ctx.attr.deps])
     runner_classpath = ctx.attr._runner[JavaInfo].transitive_runtime_deps
 
     args = ctx.actions.args()
     args.add("--compiler_bridge", zinc_configuration.compiler_bridge.short_path)
-    args.add_all("--compiler_classpath", scala_configuration.compiler_classpath, map_each = _short_path)
+    args.add_all("--compiler_classpath", scompiler_classpath.transitive_runtime_jars, map_each = _short_path)
     args.add_all("--classpath", classpath, map_each = _short_path)
     args.add_all(ctx.attr.scalacopts, format_each = "--compiler_option=%s")
     args.set_param_file_format("multiline")
@@ -48,8 +52,8 @@ def scala_repl_implementation(ctx):
     )
 
     files = depset(
-        [args_file, zinc_configuration.compiler_bridge] + launcher_files + scala_configuration.compiler_classpath,
-        transitive = [classpath, runner_classpath],
+        [args_file, zinc_configuration.compiler_bridge] + launcher_files,
+        transitive = [classpath, runner_classpath, scompiler_classpath.transitive_runtime_deps],
     )
     return [
         DefaultInfo(

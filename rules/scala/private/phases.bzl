@@ -12,12 +12,19 @@ load("//rules/scalafmt:private/test.bzl", _build_format = "build_format", _forma
 load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
 
 def run_phases(ctx, phases):
+    # init currently holds info derived from core attributes and the
+    # scala_configuration
     scala_configuration = ctx.attr.scala[_ScalaConfiguration]
-    sdeps = java_common.merge(_collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps))
+    sdeps = java_common.merge(
+        _collect(JavaInfo, scala_configuration.runtime_classpath + ctx.attr.deps),
+    )
+    scompiler_classpath = java_common.merge(
+        _collect(JavaInfo, scala_configuration.compiler_classpath),
+    )
     init = struct(
         scala_configuration = scala_configuration,
-        # todo: probably can remove this from init
         sdeps = sdeps,
+        scompiler_classpath = scompiler_classpath,
     )
 
     phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
@@ -142,7 +149,7 @@ def phase_compile(ctx, g):
     args = ctx.actions.args()
     args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _compile_analysis)
     args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
-    args.add_all("--compiler_classpath", g.init.scala_configuration.compiler_classpath)
+    args.add_all("--compiler_classpath", g.init.scompiler_classpath.transitive_runtime_jars)
     args.add_all("--classpath", compile_classpath)
     args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
     args.add_all(javacopts, format_each = "--java_compiler_option=%s")
@@ -164,10 +171,11 @@ def phase_compile(ctx, g):
 
     runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner.runner])
     inputs = depset(
-        [zinc_configuration.compiler_bridge] + g.init.scala_configuration.compiler_classpath + ctx.files.data + ctx.files.srcs + runner_inputs,
+        [zinc_configuration.compiler_bridge] + ctx.files.data + ctx.files.srcs + runner_inputs,
         transitive = [
             splugins.transitive_runtime_deps,
             compile_classpath,
+            g.init.scompiler_classpath.transitive_runtime_deps,
         ] + [zinc.deps_files for zinc in zincs],
     )
 
@@ -238,8 +246,9 @@ def phase_boostrap_compile(ctx, g):
     class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
     scala = g.init.scala_configuration
 
-    deps = [dep[JavaInfo] for dep in scala.runtime_classpath + ctx.attr.deps]
-    sdep = java_common.merge(deps)
+    sdep = java_common.merge(
+        _collect(JavaInfo, scala.runtime_classpath + ctx.attr.deps),
+    )
 
     macro_classpath = [
         dep[JavaInfo].transitive_runtime_jars
@@ -253,12 +262,12 @@ def phase_boostrap_compile(ctx, g):
     compile_deps = depset(order = "preorder", transitive = macro_classpath + [sdep.transitive_compile_time_jars])
     runtime_deps = sdep.transitive_runtime_jars
 
-    compiler_classpath_str = ":".join([file.path for file in scala.compiler_classpath])
+    compiler_classpath_str = ":".join([file.path for file in g.init.scompiler_classpath.transitive_runtime_jars])
     compile_classpath_str = ":".join([file.path for file in compile_deps.to_list()])
 
     inputs = depset(
-        [java] + ctx.files.srcs + scala.compiler_classpath,
-        transitive = [compile_deps],
+        [java] + ctx.files.srcs,
+        transitive = [compile_deps, g.init.scompiler_classpath.transitive_runtime_jars],
     )
     tools = [jar_creator]
 
