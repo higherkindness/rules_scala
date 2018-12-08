@@ -436,7 +436,7 @@ def phase_singlejar(ctx, g):
     # including them in the args for singlejar to process. This will
     # cause the build to fail, cleanly, if any declared outputs are
     # missing from previous phases.
-    inputs = [g.compile.jar] + [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]
+    inputs = [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]
     phantom_inputs = []
     for v in [getattr(g, k) for k in dir(g) if k not in ["to_json", "to_proto"]]:
         if hasattr(v, "jar"):

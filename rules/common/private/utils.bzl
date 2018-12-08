@@ -94,6 +94,11 @@ def action_singlejar(
     # For a full list of available command line options see:
     # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
 
+    if type(inputs) == "list":
+        inputs = depset(inputs)
+    if type(phantom_inputs) == "list":
+        phantom_inputs = depset(phantom_inputs)
+
     args = ctx.actions.args()
     args.add("--exclude_build_data")
     args.add("--normalize")
@@ -104,11 +109,6 @@ def action_singlejar(
         args.add("--main_class", main_class)
         args.set_param_file_format("multiline")
         args.use_param_file("@%s", use_always = True)
-
-    if type(inputs) == "list":
-        inputs = depset(inputs)
-    if type(phantom_inputs) == "list":
-        phantom_inputs = depset()
 
     all_inputs = depset(transitive = [inputs, phantom_inputs])
 
