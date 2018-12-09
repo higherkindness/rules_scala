@@ -1,4 +1,3 @@
 -rw----     2.0 fat        0 bx  0% stor 19800101.000000 META-INF/
 -rw----     2.0 fat       48 b-  0% stor 19800101.000000 META-INF/MANIFEST.MF
 -rw-r--r--  0.0 fat        8 b-  0% stor 19800101.000000 resources/plain/example/example.txt
--rw-r--r--  0.0 fat        8 b-  0% stor 19800101.000000 plain/example/example.txt
