@@ -7,6 +7,8 @@ diff expected_plain <(
 )
 
 bazel build :merged
+ls -la example/
+zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/merged.jar"
 diff expected_merged <(
     zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/merged.jar"
 )
