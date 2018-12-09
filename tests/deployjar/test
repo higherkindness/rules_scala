@@ -3,7 +3,6 @@
 
 bazel build :TestBinary_deploy.jar
 
-! unzip -v | grep -q Debian || diff expected  <( \
-  unzip -l "$(bazel info bazel-bin)/deployjar/TestBinary_deploy.jar" \
-  | tail -n+2 \
+diff expected <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/deployjar/TestBinary_deploy.jar"
 )
