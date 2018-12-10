@@ -3,7 +3,6 @@
 
 zip example.srcjar Example.scala
 bazel build :lib
-! unzip -v | grep -q Debian || diff expected  <( \
-  unzip -l "$(bazel info bazel-bin)/compile/srcjar/lib.jar" \
-  | tail -n+2 \
+diff expected  <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/compile/srcjar/lib.jar"
 )

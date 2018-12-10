@@ -2,9 +2,8 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :prefix
-! unzip -v | grep -q Debian || diff expected  <( \
-  unzip -l "$(bazel info bazel-bin)/resources/prefix/prefix.jar" \
-  | tail -n+2 \
+diff expected <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/prefix/prefix.jar"
 )
 
 ! bazel build :outside

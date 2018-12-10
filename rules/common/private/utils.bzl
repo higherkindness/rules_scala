@@ -27,6 +27,8 @@ def _strip_margin_line(line, delim):
     else:
         return line
 
+_SINGLE_JAR_MNEMONIC = "SingleJar"
+
 def write_launcher(
         ctx,
         prefix,
@@ -80,3 +82,44 @@ def safe_name(value):
 
 def _short_path(file):
     return file.short_path
+
+def action_singlejar(
+        ctx,
+        inputs,
+        output,
+        phantom_inputs = depset(),
+        main_class = None,
+        progress_message = None,
+        resources = {}):
+    # This calls bazels singlejar utility.
+    # For a full list of available command line options see:
+    # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
+
+    if type(inputs) == "list":
+        inputs = depset(inputs)
+    if type(phantom_inputs) == "list":
+        phantom_inputs = depset(phantom_inputs)
+
+    args = ctx.actions.args()
+    args.add("--exclude_build_data")
+    args.add("--normalize")
+    args.add_all("--sources", inputs)
+    args.add_all("--resources", ["{}:{}".format(value.path, key) for key, value in resources.items()])
+    args.add("--output", output)
+    args.add("--warn_duplicate_resources")
+    if main_class != None:
+        args.add("--main_class", main_class)
+        args.set_param_file_format("multiline")
+        args.use_param_file("@%s", use_always = True)
+
+    all_inputs = depset(resources.values(), transitive = [inputs, phantom_inputs])
+
+    ctx.actions.run(
+        arguments = [args],
+        executable = ctx.executable._singlejar,
+        execution_requirements = {"supports-workers": "1"},
+        mnemonic = _SINGLE_JAR_MNEMONIC,
+        inputs = all_inputs,
+        outputs = [output],
+        progress_message = progress_message,
+    )

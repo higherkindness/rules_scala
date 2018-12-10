@@ -4,6 +4,3 @@
 -rw----     2.0 fat        0 b-  0% stor 19800101.000000 resources/plain/
 -rw----     2.0 fat        0 b-  0% stor 19800101.000000 resources/plain/example/
 -rw----     2.0 fat        8 b-  0% stor 19800101.000000 resources/plain/example/example.txt
--rw----     2.0 fat        0 b-  0% stor 19800101.000000 plain/
--rw----     2.0 fat        0 b-  0% stor 19800101.000000 plain/example/
--rw----     2.0 fat        8 b-  0% stor 19800101.000000 plain/example/example.txt

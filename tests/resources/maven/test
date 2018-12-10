@@ -2,8 +2,6 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :maven
-# note: date formats for unzip vary
-! unzip -v | grep -q Debian || diff expected  <( \
-   unzip -l "$(bazel info bazel-bin)/resources/maven/maven.jar" \
-   | tail -n+2
+diff expected <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/maven/maven.jar"
 )

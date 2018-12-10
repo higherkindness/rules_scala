@@ -102,11 +102,6 @@ runner_common_attributes = {
         default = "@bazel_tools//tools/jdk:singlejar",
         executable = True,
     ),
-    "_zipper": attr.label(
-        cfg = "host",
-        default = "@bazel_tools//tools/zip:zipper",
-        executable = True,
-    ),
 }
 
 scala_library_private_attributes = runner_common_attributes

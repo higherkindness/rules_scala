@@ -7,9 +7,23 @@ load(
     _ZincConfiguration = "ZincConfiguration",
     _ZincInfo = "ZincInfo",
 )
-load("//rules/common:private/utils.bzl", _collect = "collect", _strip_margin = "strip_margin", _write_launcher = "write_launcher")
-load("//rules/scalafmt:private/test.bzl", _build_format = "build_format", _format_runner = "format_runner", _format_tester = "format_tester")
-load(":private/import.bzl", _create_intellij_info = "create_intellij_info")
+load(
+    "//rules/common:private/utils.bzl",
+    _action_singlejar = "action_singlejar",
+    _collect = "collect",
+    _strip_margin = "strip_margin",
+    _write_launcher = "write_launcher",
+)
+load(
+    "//rules/scalafmt:private/test.bzl",
+    _build_format = "build_format",
+    _format_runner = "format_runner",
+    _format_tester = "format_tester",
+)
+load(
+    ":private/import.bzl",
+    _create_intellij_info = "create_intellij_info",
+)
 
 def run_phases(ctx, phases):
     # init currently holds info derived from core attributes and the
@@ -23,8 +37,8 @@ def run_phases(ctx, phases):
     )
     init = struct(
         scala_configuration = scala_configuration,
-        sdeps = sdeps,
         scompiler_classpath = scompiler_classpath,
+        sdeps = sdeps,
     )
 
     phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
@@ -56,8 +70,6 @@ def run_phases(ctx, phases):
 
     return g
 
-_SINGLE_JAR_MNEMONIC = "SingleJar"
-
 #
 # PHASE: resources
 #
@@ -68,25 +80,19 @@ _SINGLE_JAR_MNEMONIC = "SingleJar"
 #
 
 def phase_resources(ctx, g):
-    zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
-
     if ctx.files.resources:
-        jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
-        args = ctx.actions.args()
-        args.add("c", jar)
-        args.set_param_file_format("multiline")
-        args.use_param_file("@%s")
-        for file in ctx.files.resources:
-            args.add("{}={}".format(_resources_make_path(file, ctx.attr.resource_strip_prefix), file.path))
-        ctx.actions.run(
-            arguments = [args],
-            executable = ctx.executable._zipper,
-            inputs = ctx.files.resources,
-            input_manifests = zipper_manifests,
-            outputs = [jar],
-            tools = zipper_inputs,
+        resource_jar = ctx.actions.declare_file("{}/resources.jar".format(ctx.label.name))
+        _action_singlejar(
+            ctx,
+            inputs = [],
+            output = resource_jar,
+            progress_message = "singlejar resources %s" % ctx.label.name,
+            resources = {
+                _resources_make_path(file, ctx.attr.resource_strip_prefix): file
+                for file in ctx.files.resources
+            },
         )
-        return struct(jar = jar)
+        return struct(jar = resource_jar)
     else:
         return struct()
 
@@ -115,7 +121,37 @@ def phase_compile(ctx, g):
     runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
     class_jar = ctx.actions.declare_file("{}/classes.jar".format(ctx.label.name))
 
-    splugins = java_common.merge(_collect(JavaInfo, ctx.attr.plugins + g.init.scala_configuration.global_plugins))
+    plugin_skip_jars = java_common.merge(
+        _collect(JavaInfo, g.init.scala_configuration.compiler_classpath +
+                           g.init.scala_configuration.runtime_classpath),
+    ).transitive_runtime_jars.to_list()
+
+    actual_plugins = []
+    for plugin in ctx.attr.plugins + g.init.scala_configuration.global_plugins:
+        deps = [dep for dep in plugin[JavaInfo].transitive_runtime_jars if dep not in plugin_skip_jars]
+        if len(deps) == 1:
+            actual_plugins.extend(deps)
+        else:
+            # scalac expects each plugin to be fully isolated, so we need to
+            # smash everything together with singlejar
+            print("WARNING! " +
+                  "It is slightly inefficient to use a JVM target with " +
+                  "dependencies directly as a scalac plugin. Please " +
+                  "SingleJar the target before using it as a scalac plugin " +
+                  "in order to avoid additional overhead.")
+
+            plugin_singlejar = ctx.actions.declare_file(
+                "{}/scalac_plugin_{}.jar".format(ctx.label.name, plugin.label.name),
+            )
+            _action_singlejar(
+                ctx,
+                inputs = deps,
+                output = plugin_singlejar,
+                progress_message = "singlejar scalac plugin %s" % plugin.label.name,
+            )
+            actual_plugins.append(plugin_singlejar)
+
+    actual_plugins = depset(actual_plugins)
 
     zinc_configuration = ctx.attr.scala[_ZincConfiguration]
 
@@ -162,7 +198,7 @@ def phase_compile(ctx, g):
     args.add("--output_setup", setup)
     args.add("--output_stamps", stamps)
     args.add("--output_used", used)
-    args.add_all("--plugins", splugins.transitive_runtime_deps)
+    args.add_all("--plugins", actual_plugins)
     args.add_all("--source_jars", src_jars)
     args.add("--tmp", tmp.path)
     args.add_all("--", srcs)
@@ -173,7 +209,7 @@ def phase_compile(ctx, g):
     inputs = depset(
         [zinc_configuration.compiler_bridge] + ctx.files.data + ctx.files.srcs + runner_inputs,
         transitive = [
-            splugins.transitive_runtime_deps,
+            actual_plugins,
             compile_classpath,
             g.init.scompiler_classpath.transitive_runtime_deps,
         ] + [zinc.deps_files for zinc in zincs],
@@ -390,39 +426,20 @@ def _depscheck_labeled_group(labeled_jars):
 #
 
 def phase_singlejar(ctx, g):
-    inputs = [g.compile.jar] + ctx.files.resource_jars
-    args = ctx.actions.args()
-    args.add("--exclude_build_data")
-    args.add("--normalize")
-
+    # We're going to declare all phase outputs as inputs but skip
+    # including them in the args for singlejar to process. This will
+    # cause the build to fail, cleanly, if any declared outputs are
+    # missing from previous phases.
+    inputs = [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]
+    phantom_inputs = []
     for v in [getattr(g, k) for k in dir(g) if k not in ["to_json", "to_proto"]]:
         if hasattr(v, "jar"):
             jar = getattr(v, "jar")
-            args.add("--sources", jar)
             inputs.append(jar)
         if hasattr(v, "outputs"):
-            # Declare all phase outputs as inputs but _don't_ include them in the args
-            # for singlejar to process. This will cause the build to fail, cleanly, if
-            # any declared outputs are missing from previous phases.
-            inputs.extend(getattr(v, "outputs"))
+            phantom_inputs.extend(getattr(v, "outputs"))
 
-    for file in [f for f in ctx.files.resource_jars if f.extension.lower() in ["jar"]]:
-        args.add("--sources")
-        args.add(file)
-
-    args.add("--output", ctx.outputs.jar)
-    args.add("--warn_duplicate_resources")
-    args.set_param_file_format("multiline")
-    args.use_param_file("@%s", use_always = True)
-
-    ctx.actions.run(
-        arguments = [args],
-        executable = ctx.executable._singlejar,
-        execution_requirements = {"supports-workers": "1"},
-        mnemonic = _SINGLE_JAR_MNEMONIC,
-        inputs = inputs,  # TODO: build up inputs as a depset
-        outputs = [ctx.outputs.jar],
-    )
+    _action_singlejar(ctx, inputs, ctx.outputs.jar, phantom_inputs)
 
 #
 # PHASE: javainfo
@@ -537,31 +554,18 @@ def phase_non_default_format(ctx, g):
 #
 
 def phase_binary_deployjar(ctx, g):
-    transitive_rjars = g.javainfo.java_info.transitive_runtime_jars
-    rjars = depset([ctx.outputs.jar], transitive = [transitive_rjars])
-    _binary_deployjar_build_deployable(ctx, rjars.to_list())
-
-def _binary_deployjar_build_deployable(ctx, jars_list):
-    # This calls bazels singlejar utility.
-    # For a full list of available command line options see:
-    # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
-    args = ctx.actions.args()
-    args.add("--normalize")
-    args.add("--compression")
-    args.add("--sources")
-    args.add_all([j.path for j in jars_list])
+    main_class = None
     if getattr(ctx.attr, "main_class", ""):
-        args.add_all(["--main_class", ctx.attr.main_class])
-    args.add_all(["--output", ctx.outputs.deploy_jar.path])
-
-    ctx.actions.run(
-        inputs = jars_list,
-        outputs = [ctx.outputs.deploy_jar],
-        executable = ctx.executable._singlejar,
-        execution_requirements = {"supports-workers": "1"},
-        mnemonic = _SINGLE_JAR_MNEMONIC,
+        main_class = ctx.attr.main_class
+    _action_singlejar(
+        ctx,
+        inputs = depset(
+            [ctx.outputs.jar],
+            transitive = [g.javainfo.java_info.transitive_runtime_jars],
+        ),
+        main_class = main_class,
+        output = ctx.outputs.deploy_jar,
         progress_message = "scala deployable %s" % ctx.label,
-        arguments = [args],
     )
 
 #
