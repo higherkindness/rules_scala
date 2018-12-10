@@ -89,7 +89,8 @@ def action_singlejar(
         output,
         phantom_inputs = depset(),
         main_class = None,
-        progress_message = None):
+        progress_message = None,
+        resources = {}):
     # This calls bazels singlejar utility.
     # For a full list of available command line options see:
     # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
@@ -103,6 +104,7 @@ def action_singlejar(
     args.add("--exclude_build_data")
     args.add("--normalize")
     args.add_all("--sources", inputs)
+    args.add_all("--resources", ["{}:{}".format(value.path, key) for key, value in resources.items()])
     args.add("--output", output)
     args.add("--warn_duplicate_resources")
     if main_class != None:
@@ -110,7 +112,7 @@ def action_singlejar(
         args.set_param_file_format("multiline")
         args.use_param_file("@%s", use_always = True)
 
-    all_inputs = depset(transitive = [inputs, phantom_inputs])
+    all_inputs = depset(resources.values(), transitive = [inputs, phantom_inputs])
 
     ctx.actions.run(
         arguments = [args],

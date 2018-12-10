@@ -80,25 +80,19 @@ def run_phases(ctx, phases):
 #
 
 def phase_resources(ctx, g):
-    zipper_inputs, _, zipper_manifests = ctx.resolve_command(tools = [ctx.attr._zipper])
-
     if ctx.files.resources:
-        jar = ctx.actions.declare_file("{}/resources.zip".format(ctx.label.name))
-        args = ctx.actions.args()
-        args.add("c", jar)
-        args.set_param_file_format("multiline")
-        args.use_param_file("@%s")
-        for file in ctx.files.resources:
-            args.add("{}={}".format(_resources_make_path(file, ctx.attr.resource_strip_prefix), file.path))
-        ctx.actions.run(
-            arguments = [args],
-            executable = ctx.executable._zipper,
-            inputs = ctx.files.resources,
-            input_manifests = zipper_manifests,
-            outputs = [jar],
-            tools = zipper_inputs,
+        resource_jar = ctx.actions.declare_file("{}/resources.jar".format(ctx.label.name))
+        _action_singlejar(
+            ctx,
+            inputs = [],
+            output = resource_jar,
+            progress_message = "singlejar resources %s" % ctx.label.name,
+            resources = {
+                _resources_make_path(file, ctx.attr.resource_strip_prefix): file
+                for file in ctx.files.resources
+            },
         )
-        return struct(jar = jar)
+        return struct(jar = resource_jar)
     else:
         return struct()
 
