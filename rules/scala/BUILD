@@ -54,17 +54,6 @@ config_setting(
     },
 )
 
-bootstrap_scala_library(
-    name = "compiler",
-    srcs = glob(["compiler/**/*.scala"]),
-    scala = "//external:scala_annex_scala_basic",
-    deps = [
-        "//src/main/scala/higherkindness/rules_scala/common/args",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
-    ],
-)
-
 toolchain_type(
     name = "runner_toolchain_type",
     visibility = ["//visibility:public"],
@@ -149,9 +138,9 @@ scala_binary(
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
-        ":compiler",
         "//src/main/scala/higherkindness/rules_scala/common/args",
         "//src/main/scala/higherkindness/rules_scala/common/worker",
+        "//src/main/scala/higherkindness/rules_scala/workers/zinc/common",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_util_interface",
@@ -170,8 +159,8 @@ scala_binary(
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
-        ":compiler",
         "//src/main/scala/higherkindness/rules_scala/common/args",
+        "//src/main/scala/higherkindness/rules_scala/workers/zinc/common",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_util_interface",
@@ -244,8 +233,8 @@ bootstrap_scala_binary(
         "@scala_annex_com_lihaoyi_sourcecode_2_12",
     ],
     deps = [
-        ":compiler",
         "//src/main/scala/higherkindness/rules_scala/common/worker",
+        "//src/main/scala/higherkindness/rules_scala/workers/zinc/common",
         "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "@scala_annex_org_scala_sbt_test_interface",
         "@scala_annex_org_scala_sbt_zinc_2_12",

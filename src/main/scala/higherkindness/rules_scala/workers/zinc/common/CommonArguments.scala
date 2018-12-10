@@ -1,11 +1,14 @@
-package annex.compiler
+package higherkindness.rules_scala
+package workers.zinc.common
 
-import higherkindness.rules_scala.common.args.implicits._
-import java.util.Collections
 import net.sourceforge.argparse4j.impl.{Arguments => ArgumentsImpl}
 import net.sourceforge.argparse4j.inf.ArgumentParser
 
-object Arguments {
+import java.util.Collections
+
+import common.args.implicits._
+
+object CommonArguments {
 
   object LogLevel {
     val Debug = "debug"

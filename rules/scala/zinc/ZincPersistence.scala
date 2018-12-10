@@ -1,7 +1,8 @@
 package annex.zinc
 
-import annex.compiler.FileUtil
-import java.nio.file.{Files, Path}
+import higherkindness.rules_scala.workers.zinc.common.FileUtil
+import java.nio.file.Files
+import java.nio.file.Path
 
 trait ZincPersistence {
   def load(): Unit

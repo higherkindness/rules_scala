@@ -1,6 +1,9 @@
 package annex.zinc
 
-import annex.compiler.{AnxLogger, AnxScalaInstance, Arguments, FileUtil}
+import higherkindness.rules_scala.workers.zinc.common.AnnexLogger
+import higherkindness.rules_scala.workers.zinc.common.AnnexScalaInstance
+import higherkindness.rules_scala.workers.zinc.common.CommonArguments
+import higherkindness.rules_scala.workers.zinc.common.FileUtil
 import higherkindness.rules_scala.common.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
@@ -56,10 +59,10 @@ object ZincRunner extends WorkerMain[Namespace] {
 
   protected[this] def work(worker: Namespace, args: Array[String]) = {
     val parser = ArgumentParsers.newFor("zinc").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
-    Arguments.add(parser)
+    CommonArguments.add(parser)
     val namespace = parser.parseArgsOrFail(args)
 
-    val logger = new AnxLogger(namespace.getString("log_level"))
+    val logger = new AnnexLogger(namespace.getString("log_level"))
 
     val tmpDir = namespace.get[File]("tmp").toPath
 
@@ -155,7 +158,7 @@ object ZincRunner extends WorkerMain[Namespace] {
       .orElseGet(() => PreviousResult.of(Optional.empty(), Optional.empty()))
 
     // setup compiler
-    val scalaInstance = new AnxScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
+    val scalaInstance = new AnnexScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
 
     val compileOptions =
       CompileOptions.create

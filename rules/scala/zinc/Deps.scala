@@ -1,6 +1,7 @@
 package annex.zinc
 
-import annex.compiler.FileUtil
+import higherkindness.rules_scala.workers.zinc.common.FileUtil
+
 import java.io.File
 import java.nio.file.{Files, Path, StandardCopyOption}
 import java.util.zip.ZipInputStream

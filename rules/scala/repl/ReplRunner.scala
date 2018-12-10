@@ -1,8 +1,11 @@
 package annex.repl
 
 import higherkindness.rules_scala.common.args.implicits._
-import annex.compiler.Arguments.LogLevel
-import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
+import higherkindness.rules_scala.workers.zinc.common.CommonArguments.LogLevel
+import higherkindness.rules_scala.workers.zinc.common.AnnexLogger
+import higherkindness.rules_scala.workers.zinc.common.AnnexScalaInstance
+import higherkindness.rules_scala.workers.zinc.common.FileUtil
+
 import java.io.File
 import java.nio.file.{Files, Paths}
 import java.util.Collections
@@ -68,11 +71,11 @@ object ReplRunner {
       .getList[File]("compiler_classpath")
       .asScala
       .map(file => runPath.resolve(file.toPath).toFile)
-    val scalaInstance = new AnxScalaInstance(
+    val scalaInstance = new AnnexScalaInstance(
       compilerClasspath.toArray
     )
 
-    val logger = new AnxLogger(namespace.getString("log_level"))
+    val logger = new AnnexLogger(namespace.getString("log_level"))
 
     val scalaCompiler = ZincUtil
       .scalaCompiler(scalaInstance, runPath.resolve(replNamespace.get[File]("compiler_bridge").toPath).toFile)

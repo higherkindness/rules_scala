@@ -1,15 +1,17 @@
-package annex.compiler
+package higherkindness.rules_scala
+package workers.zinc.common
+
+import scala.annotation.tailrec
 
 import java.io.IOException
-import java.nio.file.attribute.BasicFileAttributes
-import java.nio.file.FileVisitResult
 import java.nio.file.FileAlreadyExistsException
+import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 import java.nio.file.SimpleFileVisitor
+import java.nio.file.StandardCopyOption
+import java.nio.file.attribute.BasicFileAttributes
 import java.util.zip.{ZipEntry, ZipInputStream, ZipOutputStream}
-import scala.annotation.tailrec
 
 class CopyFileVisitor(source: Path, target: Path) extends SimpleFileVisitor[Path] {
   override def preVisitDirectory(directory: Path, attributes: BasicFileAttributes) = {

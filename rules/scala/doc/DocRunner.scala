@@ -2,8 +2,11 @@ package annex.doc
 
 import higherkindness.rules_scala.common.args.implicits._
 import higherkindness.rules_scala.common.worker.WorkerMain
-import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
-import annex.compiler.Arguments.LogLevel
+import higherkindness.rules_scala.workers.zinc.common.AnnexLogger
+import higherkindness.rules_scala.workers.zinc.common.AnnexScalaInstance
+import higherkindness.rules_scala.workers.zinc.common.CommonArguments.LogLevel
+import higherkindness.rules_scala.workers.zinc.common.FileUtil
+
 import java.io.File
 import java.nio.file.{Files, NoSuchFileException}
 import java.util.{Collections, Optional, Properties}
@@ -97,9 +100,9 @@ object DocRunner extends WorkerMain[Unit] {
         }
         .map(_.toFile)
 
-    val scalaInstance = new AnxScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
+    val scalaInstance = new AnnexScalaInstance(namespace.getList[File]("compiler_classpath").asScala.toArray)
 
-    val logger = new AnxLogger(namespace.getString("log_level"))
+    val logger = new AnnexLogger(namespace.getString("log_level"))
 
     val scalaCompiler = ZincUtil
       .scalaCompiler(scalaInstance, namespace.get[File]("compiler_bridge"))
