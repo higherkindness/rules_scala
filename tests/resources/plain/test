@@ -2,15 +2,11 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :plain
-ls -la example/
-zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/plain.jar"
 diff expected_plain <(
     zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/plain.jar"
 )
 
 bazel build :merged
-ls -la example/
-zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/merged.jar"
 diff expected_merged <(
     zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/merged.jar"
 )
