@@ -1,6 +1,6 @@
 package annex.bloop
 
-import annex.worker.WorkerMain
+import higherkindness.rules_scala.common.worker.WorkerMain
 import bloop.Bloop
 
 object BloopRunner extends WorkerMain[Unit] {

@@ -1,7 +1,7 @@
 package annex.zinc
 
 import annex.compiler.{AnxLogger, AnxScalaInstance, Arguments, FileUtil}
-import annex.worker.WorkerMain
+import higherkindness.rules_scala.common.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}

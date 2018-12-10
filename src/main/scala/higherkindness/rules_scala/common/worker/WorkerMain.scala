@@ -1,4 +1,5 @@
-package annex.worker
+package higherkindness.rules_scala
+package common.worker
 
 import com.google.devtools.build.lib.worker.WorkerProtocol
 import java.io.ByteArrayInputStream

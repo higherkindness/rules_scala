@@ -1,9 +1,9 @@
 package annex.doc
 
-import annex.args.Implicits._
+import higherkindness.rules_scala.common.args.implicits._
+import higherkindness.rules_scala.common.worker.WorkerMain
 import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
 import annex.compiler.Arguments.LogLevel
-import annex.worker.WorkerMain
 import java.io.File
 import java.nio.file.{Files, NoSuchFileException}
 import java.util.{Collections, Optional, Properties}

@@ -1,6 +1,6 @@
 package annex
 
-import annex.args.Implicits._
+import higherkindness.rules_scala.common.args.implicits._
 import java.io.File
 import java.net.URLClassLoader
 import java.nio.file.attribute.FileTime

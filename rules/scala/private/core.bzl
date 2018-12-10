@@ -137,7 +137,7 @@ bootstrap_scala_library_private_attributes = dict(
             cfg = "host",
         ),
         "_jar_creator": attr.label(
-            default = Label("@rules_scala_annex//rules/common/third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin"),
+            default = Label("@rules_scala_annex//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin"),
             executable = True,
             cfg = "host",
         ),

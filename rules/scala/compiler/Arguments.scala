@@ -1,6 +1,6 @@
 package annex.compiler
 
-import annex.args.Implicits._
+import higherkindness.rules_scala.common.args.implicits._
 import java.util.Collections
 import net.sourceforge.argparse4j.impl.{Arguments => ArgumentsImpl}
 import net.sourceforge.argparse4j.inf.ArgumentParser

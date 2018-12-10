@@ -10,7 +10,7 @@ bootstrap_scala_binary(
     scala = "//external:scala_annex_scala_basic",
     visibility = ["//visibility:public"],
     deps = [
-        "//rules/common:worker",
+        "//src/main/scala/higherkindness/rules_scala/common/worker",
         "@scala_annex_ch_epfl_scala_bloop_frontend_2_12",
     ],
 )
@@ -59,7 +59,7 @@ bootstrap_scala_library(
     srcs = glob(["compiler/**/*.scala"]),
     scala = "//external:scala_annex_scala_basic",
     deps = [
-        "//rules/common:args",
+        "//src/main/scala/higherkindness/rules_scala/common/args",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_zinc_2_12",
     ],
@@ -135,8 +135,8 @@ bootstrap_scala_binary(
     scala = "//external:scala_annex_scala_basic",
     visibility = ["//visibility:public"],
     deps = [
-        "//rules/common:args",
-        "//rules/common:worker",
+        "//src/main/scala/higherkindness/rules_scala/common/args",
+        "//src/main/scala/higherkindness/rules_scala/common/worker",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
     ],
 )
@@ -150,8 +150,8 @@ scala_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":compiler",
-        "//rules/common:args",
-        "//rules/common:worker",
+        "//src/main/scala/higherkindness/rules_scala/common/args",
+        "//src/main/scala/higherkindness/rules_scala/common/worker",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_util_interface",
@@ -171,7 +171,7 @@ scala_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":compiler",
-        "//rules/common:args",
+        "//src/main/scala/higherkindness/rules_scala/common/args",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_util_interface",
@@ -190,7 +190,7 @@ scala_library(
     visibility = ["//visibility:public"],
     deps = [
         ":test_common",
-        "//rules/common:args",
+        "//src/main/scala/higherkindness/rules_scala/common/args",
         "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
@@ -245,8 +245,8 @@ bootstrap_scala_binary(
     ],
     deps = [
         ":compiler",
-        "//rules/common:worker",
-        "//rules/common/third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
+        "//src/main/scala/higherkindness/rules_scala/common/worker",
+        "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
         "@scala_annex_org_scala_sbt_test_interface",
         "@scala_annex_org_scala_sbt_zinc_2_12",
     ],

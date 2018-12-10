@@ -1,6 +1,6 @@
 package annex.repl
 
-import annex.args.Implicits._
+import higherkindness.rules_scala.common.args.implicits._
 import annex.compiler.Arguments.LogLevel
 import annex.compiler.{AnxLogger, AnxScalaInstance, FileUtil}
 import java.io.File
