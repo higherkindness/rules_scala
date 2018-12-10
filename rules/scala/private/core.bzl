@@ -3,6 +3,7 @@ load(
     _phase_binary_deployjar = "phase_binary_deployjar",
     _phase_binary_launcher = "phase_binary_launcher",
     _phase_boostrap_compile = "phase_boostrap_compile",
+    _phase_classpaths = "phase_classpaths",
     _phase_coda = "phase_coda",
     _phase_compile = "phase_compile",
     _phase_depscheck = "phase_depscheck",
@@ -17,8 +18,9 @@ load(
 )
 
 scala_library_phases = [
-    ("javainfo", _phase_javainfo),
     ("resources", _phase_resources),
+    ("classpaths", _phase_classpaths),
+    ("javainfo", _phase_javainfo),
     ("compile", _phase_compile),
     ("depscheck", _phase_depscheck),
     ("singlejar", _phase_singlejar),
@@ -29,8 +31,9 @@ scala_library_phases = [
 ]
 
 scala_binary_phases = [
-    ("javainfo", _phase_javainfo),
     ("resources", _phase_resources),
+    ("classpaths", _phase_classpaths),
+    ("javainfo", _phase_javainfo),
     ("compile", _phase_compile),
     ("depscheck", _phase_depscheck),
     ("singlejar", _phase_singlejar),
@@ -42,8 +45,9 @@ scala_binary_phases = [
 ]
 
 scala_test_phases = [
-    ("javainfo", _phase_javainfo),
     ("resources", _phase_resources),
+    ("classpaths", _phase_classpaths),
+    ("javainfo", _phase_javainfo),
     ("compile", _phase_compile),
     ("depscheck", _phase_depscheck),
     ("singlejar", _phase_singlejar),
@@ -54,8 +58,9 @@ scala_test_phases = [
 ]
 
 bootstrap_scala_library_phases = [
-    ("javainfo", _phase_javainfo),
     ("resources", _phase_resources),
+    ("classpaths", _phase_classpaths),
+    ("javainfo", _phase_javainfo),
     ("compile", _phase_boostrap_compile),
     ("singlejar", _phase_singlejar),
     ("ijinfo", _phase_ijinfo),
@@ -64,8 +69,9 @@ bootstrap_scala_library_phases = [
 ]
 
 bootstrap_scala_binary_phases = [
-    ("javainfo", _phase_javainfo),
     ("resources", _phase_resources),
+    ("classpaths", _phase_classpaths),
+    ("javainfo", _phase_javainfo),
     ("compile", _phase_boostrap_compile),
     ("singlejar", _phase_singlejar),
     ("ijinfo", _phase_ijinfo),
