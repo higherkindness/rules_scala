@@ -1,10 +1,11 @@
-package annex.repl
+package higherkindness.rules_scala
+package workers.zinc.repl
 
-import higherkindness.rules_scala.common.args.implicits._
-import higherkindness.rules_scala.workers.zinc.common.CommonArguments.LogLevel
-import higherkindness.rules_scala.workers.zinc.common.AnnexLogger
-import higherkindness.rules_scala.workers.zinc.common.AnnexScalaInstance
-import higherkindness.rules_scala.workers.zinc.common.FileUtil
+import common.args.implicits._
+import workers.zinc.common.CommonArguments.LogLevel
+import workers.zinc.common.AnnexLogger
+import workers.zinc.common.AnnexScalaInstance
+import workers.zinc.common.FileUtil
 
 import java.io.File
 import java.nio.file.{Files, Paths}
