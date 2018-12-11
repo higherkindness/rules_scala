@@ -101,7 +101,7 @@ scala_deps_toolchain(
         ":config_deps_direct_off": "off",
         "//conditions:default": "check",
     }),
-    runner = ":deps",
+    runner = "//src/main/scala/higherkindness/rules_scala/workers/deps",
     used = select({
         ":config_deps_used_error": "error",
         ":config_deps_used_off": "off",
@@ -115,19 +115,6 @@ toolchain(
     toolchain = ":config_deps_toolchain_implementation",
     toolchain_type = "@rules_scala_annex//rules/scala:deps_toolchain_type",
     visibility = ["//visibility:public"],
-)
-
-bootstrap_scala_binary(
-    name = "deps",
-    srcs = glob(["deps/**/*.scala"]),
-    main_class = "annex.deps.DepsRunner",
-    scala = "//external:scala_annex_scala_basic",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//src/main/scala/higherkindness/rules_scala/common/args",
-        "//src/main/scala/higherkindness/rules_scala/common/worker",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-    ],
 )
 
 # Doc

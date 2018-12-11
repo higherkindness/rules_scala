@@ -1,6 +1,12 @@
 package higherkindness.rules_scala
 package workers.zinc.compile
 
+import workers.zinc.common.AnnexLogger
+import workers.zinc.common.AnnexScalaInstance
+import workers.zinc.common.CommonArguments
+import workers.zinc.common.FileUtil
+import common.worker.WorkerMain
+
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
@@ -25,12 +31,6 @@ import xsbti.compile.Inputs
 import xsbti.compile.PerClasspathEntryLookup
 import xsbti.compile.PreviousResult
 import xsbti.compile.Setup
-
-import workers.zinc.common.AnnexLogger
-import workers.zinc.common.AnnexScalaInstance
-import workers.zinc.common.CommonArguments
-import workers.zinc.common.FileUtil
-import common.worker.WorkerMain
 
 /**
  * <strong>Caching</strong>

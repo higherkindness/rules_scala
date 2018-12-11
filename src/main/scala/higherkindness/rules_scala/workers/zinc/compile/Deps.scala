@@ -1,14 +1,14 @@
 package higherkindness.rules_scala
 package workers.zinc.compile
 
+import workers.zinc.common.FileUtil
+
 import java.io.File
 import java.nio.file.{Files, Path, StandardCopyOption}
 import java.util.zip.ZipInputStream
 import sbt.internal.inc.Relations
 import scala.annotation.tailrec
 import xsbti.compile.PerClasspathEntryLookup
-
-import workers.zinc.common.FileUtil
 
 sealed trait Dep {
   def file: Path

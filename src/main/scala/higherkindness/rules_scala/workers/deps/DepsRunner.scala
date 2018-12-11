@@ -1,7 +1,9 @@
-package annex.deps
+package higherkindness.rules_scala
+package workers.deps
 
-import higherkindness.rules_scala.common.args.implicits._
-import higherkindness.rules_scala.common.worker.WorkerMain
+import common.args.implicits._
+import common.worker.WorkerMain
+
 import java.io.File
 import java.nio.file.{FileAlreadyExistsException, Files}
 import java.util.Collections
