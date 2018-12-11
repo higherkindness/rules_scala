@@ -42,7 +42,7 @@ scala_runner_toolchain(
     encoding = "UTF-8",
     runner = select({
         ":config_use_bloop": "@rules_scala_annex//rules/scala:bloop",
-        "//conditions:default": "@rules_scala_annex//rules/scala:zinc",
+        "//conditions:default": "//src/main/scala/higherkindness/rules_scala/workers/zinc/compile",
     }),
     visibility = ["//visibility:public"],
 )
@@ -212,34 +212,6 @@ scala_library(
 )
 
 # Zinc
-
-proto_library(
-    name = "zinc_options_proto",
-    srcs = glob(["zinc/**/*.proto"]),
-)
-
-java_proto_library(
-    name = "zinc_options_proto_java",
-    deps = [":zinc_options_proto"],
-)
-
-bootstrap_scala_binary(
-    name = "zinc",
-    srcs = glob(["zinc/**/*.scala"]),
-    main_class = "annex.zinc.ZincRunner",
-    scala = "//external:scala_annex_scala_basic",
-    visibility = ["//visibility:public"],
-    runtime_deps = [
-        "@scala_annex_com_lihaoyi_sourcecode_2_12",
-    ],
-    deps = [
-        "//src/main/scala/higherkindness/rules_scala/common/worker",
-        "//src/main/scala/higherkindness/rules_scala/workers/zinc/common",
-        "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
-        "@scala_annex_org_scala_sbt_test_interface",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
-    ],
-)
 
 scala_runner_toolchain(
     name = "zinc_toolchain_implementation",

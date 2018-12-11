@@ -1,8 +1,10 @@
-package annex.zinc
+package higherkindness.rules_scala
+package workers.zinc.compile
 
-import higherkindness.rules_scala.workers.zinc.common.FileUtil
 import java.nio.file.Files
 import java.nio.file.Path
+
+import workers.zinc.common.FileUtil
 
 trait ZincPersistence {
   def load(): Unit

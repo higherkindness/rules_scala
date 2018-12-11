@@ -1,10 +1,6 @@
-package annex.zinc
+package higherkindness.rules_scala
+package workers.zinc.compile
 
-import higherkindness.rules_scala.workers.zinc.common.AnnexLogger
-import higherkindness.rules_scala.workers.zinc.common.AnnexScalaInstance
-import higherkindness.rules_scala.workers.zinc.common.CommonArguments
-import higherkindness.rules_scala.workers.zinc.common.FileUtil
-import higherkindness.rules_scala.common.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
@@ -17,8 +13,24 @@ import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locat
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.util.control.NonFatal
-import xsbti.compile.{AnalysisContents, ClasspathOptionsUtil, CompileAnalysis, CompileOptions, CompilerCache, DefinesClass, IncOptions, Inputs, PerClasspathEntryLookup, PreviousResult, Setup}
 import xsbti.Logger
+import xsbti.compile.AnalysisContents
+import xsbti.compile.ClasspathOptionsUtil
+import xsbti.compile.CompileAnalysis
+import xsbti.compile.CompileOptions
+import xsbti.compile.CompilerCache
+import xsbti.compile.DefinesClass
+import xsbti.compile.IncOptions
+import xsbti.compile.Inputs
+import xsbti.compile.PerClasspathEntryLookup
+import xsbti.compile.PreviousResult
+import xsbti.compile.Setup
+
+import workers.zinc.common.AnnexLogger
+import workers.zinc.common.AnnexScalaInstance
+import workers.zinc.common.CommonArguments
+import workers.zinc.common.FileUtil
+import common.worker.WorkerMain
 
 /**
  * <strong>Caching</strong>

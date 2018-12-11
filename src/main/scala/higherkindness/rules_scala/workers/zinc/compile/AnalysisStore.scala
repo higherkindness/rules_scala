@@ -1,4 +1,5 @@
-package annex.zinc
+package higherkindness.rules_scala
+package workers.zinc.compile
 
 import com.google.devtools.build.buildjar.jarhelper.JarHelper
 import com.trueaccord.lenses.{Lens, Mutation}
