@@ -9,7 +9,7 @@ scaladoc_private_attributes = {
     "_runner": attr.label(
         cfg = "host",
         executable = True,
-        default = "@rules_scala_annex//rules/scala:doc",
+        default = "//src/main/scala/higherkindness/rules_scala/workers/zinc/doc",
     ),
 }
 
