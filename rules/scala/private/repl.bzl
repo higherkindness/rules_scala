@@ -13,7 +13,7 @@ scala_repl_private_attributes = _dicts.add(
         "_runner": attr.label(
             cfg = "host",
             executable = True,
-            default = "@rules_scala_annex//rules/scala:repl",
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/repl",
         ),
     },
 )
@@ -43,7 +43,7 @@ def scala_repl_implementation(ctx):
         "{}/".format(ctx.label.name),
         ctx.outputs.bin,
         runner_classpath,
-        "annex.repl.ReplRunner",
+        "higherkindness.rules_scala.workers.zinc.repl.ReplRunner",
         [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags] + [
             "-Dbazel.runPath=$RUNPATH",
             "-DscalaAnnex.test.args=${{RUNPATH}}{}".format(args_file.short_path),

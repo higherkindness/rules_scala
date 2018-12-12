@@ -20,7 +20,7 @@ bootstrap_scala_binary(
     scala = "//external:scala_annex_scala",
     visibility = ["//visibility:public"],
     deps = [
-        "//rules/common:worker",
+        "//src/main/scala/higherkindness/rules_scala/common/worker",
         "@scalafmt_com_geirsson_metaconfig_core_2_12",
         "@scalafmt_com_geirsson_scalafmt_core_2_12",
         "@scalafmt_net_sourceforge_argparse4j_argparse4j",

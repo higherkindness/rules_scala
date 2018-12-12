@@ -1,7 +1,7 @@
 package annex.scala.proto
 
-import annex.args.Implicits._
-import annex.worker.WorkerMain
+import higherkindness.rules_scala.common.args.implicits._
+import higherkindness.rules_scala.common.worker.WorkerMain
 import java.io.File
 import java.nio.file.{Files, Paths}
 import java.util.Collections

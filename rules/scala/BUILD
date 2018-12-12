@@ -1,19 +1,4 @@
-load("//rules:scala.bzl", "bootstrap_scala_binary", "bootstrap_scala_library", "scala_binary", "scala_deps_toolchain", "scala_library", "scala_runner_toolchain")
-load("//rules:scalafmt.bzl", "scala_format_test")
-
-# Bloop
-
-bootstrap_scala_binary(
-    name = "bloop",
-    srcs = glob(["bloop/**/*.scala"]),
-    main_class = "annex.bloop.BloopRunner",
-    scala = "//external:scala_annex_scala_basic",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//rules/common:worker",
-        "@scala_annex_ch_epfl_scala_bloop_frontend_2_12",
-    ],
-)
+load("//rules:scala.bzl", "scala_deps_toolchain", "scala_runner_toolchain")
 
 toolchain(
     name = "bloop_toolchain",
@@ -28,8 +13,6 @@ scala_runner_toolchain(
     visibility = ["//visibility:public"],
 )
 
-# Common
-
 toolchain(
     name = "config_runner_toolchain",
     toolchain = ":config_toolchain_implementation",
@@ -41,8 +24,8 @@ scala_runner_toolchain(
     name = "config_toolchain_implementation",
     encoding = "UTF-8",
     runner = select({
-        ":config_use_bloop": "@rules_scala_annex//rules/scala:bloop",
-        "//conditions:default": "@rules_scala_annex//rules/scala:zinc",
+        ":config_use_bloop": "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/bloop/compile",
+        "//conditions:default": "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/compile",
     }),
     visibility = ["//visibility:public"],
 )
@@ -54,23 +37,10 @@ config_setting(
     },
 )
 
-bootstrap_scala_library(
-    name = "compiler",
-    srcs = glob(["compiler/**/*.scala"]),
-    scala = "//external:scala_annex_scala_basic",
-    deps = [
-        "//rules/common:args",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
-    ],
-)
-
 toolchain_type(
     name = "runner_toolchain_type",
     visibility = ["//visibility:public"],
 )
-
-# Deps
 
 toolchain_type(
     name = "deps_toolchain_type",
@@ -112,7 +82,7 @@ scala_deps_toolchain(
         ":config_deps_direct_off": "off",
         "//conditions:default": "check",
     }),
-    runner = ":deps",
+    runner = "//src/main/scala/higherkindness/rules_scala/workers/deps",
     used = select({
         ":config_deps_used_error": "error",
         ":config_deps_used_off": "off",
@@ -128,130 +98,6 @@ toolchain(
     visibility = ["//visibility:public"],
 )
 
-bootstrap_scala_binary(
-    name = "deps",
-    srcs = glob(["deps/**/*.scala"]),
-    main_class = "annex.deps.DepsRunner",
-    scala = "//external:scala_annex_scala_basic",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//rules/common:args",
-        "//rules/common:worker",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-    ],
-)
-
-# Doc
-
-scala_binary(
-    name = "doc",
-    srcs = glob(["doc/**/*.scala"]),
-    scala = "//external:scala_annex_scala",
-    visibility = ["//visibility:public"],
-    deps = [
-        ":compiler",
-        "//rules/common:args",
-        "//rules/common:worker",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_annex_org_scala_sbt_compiler_interface",
-        "@scala_annex_org_scala_sbt_util_interface",
-        "@scala_annex_org_scala_sbt_util_logging_2_12",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
-        "@scala_annex_org_scala_sbt_zinc_classpath_2_12",
-        "@scala_annex_org_scala_sbt_zinc_compile_core_2_12",
-    ],
-)
-
-# REPL
-
-scala_binary(
-    name = "repl",
-    srcs = glob(["repl/**/*.scala"]),
-    scala = "//external:scala_annex_scala",
-    visibility = ["//visibility:public"],
-    deps = [
-        ":compiler",
-        "//rules/common:args",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_annex_org_scala_sbt_compiler_interface",
-        "@scala_annex_org_scala_sbt_util_interface",
-        "@scala_annex_org_scala_sbt_util_logging_2_12",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
-        "@scala_annex_org_scala_sbt_zinc_compile_core_2_12",
-    ],
-)
-
-# Test
-
-scala_library(
-    name = "test",
-    srcs = glob(["test/**/*.scala"]),
-    scala = "//external:scala_annex_scala",
-    visibility = ["//visibility:public"],
-    deps = [
-        ":test_common",
-        "//rules/common:args",
-        "@scala_annex_com_trueaccord_scalapb_scalapb_runtime_2_12",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_annex_org_scala_sbt_compiler_interface",
-        "@scala_annex_org_scala_sbt_test_interface",
-        "@scala_annex_org_scala_sbt_zinc_apiinfo_2_12",
-        "@scala_annex_org_scala_sbt_zinc_core_2_12",
-        "@scala_annex_org_scala_sbt_zinc_persist_2_12",
-    ],
-)
-
-scala_library(
-    name = "test_common",
-    srcs = glob(["test_common/**/*.scala"]),
-    scala = "//external:scala_annex_scala",
-    visibility = ["//visibility:public"],
-    deps = [
-        "@scala_annex_org_scala_sbt_test_interface",
-    ],
-)
-
-scala_library(
-    name = "test_subprocess",
-    srcs = glob(["test_subprocess/**/*.scala"]),
-    scala = "//external:scala_annex_scala",
-    visibility = ["//visibility:public"],
-    deps = [
-        ":test_common",
-        "@scala_annex_org_scala_sbt_test_interface",
-    ],
-)
-
-# Zinc
-
-proto_library(
-    name = "zinc_options_proto",
-    srcs = glob(["zinc/**/*.proto"]),
-)
-
-java_proto_library(
-    name = "zinc_options_proto_java",
-    deps = [":zinc_options_proto"],
-)
-
-bootstrap_scala_binary(
-    name = "zinc",
-    srcs = glob(["zinc/**/*.scala"]),
-    main_class = "annex.zinc.ZincRunner",
-    scala = "//external:scala_annex_scala_basic",
-    visibility = ["//visibility:public"],
-    runtime_deps = [
-        "@scala_annex_com_lihaoyi_sourcecode_2_12",
-    ],
-    deps = [
-        ":compiler",
-        "//rules/common:worker",
-        "//rules/common/third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
-        "@scala_annex_org_scala_sbt_test_interface",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
-    ],
-)
-
 scala_runner_toolchain(
     name = "zinc_toolchain_implementation",
     runner = ":zinc",
@@ -265,15 +111,8 @@ toolchain(
     visibility = ["//visibility:public"],
 )
 
-# Other
-
 filegroup(
     name = "bzl",
     srcs = glob(["**/*.bzl"]),
     visibility = ["//rules:__pkg__"],
-)
-
-scala_format_test(
-    name = "format",
-    srcs = glob(["**/*.scala"]),
 )

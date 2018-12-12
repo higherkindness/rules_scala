@@ -19,8 +19,8 @@ scala_binary(
     scala = "@scala_annex_scala_2_12",
     visibility = ["//visibility:public"],
     deps = [
-        "//rules/common:args",
-        "//rules/common:worker",
+        "//src/main/scala/higherkindness/rules_scala/common/args",
+        "//src/main/scala/higherkindness/rules_scala/common/worker",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_proto_com_github_os72_protoc_jar",
         "@scala_proto_com_thesamet_scalapb_compilerplugin_2_12",

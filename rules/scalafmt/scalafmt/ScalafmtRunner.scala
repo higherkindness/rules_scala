@@ -1,6 +1,6 @@
 package annex.scalafmt
 
-import annex.worker.WorkerMain
+import higherkindness.rules_scala.common.worker.WorkerMain
 import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Files
