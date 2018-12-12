@@ -163,12 +163,12 @@ def phase_classpaths(ctx, g):
 
     return struct(
         srcs = srcs,
-        src_jars = src_jars,
-        sdeps = sdeps,
         compile = compile_classpath,
         compiler = compiler_classpath,
-        plugin = plugin_classpath,
         jar = jar,
+        plugin = plugin_classpath,
+        sdeps = sdeps,
+        src_jars = src_jars,
     )
 
 #
@@ -608,7 +608,7 @@ def phase_test_launcher(ctx, g):
             "{}/subprocess-".format(ctx.label.name),
             subprocess_executable,
             subprocess_runner_jars,
-            "annex.SubprocessTestRunner",
+            "higherkindness.rules_scala.common.sbt_testing.SubprocessTestRunner",
             [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags],
         )
         files.append(subprocess_executable)
@@ -625,7 +625,7 @@ def phase_test_launcher(ctx, g):
         "{}/".format(ctx.label.name),
         ctx.outputs.bin,
         runner_jars,
-        "annex.TestRunner",
+        "higherkindness.rules_scala.workers.zinc.test.TestRunner",
         [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags] + [
             "-Dbazel.runPath=$RUNPATH",
             "-DscalaAnnex.test.args=${{RUNPATH}}{}".format(args_file.short_path),

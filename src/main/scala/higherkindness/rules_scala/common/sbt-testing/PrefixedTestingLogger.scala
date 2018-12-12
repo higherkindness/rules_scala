@@ -1,8 +1,9 @@
-package annex
+package higherkindness.rules_scala
+package common.sbt_testing
 
 import sbt.testing.Logger
 
-class PrefixedLogger(delegate: Logger, prefix: String) extends Logger {
+class PrefixedTestingLogger(delegate: Logger, prefix: String) extends Logger {
   def ansiCodesSupported() = delegate.ansiCodesSupported()
   def error(msg: String) = delegate.error(prefix + msg)
   def warn(msg: String) = delegate.warn(prefix + msg)

@@ -1,8 +1,9 @@
-package annex
+package higherkindness.rules_scala
+package common.sbt_testing
 
 import java.net.{URL, URLClassLoader}
 
-object ClassLoader {
+object ClassLoaders {
   def withContextClassLoader[A](classLoader: ClassLoader)(f: => A) = {
     val thread = Thread.currentThread
     val previous = thread.getContextClassLoader

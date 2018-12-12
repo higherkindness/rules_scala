@@ -1,6 +1,13 @@
-package annex
+package higherkindness.rules_scala
+package workers.zinc.test
 
-import higherkindness.rules_scala.common.args.implicits._
+import common.args.implicits._
+import common.sbt_testing.AnnexTestingLogger
+import common.sbt_testing.ClassLoaders
+import common.sbt_testing.TestDefinition
+import common.sbt_testing.TestFrameworkLoader
+import common.sbt_testing.TestRequest
+
 import java.io.File
 import java.net.URLClassLoader
 import java.nio.file.attribute.FileTime
@@ -99,7 +106,7 @@ object TestRunner {
     val testArgFile = Paths.get(sys.props("scalaAnnex.test.args"))
     val testNamespace = testArgParser.parseArgsOrFail(Files.readAllLines(testArgFile).asScala.toArray)
 
-    val logger = new AnxLogger(namespace.getBoolean("color"), namespace.getString("verbosity"))
+    val logger = new AnnexTestingLogger(namespace.getBoolean("color"), namespace.getString("verbosity"))
 
     val classpath = testNamespace
       .getList[File]("classpath")
@@ -112,8 +119,8 @@ object TestRunner {
 
     val sharedUrls = classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL)
 
-    val classLoader = ClassLoader.sbtTestClassLoader(classpath.map(_.toUri.toURL))
-    val sharedClassLoader = ClassLoader.sbtTestClassLoader(classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL))
+    val classLoader = ClassLoaders.sbtTestClassLoader(classpath.map(_.toUri.toURL))
+    val sharedClassLoader = ClassLoaders.sbtTestClassLoader(classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL))
 
     val apisFile = runPath.resolve(testNamespace.get[File]("apis").toPath)
     val apisStream = Files.newInputStream(apisFile)

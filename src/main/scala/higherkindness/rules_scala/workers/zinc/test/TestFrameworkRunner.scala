@@ -1,4 +1,13 @@
-package annex
+package higherkindness.rules_scala
+package workers.zinc.test
+
+import common.sbt_testing.ClassLoaders
+import common.sbt_testing.TestDefinition
+import common.sbt_testing.TestFrameworkLoader
+import common.sbt_testing.TestHelper
+import common.sbt_testing.TestReporter
+import common.sbt_testing.TestRequest
+import common.sbt_testing.TestTaskExecutor
 
 import java.io.ObjectOutputStream
 import java.nio.file.Path
@@ -7,7 +16,7 @@ import scala.collection.mutable
 
 class BasicTestRunner(framework: Framework, classLoader: ClassLoader, logger: Logger) extends TestFrameworkRunner {
   def execute(tests: Seq[TestDefinition], scopeAndTestName: String) =
-    ClassLoader.withContextClassLoader(classLoader) {
+    ClassLoaders.withContextClassLoader(classLoader) {
       TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
         val reporter = new TestReporter(logger)
         val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
@@ -31,7 +40,7 @@ class ClassLoaderTestRunner(framework: Framework, classLoaderProvider: () => Cla
     val reporter = new TestReporter(logger)
 
     val classLoader = framework.getClass.getClassLoader
-    ClassLoader.withContextClassLoader(classLoader) {
+    ClassLoaders.withContextClassLoader(classLoader) {
       TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
         val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)
@@ -44,7 +53,7 @@ class ClassLoaderTestRunner(framework: Framework, classLoaderProvider: () => Cla
       val classLoader = classLoaderProvider()
       val isolatedFramework = new TestFrameworkLoader(classLoader, logger).load(framework.getClass.getName).get
       TestHelper.withRunner(isolatedFramework, scopeAndTestName, classLoader) { runner =>
-        ClassLoader.withContextClassLoader(classLoader) {
+        ClassLoaders.withContextClassLoader(classLoader) {
           val tasks = runner.tasks(Array(TestHelper.taskDef(test, scopeAndTestName)))
           tasks.foreach { task =>
             reporter.preTask(task)
@@ -74,7 +83,7 @@ class ProcessTestRunner(
     val reporter = new TestReporter(logger)
 
     val classLoader = framework.getClass.getClassLoader
-    ClassLoader.withContextClassLoader(classLoader) {
+    ClassLoaders.withContextClassLoader(classLoader) {
       TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
         val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)

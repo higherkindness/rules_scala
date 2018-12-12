@@ -1,4 +1,5 @@
-package annex
+package higherkindness.rules_scala
+package common.sbt_testing
 
 import sbt.testing.{Fingerprint, Framework, Logger, Runner, Status, Task, TaskDef, TestWildcardSelector}
 import scala.collection.mutable
@@ -69,7 +70,7 @@ class TestTaskExecutor(logger: Logger) {
               failures += task.taskDef.fullyQualifiedName
             case _ =>
         },
-        Array(new PrefixedLogger(logger, "    ")),
+        Array(new PrefixedTestingLogger(logger, "    ")),
       )
       tasks.foreach(execute)
     }

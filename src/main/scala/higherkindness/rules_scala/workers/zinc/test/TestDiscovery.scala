@@ -1,4 +1,9 @@
-package annex
+package higherkindness.rules_scala
+package workers.zinc.test
+
+import common.sbt_testing.TestAnnotatedFingerprint
+import common.sbt_testing.TestDefinition
+import common.sbt_testing.TestSubclassFingerprint
 
 import sbt.testing.{AnnotatedFingerprint, Fingerprint, Framework, SubclassFingerprint, SuiteSelector}
 import scala.collection.{breakOut, mutable}

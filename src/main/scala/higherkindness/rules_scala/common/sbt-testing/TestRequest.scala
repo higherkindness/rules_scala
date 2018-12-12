@@ -1,4 +1,5 @@
-package annex
+package higherkindness.rules_scala
+package common.sbt_testing
 
 import sbt.testing.Logger
 

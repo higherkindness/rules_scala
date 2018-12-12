@@ -1,8 +1,9 @@
-package annex
+package higherkindness.rules_scala
+package common.sbt_testing
 
 import sbt.testing.Logger
 
-final class AnxLogger(color: Boolean, verbosity: String) extends Logger with Serializable {
+final class AnnexTestingLogger(color: Boolean, verbosity: String) extends Logger with Serializable {
   def ansiCodesSupported = color
 
   def error(msg: String) = println(s"$msg")
