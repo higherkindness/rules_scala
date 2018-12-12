@@ -3,18 +3,6 @@ load("//rules:scalafmt.bzl", "scala_format_test")
 
 # Bloop
 
-bootstrap_scala_binary(
-    name = "bloop",
-    srcs = glob(["bloop/**/*.scala"]),
-    main_class = "annex.bloop.BloopRunner",
-    scala = "//external:scala_annex_scala_basic",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//src/main/scala/higherkindness/rules_scala/common/worker",
-        "@scala_annex_ch_epfl_scala_bloop_frontend_2_12",
-    ],
-)
-
 toolchain(
     name = "bloop_toolchain",
     toolchain = ":bloop_toolchain_implementation",
@@ -41,8 +29,8 @@ scala_runner_toolchain(
     name = "config_toolchain_implementation",
     encoding = "UTF-8",
     runner = select({
-        ":config_use_bloop": "@rules_scala_annex//rules/scala:bloop",
-        "//conditions:default": "//src/main/scala/higherkindness/rules_scala/workers/zinc/compile",
+        ":config_use_bloop": "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/bloop/compile",
+        "//conditions:default": "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/compile",
     }),
     visibility = ["//visibility:public"],
 )

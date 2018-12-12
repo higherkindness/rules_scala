@@ -1,6 +1,8 @@
-package annex.bloop
+package higherkindness.rules_scala
+package workers.bloop.compile
 
-import higherkindness.rules_scala.common.worker.WorkerMain
+import common.worker.WorkerMain
+
 import bloop.Bloop
 
 object BloopRunner extends WorkerMain[Unit] {
