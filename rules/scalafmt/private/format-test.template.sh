@@ -6,10 +6,12 @@ NONDEFAULTPATH="${NONDEFAULTPATH[0]}"bin
 
 EXIT=0
 while read original formatted; do
-    if ! cmp -s "$WORKSPACE_ROOT/$original" "$NONDEFAULTPATH/$formatted"; then
-        echo $original
-        diff "$WORKSPACE_ROOT/$original" "$NONDEFAULTPATH/$formatted" || true
-        EXIT=1
+    if [[ ! -z "$original" ]] && [[ ! -z "$formatted" ]]; then
+        if ! cmp -s "$WORKSPACE_ROOT/$original" "$NONDEFAULTPATH/$formatted"; then
+            echo $original
+            diff "$WORKSPACE_ROOT/$original" "$NONDEFAULTPATH/$formatted" || true
+            EXIT=1
+        fi
     fi
 done < "$NONDEFAULTPATH"/%manifest%
 
