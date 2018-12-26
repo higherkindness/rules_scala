@@ -18,14 +18,14 @@ load(
 declare_scala_configuration(
     name = "provided_scala_configuration",
     compiler_classpath = [
-        "@scala_2_12_scala_compiler//jar",
-        "@scala_2_12_scala_reflect//jar",
-        "@scala_2_12_scala_library//jar",
+        "@scala_compiler_2_12_6//jar",
+        "@scala_reflect_2_12_6//jar",
+        "@scala_library_2_12_6//jar",
     ],
     runtime_classpath = [
-        "@scala_2_12_scala_library//jar",
+        "@scala_library_2_12_6//jar",
     ],
-    version = "2.12.4",
+    version = "2.12.6",
 )
 
 bootstrap_scala_library(
@@ -33,11 +33,11 @@ bootstrap_scala_library(
     srcs = ["@compiler_bridge_2_12//:src"],
     scala = ":provided_scala_configuration",
     deps = [
-        "@scala_2_12_scala_compiler//jar",
-        "@scala_2_12_scala_library//jar",
-        "@scala_2_12_scala_reflect//jar",
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_util_interface",
+        "@scala_compiler_2_12_6//jar",
+        "@scala_library_2_12_6//jar",
+        "@scala_reflect_2_12_6//jar",
     ],
 )
 

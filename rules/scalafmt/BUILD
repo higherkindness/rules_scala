@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "bootstrap_scala_binary", "scala_binary")
+load("//rules:scala.bzl", "bootstrap_scala_binary")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
 filegroup(
@@ -17,7 +17,7 @@ bootstrap_scala_binary(
     name = "scalafmt",
     srcs = glob(["scalafmt/**/*.scala"]),
     main_class = "annex.scalafmt.ScalafmtRunner",
-    scala = "//external:scala_annex_scala",
+    scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/worker",

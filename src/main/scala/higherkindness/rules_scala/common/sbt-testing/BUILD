@@ -12,7 +12,7 @@ _common_srcs = [
 scala_library(
     name = "subprocess",
     srcs = _subprocess_srcs,
-    scala = "//external:scala_annex_scala",
+    scala = "//src/main/scala:zinc",
     visibility = ["//visibility:public"],
     deps = [
         ":common",
@@ -23,7 +23,7 @@ scala_library(
 scala_library(
     name = "common",
     srcs = _common_srcs,
-    scala = "//external:scala_annex_scala",
+    scala = "//src/main/scala:zinc",
     visibility = ["//visibility:public"],
     deps = [
         "@scala_annex_org_scala_sbt_test_interface",

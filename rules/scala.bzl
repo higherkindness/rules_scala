@@ -109,7 +109,7 @@ _library_common_attributes = {
         doc = "The JARs to merge into the output JAR.",
     ),
     "scala": attr.label(
-        default = "@scala",
+        default = "//external:default_scala",
         doc = "The `ScalaConfiguration`.",
         providers = [
             _ScalaConfiguration,
@@ -288,7 +288,7 @@ scala_repl = rule(
                 doc = "The JVM runtime flags.",
             ),
             "scala": attr.label(
-                default = "@scala",
+                default = "//external:default_scala",
                 doc = "The `ScalaConfiguration`.",
                 providers = [
                     _ScalaConfiguration,

@@ -7,13 +7,13 @@ load(
 bootstrap_scala_library(
     name = "hello_world_lib",
     srcs = ["HelloWorldLib.scala"],
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
 )
 
 bootstrap_scala_binary(
     name = "hello_world_bin",
     srcs = ["HelloWorldBin.scala"],
     main_class = "anx.HelloWorld",
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
     deps = [":hello_world_lib"],
 )

@@ -3,7 +3,7 @@ load("@rules_scala_annex//rules:scala.bzl", "scala_library", "scala_runner_toolc
 scala_library(
     name = "lib",
     srcs = ["Deprecated.scala"],
-    scala = "@typelevel_2_12",
+    scala = "//scala:zinc_typelevel_2_12_1",
 )
 
 scala_runner_toolchain(

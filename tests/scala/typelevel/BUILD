@@ -3,6 +3,6 @@ load("@rules_scala_annex//rules:scala.bzl", "scala_library")
 scala_library(
     name = "example",
     srcs = ["Example.scala"],
-    scala = "@typelevel_2_12",
+    scala = "//scala:zinc_typelevel_2_12_1",
     tags = ["manual"],
 )

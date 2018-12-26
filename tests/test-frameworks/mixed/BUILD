@@ -3,7 +3,7 @@ load("@rules_scala_annex//rules:scala.bzl", "scala_test")
 scala_test(
     name = "mixed_2_12",
     srcs = glob(["*.scala"]),
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
     shard_count = 2,
     tags = ["manual"],
     runtime_deps = [
@@ -27,7 +27,7 @@ scala_test(
         "scalacheck.scala",
         "specs2.scala",
     ],
-    scala = "@scala_2_11",
+    scala = "//scala:2_11",
     tags = ["manual"],
     deps = [
         "@org_scalacheck_scalacheck_2_11//jar",

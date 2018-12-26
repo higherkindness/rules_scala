@@ -4,7 +4,7 @@ load("//rules:scalafmt.bzl", "scala_format_test")
 scala_library(
     name = "test",
     srcs = glob(["**/*.scala"]),
-    scala = "//external:scala_annex_scala",
+    scala = "//src/main/scala:zinc",
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",

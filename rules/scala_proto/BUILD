@@ -16,7 +16,7 @@ scala_binary(
     name = "worker",
     srcs = glob(["private/ScalaProtoWorker.scala"]),
     main_class = "annex.scala.proto.ScalaProtoWorker",
-    scala = "@scala_annex_scala_2_12",
+    scala = "//src/main/scala:zinc",
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",

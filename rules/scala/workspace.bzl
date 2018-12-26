@@ -1,17 +1,13 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
-load("//rules/common:private/utils.bzl", "safe_name", "strip_margin")
-load("//rules/scala:private/workspace.bzl", "configure_scala_repository_implementation")
 load("//3rdparty:maven.bzl", "list_dependencies")
 
-configure_scala_repository = repository_rule(
-    attrs = {
-        "compiler_bridge": attr.string(),
-        "organization": attr.string(),
-        "version": attr.string(),
-    },
-    implementation = configure_scala_repository_implementation,
-)
+_SRC_FILEGROUP_BUILD_FILE_CONTENT = """
+filegroup(
+    name = "src",
+    srcs = glob(["**/*.scala", "**/*.java"]),
+    visibility = ["//visibility:public"]
+)"""
 
 def scala_repositories():
     for dep in list_dependencies():
@@ -34,62 +30,33 @@ def scala_repositories():
         ],
     )
 
-    scala_src_build = strip_margin("""
-      |filegroup(
-      |    name = "src",
-      |    srcs = glob(["**/*.scala", "**/*.java"]),
-      |    visibility = ["//visibility:public"]
-      |)""")
-
     http_archive(
         name = "compiler_bridge_2_11",
-        build_file_content = scala_src_build,
+        build_file_content = _SRC_FILEGROUP_BUILD_FILE_CONTENT,
         sha256 = "355abdd13ee514a239ed48b6bf8846f2a1d9d78bca8df836028d0156002ea08a",
         url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.2.1/compiler-bridge_2.11-1.2.1-sources.jar",
     )
 
     http_archive(
         name = "compiler_bridge_2_12",
-        build_file_content = scala_src_build,
+        build_file_content = _SRC_FILEGROUP_BUILD_FILE_CONTENT,
         sha256 = "d7a5dbc384c2c86479b30539cef911c256b7b3861ced68699b116e05b9357c9b",
         url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.1/compiler-bridge_2.12-1.2.1-sources.jar",
     )
 
-    scala_repository("scala_annex_scala_2_12", ("org.scala-lang", "2.12.6"), "@compiler_bridge_2_12//:src")
-
-    native.bind(
-        name = "scala_annex_scala",
-        actual = "@scala_annex_scala_2_12",
+    native.maven_jar(
+        name = "scala_compiler_2_12_8",
+        artifact = "org.scala-lang:scala-compiler:2.12.8",
     )
-    native.bind(
-        name = "scala_annex_scala_basic",
-        actual = "@scala_annex_scala_2_12//:basic",
+    native.maven_jar(
+        name = "scala_library_2_12_8",
+        artifact = "org.scala-lang:scala-library:2.12.8",
+    )
+    native.maven_jar(
+        name = "scala_reflect_2_12_8",
+        artifact = "org.scala-lang:scala-reflect:2.12.8",
     )
 
 def scala_register_toolchains():
     native.register_toolchains("@rules_scala_annex//rules/scala:config_runner_toolchain")
     native.register_toolchains("@rules_scala_annex//rules/scala:config_deps_toolchain")
-
-def scala_repository(name, coordinates, compiler_bridge):
-    configure_scala_repository(
-        name = name,
-        compiler_bridge = compiler_bridge,
-        version = coordinates[1],
-    )
-
-    organization, version = coordinates
-
-    native.maven_jar(
-        name = "{}_scala_compiler".format(name),
-        artifact = "%s:scala-compiler:%s" % (organization, version),
-    )
-
-    native.maven_jar(
-        name = "{}_scala_library".format(name),
-        artifact = "%s:scala-library:%s" % (organization, version),
-    )
-
-    native.maven_jar(
-        name = "{}_scala_reflect".format(name),
-        artifact = "%s:scala-reflect:%s" % (organization, version),
-    )
