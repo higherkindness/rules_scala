@@ -14,10 +14,6 @@ load(
 )
 load(
     "//rules/scala:private/core.bzl",
-    _bootstrap_scala_binary_implementation = "bootstrap_scala_binary_implementation",
-    _bootstrap_scala_binary_private_attributes = "bootstrap_scala_binary_private_attributes",
-    _bootstrap_scala_library_implementation = "bootstrap_scala_library_implementation",
-    _bootstrap_scala_library_private_attributes = "bootstrap_scala_library_private_attributes",
     _scala_binary_implementation = "scala_binary_implementation",
     _scala_binary_private_attributes = "scala_binary_private_attributes",
     _scala_library_implementation = "scala_library_implementation",
@@ -37,8 +33,8 @@ load(
 )
 load(
     "//rules/scala:private/provider.bzl",
-    _configure_basic_scala_implementation = "configure_basic_scala_implementation",
-    _configure_scala_implementation = "configure_scala_implementation",
+    _configure_bootstrap_scala_implementation = "configure_bootstrap_scala_implementation",
+    _configure_zinc_scala_implementation = "configure_zinc_scala_implementation",
 )
 load(
     "//rules/scala:private/repl.bzl",
@@ -122,8 +118,8 @@ _library_common_attributes = {
 }
 
 _common_outputs = {
-    "runner": "%{name}.format",
-    "testrunner": "%{name}.format-test",
+    #"runner": "%{name}.format",
+    #"testrunner": "%{name}.format-test",
 }
 
 scala_library = rule(
@@ -142,21 +138,8 @@ scala_library = rule(
     ),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
-        "@rules_scala_annex//rules/scala:runner_toolchain_type",
     ],
     implementation = _scala_library_implementation,
-)
-
-bootstrap_scala_library = rule(
-    attrs = _dicts.add(
-        _library_common_attributes,
-        _bootstrap_scala_library_private_attributes,
-    ),
-    doc = "Compiles a Scala JVM library.",
-    outputs = {
-        "jar": "%{name}.jar",
-    },
-    implementation = _bootstrap_scala_library_implementation,
 )
 
 _runner_common_attributes = {
@@ -194,30 +177,8 @@ scala_binary = rule(
     ),
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
-        "@rules_scala_annex//rules/scala:runner_toolchain_type",
     ],
     implementation = _scala_binary_implementation,
-)
-
-bootstrap_scala_binary = rule(
-    attrs = _dicts.add(
-        _library_common_attributes,
-        _runner_common_attributes,
-        _bootstrap_scala_binary_private_attributes,
-        {
-            "main_class": attr.string(
-                mandatory = True,
-            ),
-        },
-    ),
-    doc = "Compiles and links a Scala JVM executable.",
-    executable = True,
-    outputs = {
-        "bin": "%{name}-bin",
-        "jar": "%{name}.jar",
-        "deploy_jar": "%{name}_deploy.jar",
-    },
-    implementation = _bootstrap_scala_binary_implementation,
 )
 
 scala_test = rule(
@@ -267,7 +228,6 @@ scala_test = rule(
     test = True,
     toolchains = [
         "@rules_scala_annex//rules/scala:deps_toolchain_type",
-        "@rules_scala_annex//rules/scala:runner_toolchain_type",
     ],
     implementation = _scala_test_implementation,
 )
@@ -359,53 +319,24 @@ Generates Scaladocs.
 ## core/underlying rules and configuration ##
 ##
 
-# scala_runner_toolchain
-
-def _scala_runner_toolchain_implementation(ctx):
-    return [platform_common.ToolchainInfo(
-        runner = ctx.attr.runner,
-        scalacopts = ctx.attr.scalacopts,
-        encoding = ctx.attr.encoding,
-    )]
-
-scala_runner_toolchain = rule(
-    attrs = {
-        "runner": attr.label(
-            allow_files = True,
-            executable = True,
-            cfg = "host",
-        ),
-        "scalacopts": attr.string_list(),
-        "encoding": attr.string(),
-    },
-    doc = "Configures the Scala runner to use.",
-    implementation = _scala_runner_toolchain_implementation,
-)
-
 # scala_deps_toolchain
 
 def scala_deps_toolchain_implementation(ctx):
     return [platform_common.ToolchainInfo(
         direct = ctx.attr.direct,
-        runner = ctx.attr.runner,
         used = ctx.attr.used,
     )]
 
 scala_deps_toolchain = rule(
     attrs = {
         "direct": attr.string(),
-        "runner": attr.label(
-            allow_files = True,
-            executable = True,
-            cfg = "host",
-        ),
         "used": attr.string(),
     },
     doc = "Configures the deps checker and options to use.",
     implementation = scala_deps_toolchain_implementation,
 )
 
-configure_basic_scala = rule(
+configure_bootstrap_scala = rule(
     attrs = {
         "version": attr.string(mandatory = True),
         "compiler_classpath": attr.label_list(
@@ -421,10 +352,10 @@ configure_basic_scala = rule(
             providers = [JavaInfo],
         ),
     },
-    implementation = _configure_basic_scala_implementation,
+    implementation = _configure_bootstrap_scala_implementation,
 )
 
-configure_scala = rule(
+configure_zinc_scala = rule(
     attrs = {
         "version": attr.string(mandatory = True),
         "runtime_classpath": attr.label_list(
@@ -443,6 +374,18 @@ configure_scala = rule(
             doc = "Scalac plugins that will always be enabled.",
             providers = [JavaInfo],
         ),
+        "_compile_worker": attr.label(
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/compile",
+            allow_files = True,
+            executable = True,
+            cfg = "host",
+        ),
+        "_deps_worker": attr.label(
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/deps",
+            allow_files = True,
+            executable = True,
+            cfg = "host",
+        ),
     },
-    implementation = _configure_scala_implementation,
+    implementation = _configure_zinc_scala_implementation,
 )

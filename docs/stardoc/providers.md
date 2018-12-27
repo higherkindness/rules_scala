@@ -216,6 +216,18 @@ Zinc configuration.
         <p>compiled Zinc compiler bridge</p>
       </td>
     </tr>
+    <tr id="#ZincConfiguration_compile_worker">
+      <td><code>compile_worker</code></td>
+      <td>
+        <p>the worker label for compilation with Zinc</p>
+      </td>
+    </tr>
+    <tr id="#ZincConfiguration_deps_worker">
+      <td><code>deps_worker</code></td>
+      <td>
+        <p>the worker label for checking used/unused deps</p>
+      </td>
+    </tr>
   </tbody>
 </table>
 

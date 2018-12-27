@@ -1,8 +1,8 @@
 load(
     "@rules_scala_annex//rules:scala.bzl",
-    "bootstrap_scala_library",
-    "configure_basic_scala",
-    "configure_scala",
+    "configure_bootstrap_scala",
+    "configure_zinc_scala",
+    "scala_library",
 )
 
 alias(
@@ -27,7 +27,7 @@ runtime_classpath_2_12_8 = [
     "@scala_library_2_12_8//jar",
 ]
 
-configure_basic_scala(
+configure_bootstrap_scala(
     name = "bootstrap_2_12_8",
     compiler_classpath = compiler_classpath_2_12_8,
     runtime_classpath = runtime_classpath_2_12_8,
@@ -35,7 +35,7 @@ configure_basic_scala(
     visibility = ["//visibility:public"],
 )
 
-bootstrap_scala_library(
+scala_library(
     name = "compiler_bridge_2_12_8",
     srcs = [
         "@compiler_bridge_2_12//:src",
@@ -48,7 +48,7 @@ bootstrap_scala_library(
     ],
 )
 
-configure_scala(
+configure_zinc_scala(
     name = "zinc_2_12_8",
     compiler_bridge = ":compiler_bridge_2_12_8",
     compiler_classpath = compiler_classpath_2_12_8,

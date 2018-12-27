@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "bootstrap_scala_binary")
+load("//rules:scala.bzl", "scala_binary")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
 filegroup(
@@ -13,7 +13,7 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-bootstrap_scala_binary(
+scala_binary(
     name = "scalafmt",
     srcs = glob(["scalafmt/**/*.scala"]),
     main_class = "annex.scalafmt.ScalafmtRunner",

@@ -1,4 +1,4 @@
-scala_format_attributes = {
+"""
     "_fmt": attr.label(
         cfg = "host",
         default = "@rules_scala_annex//rules/scalafmt",
@@ -8,6 +8,9 @@ scala_format_attributes = {
         allow_single_file = True,
         default = "@rules_scala_annex//rules/scalafmt:runner",
     ),
+"""
+
+scala_format_attributes = {
     "config": attr.label(
         allow_single_file = [".conf"],
         default = "@scalafmt_default//:config",
@@ -15,11 +18,14 @@ scala_format_attributes = {
     ),
 }
 
-scala_non_default_format_attributes = {
+"""
     "_testrunner": attr.label(
         allow_single_file = True,
         default = "@rules_scala_annex//rules/scalafmt:testrunner",
     ),
+"""
+
+scala_non_default_format_attributes = {
     "format": attr.bool(
         default = False,
     ),
@@ -28,7 +34,6 @@ scala_non_default_format_attributes = {
 def build_format(ctx):
     files = []
     runner_inputs, _, runner_manifests = ctx.resolve_command(tools = [ctx.attr._fmt])
-    toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
     manifest_content = []
     for src in ctx.files.srcs:
         if src.path.endswith(".scala") and src.is_source:
@@ -42,7 +47,7 @@ def build_format(ctx):
             args.set_param_file_format("multiline")
             args.use_param_file("@%s", use_always = True)
             ctx.actions.run(
-                arguments = ["--jvm_flag=-Dfile.encoding=" + toolchain.encoding, args],
+                arguments = [args],  #["--jvm_flag=-Dfile.encoding=" + toolchain.encoding, args],
                 executable = ctx.executable._fmt,
                 outputs = [file],
                 input_manifests = runner_manifests,
@@ -74,6 +79,7 @@ def format_tester(ctx, manifest, files):
     )
 
 def scala_format_test_implementation(ctx):
+    """
     manifest, files = build_format(ctx)
     format_runner(ctx, manifest, files)
 
@@ -81,4 +87,19 @@ def scala_format_test_implementation(ctx):
         executable = ctx.outputs.runner,
         files = depset([ctx.outputs.runner, manifest] + files),
         runfiles = ctx.runfiles(files = [manifest] + files + ctx.files.srcs),
+    )
+    """
+
+    # TODO: remove temp hack
+    ctx.actions.run_shell(
+        inputs = [],
+        outputs = [ctx.outputs.runner],
+        command = "touch $1",
+        arguments = [ctx.outputs.runner.path],
+    )
+
+    return DefaultInfo(
+        executable = ctx.outputs.runner,
+        files = depset([ctx.outputs.runner]),
+        runfiles = ctx.runfiles(files = []),
     )

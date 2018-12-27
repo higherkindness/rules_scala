@@ -31,7 +31,12 @@ def run_phases(ctx, phases):
         scala_configuration = scala_configuration,
     )
 
-    phase_providers = [p[_ScalaRulePhase] for p in ctx.attr.plugins if _ScalaRulePhase in p]
+    phase_provider_sources = [ctx.attr.scala] + ctx.attr.plugins
+    phase_providers = [
+        p[_ScalaRulePhase]
+        for p in phase_provider_sources
+        if _ScalaRulePhase in p
+    ]
     if phase_providers != []:
         phases = phases[:]
 
@@ -43,6 +48,8 @@ def run_phases(ctx, phases):
                         phases.insert(idx, (name, function))
                     elif relation in ["+", "after"]:
                         phases.insert(idx + 1, (name, function))
+                    elif relation in ["=", "replace"]:
+                        phases[idx] = (name, function)
 
     gd = {
         "init": init,
@@ -59,6 +66,9 @@ def run_phases(ctx, phases):
             g = struct(**gd)
 
     return g
+
+def phase_noop(ctx, g):
+    print("noop phase")
 
 #
 # PHASE: resources
@@ -178,8 +188,6 @@ def phase_classpaths(ctx, g):
 #
 
 def phase_compile(ctx, g):
-    runner = ctx.toolchains["@rules_scala_annex//rules/scala:runner_toolchain_type"]
-
     zinc_configuration = ctx.attr.scala[_ZincConfiguration]
 
     apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
@@ -204,7 +212,7 @@ def phase_compile(ctx, g):
     args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
     args.add_all("--compiler_classpath", g.classpaths.compiler)
     args.add_all("--classpath", g.classpaths.compile)
-    args.add_all(runner.scalacopts + ctx.attr.scalacopts, format_each = "--compiler_option=%s")
+    args.add_all(ctx.attr.scalacopts, format_each = "--compiler_option=%s")
     args.add_all(javacopts, format_each = "--java_compiler_option=%s")
     args.add(ctx.label, format = "--label=%s")
     args.add("--main_manifest", mains_file)
@@ -222,9 +230,11 @@ def phase_compile(ctx, g):
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
 
-    runner_inputs, _, input_manifests = ctx.resolve_command(tools = [runner.runner])
+    worker = zinc_configuration.compile_worker
+
+    worker_inputs, _, input_manifests = ctx.resolve_command(tools = [worker])
     inputs = depset(
-        [zinc_configuration.compiler_bridge] + ctx.files.data + ctx.files.srcs + runner_inputs,
+        [zinc_configuration.compiler_bridge] + ctx.files.data + ctx.files.srcs + worker_inputs,
         transitive = [
             g.classpaths.plugin,
             g.classpaths.compile,
@@ -239,7 +249,7 @@ def phase_compile(ctx, g):
         mnemonic = "ScalaCompile",
         inputs = inputs,
         outputs = outputs,
-        executable = runner.runner.files_to_run.executable,
+        executable = worker.files_to_run.executable,
         input_manifests = input_manifests,
         execution_requirements = {"no-sandbox": "1", "supports-workers": "1"},
         arguments = [args],
@@ -287,11 +297,11 @@ def _compile_analysis(analysis):
 # An alternative compile phase that shells out to scalac directly
 #
 
-def phase_boostrap_compile(ctx, g):
+def phase_bootstrap_compile(ctx, g):
     if g.classpaths.plugin:
-        fail("plugins aren't supported for boostrap_scala rules")
+        fail("plugins aren't supported for bootstrap_scala rules")
     if g.classpaths.src_jars:
-        fail("source jars supported for boostrap_scala rules")
+        fail("source jars supported for bootstrap_scala rules")
 
     inputs = depset(
         [ctx.executable._java] + ctx.files.srcs,
@@ -339,10 +349,11 @@ def phase_boostrap_compile(ctx, g):
 #
 
 def phase_depscheck(ctx, g):
-    deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
     deps_checks = {}
     labeled_jars = depset(transitive = [dep[_LabeledJars].values for dep in ctx.attr.deps])
-    deps_inputs, _, deps_input_manifests = ctx.resolve_command(tools = [deps_toolchain.runner])
+    zinc_configuration = ctx.attr.scala[_ZincConfiguration]  # TODO: different provider
+    worker = zinc_configuration.deps_worker
+    worker_inputs, _, worker_input_manifests = ctx.resolve_command(tools = [worker])
     for name in ("direct", "used"):
         deps_check = ctx.actions.declare_file("{}/depscheck_{}.success".format(ctx.label.name, name))
         deps_args = ctx.actions.args()
@@ -358,10 +369,10 @@ def phase_depscheck(ctx, g):
         deps_args.use_param_file("@%s", use_always = True)
         ctx.actions.run(
             mnemonic = "ScalaCheckDeps",
-            inputs = [g.compile.used] + deps_inputs,
+            inputs = [g.compile.used] + worker_inputs,
             outputs = [deps_check],
-            executable = deps_toolchain.runner.files_to_run.executable,
-            input_manifests = deps_input_manifests,
+            executable = worker.files_to_run.executable,
+            input_manifests = worker_input_manifests,
             execution_requirements = {"supports-workers": "1"},
             arguments = [deps_args],
         )
@@ -369,6 +380,7 @@ def phase_depscheck(ctx, g):
 
     outputs = []
 
+    deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
     if deps_toolchain.direct == "error":
         outputs.append(deps_checks["direct"])
     if deps_toolchain.used == "error":

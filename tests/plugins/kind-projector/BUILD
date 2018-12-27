@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:scala.bzl", "configure_scala", "scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "configure_zinc_scala", "scala_library")
 
 scala_library(
     name = "kind-projector",
@@ -9,7 +9,7 @@ scala_library(
     tags = ["manual"],
 )
 
-configure_scala(
+configure_zinc_scala(
     name = "scala_2_12_6_with_kind_projector",
     compiler_bridge = "//scala:compiler_bridge_2_12_6",
     compiler_classpath = [

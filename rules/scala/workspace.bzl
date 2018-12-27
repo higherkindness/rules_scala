@@ -58,5 +58,4 @@ def scala_repositories():
     )
 
 def scala_register_toolchains():
-    native.register_toolchains("@rules_scala_annex//rules/scala:config_runner_toolchain")
     native.register_toolchains("@rules_scala_annex//rules/scala:config_deps_toolchain")

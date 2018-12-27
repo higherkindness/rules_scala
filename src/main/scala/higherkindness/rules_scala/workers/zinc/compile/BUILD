@@ -1,7 +1,7 @@
-load("//rules:scala.bzl", "bootstrap_scala_binary")
+load("//rules:scala.bzl", "scala_binary")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
-bootstrap_scala_binary(
+scala_binary(
     name = "compile",
     srcs = glob(["**/*.scala"]),
     main_class = "higherkindness.rules_scala.workers.zinc.compile.ZincRunner",

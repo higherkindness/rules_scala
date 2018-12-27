@@ -1,7 +1,7 @@
 load("//rules:scalafmt.bzl", "scala_format_test")
-load("//rules:scala.bzl", "bootstrap_scala_library")
+load("//rules:scala.bzl", "scala_library")
 
-bootstrap_scala_library(
+scala_library(
     name = "worker",
     srcs = glob(["**/*.scala"]),
     scala = "//src/main/scala:bootstrap",

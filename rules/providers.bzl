@@ -57,6 +57,8 @@ ZincConfiguration = provider(
     doc = "Zinc configuration.",
     fields = {
         "compiler_bridge": "compiled Zinc compiler bridge",
+        "compile_worker": "the worker label for compilation with Zinc",
+        "deps_worker": "the worker label for checking used/unused deps",
     },
 )
 
@@ -70,6 +72,8 @@ ScalaRulePhase = provider(
 def _declare_zinc_configuration_implementation(ctx):
     return [ZincConfiguration(
         compiler_bridge = ctx.files.compiler_bridge,
+        compile_worker = ctx.attr._compile_worker,
+        deps_worker = ctx.attr._deps_worker,
     )]
 
 declare_zinc_configuration = rule(
@@ -77,6 +81,18 @@ declare_zinc_configuration = rule(
         "compiler_bridge": attr.label(
             allow_single_file = True,
             mandatory = True,
+        ),
+        "_compile_worker": attr.label(
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/compile",
+            allow_files = True,
+            executable = True,
+            cfg = "host",
+        ),
+        "_deps_worker": attr.label(
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/deps",
+            allow_files = True,
+            executable = True,
+            cfg = "host",
         ),
     },
     doc = "Creates a `ZincConfiguration`.",

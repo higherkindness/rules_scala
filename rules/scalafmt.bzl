@@ -10,8 +10,8 @@ Formats and checks the format of Scala.
 
 See [scalafmt.md](../scalafmt.md)
 """
+
 scala_format_test = rule(
-    implementation = _scala_format_test_implementation,
     attrs = _dicts.add(
         _scala_format_attributes,
         {
@@ -21,9 +21,9 @@ scala_format_test = rule(
             ),
         },
     ),
-    test = True,
-    toolchains = ["@rules_scala_annex//rules/scala:runner_toolchain_type"],
     outputs = {
         "runner": "%{name}-format",
     },
+    test = True,
+    implementation = _scala_format_test_implementation,
 )

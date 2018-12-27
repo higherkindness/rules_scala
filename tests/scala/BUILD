@@ -1,14 +1,8 @@
 load(
     "@rules_scala_annex//rules:scala.bzl",
-    "bootstrap_scala_library",
-    "configure_basic_scala",
-    "configure_scala",
-)
-load(
-    "@rules_scala_annex//rules:scala.bzl",
-    "bootstrap_scala_library",
-    "configure_basic_scala",
-    "configure_scala",
+    "configure_bootstrap_scala",
+    "configure_zinc_scala",
+    "scala_library",
 )
 
 alias(
@@ -35,7 +29,7 @@ runtime_classpath_2_11_12 = [
     "@scala_library_2_11_12//jar",
 ]
 
-configure_basic_scala(
+configure_bootstrap_scala(
     name = "bootstrap_2_11_12",
     compiler_classpath = compiler_classpath_2_11_12,
     runtime_classpath = runtime_classpath_2_11_12,
@@ -43,7 +37,7 @@ configure_basic_scala(
     visibility = ["//visibility:public"],
 )
 
-bootstrap_scala_library(
+scala_library(
     name = "compiler_bridge_2_11_12",
     srcs = [
         "@compiler_bridge_2_11//:src",
@@ -56,7 +50,7 @@ bootstrap_scala_library(
     ],
 )
 
-configure_scala(
+configure_zinc_scala(
     name = "zinc_2_11_12",
     compiler_bridge = ":compiler_bridge_2_11_12",
     compiler_classpath = compiler_classpath_2_11_12,
@@ -77,7 +71,7 @@ runtime_classpath_2_12_6 = [
     "@scala_library_2_12_6//jar",
 ]
 
-configure_basic_scala(
+configure_bootstrap_scala(
     name = "bootstrap_2_12_6",
     compiler_classpath = compiler_classpath_2_12_6,
     runtime_classpath = runtime_classpath_2_12_6,
@@ -85,7 +79,7 @@ configure_basic_scala(
     visibility = ["//visibility:public"],
 )
 
-bootstrap_scala_library(
+scala_library(
     name = "compiler_bridge_2_12_6",
     srcs = [
         "@compiler_bridge_2_12//:src",
@@ -98,7 +92,7 @@ bootstrap_scala_library(
     ],
 )
 
-configure_scala(
+configure_zinc_scala(
     name = "zinc_2_12_6",
     compiler_bridge = ":compiler_bridge_2_12_6",
     compiler_classpath = compiler_classpath_2_12_6,
@@ -119,7 +113,7 @@ runtime_classpath_typelevel_2_12_1 = [
     "@scala_library_typelevel_2_12_1//jar",
 ]
 
-configure_basic_scala(
+configure_bootstrap_scala(
     name = "bootstrap_typelevel_2_12_1",
     compiler_classpath = compiler_classpath_typelevel_2_12_1,
     runtime_classpath = runtime_classpath_typelevel_2_12_1,
@@ -127,7 +121,7 @@ configure_basic_scala(
     visibility = ["//visibility:public"],
 )
 
-bootstrap_scala_library(
+scala_library(
     name = "compiler_bridge_typelevel_2_12_1",
     srcs = [
         "@compiler_bridge_2_12//:src",
@@ -140,7 +134,7 @@ bootstrap_scala_library(
     ],
 )
 
-configure_scala(
+configure_zinc_scala(
     name = "zinc_typelevel_2_12_1",
     compiler_bridge = ":compiler_bridge_typelevel_2_12_1",
     compiler_classpath = compiler_classpath_typelevel_2_12_1,

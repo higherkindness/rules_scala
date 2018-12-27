@@ -178,171 +178,6 @@ Compiles a Scala JVM library.
 </table>
 
 
-<a name="#bootstrap_scala_library"></a>
-## bootstrap_scala_library
-
-<pre>
-bootstrap_scala_library(name, data, deps, deps_used_whitelist, exports, javacopts, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
-</pre>
-
-Compiles a Scala JVM library.
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#bootstrap_scala_library_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_data">
-      <td><code>data</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The additional runtime files needed by this library.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_deps">
-      <td><code>deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_deps_used_whitelist">
-      <td><code>deps_used_whitelist</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies to always consider used for `scala_deps_used` checks.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_exports">
-      <td><code>exports</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM libraries to add as dependencies to any libraries dependent on this one.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_javacopts">
-      <td><code>javacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Javac options.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_macro">
-      <td><code>macro</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library provides macros.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_neverlink">
-      <td><code>neverlink</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library should be excluded at runtime.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_plugins">
-      <td><code>plugins</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The Scalac plugins.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_resource_jars">
-      <td><code>resource_jars</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JARs to merge into the output JAR.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_resource_strip_prefix">
-      <td><code>resource_strip_prefix</code></td>
-      <td>
-        String; optional
-        <p>
-          The path prefix to strip from classpath resources.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_resources">
-      <td><code>resources</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The files to include as classpath resources.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_runtime_deps">
-      <td><code>runtime_deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM runtime-only library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_scala">
-      <td><code>scala</code></td>
-      <td>
-        Label; optional
-        <p>
-          The `ScalaConfiguration`.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_scalacopts">
-      <td><code>scalacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Scalac options.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_library_srcs">
-      <td><code>srcs</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The source Scala and Java files (and `.srcjar` files of those).
-        </p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
 <a name="#scala_binary"></a>
 ## scala_binary
 
@@ -529,186 +364,6 @@ Compiles and links a Scala JVM executable.
       </td>
     </tr>
     <tr id="#scala_binary_srcs">
-      <td><code>srcs</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The source Scala and Java files (and `.srcjar` files of those).
-        </p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#bootstrap_scala_binary"></a>
-## bootstrap_scala_binary
-
-<pre>
-bootstrap_scala_binary(name, data, deps, deps_used_whitelist, exports, javacopts, jvm_flags, macro, main_class, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
-</pre>
-
-Compiles and links a Scala JVM executable.
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#bootstrap_scala_binary_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_data">
-      <td><code>data</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The additional runtime files needed by this library.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_deps">
-      <td><code>deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_deps_used_whitelist">
-      <td><code>deps_used_whitelist</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies to always consider used for `scala_deps_used` checks.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_exports">
-      <td><code>exports</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM libraries to add as dependencies to any libraries dependent on this one.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_javacopts">
-      <td><code>javacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Javac options.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_jvm_flags">
-      <td><code>jvm_flags</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The JVM runtime flags.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_macro">
-      <td><code>macro</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library provides macros.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_main_class">
-      <td><code>main_class</code></td>
-      <td>
-        String; required
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_neverlink">
-      <td><code>neverlink</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library should be excluded at runtime.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_plugins">
-      <td><code>plugins</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The Scalac plugins.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_resource_jars">
-      <td><code>resource_jars</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JARs to merge into the output JAR.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_resource_strip_prefix">
-      <td><code>resource_strip_prefix</code></td>
-      <td>
-        String; optional
-        <p>
-          The path prefix to strip from classpath resources.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_resources">
-      <td><code>resources</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The files to include as classpath resources.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_runtime_deps">
-      <td><code>runtime_deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM runtime-only library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_scala">
-      <td><code>scala</code></td>
-      <td>
-        Label; optional
-        <p>
-          The `ScalaConfiguration`.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_scalacopts">
-      <td><code>scalacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Scalac options.
-        </p>
-      </td>
-    </tr>
-    <tr id="#bootstrap_scala_binary_srcs">
       <td><code>srcs</code></td>
       <td>
         List of labels; optional
@@ -1205,7 +860,7 @@ Configures the Scala runner to use.
 ## scala_deps_toolchain
 
 <pre>
-scala_deps_toolchain(name, direct, runner, used)
+scala_deps_toolchain(name, direct, used)
 </pre>
 
 Configures the deps checker and options to use.
@@ -1233,12 +888,6 @@ Configures the deps checker and options to use.
         String; optional
       </td>
     </tr>
-    <tr id="#scala_deps_toolchain_runner">
-      <td><code>runner</code></td>
-      <td>
-        Label; optional
-      </td>
-    </tr>
     <tr id="#scala_deps_toolchain_used">
       <td><code>used</code></td>
       <td>
@@ -1249,11 +898,11 @@ Configures the deps checker and options to use.
 </table>
 
 
-<a name="#configure_basic_scala"></a>
-## configure_basic_scala
+<a name="#configure_bootstrap_scala"></a>
+## configure_bootstrap_scala
 
 <pre>
-configure_basic_scala(name, compiler_classpath, global_plugins, runtime_classpath, version)
+configure_bootstrap_scala(name, compiler_classpath, global_plugins, runtime_classpath, version)
 </pre>
 
 
@@ -1266,7 +915,7 @@ configure_basic_scala(name, compiler_classpath, global_plugins, runtime_classpat
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#configure_basic_scala_name">
+    <tr id="#configure_bootstrap_scala_name">
       <td><code>name</code></td>
       <td>
         String; required
@@ -1275,13 +924,13 @@ configure_basic_scala(name, compiler_classpath, global_plugins, runtime_classpat
         </p>
       </td>
     </tr>
-    <tr id="#configure_basic_scala_compiler_classpath">
+    <tr id="#configure_bootstrap_scala_compiler_classpath">
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#configure_basic_scala_global_plugins">
+    <tr id="#configure_bootstrap_scala_global_plugins">
       <td><code>global_plugins</code></td>
       <td>
         List of labels; optional
@@ -1290,13 +939,13 @@ configure_basic_scala(name, compiler_classpath, global_plugins, runtime_classpat
         </p>
       </td>
     </tr>
-    <tr id="#configure_basic_scala_runtime_classpath">
+    <tr id="#configure_bootstrap_scala_runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#configure_basic_scala_version">
+    <tr id="#configure_bootstrap_scala_version">
       <td><code>version</code></td>
       <td>
         String; required
@@ -1306,11 +955,11 @@ configure_basic_scala(name, compiler_classpath, global_plugins, runtime_classpat
 </table>
 
 
-<a name="#configure_scala"></a>
-## configure_scala
+<a name="#configure_zinc_scala"></a>
+## configure_zinc_scala
 
 <pre>
-configure_scala(name, compiler_bridge, compiler_classpath, global_plugins, runtime_classpath, version)
+configure_zinc_scala(name, compiler_bridge, compiler_classpath, global_plugins, runtime_classpath, version)
 </pre>
 
 
@@ -1323,7 +972,7 @@ configure_scala(name, compiler_bridge, compiler_classpath, global_plugins, runti
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#configure_scala_name">
+    <tr id="#configure_zinc_scala_name">
       <td><code>name</code></td>
       <td>
         String; required
@@ -1332,19 +981,19 @@ configure_scala(name, compiler_bridge, compiler_classpath, global_plugins, runti
         </p>
       </td>
     </tr>
-    <tr id="#configure_scala_compiler_bridge">
+    <tr id="#configure_zinc_scala_compiler_bridge">
       <td><code>compiler_bridge</code></td>
       <td>
         Label; required
       </td>
     </tr>
-    <tr id="#configure_scala_compiler_classpath">
+    <tr id="#configure_zinc_scala_compiler_classpath">
       <td><code>compiler_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#configure_scala_global_plugins">
+    <tr id="#configure_zinc_scala_global_plugins">
       <td><code>global_plugins</code></td>
       <td>
         List of labels; optional
@@ -1353,13 +1002,13 @@ configure_scala(name, compiler_bridge, compiler_classpath, global_plugins, runti
         </p>
       </td>
     </tr>
-    <tr id="#configure_scala_runtime_classpath">
+    <tr id="#configure_zinc_scala_runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
         List of labels; required
       </td>
     </tr>
-    <tr id="#configure_scala_version">
+    <tr id="#configure_zinc_scala_version">
       <td><code>version</code></td>
       <td>
         String; required
@@ -1556,6 +1205,18 @@ Zinc configuration.
       <td><code>compiler_bridge</code></td>
       <td>
         <p>compiled Zinc compiler bridge</p>
+      </td>
+    </tr>
+    <tr id="#_ZincConfiguration_compile_worker">
+      <td><code>compile_worker</code></td>
+      <td>
+        <p>the worker label for compilation with Zinc</p>
+      </td>
+    </tr>
+    <tr id="#_ZincConfiguration_deps_worker">
+      <td><code>deps_worker</code></td>
+      <td>
+        <p>the worker label for checking used/unused deps</p>
       </td>
     </tr>
   </tbody>
