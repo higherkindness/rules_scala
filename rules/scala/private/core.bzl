@@ -53,29 +53,6 @@ scala_test_phases = [
     ("coda", _phase_coda),
 ]
 
-bootstrap_scala_library_phases = [
-    ("resources", _phase_resources),
-    ("classpaths", _phase_classpaths),
-    ("javainfo", _phase_javainfo),
-    ("compile", _phase_noop),
-    ("singlejar", _phase_singlejar),
-    ("ijinfo", _phase_ijinfo),
-    ("library_defaultinfo", _phase_library_defaultinfo),
-    ("coda", _phase_coda),
-]
-
-bootstrap_scala_binary_phases = [
-    ("resources", _phase_resources),
-    ("classpaths", _phase_classpaths),
-    ("javainfo", _phase_javainfo),
-    ("compile", _phase_noop),
-    ("singlejar", _phase_singlejar),
-    ("ijinfo", _phase_ijinfo),
-    ("binary_deployjar", _phase_binary_deployjar),
-    ("binary_launcher", _phase_binary_launcher),
-    ("coda", _phase_coda),
-]
-
 def scala_library_implementation(ctx):
     return _run_phases(ctx, scala_library_phases).coda
 
@@ -84,12 +61,6 @@ def scala_binary_implementation(ctx):
 
 def scala_test_implementation(ctx):
     return _run_phases(ctx, scala_test_phases).coda
-
-def bootstrap_scala_library_implementation(ctx):
-    return _run_phases(ctx, bootstrap_scala_library_phases).coda
-
-def bootstrap_scala_binary_implementation(ctx):
-    return _run_phases(ctx, bootstrap_scala_binary_phases).coda
 
 runner_common_attributes = {
     "_java_toolchain": attr.label(
@@ -137,19 +108,3 @@ scala_binary_private_attributes = dict(
 )
 
 scala_test_private_attributes = scala_binary_private_attributes
-
-bootstrap_scala_library_private_attributes = dict(
-    {
-    },
-    **runner_common_attributes
-)
-
-bootstrap_scala_binary_private_attributes = dict(
-    {
-        "_java_stub_template": attr.label(
-            default = Label("@anx_java_stub_template//file"),
-            allow_single_file = True,
-        ),
-    },
-    **bootstrap_scala_library_private_attributes
-)
