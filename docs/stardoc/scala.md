@@ -808,96 +808,6 @@ Generates Scaladocs.
 </table>
 
 
-<a name="#scala_runner_toolchain"></a>
-## scala_runner_toolchain
-
-<pre>
-scala_runner_toolchain(name, encoding, runner, scalacopts)
-</pre>
-
-Configures the Scala runner to use.
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#scala_runner_toolchain_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_runner_toolchain_encoding">
-      <td><code>encoding</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-    <tr id="#scala_runner_toolchain_runner">
-      <td><code>runner</code></td>
-      <td>
-        Label; optional
-      </td>
-    </tr>
-    <tr id="#scala_runner_toolchain_scalacopts">
-      <td><code>scalacopts</code></td>
-      <td>
-        List of strings; optional
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#scala_deps_toolchain"></a>
-## scala_deps_toolchain
-
-<pre>
-scala_deps_toolchain(name, direct, used)
-</pre>
-
-Configures the deps checker and options to use.
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#scala_deps_toolchain_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_deps_toolchain_direct">
-      <td><code>direct</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-    <tr id="#scala_deps_toolchain_used">
-      <td><code>used</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
 <a name="#configure_bootstrap_scala"></a>
 ## configure_bootstrap_scala
 
@@ -959,7 +869,7 @@ configure_bootstrap_scala(name, compiler_classpath, global_plugins, runtime_clas
 ## configure_zinc_scala
 
 <pre>
-configure_zinc_scala(name, compiler_bridge, compiler_classpath, global_plugins, runtime_classpath, version)
+configure_zinc_scala(name, compiler_bridge, compiler_classpath, deps_direct, deps_used, global_plugins, runtime_classpath, version)
 </pre>
 
 
@@ -993,6 +903,18 @@ configure_zinc_scala(name, compiler_bridge, compiler_classpath, global_plugins, 
         List of labels; required
       </td>
     </tr>
+    <tr id="#configure_zinc_scala_deps_direct">
+      <td><code>deps_direct</code></td>
+      <td>
+        String; optional
+      </td>
+    </tr>
+    <tr id="#configure_zinc_scala_deps_used">
+      <td><code>deps_used</code></td>
+      <td>
+        String; optional
+      </td>
+    </tr>
     <tr id="#configure_zinc_scala_global_plugins">
       <td><code>global_plugins</code></td>
       <td>
@@ -1022,10 +944,10 @@ configure_zinc_scala(name, compiler_bridge, compiler_classpath, global_plugins, 
 ## <unknown name>
 
 <pre>
-<unknown name>(name, compiler_bridge)
+<unknown name>(name, direct, provider, used)
 </pre>
 
-Creates a `ZincConfiguration`.
+
 
 ### Attributes
 
@@ -1044,10 +966,22 @@ Creates a `ZincConfiguration`.
         </p>
       </td>
     </tr>
-    <tr id="#<unknown name>_compiler_bridge">
-      <td><code>compiler_bridge</code></td>
+    <tr id="#<unknown name>_direct">
+      <td><code>direct</code></td>
+      <td>
+        String; optional
+      </td>
+    </tr>
+    <tr id="#<unknown name>_provider">
+      <td><code>provider</code></td>
       <td>
         Label; required
+      </td>
+    </tr>
+    <tr id="#<unknown name>_used">
+      <td><code>used</code></td>
+      <td>
+        String; optional
       </td>
     </tr>
   </tbody>
@@ -1147,6 +1081,42 @@ Creates a `ScalaConfiguration`.
 </table>
 
 
+<a name="#<unknown name>"></a>
+## <unknown name>
+
+<pre>
+<unknown name>(name, compiler_bridge)
+</pre>
+
+Creates a `ZincConfiguration`.
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="#<unknown name>_name">
+      <td><code>name</code></td>
+      <td>
+        String; required
+        <p>
+          A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="#<unknown name>_compiler_bridge">
+      <td><code>compiler_bridge</code></td>
+      <td>
+        Label; required
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <a name="#_ScalaConfiguration"></a>
 ## _ScalaConfiguration
 
@@ -1211,12 +1181,6 @@ Zinc configuration.
       <td><code>compile_worker</code></td>
       <td>
         <p>the worker label for compilation with Zinc</p>
-      </td>
-    </tr>
-    <tr id="#_ZincConfiguration_deps_worker">
-      <td><code>deps_worker</code></td>
-      <td>
-        <p>the worker label for checking used/unused deps</p>
       </td>
     </tr>
   </tbody>

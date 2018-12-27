@@ -1,5 +1,6 @@
 load(
     "@rules_scala_annex//rules:providers.bzl",
+    _DepsConfiguration = "DepsConfiguration",
     _LabeledJars = "LabeledJars",
     _ScalaConfiguration = "ScalaConfiguration",
     _ScalaInfo = "ScalaInfo",
@@ -349,11 +350,14 @@ def phase_bootstrap_compile(ctx, g):
 #
 
 def phase_depscheck(ctx, g):
+    if _DepsConfiguration not in ctx.attr.scala:
+        return
+
+    deps_configuration = ctx.attr.scala[_DepsConfiguration]
+
     deps_checks = {}
     labeled_jars = depset(transitive = [dep[_LabeledJars].values for dep in ctx.attr.deps])
-    zinc_configuration = ctx.attr.scala[_ZincConfiguration]  # TODO: different provider
-    worker = zinc_configuration.deps_worker
-    worker_inputs, _, worker_input_manifests = ctx.resolve_command(tools = [worker])
+    worker_inputs, _, worker_input_manifests = ctx.resolve_command(tools = [deps_configuration.worker])
     for name in ("direct", "used"):
         deps_check = ctx.actions.declare_file("{}/depscheck_{}.success".format(ctx.label.name, name))
         deps_args = ctx.actions.args()
@@ -371,7 +375,7 @@ def phase_depscheck(ctx, g):
             mnemonic = "ScalaCheckDeps",
             inputs = [g.compile.used] + worker_inputs,
             outputs = [deps_check],
-            executable = worker.files_to_run.executable,
+            executable = deps_configuration.worker.files_to_run.executable,
             input_manifests = worker_input_manifests,
             execution_requirements = {"supports-workers": "1"},
             arguments = [deps_args],
@@ -379,11 +383,9 @@ def phase_depscheck(ctx, g):
         deps_checks[name] = deps_check
 
     outputs = []
-
-    deps_toolchain = ctx.toolchains["@rules_scala_annex//rules/scala:deps_toolchain_type"]
-    if deps_toolchain.direct == "error":
+    if deps_configuration.direct == "error":
         outputs.append(deps_checks["direct"])
-    if deps_toolchain.used == "error":
+    if deps_configuration.used == "error":
         outputs.append(deps_checks["used"])
 
     g.out.output_groups["depscheck"] = depset(outputs)
@@ -391,7 +393,7 @@ def phase_depscheck(ctx, g):
     return struct(
         checks = deps_checks,
         outputs = outputs,
-        toolchain = deps_toolchain,
+        toolchain = deps_configuration,
     )
 
 def _depscheck_labeled_group(labeled_jars):

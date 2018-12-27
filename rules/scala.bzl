@@ -136,9 +136,6 @@ scala_library = rule(
         },
         _common_outputs,
     ),
-    toolchains = [
-        "@rules_scala_annex//rules/scala:deps_toolchain_type",
-    ],
     implementation = _scala_library_implementation,
 )
 
@@ -175,9 +172,6 @@ scala_binary = rule(
         },
         _common_outputs,
     ),
-    toolchains = [
-        "@rules_scala_annex//rules/scala:deps_toolchain_type",
-    ],
     implementation = _scala_binary_implementation,
 )
 
@@ -226,9 +220,6 @@ scala_test = rule(
         _common_outputs,
     ),
     test = True,
-    toolchains = [
-        "@rules_scala_annex//rules/scala:deps_toolchain_type",
-    ],
     implementation = _scala_test_implementation,
 )
 
@@ -319,23 +310,6 @@ Generates Scaladocs.
 ## core/underlying rules and configuration ##
 ##
 
-# scala_deps_toolchain
-
-def scala_deps_toolchain_implementation(ctx):
-    return [platform_common.ToolchainInfo(
-        direct = ctx.attr.direct,
-        used = ctx.attr.used,
-    )]
-
-scala_deps_toolchain = rule(
-    attrs = {
-        "direct": attr.string(),
-        "used": attr.string(),
-    },
-    doc = "Configures the deps checker and options to use.",
-    implementation = scala_deps_toolchain_implementation,
-)
-
 configure_bootstrap_scala = rule(
     attrs = {
         "version": attr.string(mandatory = True),
@@ -374,6 +348,8 @@ configure_zinc_scala = rule(
             doc = "Scalac plugins that will always be enabled.",
             providers = [JavaInfo],
         ),
+        "deps_direct": attr.string(default = "error"),
+        "deps_used": attr.string(default = "error"),
         "_compile_worker": attr.label(
             default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/compile",
             allow_files = True,

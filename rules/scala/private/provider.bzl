@@ -1,5 +1,6 @@
 load(
     "@rules_scala_annex//rules:providers.bzl",
+    _DepsConfiguration = "DepsConfiguration",
     _ScalaConfiguration = "ScalaConfiguration",
     _ScalaRulePhase = "ScalaRulePhase",
     _ZincConfiguration = "ZincConfiguration",
@@ -37,7 +38,11 @@ def configure_zinc_scala_implementation(ctx):
         _ZincConfiguration(
             compiler_bridge = ctx.file.compiler_bridge,
             compile_worker = ctx.attr._compile_worker,
-            deps_worker = ctx.attr._deps_worker,
+        ),
+        _DepsConfiguration(
+            direct = ctx.attr.deps_direct,
+            used = ctx.attr.deps_used,
+            worker = ctx.attr._deps_worker,
         ),
         _ScalaRulePhase(
             phases = [

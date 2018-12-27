@@ -9,8 +9,6 @@ common --incompatible_no_support_tools_in_action_inputs=false
 common --incompatible_remove_native_git_repository=false
 common --incompatible_remove_native_http_archive=false
 
-build --define=scala_deps_direct=error
-build --define=scala_deps_used=error
 build --disk_cache=../.bazel_cache
 build --experimental_strict_action_env
 build --javacopt="-source 8 -target 8"

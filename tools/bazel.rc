@@ -7,8 +7,6 @@ common --incompatible_depset_is_not_iterable=false
 common --incompatible_disallow_data_transition=false
 common --incompatible_no_support_tools_in_action_inputs=false
 
-build --define=scala_deps_direct=error
-build --define=scala_deps_used=error
 build --disk_cache=.bazel_cache
 build --experimental_strict_action_env
 build --javacopt="-source 8 -target 8"
