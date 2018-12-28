@@ -17,6 +17,7 @@ scala_format_test(
     srcs = ["unformatted.tmp.scala"],
 )
 
+"""
 ### scala_binary ###
 scala_binary(
     name = "formatted-binary",
@@ -73,3 +74,4 @@ scala_test(
     srcs = ["unformatted.tmp.scala"],
     format = True,
 )
+"""

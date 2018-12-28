@@ -3,14 +3,14 @@
 
 # scala_format_test
 ## check
-#bazel test :formatted || false
-#! bazel test :unformatted || false
+bazel test :formatted || false
+! bazel test :unformatted || false
 ## copy
-#cp unformatted.template.scala unformatted.tmp.scala
-#! bazel test :unformatted-copy || false
-#bazel run :unformatted-copy
-#bazel test :unformatted-copy || false
-#rm unformatted.tmp.scala
+cp unformatted.template.scala unformatted.tmp.scala
+! bazel test :unformatted-copy || false
+bazel run :unformatted-copy
+bazel test :unformatted-copy || false
+rm unformatted.tmp.scala
 
 # non-default output format test: binary
 ## check

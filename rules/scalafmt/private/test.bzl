@@ -1,4 +1,9 @@
-"""
+scala_format_attributes = {
+    "config": attr.label(
+        allow_single_file = [".conf"],
+        default = "@scalafmt_default//:config",
+        doc = "The Scalafmt configuration file.",
+    ),
     "_fmt": attr.label(
         cfg = "host",
         default = "@rules_scala_annex//rules/scalafmt",
@@ -8,24 +13,13 @@
         allow_single_file = True,
         default = "@rules_scala_annex//rules/scalafmt:runner",
     ),
-"""
-
-scala_format_attributes = {
-    "config": attr.label(
-        allow_single_file = [".conf"],
-        default = "@scalafmt_default//:config",
-        doc = "The Scalafmt configuration file.",
-    ),
 }
 
-"""
+scala_non_default_format_attributes = {
     "_testrunner": attr.label(
         allow_single_file = True,
         default = "@rules_scala_annex//rules/scalafmt:testrunner",
     ),
-"""
-
-scala_non_default_format_attributes = {
     "format": attr.bool(
         default = False,
     ),
@@ -79,7 +73,6 @@ def format_tester(ctx, manifest, files):
     )
 
 def scala_format_test_implementation(ctx):
-    """
     manifest, files = build_format(ctx)
     format_runner(ctx, manifest, files)
 
@@ -87,19 +80,4 @@ def scala_format_test_implementation(ctx):
         executable = ctx.outputs.runner,
         files = depset([ctx.outputs.runner, manifest] + files),
         runfiles = ctx.runfiles(files = [manifest] + files + ctx.files.srcs),
-    )
-    """
-
-    # TODO: remove temp hack
-    ctx.actions.run_shell(
-        inputs = [],
-        outputs = [ctx.outputs.runner],
-        command = "touch $1",
-        arguments = [ctx.outputs.runner.path],
-    )
-
-    return DefaultInfo(
-        executable = ctx.outputs.runner,
-        files = depset([ctx.outputs.runner]),
-        runfiles = ctx.runfiles(files = []),
     )
