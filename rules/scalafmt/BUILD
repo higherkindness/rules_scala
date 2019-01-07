@@ -38,3 +38,13 @@ filegroup(
     srcs = glob(["**/*.bzl"]),
     visibility = ["//rules:__pkg__"],
 )
+
+load(
+    ":ext.bzl",
+    _add_non_default_format_phase_singleton = "add_non_default_format_phase_singleton",
+)
+
+_add_non_default_format_phase_singleton(
+    name = "add_non_default_format_phase",
+    visibility = ["//visibility:public"],
+)

@@ -10,6 +10,7 @@ load(
 load(
     "@rules_scala_annex//rules:providers.bzl",
     _ScalaConfiguration = "ScalaConfiguration",
+    _ScalaRulePhase = "ScalaRulePhase",
     _ZincConfiguration = "ZincConfiguration",
 )
 load(
@@ -41,6 +42,14 @@ load(
     _scala_repl_implementation = "scala_repl_implementation",
     _scala_repl_private_attributes = "scala_repl_private_attributes",
 )
+
+def _extras_attributes(extras):
+    return {
+        "_phase_providers": attr.label_list(
+            default = [pp for extra in extras for pp in extra["phase_providers"]],
+            providers = [_ScalaRulePhase],
+        ),
+    }
 
 _library_common_attributes = {
     "srcs": attr.label_list(
@@ -104,7 +113,6 @@ _library_common_attributes = {
         doc = "The `ScalaConfiguration`.",
         providers = [
             _ScalaConfiguration,
-            #_ZincConfiguration,
         ],
     ),
     "scalacopts": attr.string_list(
@@ -112,27 +120,25 @@ _library_common_attributes = {
     ),
 }
 
-_common_outputs = {
-    #"runner": "%{name}.format",
-    #"testrunner": "%{name}.format-test",
-}
+def make_scala_library(*extras):
+    return rule(
+        attrs = _dicts.add(
+            _library_common_attributes,
+            _scala_library_private_attributes,
+            _extras_attributes(extras),
+            *[extra["attrs"] for extra in extras]
+        ),
+        doc = "Compiles a Scala JVM library.",
+        outputs = _dicts.add(
+            {
+                "jar": "%{name}.jar",
+            },
+            *[extra["outputs"] for extra in extras]
+        ),
+        implementation = _scala_library_implementation,
+    )
 
-scala_library = rule(
-    attrs = _dicts.add(
-        _library_common_attributes,
-        _scala_library_private_attributes,
-        #_scala_format_attributes,
-        #_scala_non_default_format_attributes,
-    ),
-    doc = "Compiles a Scala JVM library.",
-    outputs = _dicts.add(
-        {
-            "jar": "%{name}.jar",
-        },
-        _common_outputs,
-    ),
-    implementation = _scala_library_implementation,
-)
+scala_library = make_scala_library()
 
 _runner_common_attributes = {
     "jvm_flags": attr.string_list(
@@ -144,79 +150,85 @@ _runner_common_attributes = {
     ),
 }
 
-scala_binary = rule(
-    attrs = _dicts.add(
-        _library_common_attributes,
-        _runner_common_attributes,
-        _scala_binary_private_attributes,
-        #_scala_format_attributes,
-        #_scala_non_default_format_attributes,
-        {
-            "main_class": attr.string(
-                doc = "The main class. If not provided, it will be inferred by its type signature.",
-            ),
-        },
-    ),
-    doc = "Compiles and links a Scala JVM executable.",
-    executable = True,
-    outputs = _dicts.add(
-        {
-            "bin": "%{name}-bin",
-            "jar": "%{name}.jar",
-            "deploy_jar": "%{name}_deploy.jar",
-        },
-        _common_outputs,
-    ),
-    implementation = _scala_binary_implementation,
-)
+def make_scala_binary(*extras):
+    return rule(
+        attrs = _dicts.add(
+            _library_common_attributes,
+            _runner_common_attributes,
+            _scala_binary_private_attributes,
+            {
+                "main_class": attr.string(
+                    doc = "The main class. If not provided, it will be inferred by its type signature.",
+                ),
+            },
+            _extras_attributes(extras),
+            *[extra["attrs"] for extra in extras]
+        ),
+        doc = "Compiles and links a Scala JVM executable.",
+        executable = True,
+        outputs = _dicts.add(
+            {
+                "bin": "%{name}-bin",
+                "jar": "%{name}.jar",
+                "deploy_jar": "%{name}_deploy.jar",
+            },
+            *[extra["outputs"] for extra in extras]
+        ),
+        implementation = _scala_binary_implementation,
+    )
 
-scala_test = rule(
-    attrs = _dicts.add(
-        _library_common_attributes,
-        _runner_common_attributes,
-        _scala_test_private_attributes,
-        #_scala_format_attributes,
-        #_scala_non_default_format_attributes,
-        {
-            "isolation": attr.string(
-                default = "none",
-                doc = "The isolation level to apply",
-                values = [
-                    "classloader",
-                    "none",
-                    "process",
-                ],
-            ),
-            "scalacopts": attr.string_list(),
-            "shared_deps": attr.label_list(
-                doc = "If isolation is \"classloader\", the list of deps to keep loaded between tests",
-                providers = [JavaInfo],
-            ),
-            "frameworks": attr.string_list(
-                default = [
-                    "org.scalatest.tools.Framework",
-                    "org.scalacheck.ScalaCheckFramework",
-                    "org.specs2.runner.Specs2Framework",
-                    "minitest.runner.Framework",
-                    "utest.runner.Framework",
-                    "com.novocode.junit.JUnitFramework",
-                ],
-            ),
-            "runner": attr.label(default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/test"),
-            "subprocess_runner": attr.label(default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/common/sbt-testing:subprocess"),
-        },
-    ),
-    executable = True,
-    outputs = _dicts.add(
-        {
-            "bin": "%{name}-bin",
-            "jar": "%{name}.jar",
-        },
-        _common_outputs,
-    ),
-    test = True,
-    implementation = _scala_test_implementation,
-)
+scala_binary = make_scala_binary()
+
+def make_scala_test(*extras):
+    return rule(
+        attrs = _dicts.add(
+            _library_common_attributes,
+            _runner_common_attributes,
+            _scala_test_private_attributes,
+            {
+                "isolation": attr.string(
+                    default = "none",
+                    doc = "The isolation level to apply",
+                    values = [
+                        "classloader",
+                        "none",
+                        "process",
+                    ],
+                ),
+                "scalacopts": attr.string_list(),
+                "shared_deps": attr.label_list(
+                    doc = "If isolation is \"classloader\", the list of deps to keep loaded between tests",
+                    providers = [JavaInfo],
+                ),
+                "frameworks": attr.string_list(
+                    default = [
+                        "org.scalatest.tools.Framework",
+                        "org.scalacheck.ScalaCheckFramework",
+                        "org.specs2.runner.Specs2Framework",
+                        "minitest.runner.Framework",
+                        "utest.runner.Framework",
+                        "com.novocode.junit.JUnitFramework",
+                    ],
+                ),
+                "runner": attr.label(default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/test"),
+                "subprocess_runner": attr.label(default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/common/sbt-testing:subprocess"),
+            },
+            _extras_attributes(extras),
+            *[extra["attrs"] for extra in extras]
+        ),
+        executable = True,
+        outputs = _dicts.add(
+            {
+                "bin": "%{name}-bin",
+                "jar": "%{name}.jar",
+            },
+            *[extra["outputs"] for extra in extras]
+        ),
+        test = True,
+        implementation = _scala_test_implementation,
+    )
+
+scala_test = make_scala_test()
 
 # scala_repl
 

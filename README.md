@@ -57,6 +57,10 @@ to completely defer expanding transitive dependency lists until execution time.
 
 ## Usage
 
+Note: the rules are undergoing refactoring and the following configuration
+is only valid up to commit `6829904caaac3160636a7e30acd8bd500357e742`. Expect
+updated documentation soon.
+
 WORKSPACE
 
 ```python

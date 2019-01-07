@@ -1,5 +1,6 @@
 load(
     ":private/phases.bzl",
+    _adjust_phases = "adjust_phases",
     _phase_binary_deployjar = "phase_binary_deployjar",
     _phase_binary_launcher = "phase_binary_launcher",
     _phase_classpaths = "phase_classpaths",
