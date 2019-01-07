@@ -1,11 +1,11 @@
-load("//rules:scala.bzl", "bootstrap_scala_binary")
+load("//rules:scala.bzl", "scala_binary")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
-bootstrap_scala_binary(
+scala_binary(
     name = "deps",
     srcs = glob(["**/*.scala"]),
     main_class = "higherkindness.rules_scala.workers.deps.DepsRunner",
-    scala = "//external:scala_annex_scala_basic",
+    scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",

@@ -23,36 +23,11 @@ load(
     "@rules_scala_annex//rules/scala:workspace.bzl",
     "scala_register_toolchains",
     "scala_repositories",
-    "scala_repository",
 )
 
 scala_repositories()
 
 scala_register_toolchains()
-
-scala_repository(
-    "scala_2_11",
-    ("org.scala-lang", "2.11.12"),
-    "@compiler_bridge_2_11//:src",
-)
-
-scala_repository(
-    "scala_2_12",
-    ("org.scala-lang", "2.12.6"),
-    "@compiler_bridge_2_12//:src",
-)
-
-scala_repository(
-    "typelevel_2_12",
-    ("org.typelevel", "2.12.1"),
-    "@compiler_bridge_2_12//:src",
-)
-
-scala_repository(
-    "scala",
-    ("org.typelevel", "2.12.1"),
-    "@compiler_bridge_2_12//:src",
-)
 
 load(
     "@rules_scala_annex//rules/scala_proto:workspace.bzl",
@@ -76,10 +51,10 @@ scala_import_external(
 
 emulate_rules_scala(
     extra_deps = [
-        "@scala_2_11_scala_reflect//jar",
+        "@scala_reflect_2_11_12//jar",
         "@org_scala_lang_modules_scala_xml_2_11//jar",
     ],
-    scala = "@scala_2_11",
+    scala = "//scala:2_11",
     scalatest = "@scalatest_2_11//jar",
 )
 
@@ -149,3 +124,53 @@ load(
 )
 
 _scala_image_repos()
+
+maven_jar(
+    name = "scala_compiler_2_11_12",
+    artifact = "org.scala-lang:scala-compiler:2.11.12",
+)
+
+maven_jar(
+    name = "scala_library_2_11_12",
+    artifact = "org.scala-lang:scala-library:2.11.12",
+)
+
+maven_jar(
+    name = "scala_reflect_2_11_12",
+    artifact = "org.scala-lang:scala-reflect:2.11.12",
+)
+
+maven_jar(
+    name = "scala_compiler_2_12_6",
+    artifact = "org.scala-lang:scala-compiler:2.12.6",
+)
+
+maven_jar(
+    name = "scala_library_2_12_6",
+    artifact = "org.scala-lang:scala-library:2.12.6",
+)
+
+maven_jar(
+    name = "scala_reflect_2_12_6",
+    artifact = "org.scala-lang:scala-reflect:2.12.6",
+)
+
+maven_jar(
+    name = "scala_compiler_typelevel_2_12_1",
+    artifact = "org.typelevel:scala-compiler:2.12.1",
+)
+
+maven_jar(
+    name = "scala_library_typelevel_2_12_1",
+    artifact = "org.typelevel:scala-library:2.12.1",
+)
+
+maven_jar(
+    name = "scala_reflect_typelevel_2_12_1",
+    artifact = "org.typelevel:scala-reflect:2.12.1",
+)
+
+bind(
+    name = "default_scala",
+    actual = "//scala:zinc_typelevel_2_12_1",
+)

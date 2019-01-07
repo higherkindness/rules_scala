@@ -1,11 +1,11 @@
-load("//rules:scala.bzl", "bootstrap_scala_binary")
+load("//rules:scala.bzl", "scala_binary")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
-bootstrap_scala_binary(
+scala_binary(
     name = "compile",
     srcs = glob(["**/*.scala"]),
     main_class = "higherkindness.rules_scala.workers.zinc.compile.ZincRunner",
-    scala = "//external:scala_annex_scala_basic",
+    scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     runtime_deps = [
         "@scala_annex_com_lihaoyi_sourcecode_2_12",

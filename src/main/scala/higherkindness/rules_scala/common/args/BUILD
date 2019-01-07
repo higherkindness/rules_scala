@@ -1,10 +1,10 @@
 load("//rules:scalafmt.bzl", "scala_format_test")
-load("//rules:scala.bzl", "bootstrap_scala_library")
+load("//rules:scala.bzl", "scala_library")
 
-bootstrap_scala_library(
+scala_library(
     name = "args",
     srcs = glob(["**/*.scala"]),
-    scala = "//external:scala_annex_scala_basic",
+    scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     deps = [
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",

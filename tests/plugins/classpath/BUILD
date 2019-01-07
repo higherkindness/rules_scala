@@ -1,9 +1,9 @@
-load("@rules_scala_annex//rules:scala.bzl", "configure_scala", "scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "scala_library")
 
 scala_library(
     name = "plugin-lib",
     srcs = ["plugin-lib.scala"],
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
     tags = ["manual"],
 )
 
@@ -35,12 +35,12 @@ scala_library(
     resource_jars = [
         ":resources",
     ],
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
     tags = ["manual"],
     deps = [
         ":plugin-lib",
-        "@scala_2_12_scala_compiler//jar",
-        "@scala_2_12_scala_reflect//jar",
+        "@scala_compiler_2_12_6//jar",
+        "@scala_reflect_2_12_6//jar",
     ],
 )
 
@@ -50,6 +50,6 @@ scala_library(
     plugins = [
         ":plugin",
     ],
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
     tags = ["manual"],
 )

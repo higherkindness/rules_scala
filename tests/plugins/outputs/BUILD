@@ -1,10 +1,10 @@
-load("@rules_scala_annex//rules:scala.bzl", "configure_scala", "scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "scala_library")
 load(":rules.bzl", "my_plugin")
 
 scala_library(
     name = "my_plugin_lib",
     srcs = ["plugin.scala"],
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
     tags = ["manual"],
 )
 
@@ -22,6 +22,6 @@ scala_library(
     plugins = [
         ":my_plugin",
     ],
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
     tags = ["manual"],
 )

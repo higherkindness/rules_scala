@@ -74,7 +74,7 @@ def list_dependencies():
                     "@scala_annex_com_zaxxer_nuprocess",
                     "@scala_annex_io_monix_monix_2_12",
                     "@scala_annex_org_scalaz_scalaz_core_2_12",
-                    "@scala_annex_scala_2_12_scala_library//jar",
+                    "@scala_library_2_12_8//jar",
                 ],
                 "jar_sha256": "8dccc92d2d0eb772cb78bec87578aeccc41da9b1d8289431a895d7e77d3daa29",
                 "jar_urls": [
@@ -924,8 +924,8 @@ def list_dependencies():
                 "default_visibility": ["//visibility:public"],
                 "deps": [
                     "@scala_annex_org_scala_sbt_test_interface",
-                    "@scala_annex_scala_2_12_scala_compiler//jar",
-                    "@scala_annex_scala_2_12_scala_library//jar",
+                    "@scala_compiler_2_12_8//jar",
+                    "@scala_library_2_12_8//jar",
                 ],
                 "jar_sha256": "1bc91780bf810e0a86343a899095ba8afe3dee3c422695ca2b6f9f5299c2879a",
                 "jar_urls": [
@@ -2120,7 +2120,7 @@ def list_dependencies():
                     "@scala_annex_jline_jline",
                     "@scala_annex_org_apache_logging_log4j_log4j_api",
                     "@scala_annex_org_apache_logging_log4j_log4j_core",
-                    "@scala_annex_scala_2_12_scala_compiler//jar",
+                    "@scala_compiler_2_12_8//jar",
                 ],
                 "jar_sha256": "d3eddf8ab0ed3cfa4065b0f2148babbe763141c034a443cdaeddc62d294a5b92",
                 "jar_urls": [
@@ -2352,7 +2352,7 @@ def list_dependencies():
                     "@scala_annex_org_scala_sbt_zinc_core_2_12",
                     "@scala_annex_org_scala_sbt_zinc_ivy_integration_2_12",
                     "@scala_annex_org_scala_sbt_zinc_persist_2_12",
-                    "@scala_annex_scala_2_12_scala_library//jar",
+                    "@scala_library_2_12_8//jar",
                 ],
                 "jar_sha256": "6c6351556cc459f6ee59853de74cac37b0482b37bedb5e8189b6f48095e7c23d",
                 "jar_urls": [
@@ -2376,7 +2376,7 @@ def list_dependencies():
                 "default_visibility": ["//visibility:public"],
                 "deps": [
                     "@scala_annex_org_scala_sbt_test_interface",
-                    "@scala_annex_scala_2_12_scala_library//jar",
+                    "@scala_library_2_12_8//jar",
                 ],
                 "jar_sha256": "4526e6640fa10d9d790fa19df803dfcaaf7f13e3ed627c5bf727fd5efadf0187",
                 "jar_urls": [
@@ -2473,8 +2473,8 @@ def list_dependencies():
                     "@scala_annex_org_scala_lang_modules_scala_parser_combinators_2_12",
                     "@scala_annex_org_scala_lang_modules_scala_xml_2_12",
                     "@scala_annex_org_scalactic_scalactic_2_12",
-                    "@scala_annex_scala_2_12_scala_compiler//jar",
-                    "@scala_annex_scala_2_12_scala_library//jar",
+                    "@scala_compiler_2_12_8//jar",
+                    "@scala_library_2_12_8//jar",
                 ],
                 "jar_sha256": "cf2a7999681567e0f0e0166756356ae4ab0cd6c83f3f1d70225d25bb87d26070",
                 "jar_urls": [

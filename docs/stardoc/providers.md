@@ -55,6 +55,54 @@ Creates a `ScalaConfiguration`.
 </table>
 
 
+<a name="#reconfigure_deps_configuration"></a>
+## reconfigure_deps_configuration
+
+<pre>
+reconfigure_deps_configuration(name, direct, provider, used)
+</pre>
+
+
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="#reconfigure_deps_configuration_name">
+      <td><code>name</code></td>
+      <td>
+        String; required
+        <p>
+          A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="#reconfigure_deps_configuration_direct">
+      <td><code>direct</code></td>
+      <td>
+        String; optional
+      </td>
+    </tr>
+    <tr id="#reconfigure_deps_configuration_provider">
+      <td><code>provider</code></td>
+      <td>
+        Label; required
+      </td>
+    </tr>
+    <tr id="#reconfigure_deps_configuration_used">
+      <td><code>used</code></td>
+      <td>
+        String; optional
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <a name="#declare_zinc_configuration"></a>
 ## declare_zinc_configuration
 
@@ -214,6 +262,47 @@ Zinc configuration.
       <td><code>compiler_bridge</code></td>
       <td>
         <p>compiled Zinc compiler bridge</p>
+      </td>
+    </tr>
+    <tr id="#ZincConfiguration_compile_worker">
+      <td><code>compile_worker</code></td>
+      <td>
+        <p>the worker label for compilation with Zinc</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#DepsConfiguration"></a>
+## DepsConfiguration
+
+Dependency checking configuration.
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="#DepsConfiguration_direct">
+      <td><code>direct</code></td>
+      <td>
+        <p>either error or off</p>
+      </td>
+    </tr>
+    <tr id="#DepsConfiguration_used">
+      <td><code>used</code></td>
+      <td>
+        <p>either error or off</p>
+      </td>
+    </tr>
+    <tr id="#DepsConfiguration_worker">
+      <td><code>worker</code></td>
+      <td>
+        <p>the worker label for checking used/unused deps</p>
       </td>
     </tr>
   </tbody>

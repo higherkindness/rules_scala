@@ -1,4 +1,4 @@
-load("@rules_scala_annex//rules:scala.bzl", "configure_scala", "scala_library")
+load("@rules_scala_annex//rules:scala.bzl", "configure_zinc_scala", "scala_library")
 
 scala_library(
     name = "kind-projector",
@@ -6,30 +6,29 @@ scala_library(
     plugins = [
         "@kind_projector_2_12//jar",
     ],
-    scala = "@scala_2_12",
     tags = ["manual"],
 )
 
-configure_scala(
-    name = "scala_2_12_with_kind_projector",
-    compiler_bridge = "@scala_2_12//:compiler_bridge",
+configure_zinc_scala(
+    name = "scala_2_12_6_with_kind_projector",
+    compiler_bridge = "//scala:compiler_bridge_2_12_6",
     compiler_classpath = [
-        "@scala_2_12_scala_compiler//jar",
-        "@scala_2_12_scala_reflect//jar",
-        "@scala_2_12_scala_library//jar",
+        "@scala_compiler_2_12_6//jar",
+        "@scala_reflect_2_12_6//jar",
+        "@scala_library_2_12_6//jar",
     ],
     global_plugins = [
         "@kind_projector_2_12//jar",
     ],
     runtime_classpath = [
-        "@scala_2_12_scala_library//jar",
+        "@scala_library_2_12_6//jar",
     ],
-    version = "2.12.x",
+    version = "2.12.6",
 )
 
 scala_library(
     name = "kind-projector-via-global-plugins",
     srcs = ["KindProjector.scala"],
-    scala = ":scala_2_12_with_kind_projector",
+    scala = ":scala_2_12_6_with_kind_projector",
     tags = ["manual"],
 )

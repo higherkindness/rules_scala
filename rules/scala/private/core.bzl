@@ -1,16 +1,16 @@
 load(
     ":private/phases.bzl",
+    _adjust_phases = "adjust_phases",
     _phase_binary_deployjar = "phase_binary_deployjar",
     _phase_binary_launcher = "phase_binary_launcher",
-    _phase_boostrap_compile = "phase_boostrap_compile",
     _phase_classpaths = "phase_classpaths",
     _phase_coda = "phase_coda",
-    _phase_compile = "phase_compile",
     _phase_depscheck = "phase_depscheck",
     _phase_ijinfo = "phase_ijinfo",
     _phase_javainfo = "phase_javainfo",
     _phase_library_defaultinfo = "phase_library_defaultinfo",
     _phase_non_default_format = "phase_non_default_format",
+    _phase_noop = "phase_noop",
     _phase_resources = "phase_resources",
     _phase_singlejar = "phase_singlejar",
     _phase_test_launcher = "phase_test_launcher",
@@ -21,10 +21,9 @@ scala_library_phases = [
     ("resources", _phase_resources),
     ("classpaths", _phase_classpaths),
     ("javainfo", _phase_javainfo),
-    ("compile", _phase_compile),
-    ("depscheck", _phase_depscheck),
+    ("compile", _phase_noop),
     ("singlejar", _phase_singlejar),
-    ("non_default_format", _phase_non_default_format),
+    #("non_default_format", _phase_non_default_format),
     ("ijinfo", _phase_ijinfo),
     ("library_defaultinfo", _phase_library_defaultinfo),
     ("coda", _phase_coda),
@@ -34,10 +33,9 @@ scala_binary_phases = [
     ("resources", _phase_resources),
     ("classpaths", _phase_classpaths),
     ("javainfo", _phase_javainfo),
-    ("compile", _phase_compile),
-    ("depscheck", _phase_depscheck),
+    ("compile", _phase_noop),
     ("singlejar", _phase_singlejar),
-    ("non_default_format", _phase_non_default_format),
+    #("non_default_format", _phase_non_default_format),
     ("ijinfo", _phase_ijinfo),
     ("binary_deployjar", _phase_binary_deployjar),
     ("binary_launcher", _phase_binary_launcher),
@@ -48,35 +46,11 @@ scala_test_phases = [
     ("resources", _phase_resources),
     ("classpaths", _phase_classpaths),
     ("javainfo", _phase_javainfo),
-    ("compile", _phase_compile),
-    ("depscheck", _phase_depscheck),
+    ("compile", _phase_noop),
     ("singlejar", _phase_singlejar),
-    ("non_default_format", _phase_non_default_format),
+    #("non_default_format", _phase_non_default_format),
     ("ijinfo", _phase_ijinfo),
     ("test_launcher", _phase_test_launcher),
-    ("coda", _phase_coda),
-]
-
-bootstrap_scala_library_phases = [
-    ("resources", _phase_resources),
-    ("classpaths", _phase_classpaths),
-    ("javainfo", _phase_javainfo),
-    ("compile", _phase_boostrap_compile),
-    ("singlejar", _phase_singlejar),
-    ("ijinfo", _phase_ijinfo),
-    ("library_defaultinfo", _phase_library_defaultinfo),
-    ("coda", _phase_coda),
-]
-
-bootstrap_scala_binary_phases = [
-    ("resources", _phase_resources),
-    ("classpaths", _phase_classpaths),
-    ("javainfo", _phase_javainfo),
-    ("compile", _phase_boostrap_compile),
-    ("singlejar", _phase_singlejar),
-    ("ijinfo", _phase_ijinfo),
-    ("binary_deployjar", _phase_binary_deployjar),
-    ("binary_launcher", _phase_binary_launcher),
     ("coda", _phase_coda),
 ]
 
@@ -88,12 +62,6 @@ def scala_binary_implementation(ctx):
 
 def scala_test_implementation(ctx):
     return _run_phases(ctx, scala_test_phases).coda
-
-def bootstrap_scala_library_implementation(ctx):
-    return _run_phases(ctx, bootstrap_scala_library_phases).coda
-
-def bootstrap_scala_binary_implementation(ctx):
-    return _run_phases(ctx, bootstrap_scala_binary_phases).coda
 
 runner_common_attributes = {
     "_java_toolchain": attr.label(
@@ -107,6 +75,19 @@ runner_common_attributes = {
         cfg = "host",
         default = "@bazel_tools//tools/jdk:singlejar",
         executable = True,
+    ),
+
+    # TODO: push java and jar_creator into a provider for the
+    # bootstrap compile phase
+    "_java": attr.label(
+        default = Label("@bazel_tools//tools/jdk:java"),
+        executable = True,
+        cfg = "host",
+    ),
+    "_jar_creator": attr.label(
+        default = Label("@rules_scala_annex//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin"),
+        executable = True,
+        cfg = "host",
     ),
 }
 
@@ -128,29 +109,3 @@ scala_binary_private_attributes = dict(
 )
 
 scala_test_private_attributes = scala_binary_private_attributes
-
-bootstrap_scala_library_private_attributes = dict(
-    {
-        "_java": attr.label(
-            default = Label("@bazel_tools//tools/jdk:java"),
-            executable = True,
-            cfg = "host",
-        ),
-        "_jar_creator": attr.label(
-            default = Label("@rules_scala_annex//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin"),
-            executable = True,
-            cfg = "host",
-        ),
-    },
-    **runner_common_attributes
-)
-
-bootstrap_scala_binary_private_attributes = dict(
-    {
-        "_java_stub_template": attr.label(
-            default = Label("@anx_java_stub_template//file"),
-            allow_single_file = True,
-        ),
-    },
-    **bootstrap_scala_library_private_attributes
-)

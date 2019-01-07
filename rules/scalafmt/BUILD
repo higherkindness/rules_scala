@@ -1,4 +1,4 @@
-load("//rules:scala.bzl", "bootstrap_scala_binary", "scala_binary")
+load("//rules:scala.bzl", "scala_binary")
 load("//rules:scalafmt.bzl", "scala_format_test")
 
 filegroup(
@@ -13,11 +13,11 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-bootstrap_scala_binary(
+scala_binary(
     name = "scalafmt",
     srcs = glob(["scalafmt/**/*.scala"]),
     main_class = "annex.scalafmt.ScalafmtRunner",
-    scala = "//external:scala_annex_scala",
+    scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/worker",
@@ -37,4 +37,14 @@ filegroup(
     name = "bzl",
     srcs = glob(["**/*.bzl"]),
     visibility = ["//rules:__pkg__"],
+)
+
+load(
+    ":ext.bzl",
+    _add_non_default_format_phase_singleton = "add_non_default_format_phase_singleton",
+)
+
+_add_non_default_format_phase_singleton(
+    name = "add_non_default_format_phase",
+    visibility = ["//visibility:public"],
 )

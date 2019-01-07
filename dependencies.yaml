@@ -1,5 +1,5 @@
 options:
-  languages: [ "java", "scala:2.12.4" ]
+  languages: [ "java", "scala:2.12.8" ]
   transitivity: deps
   namePrefix: scala_annex_
   versionConflictPolicy: highest
@@ -52,7 +52,7 @@ replacements:
   org.scala-lang:
     scala-library:
       lang: java
-      target: "@scala_annex_scala_2_12_scala_library//jar"
+      target: "@scala_library_2_12_8//jar"
     scala-reflect:
       lang: java
-      target: "@scala_annex_scala_2_12_scala_compiler//jar"
+      target: "@scala_compiler_2_12_8//jar"

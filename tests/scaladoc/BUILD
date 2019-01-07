@@ -9,5 +9,5 @@ scaladoc(
     compiler_deps = [
         "@org_scala_lang_modules_scala_xml_2_12",
     ],
-    scala = "@scala_2_12",
+    scala = "//scala:2_12",
 )
