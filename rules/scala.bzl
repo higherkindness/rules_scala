@@ -14,13 +14,20 @@ load(
     _ZincConfiguration = "ZincConfiguration",
 )
 load(
-    "//rules/scala:private/core.bzl",
-    _scala_binary_implementation = "scala_binary_implementation",
-    _scala_binary_private_attributes = "scala_binary_private_attributes",
-    _scala_library_implementation = "scala_library_implementation",
-    _scala_library_private_attributes = "scala_library_private_attributes",
-    _scala_test_implementation = "scala_test_implementation",
-    _scala_test_private_attributes = "scala_test_private_attributes",
+    "//rules/private:phases.bzl",
+    _adjust_phases = "adjust_phases",
+    _phase_binary_deployjar = "phase_binary_deployjar",
+    _phase_binary_launcher = "phase_binary_launcher",
+    _phase_classpaths = "phase_classpaths",
+    _phase_coda = "phase_coda",
+    _phase_ijinfo = "phase_ijinfo",
+    _phase_javainfo = "phase_javainfo",
+    _phase_library_defaultinfo = "phase_library_defaultinfo",
+    _phase_noop = "phase_noop",
+    _phase_resources = "phase_resources",
+    _phase_singlejar = "phase_singlejar",
+    _phase_test_launcher = "phase_test_launcher",
+    _run_phases = "run_phases",
 )
 load(
     "//rules/scala:private/doc.bzl",
@@ -40,18 +47,37 @@ load(
 load(
     "//rules/scala:private/repl.bzl",
     _scala_repl_implementation = "scala_repl_implementation",
-    _scala_repl_private_attributes = "scala_repl_private_attributes",
 )
 
-def _extras_attributes(extras):
-    return {
-        "_phase_providers": attr.label_list(
-            default = [pp for extra in extras for pp in extra["phase_providers"]],
-            providers = [_ScalaRulePhase],
-        ),
-    }
+_compile_private_attributes = {
+    "_java_toolchain": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_toolchain"),
+    ),
+    "_host_javabase": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
+        cfg = "host",
+    ),
+    "_singlejar": attr.label(
+        cfg = "host",
+        default = "@bazel_tools//tools/jdk:singlejar",
+        executable = True,
+    ),
 
-_library_common_attributes = {
+    # TODO: push java and jar_creator into a provider for the
+    # bootstrap compile phase
+    "_java": attr.label(
+        default = Label("@bazel_tools//tools/jdk:java"),
+        executable = True,
+        cfg = "host",
+    ),
+    "_jar_creator": attr.label(
+        default = Label("@rules_scala_annex//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper:jarcreator_bin"),
+        executable = True,
+        cfg = "host",
+    ),
+}
+
+_compile_attributes = {
     "srcs": attr.label_list(
         doc = "The source Scala and Java files (and `.srcjar` files of those).",
         allow_files = [
@@ -120,11 +146,78 @@ _library_common_attributes = {
     ),
 }
 
+_runtime_attributes = {
+    "jvm_flags": attr.string_list(
+        doc = "The JVM runtime flags.",
+    ),
+    "runtime_deps": attr.label_list(
+        doc = "The JVM runtime-only library dependencies.",
+        providers = [JavaInfo],
+    ),
+}
+
+_runtime_private_attributes = {
+    "_java": attr.label(
+        default = Label("@bazel_tools//tools/jdk:java"),
+        executable = True,
+        cfg = "host",
+    ),
+    "_java_stub_template": attr.label(
+        default = Label("@anx_java_stub_template//file"),
+        allow_single_file = True,
+    ),
+}
+
+def _extras_attributes(extras):
+    return {
+        "_phase_providers": attr.label_list(
+            default = [pp for extra in extras for pp in extra["phase_providers"]],
+            providers = [_ScalaRulePhase],
+        ),
+    }
+
+def _scala_library_implementation(ctx):
+    return _run_phases(ctx, [
+        ("resources", _phase_resources),
+        ("classpaths", _phase_classpaths),
+        ("javainfo", _phase_javainfo),
+        ("compile", _phase_noop),
+        ("singlejar", _phase_singlejar),
+        ("ijinfo", _phase_ijinfo),
+        ("library_defaultinfo", _phase_library_defaultinfo),
+        ("coda", _phase_coda),
+    ]).coda
+
+def _scala_binary_implementation(ctx):
+    return _run_phases(ctx, [
+        ("resources", _phase_resources),
+        ("classpaths", _phase_classpaths),
+        ("javainfo", _phase_javainfo),
+        ("compile", _phase_noop),
+        ("singlejar", _phase_singlejar),
+        ("ijinfo", _phase_ijinfo),
+        ("binary_deployjar", _phase_binary_deployjar),
+        ("binary_launcher", _phase_binary_launcher),
+        ("coda", _phase_coda),
+    ]).coda
+
+def _scala_test_implementation(ctx):
+    return _run_phases(ctx, [
+        ("resources", _phase_resources),
+        ("classpaths", _phase_classpaths),
+        ("javainfo", _phase_javainfo),
+        ("compile", _phase_noop),
+        ("singlejar", _phase_singlejar),
+        ("ijinfo", _phase_ijinfo),
+        ("test_launcher", _phase_test_launcher),
+        ("coda", _phase_coda),
+    ]).coda
+
 def make_scala_library(*extras):
     return rule(
         attrs = _dicts.add(
-            _library_common_attributes,
-            _scala_library_private_attributes,
+            _compile_attributes,
+            _compile_private_attributes,
             _extras_attributes(extras),
             *[extra["attrs"] for extra in extras]
         ),
@@ -140,22 +233,13 @@ def make_scala_library(*extras):
 
 scala_library = make_scala_library()
 
-_runner_common_attributes = {
-    "jvm_flags": attr.string_list(
-        doc = "The JVM runtime flags.",
-    ),
-    "runtime_deps": attr.label_list(
-        doc = "The JVM runtime-only library dependencies.",
-        providers = [JavaInfo],
-    ),
-}
-
 def make_scala_binary(*extras):
     return rule(
         attrs = _dicts.add(
-            _library_common_attributes,
-            _runner_common_attributes,
-            _scala_binary_private_attributes,
+            _compile_attributes,
+            _compile_private_attributes,
+            _runtime_attributes,
+            _runtime_private_attributes,
             {
                 "main_class": attr.string(
                     doc = "The main class. If not provided, it will be inferred by its type signature.",
@@ -182,9 +266,10 @@ scala_binary = make_scala_binary()
 def make_scala_test(*extras):
     return rule(
         attrs = _dicts.add(
-            _library_common_attributes,
-            _runner_common_attributes,
-            _scala_test_private_attributes,
+            _compile_attributes,
+            _compile_private_attributes,
+            _runtime_attributes,
+            _runtime_private_attributes,
             {
                 "isolation": attr.string(
                     default = "none",
@@ -231,6 +316,17 @@ def make_scala_test(*extras):
 scala_test = make_scala_test()
 
 # scala_repl
+
+_scala_repl_private_attributes = _dicts.add(
+    _runtime_private_attributes,
+    {
+        "_runner": attr.label(
+            cfg = "host",
+            executable = True,
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/repl",
+        ),
+    },
+)
 
 scala_repl = rule(
     attrs = _dicts.add(

@@ -5,18 +5,6 @@ load(
     _ZincConfiguration = "ZincConfiguration",
 )
 load("//rules/common:private/utils.bzl", "write_launcher", _collect = "collect")
-load(":private/core.bzl", _scala_binary_private_attributes = "scala_binary_private_attributes")
-
-scala_repl_private_attributes = _dicts.add(
-    _scala_binary_private_attributes,
-    {
-        "_runner": attr.label(
-            cfg = "host",
-            executable = True,
-            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/zinc/repl",
-        ),
-    },
-)
 
 def scala_repl_implementation(ctx):
     scala_configuration = ctx.attr.scala[_ScalaConfiguration]
