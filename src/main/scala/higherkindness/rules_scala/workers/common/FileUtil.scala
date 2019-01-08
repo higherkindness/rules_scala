@@ -1,5 +1,5 @@
 package higherkindness.rules_scala
-package workers.zinc.common
+package workers.common
 
 import scala.annotation.tailrec
 

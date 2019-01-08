@@ -1,5 +1,5 @@
 package higherkindness.rules_scala
-package workers.zinc.common
+package workers.common
 
 import xsbti.Logger
 
@@ -22,7 +22,7 @@ final class AnnexLogger(level: String) extends Logger {
   }
 
   def error(msg: Supplier[String]): Unit = level match {
-    case LogLevel.Debug | LogLevel.Error | LogLevel.Info | LogLevel.Warn => println(format(msg.get))
+    case LogLevel.Debug | LogLevel.Error | LogLevel.Info | LogLevel.Warn => System.err.println(format(msg.get))
     case _                                                               =>
   }
 

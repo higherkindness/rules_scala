@@ -1,10 +1,11 @@
 package higherkindness.rules_scala
 package workers.zinc.compile
 
-import workers.zinc.common.AnnexLogger
-import workers.zinc.common.AnnexScalaInstance
-import workers.zinc.common.CommonArguments
-import workers.zinc.common.FileUtil
+import workers.common.AnnexLogger
+import workers.common.AnnexScalaInstance
+import workers.common.CommonArguments
+import workers.common.FileUtil
+import workers.common.LoggedReporter
 import common.worker.WorkerMain
 
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
@@ -15,7 +16,7 @@ import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.{Arguments => Arg}
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.classpath.ClassLoaderCache
-import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locate, LoggedReporter, ZincUtil}
+import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locate, ZincUtil}
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.util.control.NonFatal

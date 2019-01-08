@@ -1,7 +1,7 @@
 package higherkindness.rules_scala
 package workers.zinc.compile
 
-import workers.zinc.common.FileUtil
+import workers.common.FileUtil
 
 import java.io.File
 import java.nio.file.{Files, Path, StandardCopyOption}
