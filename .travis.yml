@@ -75,3 +75,10 @@ jobs:
     - <<: *linux
       env: V=0.18.0
       script: ./travis.sh test
+# Test against scala ecosystem source build
+    - <<: *osx
+      env: V=0.18.0
+      script: ./travis.sh test-singularity
+    - <<: *linux
+      env: V=0.18.0
+      script: ./travis.sh test-singularity

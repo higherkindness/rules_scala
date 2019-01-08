@@ -14,6 +14,10 @@ case "$1" in
         ./test.sh
         ;;
 
+    "test-singularity")
+        ./test-singularity.sh
+        ;;
+
     "lint")
         ./setup-tools.sh --skip-deps
         ./format.sh check
