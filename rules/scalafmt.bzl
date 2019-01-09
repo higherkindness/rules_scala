@@ -22,7 +22,7 @@ scala_format_test = rule(
         },
     ),
     outputs = {
-        "runner": "%{name}-format",
+        "scalafmt_runner": "%{name}-format",
     },
     test = True,
     implementation = _scala_format_test_implementation,

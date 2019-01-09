@@ -9,9 +9,8 @@ load(
     _scala_non_default_format_attributes = "scala_non_default_format_attributes",
 )
 load(
-    "//rules/scala:private/phases.bzl",
-    # TODO: move this to another file
-    _phase_non_default_format = "phase_non_default_format",
+    "//rules/private:phases.bzl",
+    _phase_scalafmt_nondefault_outputs = "phase_scalafmt_nondefault_outputs",
 )
 
 ext_with_non_default_format = {
@@ -20,8 +19,8 @@ ext_with_non_default_format = {
         _scala_non_default_format_attributes,
     ),
     "outputs": {
-        "runner": "%{name}.format",
-        "testrunner": "%{name}.format-test",
+        "scalafmt_runner": "%{name}.format",
+        "scalafmt_testrunner": "%{name}.format-test",
     },
     "phase_providers": [
         "//rules/scalafmt:add_non_default_format_phase",
@@ -32,7 +31,7 @@ def _add_non_default_format_phase_singleton_implementation(ctx):
     return [
         _ScalaRulePhase(
             phases = [
-                ("-", "coda", "non_default_format", _phase_non_default_format),
+                ("-", "coda", "non_default_format", _phase_scalafmt_nondefault_outputs),
             ],
         ),
     ]

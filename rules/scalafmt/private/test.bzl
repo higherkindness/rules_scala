@@ -59,17 +59,27 @@ def build_format(ctx):
 def format_runner(ctx, manifest, files):
     ctx.actions.run_shell(
         inputs = [ctx.file._runner, manifest] + files,
-        outputs = [ctx.outputs.runner],
+        outputs = [ctx.outputs.scalafmt_runner],
         command = "cat $1 | sed -e s#%workspace%#$2# -e s#%manifest%#$3# > $4",
-        arguments = [ctx.file._runner.path, ctx.workspace_name, manifest.short_path, ctx.outputs.runner.path],
+        arguments = [
+            ctx.file._runner.path,
+            ctx.workspace_name,
+            manifest.short_path,
+            ctx.outputs.scalafmt_runner.path,
+        ],
     )
 
 def format_tester(ctx, manifest, files):
     ctx.actions.run_shell(
         inputs = [ctx.file._testrunner, manifest] + files,
-        outputs = [ctx.outputs.testrunner],
+        outputs = [ctx.outputs.scalafmt_testrunner],
         command = "cat $1 | sed -e s#%workspace%#$2# -e s#%manifest%#$3# > $4",
-        arguments = [ctx.file._testrunner.path, ctx.workspace_name, manifest.short_path, ctx.outputs.testrunner.path],
+        arguments = [
+            ctx.file._testrunner.path,
+            ctx.workspace_name,
+            manifest.short_path,
+            ctx.outputs.scalafmt_testrunner.path,
+        ],
     )
 
 def scala_format_test_implementation(ctx):
@@ -77,7 +87,7 @@ def scala_format_test_implementation(ctx):
     format_runner(ctx, manifest, files)
 
     return DefaultInfo(
-        executable = ctx.outputs.runner,
-        files = depset([ctx.outputs.runner, manifest] + files),
+        executable = ctx.outputs.scalafmt_runner,
+        files = depset([ctx.outputs.scalafmt_runner, manifest] + files),
         runfiles = ctx.runfiles(files = [manifest] + files + ctx.files.srcs),
     )
