@@ -8,7 +8,6 @@ hash2
 .bazel_cache
 /external-tools/
 target/
-tools/deleted_packages.rc
 
 !bazel-*.rc
 
