@@ -12,7 +12,8 @@ addons:
 
 cache:
     directories:
-     - .bazel_cache
+      - ~/.bazel_binaries
+      - .bazel_cache
 
 # some could be global, but these are OS-specific and ought not to be included
 # in the UI or the cache key
