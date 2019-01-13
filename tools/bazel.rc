@@ -1,5 +1,3 @@
-import %workspace%/tools/deleted_packages.rc
-
 common --all_incompatible_changes
 common --color=yes
 common --incompatible_bzl_disallow_load_after_statement=false
