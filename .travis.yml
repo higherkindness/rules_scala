@@ -14,9 +14,6 @@ cache:
     directories:
      - .bazel_cache
 
-before_install:
-  - ./travis.sh install-bazel
-
 # some could be global, but these are OS-specific and ought not to be included
 # in the UI or the cache key
 _linux: &linux
@@ -29,7 +26,8 @@ _osx: &osx
 jobs:
   include:
 # Build
-    - <<: *osx
+    - stage: build
+      <<: *osx
       env: BAZEL_VERSION=0.21.0
       script: ./travis.sh build
     - <<: *linux
