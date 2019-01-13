@@ -5,7 +5,7 @@ load(
     "make_scala_test",
 )
 load(
-    "@rules_scala_annex//rules:scalafmt/ext.bzl",
+    "@rules_scala_annex//rules/scalafmt:ext.bzl",
     "ext_with_non_default_format",
 )
 
