@@ -61,6 +61,14 @@ ZincConfiguration = provider(
     },
 )
 
+PureConfiguration = provider(
+    doc = "Pure configuration.",
+    fields = {
+        "compiler_bridge": "compiled Zinc compiler bridge",
+        "compile_worker": "the worker label for compilation with Zinc",
+    },
+)
+
 DepsConfiguration = provider(
     doc = "Dependency checking configuration.",
     fields = {

@@ -17,7 +17,7 @@ trait WorkerMain[S] {
 
   protected[this] def init(args: Option[Array[String]]): S
 
-  protected[this] def work(ctx: S, args: Array[String]): Unit
+  protected[this] def work(ctx: S, args: Array[String]): S
 
   final def main(args: Array[String]): Unit = {
     args.toList match {
@@ -49,14 +49,13 @@ trait WorkerMain[S] {
             val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(stdin)
             val args = request.getArgumentsList.toArray(Array.empty[String])
 
-            val code = try {
-              work(ctx, args)
-              0
+            val (nextCtx, code) = try {
+              (work(ctx, args), 0)
             } catch {
-              case ExitTrapped(code) => code
+              case ExitTrapped(code) => (ctx, code)
               case NonFatal(e) =>
                 e.printStackTrace()
-                1
+                (ctx, 1)
             }
 
             WorkerProtocol.WorkResponse.newBuilder
@@ -68,7 +67,7 @@ trait WorkerMain[S] {
             out.flush()
             outStream.reset()
 
-            process(ctx)
+            process(nextCtx)
           }
           process(init(Some(args.toArray)))
         } finally {
