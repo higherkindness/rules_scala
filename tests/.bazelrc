@@ -1,0 +1,6 @@
+import %workspace%/../.bazelrc
+
+build --disk_cache=../.bazel_cache
+
+common:v0.21 --incompatible_bzl_disallow_load_after_statement=false
+common:v0.21 --incompatible_no_transitive_loads=false

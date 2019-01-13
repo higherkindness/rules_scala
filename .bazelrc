@@ -1,0 +1,15 @@
+common --announce_rc
+common --all_incompatible_changes
+common --color=yes
+
+build --disk_cache=.bazel_cache
+build --experimental_strict_action_env
+build --javacopt="-source 8 -target 8"
+build --strategy=ScalaCompile=worker
+build --worker_max_instances=4
+build --worker_sandboxing
+build --verbose_failures
+
+test  --test_output=all
+
+common:v0.21 --incompatible_disable_deprecated_attr_params=false

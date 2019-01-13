@@ -20,8 +20,8 @@ def phase_bootstrap_compile(ctx, g):
         transitive = [g.classpaths.compile, g.classpaths.compiler],
     )
 
-    compiler_classpath = ":".join([f.path for f in g.classpaths.compiler])
-    compile_classpath = ":".join([f.path for f in g.classpaths.compile])
+    compiler_classpath = ":".join([f.path for f in g.classpaths.compiler.to_list()])
+    compile_classpath = ":".join([f.path for f in g.classpaths.compile.to_list()])
     srcs = " ".join([f.path for f in g.classpaths.srcs])
 
     ctx.actions.run_shell(

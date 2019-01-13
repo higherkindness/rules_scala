@@ -106,7 +106,7 @@ maven_jar(
 git_repository(
     name = "io_bazel_rules_docker",
     remote = "https://github.com/bazelbuild/rules_docker.git",
-    tag = "v0.4.0",
+    tag = "v0.6.0",
 )
 
 rules_docker_version = "452878d665648ada0aaf816931611fdd9c683a97"

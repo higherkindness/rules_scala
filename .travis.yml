@@ -29,49 +29,24 @@ _osx: &osx
 jobs:
   include:
 # Build
-    - stage: build
-      <<: *osx
-      env: V=0.16.1
-      script: ./travis.sh build-sans-doc
-    - <<: *linux
-      env: V=0.16.1
-      script: ./travis.sh build-sans-doc
     - <<: *osx
-      env: V=0.17.2
-      script: ./travis.sh build-sans-doc
-    - <<: *linux
-      env: V=0.17.2
-      script: ./travis.sh build-sans-doc
-    - <<: *osx
-      env: V=0.18.0
+      env: BAZEL_VERSION=0.21.0
       script: ./travis.sh build
     - <<: *linux
-      env: V=0.18.0
+      env: BAZEL_VERSION=0.21.0
       script: ./travis.sh build
 # Lint
     - stage: test
       <<: *osx
-      env: V=0.18.0
+      env: BAZEL_VERSION=0.21.0
       script: ./travis.sh lint
     - <<: *linux
-      env: V=0.18.0
+      env: BAZEL_VERSION=0.21.0
       script: ./travis.sh lint
 # Test
     - <<: *osx
-      env: V=0.16.1
+      env: BAZEL_VERSION=0.21.0
       script: ./travis.sh test
     - <<: *linux
-      env: V=0.16.1
-      script: ./travis.sh test
-    - <<: *osx
-      env: V=0.17.2
-      script: ./travis.sh test
-    - <<: *linux
-      env: V=0.17.2
-      script: ./travis.sh test
-    - <<: *osx
-      env: V=0.18.0
-      script: ./travis.sh test
-    - <<: *linux
-      env: V=0.18.0
+      env: BAZEL_VERSION=0.21.0
       script: ./travis.sh test

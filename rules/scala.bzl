@@ -89,7 +89,6 @@ _compile_attributes = {
     "data": attr.label_list(
         doc = "The additional runtime files needed by this library.",
         allow_files = True,
-        cfg = "data",
     ),
     "deps": attr.label_list(
         aspects = [_labeled_jars],
@@ -335,7 +334,6 @@ scala_repl = rule(
             "data": attr.label_list(
                 doc = "The additional runtime files needed by this REPL.",
                 allow_files = True,
-                cfg = "data",
             ),
             "deps": attr.label_list(providers = [JavaInfo]),
             "jvm_flags": attr.string_list(
