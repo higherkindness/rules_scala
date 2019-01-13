@@ -4,7 +4,7 @@
 # Acts as a front end script for use with Travis CI
 #
 
-. ./prepare-path.sh
+. ./scripts/prepare-path.sh
 
 case "$1" in
 

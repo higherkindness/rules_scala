@@ -1,5 +1,6 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
+load("@bazel_tools//tools/build_defs/repo:jvm.bzl", "jvm_maven_import_external")
 load("//3rdparty:maven.bzl", "list_dependencies")
 
 _SRC_FILEGROUP_BUILD_FILE_CONTENT = """
@@ -44,17 +45,23 @@ def scala_repositories():
         url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.1/compiler-bridge_2.12-1.2.1-sources.jar",
     )
 
-    native.maven_jar(
+    jvm_maven_import_external(
         name = "scala_compiler_2_12_8",
         artifact = "org.scala-lang:scala-compiler:2.12.8",
+        licenses = ["notice"],
+        server_urls = ["http://central.maven.org/maven2"],
     )
-    native.maven_jar(
+    jvm_maven_import_external(
         name = "scala_library_2_12_8",
         artifact = "org.scala-lang:scala-library:2.12.8",
+        licenses = ["notice"],
+        server_urls = ["http://central.maven.org/maven2"],
     )
-    native.maven_jar(
+    jvm_maven_import_external(
         name = "scala_reflect_2_12_8",
         artifact = "org.scala-lang:scala-reflect:2.12.8",
+        licenses = ["notice"],
+        server_urls = ["http://central.maven.org/maven2"],
     )
 
 def scala_register_toolchains():
