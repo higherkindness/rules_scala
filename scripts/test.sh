@@ -1,6 +1,11 @@
 #!/bin/bash -e
+
+#
+# Runs the integration test suite.
+#
+
 set -o pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 find tests -name test -type f | sort | while read f; do
     echo running ${f#"tests/"}...

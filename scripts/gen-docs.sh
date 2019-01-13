@@ -1,5 +1,9 @@
 #!/bin/sh -e
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
+
+#
+# Regenerates stardoc for the rules
+#
 
 rm -fr docs/stardoc
 mkdir -p docs/stardoc

@@ -1,5 +1,10 @@
 #!/bin/bash -e
-cd "$(dirname "$0")"
+
+#
+# Sets up required tools, such as bazel-deps and Bazel's buildtools
+#
+
+cd "$(dirname "$0")/.."
 
 BAZEL_OPTS=(
     --disk_cache=../../.bazel_cache

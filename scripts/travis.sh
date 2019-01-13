@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# Acts as a front end script for use with Travis CI
+#
+
 . ./prepare-path.sh
 
 case "$1" in
@@ -13,13 +17,13 @@ case "$1" in
         ;;
 
     "test")
-        ./test.sh
+        ./scripts/test.sh
         ;;
 
     "lint")
-        ./setup-tools.sh --skip-deps
-        ./format.sh check
-        ./gen-docs.sh && git diff --exit-code
+        ./scripts/setup-tools.sh --skip-deps
+        ./scripts/format.sh check
+        ./scripts/gen-docs.sh && git diff --exit-code
         ;;
     "")
         echo "command not specified"

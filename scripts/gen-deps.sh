@@ -1,5 +1,10 @@
 #!/bin/sh -e
-cd "$(dirname "$0")"
+
+#
+# Regenerates the 3rdparty dependency directories using bazel-deps tools
+#
+
+cd "$(dirname "$0")/.."
 
 echo generating dependencies for main workspace
 rm -fr 3rdparty

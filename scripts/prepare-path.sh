@@ -6,7 +6,7 @@
 #
 
 set -o pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 if ! hash bazel >/dev/null 2>&1; then
     echo 'prepare-path: creating one-off bazel launcher'
