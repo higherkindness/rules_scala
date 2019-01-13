@@ -8,7 +8,7 @@ def _emulate_rules_scala_repository_impl(repository_ctx):
     repository_ctx.file(
         "scala/scala.bzl",
         content = _strip_margin("""
-          |load("@rules_scala_annex//rules:rules_scala/private/compat.bzl",
+          |load("@rules_scala_annex//rules/rules_scala:private/compat.bzl",
           |     "scala_library",
           |     "scala_macro_library",
           |     "scala_binary",
@@ -41,11 +41,11 @@ def _emulate_rules_scala_repository_impl(repository_ctx):
     )
 
 emulate_rules_scala_repository = repository_rule(
-    implementation = _emulate_rules_scala_repository_impl,
     attrs = {
         "extra_deps": attr.label_list(default = []),
     },
     local = True,
+    implementation = _emulate_rules_scala_repository_impl,
 )
 
 def emulate_rules_scala(scala, scalatest, extra_deps = []):
