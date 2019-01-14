@@ -27,6 +27,7 @@ workspace=$(find_workspace; pwd)
 if ! [ -f "$workspace/tools/bazel" ]; then
    workspace=$(cd $workspace/..; find_workspace; pwd)
 fi
+(>&2 echo :: exec "$workspace/tools/bazel" "$@")
 exec "$workspace/tools/bazel" "$@"
 EOF
     chmod +x "$runner"

@@ -112,4 +112,5 @@ done
 disk_cache="$root_workspace"/.bazel_cache
 mkdir -p "$disk_cache"
 
+(>&2 echo :: exec "$bazel" "$@")
 exec "$bazel" "$@"
