@@ -23,6 +23,10 @@ find_workspace() {
   fi
 }
 workspace=$(find_workspace; pwd)
+# use parent workspace, if needed
+if ! [ -f "$workspace/tools/bazel" ]; then
+   workspace=$(cd $workspace/..; find_workspace; pwd)
+fi
 exec "$workspace/tools/bazel" "$@"
 EOF
     chmod +x "$runner"
