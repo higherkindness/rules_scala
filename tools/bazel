@@ -82,12 +82,32 @@ if ! [ -f "$bazel" ]; then
     )
 fi
 
+extra_command_args=()
+
+if [ "$workspace" = "$root_workspace" ]; then
+    extra_command_args+=("--config=rules")
+fi
+
 IFS=. read -r major minor patch < <(echo "$bazel_version")
 if [ 0 -le "$major" ]; then
     if [ 21 -le "$minor" ]; then
-        set -- "--bazelrc=$root_workspace/.bazelrc.v0_21" "$@"
+        extra_command_args+=("--config=v0.21")
     fi
 fi
+
+for (( i=1; i<=$#; i++ ))
+do
+    case "${!i}" in
+        -*)
+            echo "$i - ${!i}"
+            ;;
+        *)
+            n=$(($i + 1))
+            set -- "${@:0:$n}" "${extra_command_args[@]}" "${@:$n}"
+            break
+            ;;
+    esac
+done
 
 disk_cache="$root_workspace"/.bazel_cache
 mkdir -p "$disk_cache"
