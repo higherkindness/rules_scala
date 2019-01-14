@@ -7,6 +7,8 @@
 set -o pipefail
 cd "$(dirname "$0")/.."
 
+. ./scripts/prepare-path.sh --force
+
 if [ "$1" != check ]; then
     bazel build $(bazel query 'kind("scala_format_test", //...)')
     bazel query 'kind("scala_format_test", //...)' --output package | while read package; do bazel-bin/"$package"/*-format .; done

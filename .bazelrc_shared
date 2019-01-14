@@ -10,8 +10,8 @@ build --verbose_failures
 
 test  --test_output=all
 
-common:rules --disk_cache=.bazel_cache
-common:tests --disk_cache=../.bazel_cache
+build:rules --disk_cache=.bazel_cache
+build:tests --disk_cache=../.bazel_cache
 
 # bazel 0.21.0
 
@@ -40,3 +40,21 @@ common:rules_v0.21 --incompatible_no_transitive_loads
 common:rules_v0.21 --incompatible_remove_native_maven_jar
 common:rules_v0.21 --incompatible_strict_argument_ordering
 common:rules_v0.21 --incompatible_string_is_not_iterable
+
+# appease docker
+common:tests_v0.21 --incompatible_remove_native_http_archive=false
+
+# route potentially unrouted configs to a terminating noop config
+# it's a noop because we use the default value
+common:rules --config=noop
+common:tests --config=noop
+common:v0.19 --config=noop
+common:v0.20 --config=noop
+common:v0.21 --config=noop
+# future proofing
+common:v0.22 --config=noop
+common:v0.23 --config=noop
+common:v0.24 --config=noop
+
+# pick something trivial as a "noop"
+common:noop --logging=3

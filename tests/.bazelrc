@@ -1,2 +1,3 @@
-#common:v0.21 --config=tests_v0.21 # not currently needed
-import %workspace%/../.shared_bazelrc
+common       --config=tests
+common:v0.21 --config=tests_v0.21
+import %workspace%/../.bazelrc_shared
