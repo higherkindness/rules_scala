@@ -4,7 +4,7 @@
 # Acts as a front end script for use with Travis CI
 #
 
-set -o pipefail
+set -eox pipefail
 cd "$(dirname "$0")/.."
 
 . ./scripts/prepare-path.sh --force
