@@ -1,0 +1,61 @@
+common --announce_rc
+common --color=yes
+
+build --experimental_strict_action_env
+build --javacopt="-source 8 -target 8"
+build --strategy=ScalaCompile=worker
+build --worker_max_instances=4
+build --worker_sandboxing
+build --verbose_failures
+
+test  --test_output=all
+
+build:rules --disk_cache=.bazel_cache
+build:tests --disk_cache=../.bazel_cache
+
+# bazel 0.21.0
+
+# appease io_bazel/third_party/protobuf/3.6.1/protobuf.bzl
+common:v0.21 --incompatible_disable_deprecated_attr_params=false
+
+# most of --all_incompatible_changes expanded
+common:rules_v0.21 --incompatible_bzl_disallow_load_after_statement
+common:rules_v0.21 --incompatible_depset_is_not_iterable
+common:rules_v0.21 --incompatible_depset_union
+common:rules_v0.21 --incompatible_disable_objc_provider_resources
+common:rules_v0.21 --incompatible_disallow_data_transition
+common:rules_v0.21 --incompatible_disallow_dict_plus
+common:rules_v0.21 --incompatible_disallow_filetype
+common:rules_v0.21 --incompatible_disallow_legacy_javainfo
+common:rules_v0.21 --incompatible_disallow_load_labels_to_cross_package_boundaries
+common:rules_v0.21 --incompatible_disallow_old_style_args_add
+common:rules_v0.21 --incompatible_expand_directories
+common:rules_v0.21 --incompatible_generate_javacommon_source_jar
+common:rules_v0.21 --incompatible_new_actions_api
+common:rules_v0.21 --incompatible_no_attr_license
+common:rules_v0.21 --incompatible_no_output_attr_default
+common:rules_v0.21 --incompatible_no_support_tools_in_action_inputs
+common:rules_v0.21 --incompatible_no_target_output_group
+common:rules_v0.21 --incompatible_no_transitive_loads
+common:rules_v0.21 --incompatible_remove_native_maven_jar
+common:rules_v0.21 --incompatible_strict_argument_ordering
+common:rules_v0.21 --incompatible_string_is_not_iterable
+
+# appease docker
+common:tests_v0.21 --incompatible_remove_native_http_archive=false
+common:tests_v0.21 --incompatible_remove_native_git_repository=false
+
+# route potentially unrouted configs to a terminating noop config
+# it's a noop because we use the default value
+common:rules --config=noop
+common:tests --config=noop
+common:v0.19 --config=noop
+common:v0.20 --config=noop
+common:v0.21 --config=noop
+# future proofing
+common:v0.22 --config=noop
+common:v0.23 --config=noop
+common:v0.24 --config=noop
+
+# pick something trivial as a "noop"
+common:noop --logging=3

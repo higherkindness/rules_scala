@@ -1,6 +1,13 @@
 #!/bin/bash -e
+
+#
+# Runs the integration test suite.
+#
+
 set -o pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
+
+. ./scripts/prepare-path.sh --force
 
 find tests -name test -type f | sort | while read f; do
     echo running ${f#"tests/"}...

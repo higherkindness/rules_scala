@@ -2,7 +2,7 @@
 ## declare_scala_configuration
 
 <pre>
-declare_scala_configuration(name, compiler_classpath, global_plugins, runtime_classpath, version)
+declare_scala_configuration(<a href="#declare_scala_configuration-name">name</a>, <a href="#declare_scala_configuration-compiler_classpath">compiler_classpath</a>, <a href="#declare_scala_configuration-global_plugins">global_plugins</a>, <a href="#declare_scala_configuration-runtime_classpath">runtime_classpath</a>, <a href="#declare_scala_configuration-version">version</a>)
 </pre>
 
 Creates a `ScalaConfiguration`.
@@ -15,88 +15,40 @@ Creates a `ScalaConfiguration`.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#declare_scala_configuration_name">
+    <tr id="declare_scala_configuration-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#declare_scala_configuration_compiler_classpath">
+    <tr id="declare_scala_configuration-compiler_classpath">
       <td><code>compiler_classpath</code></td>
       <td>
-        List of labels; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
-    <tr id="#declare_scala_configuration_global_plugins">
+    <tr id="declare_scala_configuration-global_plugins">
       <td><code>global_plugins</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           Scalac plugins that will always be enabled.
         </p>
       </td>
     </tr>
-    <tr id="#declare_scala_configuration_runtime_classpath">
+    <tr id="declare_scala_configuration-runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
-        List of labels; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
-    <tr id="#declare_scala_configuration_version">
+    <tr id="declare_scala_configuration-version">
       <td><code>version</code></td>
       <td>
         String; required
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#reconfigure_deps_configuration"></a>
-## reconfigure_deps_configuration
-
-<pre>
-reconfigure_deps_configuration(name, direct, provider, used)
-</pre>
-
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#reconfigure_deps_configuration_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#reconfigure_deps_configuration_direct">
-      <td><code>direct</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-    <tr id="#reconfigure_deps_configuration_provider">
-      <td><code>provider</code></td>
-      <td>
-        Label; required
-      </td>
-    </tr>
-    <tr id="#reconfigure_deps_configuration_used">
-      <td><code>used</code></td>
-      <td>
-        String; optional
       </td>
     </tr>
   </tbody>
@@ -107,7 +59,7 @@ reconfigure_deps_configuration(name, direct, provider, used)
 ## declare_zinc_configuration
 
 <pre>
-declare_zinc_configuration(name, compiler_bridge)
+declare_zinc_configuration(<a href="#declare_zinc_configuration-name">name</a>, <a href="#declare_zinc_configuration-compiler_bridge">compiler_bridge</a>)
 </pre>
 
 Creates a `ZincConfiguration`.
@@ -120,19 +72,19 @@ Creates a `ZincConfiguration`.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#declare_zinc_configuration_name">
+    <tr id="declare_zinc_configuration-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#declare_zinc_configuration_compiler_bridge">
+    <tr id="declare_zinc_configuration-compiler_bridge">
       <td><code>compiler_bridge</code></td>
       <td>
-        Label; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; required
       </td>
     </tr>
   </tbody>
@@ -143,7 +95,7 @@ Creates a `ZincConfiguration`.
 ## join_configurations
 
 <pre>
-join_configurations(name, configurations)
+join_configurations(<a href="#join_configurations-name">name</a>, <a href="#join_configurations-configurations">configurations</a>)
 </pre>
 
 
@@ -156,31 +108,35 @@ join_configurations(name, configurations)
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#join_configurations_name">
+    <tr id="join_configurations-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#join_configurations_configurations">
+    <tr id="join_configurations-configurations">
       <td><code>configurations</code></td>
       <td>
-        List of labels; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
   </tbody>
 </table>
 
 
-<a name="#ScalaConfiguration"></a>
-## ScalaConfiguration
+<a name="#reconfigure_deps_configuration"></a>
+## reconfigure_deps_configuration
 
-Scala compile-time and runtime configuration
+<pre>
+reconfigure_deps_configuration(<a href="#reconfigure_deps_configuration-name">name</a>, <a href="#reconfigure_deps_configuration-direct">direct</a>, <a href="#reconfigure_deps_configuration-provider">provider</a>, <a href="#reconfigure_deps_configuration-used">used</a>)
+</pre>
 
-### Fields
+
+
+### Attributes
 
 <table class="params-table">
   <colgroup>
@@ -188,86 +144,31 @@ Scala compile-time and runtime configuration
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#ScalaConfiguration_version">
-      <td><code>version</code></td>
+    <tr id="reconfigure_deps_configuration-name">
+      <td><code>name</code></td>
       <td>
-        <p>The Scala full version.</p>
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
+        <p>
+          A unique name for this target.
+        </p>
       </td>
     </tr>
-    <tr id="#ScalaConfiguration_compiler_classpath">
-      <td><code>compiler_classpath</code></td>
+    <tr id="reconfigure_deps_configuration-direct">
+      <td><code>direct</code></td>
       <td>
-        <p>The compiler classpath.</p>
+        String; optional
       </td>
     </tr>
-    <tr id="#ScalaConfiguration_runtime_classpath">
-      <td><code>runtime_classpath</code></td>
+    <tr id="reconfigure_deps_configuration-provider">
+      <td><code>provider</code></td>
       <td>
-        <p>The runtime classpath.</p>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; required
       </td>
     </tr>
-    <tr id="#ScalaConfiguration_global_plugins">
-      <td><code>global_plugins</code></td>
+    <tr id="reconfigure_deps_configuration-used">
+      <td><code>used</code></td>
       <td>
-        <p>Globally enabled compiler plugins</p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#ScalaInfo"></a>
-## ScalaInfo
-
-Scala library.
-
-### Fields
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#ScalaInfo_macro">
-      <td><code>macro</code></td>
-      <td>
-        <p>whether the jar contains macros</p>
-      </td>
-    </tr>
-    <tr id="#ScalaInfo_scala_configuration">
-      <td><code>scala_configuration</code></td>
-      <td>
-        <p>ScalaConfiguration associated with this output</p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#ZincConfiguration"></a>
-## ZincConfiguration
-
-Zinc configuration.
-
-### Fields
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#ZincConfiguration_compiler_bridge">
-      <td><code>compiler_bridge</code></td>
-      <td>
-        <p>compiled Zinc compiler bridge</p>
-      </td>
-    </tr>
-    <tr id="#ZincConfiguration_compile_worker">
-      <td><code>compile_worker</code></td>
-      <td>
-        <p>the worker label for compilation with Zinc</p>
+        String; optional
       </td>
     </tr>
   </tbody>
@@ -276,6 +177,10 @@ Zinc configuration.
 
 <a name="#DepsConfiguration"></a>
 ## DepsConfiguration
+
+<pre>
+DepsConfiguration(<a href="#DepsConfiguration-direct">direct</a>, <a href="#DepsConfiguration-used">used</a>, <a href="#DepsConfiguration-worker">worker</a>)
+</pre>
 
 Dependency checking configuration.
 
@@ -287,19 +192,19 @@ Dependency checking configuration.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#DepsConfiguration_direct">
+    <tr id="DepsConfiguration-direct">
       <td><code>direct</code></td>
       <td>
         <p>either error or off</p>
       </td>
     </tr>
-    <tr id="#DepsConfiguration_used">
+    <tr id="DepsConfiguration-used">
       <td><code>used</code></td>
       <td>
         <p>either error or off</p>
       </td>
     </tr>
-    <tr id="#DepsConfiguration_worker">
+    <tr id="DepsConfiguration-worker">
       <td><code>worker</code></td>
       <td>
         <p>the worker label for checking used/unused deps</p>
@@ -309,78 +214,12 @@ Dependency checking configuration.
 </table>
 
 
-<a name="#ScalaRulePhase"></a>
-## ScalaRulePhase
-
-A Scala compiler plugin
-
-### Fields
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#ScalaRulePhase_phases">
-      <td><code>phases</code></td>
-      <td>
-        <p>the phases to add</p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#ZincInfo"></a>
-## ZincInfo
-
-Zinc-specific outputs.
-
-### Fields
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#ZincInfo_apis">
-      <td><code>apis</code></td>
-      <td>
-        <p>The API file.</p>
-      </td>
-    </tr>
-    <tr id="#ZincInfo_deps">
-      <td><code>deps</code></td>
-      <td>
-        <p>The depset of library dependency outputs.</p>
-      </td>
-    </tr>
-    <tr id="#ZincInfo_deps_files">
-      <td><code>deps_files</code></td>
-      <td>
-        <p>The depset of all Zinc files.</p>
-      </td>
-    </tr>
-    <tr id="#ZincInfo_label">
-      <td><code>label</code></td>
-      <td>
-        <p>The label for this output.</p>
-      </td>
-    </tr>
-    <tr id="#ZincInfo_relations">
-      <td><code>relations</code></td>
-      <td>
-        <p>The relations file.</p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
 <a name="#IntellijInfo"></a>
 ## IntellijInfo
+
+<pre>
+IntellijInfo(<a href="#IntellijInfo-outputs">outputs</a>, <a href="#IntellijInfo-transitive_exports">transitive_exports</a>)
+</pre>
 
 Provider for IntelliJ.
 
@@ -392,13 +231,13 @@ Provider for IntelliJ.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#IntellijInfo_outputs">
+    <tr id="IntellijInfo-outputs">
       <td><code>outputs</code></td>
       <td>
         <p>java_output_jars</p>
       </td>
     </tr>
-    <tr id="#IntellijInfo_transitive_exports">
+    <tr id="IntellijInfo-transitive_exports">
       <td><code>transitive_exports</code></td>
       <td>
         <p>labels of transitive dependencies</p>
@@ -411,6 +250,10 @@ Provider for IntelliJ.
 <a name="#LabeledJars"></a>
 ## LabeledJars
 
+<pre>
+LabeledJars(<a href="#LabeledJars-values">values</a>)
+</pre>
+
 Exported jars and their labels.
 
 ### Fields
@@ -421,10 +264,303 @@ Exported jars and their labels.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#LabeledJars_values">
+    <tr id="LabeledJars-values">
       <td><code>values</code></td>
       <td>
         <p>The preorder depset of label and jars.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#ScalaConfiguration"></a>
+## ScalaConfiguration
+
+<pre>
+ScalaConfiguration(<a href="#ScalaConfiguration-version">version</a>, <a href="#ScalaConfiguration-compiler_classpath">compiler_classpath</a>, <a href="#ScalaConfiguration-runtime_classpath">runtime_classpath</a>, <a href="#ScalaConfiguration-global_plugins">global_plugins</a>)
+</pre>
+
+Scala compile-time and runtime configuration
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="ScalaConfiguration-version">
+      <td><code>version</code></td>
+      <td>
+        <p>The Scala full version.</p>
+      </td>
+    </tr>
+    <tr id="ScalaConfiguration-compiler_classpath">
+      <td><code>compiler_classpath</code></td>
+      <td>
+        <p>The compiler classpath.</p>
+      </td>
+    </tr>
+    <tr id="ScalaConfiguration-runtime_classpath">
+      <td><code>runtime_classpath</code></td>
+      <td>
+        <p>The runtime classpath.</p>
+      </td>
+    </tr>
+    <tr id="ScalaConfiguration-global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        <p>Globally enabled compiler plugins</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#ScalaInfo"></a>
+## ScalaInfo
+
+<pre>
+ScalaInfo(<a href="#ScalaInfo-macro">macro</a>, <a href="#ScalaInfo-scala_configuration">scala_configuration</a>)
+</pre>
+
+Scala library.
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="ScalaInfo-macro">
+      <td><code>macro</code></td>
+      <td>
+        <p>whether the jar contains macros</p>
+      </td>
+    </tr>
+    <tr id="ScalaInfo-scala_configuration">
+      <td><code>scala_configuration</code></td>
+      <td>
+        <p>ScalaConfiguration associated with this output</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#ScalaRulePhase"></a>
+## ScalaRulePhase
+
+<pre>
+ScalaRulePhase(<a href="#ScalaRulePhase-phases">phases</a>)
+</pre>
+
+A Scala compiler plugin
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="ScalaRulePhase-phases">
+      <td><code>phases</code></td>
+      <td>
+        <p>the phases to add</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#ZincConfiguration"></a>
+## ZincConfiguration
+
+<pre>
+ZincConfiguration(<a href="#ZincConfiguration-compiler_bridge">compiler_bridge</a>, <a href="#ZincConfiguration-compile_worker">compile_worker</a>)
+</pre>
+
+Zinc configuration.
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="ZincConfiguration-compiler_bridge">
+      <td><code>compiler_bridge</code></td>
+      <td>
+        <p>compiled Zinc compiler bridge</p>
+      </td>
+    </tr>
+    <tr id="ZincConfiguration-compile_worker">
+      <td><code>compile_worker</code></td>
+      <td>
+        <p>the worker label for compilation with Zinc</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#ZincInfo"></a>
+## ZincInfo
+
+<pre>
+ZincInfo(<a href="#ZincInfo-apis">apis</a>, <a href="#ZincInfo-deps">deps</a>, <a href="#ZincInfo-deps_files">deps_files</a>, <a href="#ZincInfo-label">label</a>, <a href="#ZincInfo-relations">relations</a>)
+</pre>
+
+Zinc-specific outputs.
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="ZincInfo-apis">
+      <td><code>apis</code></td>
+      <td>
+        <p>The API file.</p>
+      </td>
+    </tr>
+    <tr id="ZincInfo-deps">
+      <td><code>deps</code></td>
+      <td>
+        <p>The depset of library dependency outputs.</p>
+      </td>
+    </tr>
+    <tr id="ZincInfo-deps_files">
+      <td><code>deps_files</code></td>
+      <td>
+        <p>The depset of all Zinc files.</p>
+      </td>
+    </tr>
+    <tr id="ZincInfo-label">
+      <td><code>label</code></td>
+      <td>
+        <p>The label for this output.</p>
+      </td>
+    </tr>
+    <tr id="ZincInfo-relations">
+      <td><code>relations</code></td>
+      <td>
+        <p>The relations file.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## _declare_scala_configuration_implementation
+
+<pre>
+_declare_scala_configuration_implementation(<a href="#_declare_scala_configuration_implementation-ctx">ctx</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="_declare_scala_configuration_implementation-ctx>
+      <td><code>ctx</code></td>
+      <td>
+        required.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## _declare_zinc_configuration_implementation
+
+<pre>
+_declare_zinc_configuration_implementation(<a href="#_declare_zinc_configuration_implementation-ctx">ctx</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="_declare_zinc_configuration_implementation-ctx>
+      <td><code>ctx</code></td>
+      <td>
+        required.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## _join_configurations_implementation
+
+<pre>
+_join_configurations_implementation(<a href="#_join_configurations_implementation-ctx">ctx</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="_join_configurations_implementation-ctx>
+      <td><code>ctx</code></td>
+      <td>
+        required.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## _reconfigure_deps_configuration_implementation
+
+<pre>
+_reconfigure_deps_configuration_implementation(<a href="#_reconfigure_deps_configuration_implementation-ctx">ctx</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="_reconfigure_deps_configuration_implementation-ctx>
+      <td><code>ctx</code></td>
+      <td>
+        required.
       </td>
     </tr>
   </tbody>

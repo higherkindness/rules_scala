@@ -1,6 +1,13 @@
 #!/bin/bash -e
+
+#
+# Reformats various files (.bzl, .scala) throughout the project
+#
+
 set -o pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
+
+. ./scripts/prepare-path.sh --force
 
 if [ "$1" != check ]; then
     bazel build $(bazel query 'kind("scala_format_test", //...)')

@@ -17,12 +17,14 @@ load(
     _scala_test = "scala_test",
 )
 load(
-    "//rules:common/private/utils.bzl",
+    "//rules/common:private/utils.bzl",
     _safe_name = "safe_name",
 )
 
 _extra_deps = ["//external:scala_annex/compat/rules_scala/extra_deps"]
+
 _scala = "//external:scala_annex/compat/rules_scala/scala"
+
 _scalatest_deps = ["//external:scala_annex/compat/rules_scala/scalatest_dep"]
 
 def scala_library(
@@ -76,15 +78,15 @@ def scala_library(
     _scala_library(
         name = name,
         srcs = srcs,
-        deps = deps + _extra_deps,
         deps_used_whitelist = _extra_deps,
         macro = not _use_ijar,
-        runtime_deps = runtime_deps,
-        exports = exports,
         scala = _scala,
         scalacopts = scalacopts,
         tags = tags,
         visibility = visibility,
+        exports = exports,
+        runtime_deps = runtime_deps,
+        deps = deps + _extra_deps,
     )
 
 def scala_macro_library(
@@ -186,14 +188,14 @@ def scala_binary(
     scala_compiler_deps = [] if _scala in deps else [_scala]
     _scala_binary(
         name = name,
-        main_class = main_class,
         srcs = srcs,
-        deps = deps + _extra_deps,
         deps_used_whitelist = _extra_deps,
         macro = not _use_ijar,
-        runtime_deps = runtime_deps,
+        main_class = main_class,
         scala = _scala,
         tags = tags,
+        runtime_deps = runtime_deps,
+        deps = deps + _extra_deps,
     )
 
 def scala_test(
@@ -256,13 +258,13 @@ def scala_test(
     _scala_test(
         name = name,
         srcs = srcs,
-        deps = deps + _scalatest_deps + _extra_deps,
         deps_used_whitelist = _extra_deps,
+        frameworks = ["org.scalatest.tools.Framework"],
         macro = not _use_ijar,
-        runtime_deps = runtime_deps,
         scala = _scala,
         tags = tags,
-        frameworks = ["org.scalatest.tools.Framework"],
+        runtime_deps = runtime_deps,
+        deps = deps + _scalatest_deps + _extra_deps,
     )
 
 def scala_test_suite(
@@ -283,16 +285,16 @@ def scala_test_suite(
         test_name = "%s_test_suite_%s" % (name, _safe_name(src))
         scala_test(
             name = test_name,
-            srcs = [src],
-            deps = deps,
-            runtime_deps = runtime_deps,
-            resources = resources,
-            scalacopts = scalacopts,
-            jvm_flags = jvm_flags,
-            visibility = visibility,
             size = size,
+            srcs = [src],
             colors = colors,
             full_stacktraces = full_stacktraces,
+            jvm_flags = jvm_flags,
+            resources = resources,
+            scalacopts = scalacopts,
+            visibility = visibility,
+            runtime_deps = runtime_deps,
+            deps = deps,
         )
         tests.append(test_name)
 

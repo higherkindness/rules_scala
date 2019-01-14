@@ -45,7 +45,8 @@ def build_format(ctx):
                 executable = ctx.executable._fmt,
                 outputs = [file],
                 input_manifests = runner_manifests,
-                inputs = runner_inputs + [ctx.file.config, src],
+                inputs = [ctx.file.config, src],
+                tools = runner_inputs,
                 execution_requirements = {"supports-workers": "1"},
                 mnemonic = "ScalaFmt",
             )

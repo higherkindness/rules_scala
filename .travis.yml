@@ -12,10 +12,8 @@ addons:
 
 cache:
     directories:
-     - .bazel_cache
-
-before_install:
-  - ./travis.sh install-bazel
+      - ~/.bazel_binaries
+      - .bazel_cache
 
 # some could be global, but these are OS-specific and ought not to be included
 # in the UI or the cache key
@@ -31,47 +29,23 @@ jobs:
 # Build
     - stage: build
       <<: *osx
-      env: V=0.16.1
-      script: ./travis.sh build-sans-doc
+      env: BAZEL_VERSION=0.21.0
+      script: ./scripts/travis.sh build
     - <<: *linux
-      env: V=0.16.1
-      script: ./travis.sh build-sans-doc
-    - <<: *osx
-      env: V=0.17.2
-      script: ./travis.sh build-sans-doc
-    - <<: *linux
-      env: V=0.17.2
-      script: ./travis.sh build-sans-doc
-    - <<: *osx
-      env: V=0.18.0
-      script: ./travis.sh build
-    - <<: *linux
-      env: V=0.18.0
-      script: ./travis.sh build
+      env: BAZEL_VERSION=0.21.0
+      script: ./scripts/travis.sh build
 # Lint
     - stage: test
       <<: *osx
-      env: V=0.18.0
-      script: ./travis.sh lint
+      env: BAZEL_VERSION=0.21.0
+      script: ./scripts/travis.sh lint
     - <<: *linux
-      env: V=0.18.0
-      script: ./travis.sh lint
+      env: BAZEL_VERSION=0.21.0
+      script: ./scripts/travis.sh lint
 # Test
     - <<: *osx
-      env: V=0.16.1
-      script: ./travis.sh test
+      env: BAZEL_VERSION=0.21.0
+      script: ./scripts/travis.sh test
     - <<: *linux
-      env: V=0.16.1
-      script: ./travis.sh test
-    - <<: *osx
-      env: V=0.17.2
-      script: ./travis.sh test
-    - <<: *linux
-      env: V=0.17.2
-      script: ./travis.sh test
-    - <<: *osx
-      env: V=0.18.0
-      script: ./travis.sh test
-    - <<: *linux
-      env: V=0.18.0
-      script: ./travis.sh test
+      env: BAZEL_VERSION=0.21.0
+      script: ./scripts/travis.sh test

@@ -1,12 +1,13 @@
 workspace(name = "rules_scala_annex")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 http_archive(
     name = "io_bazel",
-    sha256 = "148d03ea395901052dc3d8a54bf04c02bb229b20f89d654047b426d56ef5f188",
-    strip_prefix = "bazel-6595aefe2b3a755dd0c795e20cbf67f60a56528c",
-    urls = ["https://github.com/bazelbuild/bazel/archive/6595aefe2b3a755dd0c795e20cbf67f60a56528c.zip"],
+    sha256 = "f44ad96857209fe76d7321185d1b9ad6861a469752432ffaccaf838858708cdf",
+    strip_prefix = "bazel-defd737761be2b154908646121de47c30434ed51",
+    urls = ["https://github.com/bazelbuild/bazel/archive/defd737761be2b154908646121de47c30434ed51.zip"],
 )
 
 http_archive(
@@ -16,11 +17,10 @@ http_archive(
     urls = ["https://github.com/bazelbuild/skydoc/archive/77e5399258f6d91417d23634fce97d73b40cf337.zip"],
 )
 
-http_archive(
+git_repository(
     name = "bazel_skylib",
-    sha256 = "d54e5372d784ceb365f7d38c3dad7773f73b3b8ebc8fb90d58435a92b6a20256",
-    strip_prefix = "bazel-skylib-8cecf885c8bf4c51e82fd6b50b9dd68d2c98f757",
-    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/8cecf885c8bf4c51e82fd6b50b9dd68d2c98f757.zip"],
+    remote = "https://github.com/bazelbuild/bazel-skylib.git",
+    tag = "0.6.0",
 )
 
 http_archive(

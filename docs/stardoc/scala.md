@@ -1,11 +1,11 @@
-<a name="#scala_library"></a>
-## scala_library
+<a name="#configure_bootstrap_scala"></a>
+## configure_bootstrap_scala
 
 <pre>
-scala_library(name, data, deps, deps_used_whitelist, exports, javacopts, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
+configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a href="#configure_bootstrap_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_bootstrap_scala-global_plugins">global_plugins</a>, <a href="#configure_bootstrap_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_bootstrap_scala-version">version</a>)
 </pre>
 
-Compiles a Scala JVM library.
+
 
 ### Attributes
 
@@ -15,148 +15,115 @@ Compiles a Scala JVM library.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#scala_library_name">
+    <tr id="configure_bootstrap_scala-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#scala_library_data">
-      <td><code>data</code></td>
+    <tr id="configure_bootstrap_scala-compiler_classpath">
+      <td><code>compiler_classpath</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
+      </td>
+    </tr>
+    <tr id="configure_bootstrap_scala-global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
-          The additional runtime files needed by this library.
+          Scalac plugins that will always be enabled.
         </p>
       </td>
     </tr>
-    <tr id="#scala_library_deps">
-      <td><code>deps</code></td>
+    <tr id="configure_bootstrap_scala-runtime_classpath">
+      <td><code>runtime_classpath</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
+      </td>
+    </tr>
+    <tr id="configure_bootstrap_scala-version">
+      <td><code>version</code></td>
+      <td>
+        String; required
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#configure_zinc_scala"></a>
+## configure_zinc_scala
+
+<pre>
+configure_zinc_scala(<a href="#configure_zinc_scala-name">name</a>, <a href="#configure_zinc_scala-compiler_bridge">compiler_bridge</a>, <a href="#configure_zinc_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_zinc_scala-deps_direct">deps_direct</a>, <a href="#configure_zinc_scala-deps_used">deps_used</a>, <a href="#configure_zinc_scala-global_plugins">global_plugins</a>, <a href="#configure_zinc_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_zinc_scala-version">version</a>)
+</pre>
+
+
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="configure_zinc_scala-name">
+      <td><code>name</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
-          The JVM library dependencies.
+          A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#scala_library_deps_used_whitelist">
-      <td><code>deps_used_whitelist</code></td>
+    <tr id="configure_zinc_scala-compiler_bridge">
+      <td><code>compiler_bridge</code></td>
       <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies to always consider used for `scala_deps_used` checks.
-        </p>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; required
       </td>
     </tr>
-    <tr id="#scala_library_exports">
-      <td><code>exports</code></td>
+    <tr id="configure_zinc_scala-compiler_classpath">
+      <td><code>compiler_classpath</code></td>
       <td>
-        List of labels; optional
-        <p>
-          The JVM libraries to add as dependencies to any libraries dependent on this one.
-        </p>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
-    <tr id="#scala_library_javacopts">
-      <td><code>javacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Javac options.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_macro">
-      <td><code>macro</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library provides macros.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_neverlink">
-      <td><code>neverlink</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library should be excluded at runtime.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_plugins">
-      <td><code>plugins</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The Scalac plugins.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_resource_jars">
-      <td><code>resource_jars</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JARs to merge into the output JAR.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_resource_strip_prefix">
-      <td><code>resource_strip_prefix</code></td>
+    <tr id="configure_zinc_scala-deps_direct">
+      <td><code>deps_direct</code></td>
       <td>
         String; optional
+      </td>
+    </tr>
+    <tr id="configure_zinc_scala-deps_used">
+      <td><code>deps_used</code></td>
+      <td>
+        String; optional
+      </td>
+    </tr>
+    <tr id="configure_zinc_scala-global_plugins">
+      <td><code>global_plugins</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
-          The path prefix to strip from classpath resources.
+          Scalac plugins that will always be enabled.
         </p>
       </td>
     </tr>
-    <tr id="#scala_library_resources">
-      <td><code>resources</code></td>
+    <tr id="configure_zinc_scala-runtime_classpath">
+      <td><code>runtime_classpath</code></td>
       <td>
-        List of labels; optional
-        <p>
-          The files to include as classpath resources.
-        </p>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
-    <tr id="#scala_library_runtime_deps">
-      <td><code>runtime_deps</code></td>
+    <tr id="configure_zinc_scala-version">
+      <td><code>version</code></td>
       <td>
-        List of labels; optional
-        <p>
-          The JVM runtime-only library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_scala">
-      <td><code>scala</code></td>
-      <td>
-        Label; optional
-        <p>
-          The `ScalaConfiguration`.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_scalacopts">
-      <td><code>scalacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Scalac options.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_library_srcs">
-      <td><code>srcs</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The source Scala and Java files (and `.srcjar` files of those).
-        </p>
+        String; required
       </td>
     </tr>
   </tbody>
@@ -167,7 +134,7 @@ Compiles a Scala JVM library.
 ## scala_binary
 
 <pre>
-scala_binary(name, data, deps, deps_used_whitelist, exports, javacopts, jvm_flags, macro, main_class, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runtime_deps, scala, scalacopts, srcs)
+scala_binary(<a href="#scala_binary-name">name</a>, <a href="#scala_binary-data">data</a>, <a href="#scala_binary-deps">deps</a>, <a href="#scala_binary-deps_used_whitelist">deps_used_whitelist</a>, <a href="#scala_binary-exports">exports</a>, <a href="#scala_binary-javacopts">javacopts</a>, <a href="#scala_binary-jvm_flags">jvm_flags</a>, <a href="#scala_binary-macro">macro</a>, <a href="#scala_binary-main_class">main_class</a>, <a href="#scala_binary-neverlink">neverlink</a>, <a href="#scala_binary-plugins">plugins</a>, <a href="#scala_binary-resource_jars">resource_jars</a>, <a href="#scala_binary-resource_strip_prefix">resource_strip_prefix</a>, <a href="#scala_binary-resources">resources</a>, <a href="#scala_binary-runtime_deps">runtime_deps</a>, <a href="#scala_binary-scala">scala</a>, <a href="#scala_binary-scalacopts">scalacopts</a>, <a href="#scala_binary-srcs">srcs</a>)
 </pre>
 
 Compiles and links a Scala JVM executable.
@@ -180,52 +147,52 @@ Compiles and links a Scala JVM executable.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#scala_binary_name">
+    <tr id="scala_binary-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_data">
+    <tr id="scala_binary-data">
       <td><code>data</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The additional runtime files needed by this library.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_deps">
+    <tr id="scala_binary-deps">
       <td><code>deps</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The JVM library dependencies.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_deps_used_whitelist">
+    <tr id="scala_binary-deps_used_whitelist">
       <td><code>deps_used_whitelist</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The JVM library dependencies to always consider used for `scala_deps_used` checks.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_exports">
+    <tr id="scala_binary-exports">
       <td><code>exports</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The JVM libraries to add as dependencies to any libraries dependent on this one.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_javacopts">
+    <tr id="scala_binary-javacopts">
       <td><code>javacopts</code></td>
       <td>
         List of strings; optional
@@ -234,7 +201,7 @@ Compiles and links a Scala JVM executable.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_jvm_flags">
+    <tr id="scala_binary-jvm_flags">
       <td><code>jvm_flags</code></td>
       <td>
         List of strings; optional
@@ -243,7 +210,7 @@ Compiles and links a Scala JVM executable.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_macro">
+    <tr id="scala_binary-macro">
       <td><code>macro</code></td>
       <td>
         Boolean; optional
@@ -252,7 +219,7 @@ Compiles and links a Scala JVM executable.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_main_class">
+    <tr id="scala_binary-main_class">
       <td><code>main_class</code></td>
       <td>
         String; optional
@@ -261,7 +228,7 @@ Compiles and links a Scala JVM executable.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_neverlink">
+    <tr id="scala_binary-neverlink">
       <td><code>neverlink</code></td>
       <td>
         Boolean; optional
@@ -270,25 +237,25 @@ Compiles and links a Scala JVM executable.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_plugins">
+    <tr id="scala_binary-plugins">
       <td><code>plugins</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The Scalac plugins.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_resource_jars">
+    <tr id="scala_binary-resource_jars">
       <td><code>resource_jars</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The JARs to merge into the output JAR.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_resource_strip_prefix">
+    <tr id="scala_binary-resource_strip_prefix">
       <td><code>resource_strip_prefix</code></td>
       <td>
         String; optional
@@ -297,34 +264,34 @@ Compiles and links a Scala JVM executable.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_resources">
+    <tr id="scala_binary-resources">
       <td><code>resources</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The files to include as classpath resources.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_runtime_deps">
+    <tr id="scala_binary-runtime_deps">
       <td><code>runtime_deps</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The JVM runtime-only library dependencies.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_scala">
+    <tr id="scala_binary-scala">
       <td><code>scala</code></td>
       <td>
-        Label; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
         <p>
           The `ScalaConfiguration`.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_scalacopts">
+    <tr id="scala_binary-scalacopts">
       <td><code>scalacopts</code></td>
       <td>
         List of strings; optional
@@ -333,291 +300,12 @@ Compiles and links a Scala JVM executable.
         </p>
       </td>
     </tr>
-    <tr id="#scala_binary_srcs">
+    <tr id="scala_binary-srcs">
       <td><code>srcs</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           The source Scala and Java files (and `.srcjar` files of those).
-        </p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#scala_test"></a>
-## scala_test
-
-<pre>
-scala_test(name, data, deps, deps_used_whitelist, exports, frameworks, isolation, javacopts, jvm_flags, macro, neverlink, plugins, resource_jars, resource_strip_prefix, resources, runner, runtime_deps, scala, scalacopts, shared_deps, srcs, subprocess_runner)
-</pre>
-
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#scala_test_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_data">
-      <td><code>data</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The additional runtime files needed by this library.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_deps">
-      <td><code>deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_deps_used_whitelist">
-      <td><code>deps_used_whitelist</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM library dependencies to always consider used for `scala_deps_used` checks.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_exports">
-      <td><code>exports</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM libraries to add as dependencies to any libraries dependent on this one.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_frameworks">
-      <td><code>frameworks</code></td>
-      <td>
-        List of strings; optional
-      </td>
-    </tr>
-    <tr id="#scala_test_isolation">
-      <td><code>isolation</code></td>
-      <td>
-        String; optional
-        <p>
-          The isolation level to apply
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_javacopts">
-      <td><code>javacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Javac options.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_jvm_flags">
-      <td><code>jvm_flags</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The JVM runtime flags.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_macro">
-      <td><code>macro</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library provides macros.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_neverlink">
-      <td><code>neverlink</code></td>
-      <td>
-        Boolean; optional
-        <p>
-          Whether this library should be excluded at runtime.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_plugins">
-      <td><code>plugins</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The Scalac plugins.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_resource_jars">
-      <td><code>resource_jars</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JARs to merge into the output JAR.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_resource_strip_prefix">
-      <td><code>resource_strip_prefix</code></td>
-      <td>
-        String; optional
-        <p>
-          The path prefix to strip from classpath resources.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_resources">
-      <td><code>resources</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The files to include as classpath resources.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_runner">
-      <td><code>runner</code></td>
-      <td>
-        Label; optional
-      </td>
-    </tr>
-    <tr id="#scala_test_runtime_deps">
-      <td><code>runtime_deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The JVM runtime-only library dependencies.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_scala">
-      <td><code>scala</code></td>
-      <td>
-        Label; optional
-        <p>
-          The `ScalaConfiguration`.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_scalacopts">
-      <td><code>scalacopts</code></td>
-      <td>
-        List of strings; optional
-      </td>
-    </tr>
-    <tr id="#scala_test_shared_deps">
-      <td><code>shared_deps</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          If isolation is "classloader", the list of deps to keep loaded between tests
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_srcs">
-      <td><code>srcs</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The source Scala and Java files (and `.srcjar` files of those).
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_test_subprocess_runner">
-      <td><code>subprocess_runner</code></td>
-      <td>
-        Label; optional
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#scala_repl"></a>
-## scala_repl
-
-<pre>
-scala_repl(name, data, deps, jvm_flags, scala, scalacopts)
-</pre>
-
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#scala_repl_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_repl_data">
-      <td><code>data</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          The additional runtime files needed by this REPL.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_repl_deps">
-      <td><code>deps</code></td>
-      <td>
-        List of labels; optional
-      </td>
-    </tr>
-    <tr id="#scala_repl_jvm_flags">
-      <td><code>jvm_flags</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The JVM runtime flags.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_repl_scala">
-      <td><code>scala</code></td>
-      <td>
-        Label; optional
-        <p>
-          The `ScalaConfiguration`.
-        </p>
-      </td>
-    </tr>
-    <tr id="#scala_repl_scalacopts">
-      <td><code>scalacopts</code></td>
-      <td>
-        List of strings; optional
-        <p>
-          The Scalac options.
         </p>
       </td>
     </tr>
@@ -629,7 +317,7 @@ scala_repl(name, data, deps, jvm_flags, scala, scalacopts)
 ## scala_import
 
 <pre>
-scala_import(name, deps, exports, jars, neverlink, runtime_deps, srcjar)
+scala_import(<a href="#scala_import-name">name</a>, <a href="#scala_import-deps">deps</a>, <a href="#scala_import-exports">exports</a>, <a href="#scala_import-jars">jars</a>, <a href="#scala_import-neverlink">neverlink</a>, <a href="#scala_import-runtime_deps">runtime_deps</a>, <a href="#scala_import-srcjar">srcjar</a>)
 </pre>
 
 
@@ -646,49 +334,493 @@ Use this only for libraries with macros. Otherwise, use `java_import`.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#scala_import_name">
+    <tr id="scala_import-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#scala_import_deps">
+    <tr id="scala_import-deps">
       <td><code>deps</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
       </td>
     </tr>
-    <tr id="#scala_import_exports">
+    <tr id="scala_import-exports">
       <td><code>exports</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
       </td>
     </tr>
-    <tr id="#scala_import_jars">
+    <tr id="scala_import-jars">
       <td><code>jars</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
       </td>
     </tr>
-    <tr id="#scala_import_neverlink">
+    <tr id="scala_import-neverlink">
       <td><code>neverlink</code></td>
       <td>
         Boolean; optional
       </td>
     </tr>
-    <tr id="#scala_import_runtime_deps">
+    <tr id="scala_import-runtime_deps">
       <td><code>runtime_deps</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
       </td>
     </tr>
-    <tr id="#scala_import_srcjar">
+    <tr id="scala_import-srcjar">
       <td><code>srcjar</code></td>
       <td>
-        Label; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#scala_library"></a>
+## scala_library
+
+<pre>
+scala_library(<a href="#scala_library-name">name</a>, <a href="#scala_library-data">data</a>, <a href="#scala_library-deps">deps</a>, <a href="#scala_library-deps_used_whitelist">deps_used_whitelist</a>, <a href="#scala_library-exports">exports</a>, <a href="#scala_library-javacopts">javacopts</a>, <a href="#scala_library-macro">macro</a>, <a href="#scala_library-neverlink">neverlink</a>, <a href="#scala_library-plugins">plugins</a>, <a href="#scala_library-resource_jars">resource_jars</a>, <a href="#scala_library-resource_strip_prefix">resource_strip_prefix</a>, <a href="#scala_library-resources">resources</a>, <a href="#scala_library-runtime_deps">runtime_deps</a>, <a href="#scala_library-scala">scala</a>, <a href="#scala_library-scalacopts">scalacopts</a>, <a href="#scala_library-srcs">srcs</a>)
+</pre>
+
+Compiles a Scala JVM library.
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="scala_library-name">
+      <td><code>name</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
+        <p>
+          A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-data">
+      <td><code>data</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The additional runtime files needed by this library.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-deps">
+      <td><code>deps</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-deps_used_whitelist">
+      <td><code>deps_used_whitelist</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM library dependencies to always consider used for `scala_deps_used` checks.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-exports">
+      <td><code>exports</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM libraries to add as dependencies to any libraries dependent on this one.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-javacopts">
+      <td><code>javacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Javac options.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-macro">
+      <td><code>macro</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library provides macros.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-neverlink">
+      <td><code>neverlink</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library should be excluded at runtime.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-plugins">
+      <td><code>plugins</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The Scalac plugins.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-resource_jars">
+      <td><code>resource_jars</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JARs to merge into the output JAR.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-resource_strip_prefix">
+      <td><code>resource_strip_prefix</code></td>
+      <td>
+        String; optional
+        <p>
+          The path prefix to strip from classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-resources">
+      <td><code>resources</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The files to include as classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-runtime_deps">
+      <td><code>runtime_deps</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM runtime-only library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-scala">
+      <td><code>scala</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+        <p>
+          The `ScalaConfiguration`.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-scalacopts">
+      <td><code>scalacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Scalac options.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_library-srcs">
+      <td><code>srcs</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The source Scala and Java files (and `.srcjar` files of those).
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#scala_repl"></a>
+## scala_repl
+
+<pre>
+scala_repl(<a href="#scala_repl-name">name</a>, <a href="#scala_repl-data">data</a>, <a href="#scala_repl-deps">deps</a>, <a href="#scala_repl-jvm_flags">jvm_flags</a>, <a href="#scala_repl-scala">scala</a>, <a href="#scala_repl-scalacopts">scalacopts</a>)
+</pre>
+
+
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="scala_repl-name">
+      <td><code>name</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
+        <p>
+          A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_repl-data">
+      <td><code>data</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The additional runtime files needed by this REPL.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_repl-deps">
+      <td><code>deps</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+      </td>
+    </tr>
+    <tr id="scala_repl-jvm_flags">
+      <td><code>jvm_flags</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The JVM runtime flags.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_repl-scala">
+      <td><code>scala</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+        <p>
+          The `ScalaConfiguration`.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_repl-scalacopts">
+      <td><code>scalacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Scalac options.
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<a name="#scala_test"></a>
+## scala_test
+
+<pre>
+scala_test(<a href="#scala_test-name">name</a>, <a href="#scala_test-data">data</a>, <a href="#scala_test-deps">deps</a>, <a href="#scala_test-deps_used_whitelist">deps_used_whitelist</a>, <a href="#scala_test-exports">exports</a>, <a href="#scala_test-frameworks">frameworks</a>, <a href="#scala_test-isolation">isolation</a>, <a href="#scala_test-javacopts">javacopts</a>, <a href="#scala_test-jvm_flags">jvm_flags</a>, <a href="#scala_test-macro">macro</a>, <a href="#scala_test-neverlink">neverlink</a>, <a href="#scala_test-plugins">plugins</a>, <a href="#scala_test-resource_jars">resource_jars</a>, <a href="#scala_test-resource_strip_prefix">resource_strip_prefix</a>, <a href="#scala_test-resources">resources</a>, <a href="#scala_test-runner">runner</a>, <a href="#scala_test-runtime_deps">runtime_deps</a>, <a href="#scala_test-scala">scala</a>, <a href="#scala_test-scalacopts">scalacopts</a>, <a href="#scala_test-shared_deps">shared_deps</a>, <a href="#scala_test-srcs">srcs</a>, <a href="#scala_test-subprocess_runner">subprocess_runner</a>)
+</pre>
+
+
+
+### Attributes
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="scala_test-name">
+      <td><code>name</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
+        <p>
+          A unique name for this target.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-data">
+      <td><code>data</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The additional runtime files needed by this library.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-deps">
+      <td><code>deps</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-deps_used_whitelist">
+      <td><code>deps_used_whitelist</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM library dependencies to always consider used for `scala_deps_used` checks.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-exports">
+      <td><code>exports</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM libraries to add as dependencies to any libraries dependent on this one.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-frameworks">
+      <td><code>frameworks</code></td>
+      <td>
+        List of strings; optional
+      </td>
+    </tr>
+    <tr id="scala_test-isolation">
+      <td><code>isolation</code></td>
+      <td>
+        String; optional
+        <p>
+          The isolation level to apply
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-javacopts">
+      <td><code>javacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The Javac options.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-jvm_flags">
+      <td><code>jvm_flags</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          The JVM runtime flags.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-macro">
+      <td><code>macro</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library provides macros.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-neverlink">
+      <td><code>neverlink</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether this library should be excluded at runtime.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-plugins">
+      <td><code>plugins</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The Scalac plugins.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-resource_jars">
+      <td><code>resource_jars</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JARs to merge into the output JAR.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-resource_strip_prefix">
+      <td><code>resource_strip_prefix</code></td>
+      <td>
+        String; optional
+        <p>
+          The path prefix to strip from classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-resources">
+      <td><code>resources</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The files to include as classpath resources.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-runner">
+      <td><code>runner</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+      </td>
+    </tr>
+    <tr id="scala_test-runtime_deps">
+      <td><code>runtime_deps</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The JVM runtime-only library dependencies.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-scala">
+      <td><code>scala</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
+        <p>
+          The `ScalaConfiguration`.
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-scalacopts">
+      <td><code>scalacopts</code></td>
+      <td>
+        List of strings; optional
+      </td>
+    </tr>
+    <tr id="scala_test-shared_deps">
+      <td><code>shared_deps</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          If isolation is "classloader", the list of deps to keep loaded between tests
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-srcs">
+      <td><code>srcs</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
+        <p>
+          The source Scala and Java files (and `.srcjar` files of those).
+        </p>
+      </td>
+    </tr>
+    <tr id="scala_test-subprocess_runner">
+      <td><code>subprocess_runner</code></td>
+      <td>
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
       </td>
     </tr>
   </tbody>
@@ -699,7 +831,7 @@ Use this only for libraries with macros. Otherwise, use `java_import`.
 ## scaladoc
 
 <pre>
-scaladoc(name, compiler_deps, deps, scala, scalacopts, srcs, title)
+scaladoc(<a href="#scaladoc-name">name</a>, <a href="#scaladoc-compiler_deps">compiler_deps</a>, <a href="#scaladoc-deps">deps</a>, <a href="#scaladoc-scala">scala</a>, <a href="#scaladoc-scalacopts">scalacopts</a>, <a href="#scaladoc-srcs">srcs</a>, <a href="#scaladoc-title">title</a>)
 </pre>
 
 
@@ -714,181 +846,49 @@ Generates Scaladocs.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#scaladoc_name">
+    <tr id="scaladoc-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#scaladoc_compiler_deps">
+    <tr id="scaladoc-compiler_deps">
       <td><code>compiler_deps</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
       </td>
     </tr>
-    <tr id="#scaladoc_deps">
+    <tr id="scaladoc-deps">
       <td><code>deps</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
       </td>
     </tr>
-    <tr id="#scaladoc_scala">
+    <tr id="scaladoc-scala">
       <td><code>scala</code></td>
       <td>
-        Label; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; optional
       </td>
     </tr>
-    <tr id="#scaladoc_scalacopts">
+    <tr id="scaladoc-scalacopts">
       <td><code>scalacopts</code></td>
       <td>
         List of strings; optional
       </td>
     </tr>
-    <tr id="#scaladoc_srcs">
+    <tr id="scaladoc-srcs">
       <td><code>srcs</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
       </td>
     </tr>
-    <tr id="#scaladoc_title">
+    <tr id="scaladoc-title">
       <td><code>title</code></td>
       <td>
         String; optional
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#configure_bootstrap_scala"></a>
-## configure_bootstrap_scala
-
-<pre>
-configure_bootstrap_scala(name, compiler_classpath, global_plugins, runtime_classpath, version)
-</pre>
-
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#configure_bootstrap_scala_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#configure_bootstrap_scala_compiler_classpath">
-      <td><code>compiler_classpath</code></td>
-      <td>
-        List of labels; required
-      </td>
-    </tr>
-    <tr id="#configure_bootstrap_scala_global_plugins">
-      <td><code>global_plugins</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          Scalac plugins that will always be enabled.
-        </p>
-      </td>
-    </tr>
-    <tr id="#configure_bootstrap_scala_runtime_classpath">
-      <td><code>runtime_classpath</code></td>
-      <td>
-        List of labels; required
-      </td>
-    </tr>
-    <tr id="#configure_bootstrap_scala_version">
-      <td><code>version</code></td>
-      <td>
-        String; required
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#configure_zinc_scala"></a>
-## configure_zinc_scala
-
-<pre>
-configure_zinc_scala(name, compiler_bridge, compiler_classpath, deps_direct, deps_used, global_plugins, runtime_classpath, version)
-</pre>
-
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="#configure_zinc_scala_name">
-      <td><code>name</code></td>
-      <td>
-        String; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="#configure_zinc_scala_compiler_bridge">
-      <td><code>compiler_bridge</code></td>
-      <td>
-        Label; required
-      </td>
-    </tr>
-    <tr id="#configure_zinc_scala_compiler_classpath">
-      <td><code>compiler_classpath</code></td>
-      <td>
-        List of labels; required
-      </td>
-    </tr>
-    <tr id="#configure_zinc_scala_deps_direct">
-      <td><code>deps_direct</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-    <tr id="#configure_zinc_scala_deps_used">
-      <td><code>deps_used</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-    <tr id="#configure_zinc_scala_global_plugins">
-      <td><code>global_plugins</code></td>
-      <td>
-        List of labels; optional
-        <p>
-          Scalac plugins that will always be enabled.
-        </p>
-      </td>
-    </tr>
-    <tr id="#configure_zinc_scala_runtime_classpath">
-      <td><code>runtime_classpath</code></td>
-      <td>
-        List of labels; required
-      </td>
-    </tr>
-    <tr id="#configure_zinc_scala_version">
-      <td><code>version</code></td>
-      <td>
-        String; required
       </td>
     </tr>
   </tbody>
@@ -899,7 +899,7 @@ configure_zinc_scala(name, compiler_bridge, compiler_classpath, deps_direct, dep
 ## <unknown name>
 
 <pre>
-<unknown name>(name, direct, provider, used)
+<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-direct">direct</a>, <a href="#<unknown name>-provider">provider</a>, <a href="#<unknown name>-used">used</a>)
 </pre>
 
 
@@ -912,28 +912,28 @@ configure_zinc_scala(name, compiler_bridge, compiler_classpath, deps_direct, dep
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#<unknown name>_name">
+    <tr id="<unknown name>-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#<unknown name>_direct">
+    <tr id="<unknown name>-direct">
       <td><code>direct</code></td>
       <td>
         String; optional
       </td>
     </tr>
-    <tr id="#<unknown name>_provider">
+    <tr id="<unknown name>-provider">
       <td><code>provider</code></td>
       <td>
-        Label; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; required
       </td>
     </tr>
-    <tr id="#<unknown name>_used">
+    <tr id="<unknown name>-used">
       <td><code>used</code></td>
       <td>
         String; optional
@@ -947,7 +947,7 @@ configure_zinc_scala(name, compiler_bridge, compiler_classpath, deps_direct, dep
 ## <unknown name>
 
 <pre>
-<unknown name>(name, compiler_classpath, global_plugins, runtime_classpath, version)
+<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-compiler_classpath">compiler_classpath</a>, <a href="#<unknown name>-global_plugins">global_plugins</a>, <a href="#<unknown name>-runtime_classpath">runtime_classpath</a>, <a href="#<unknown name>-version">version</a>)
 </pre>
 
 Creates a `ScalaConfiguration`.
@@ -960,37 +960,37 @@ Creates a `ScalaConfiguration`.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#<unknown name>_name">
+    <tr id="<unknown name>-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#<unknown name>_compiler_classpath">
+    <tr id="<unknown name>-compiler_classpath">
       <td><code>compiler_classpath</code></td>
       <td>
-        List of labels; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
-    <tr id="#<unknown name>_global_plugins">
+    <tr id="<unknown name>-global_plugins">
       <td><code>global_plugins</code></td>
       <td>
-        List of labels; optional
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           Scalac plugins that will always be enabled.
         </p>
       </td>
     </tr>
-    <tr id="#<unknown name>_runtime_classpath">
+    <tr id="<unknown name>-runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
-        List of labels; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
-    <tr id="#<unknown name>_version">
+    <tr id="<unknown name>-version">
       <td><code>version</code></td>
       <td>
         String; required
@@ -1004,7 +1004,7 @@ Creates a `ScalaConfiguration`.
 ## <unknown name>
 
 <pre>
-<unknown name>(name, configurations)
+<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-configurations">configurations</a>)
 </pre>
 
 
@@ -1017,19 +1017,19 @@ Creates a `ScalaConfiguration`.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#<unknown name>_name">
+    <tr id="<unknown name>-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#<unknown name>_configurations">
+    <tr id="<unknown name>-configurations">
       <td><code>configurations</code></td>
       <td>
-        List of labels; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
       </td>
     </tr>
   </tbody>
@@ -1040,7 +1040,7 @@ Creates a `ScalaConfiguration`.
 ## <unknown name>
 
 <pre>
-<unknown name>(name, compiler_bridge)
+<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-compiler_bridge">compiler_bridge</a>)
 </pre>
 
 Creates a `ZincConfiguration`.
@@ -1053,31 +1053,34 @@ Creates a `ZincConfiguration`.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#<unknown name>_name">
+    <tr id="<unknown name>-name">
       <td><code>name</code></td>
       <td>
-        String; required
+        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
         <p>
           A unique name for this target.
         </p>
       </td>
     </tr>
-    <tr id="#<unknown name>_compiler_bridge">
+    <tr id="<unknown name>-compiler_bridge">
       <td><code>compiler_bridge</code></td>
       <td>
-        Label; required
+        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; required
       </td>
     </tr>
   </tbody>
 </table>
 
 
-<a name="#_ScalaConfiguration"></a>
-## _ScalaConfiguration
+## _extras_attributes
 
-Scala compile-time and runtime configuration
+<pre>
+_extras_attributes(<a href="#_extras_attributes-extras">extras</a>)
+</pre>
 
-### Fields
+
+
+### Parameters
 
 <table class="params-table">
   <colgroup>
@@ -1085,40 +1088,25 @@ Scala compile-time and runtime configuration
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#_ScalaConfiguration_version">
-      <td><code>version</code></td>
+    <tr id="_extras_attributes-extras>
+      <td><code>extras</code></td>
       <td>
-        <p>The Scala full version.</p>
-      </td>
-    </tr>
-    <tr id="#_ScalaConfiguration_compiler_classpath">
-      <td><code>compiler_classpath</code></td>
-      <td>
-        <p>The compiler classpath.</p>
-      </td>
-    </tr>
-    <tr id="#_ScalaConfiguration_runtime_classpath">
-      <td><code>runtime_classpath</code></td>
-      <td>
-        <p>The runtime classpath.</p>
-      </td>
-    </tr>
-    <tr id="#_ScalaConfiguration_global_plugins">
-      <td><code>global_plugins</code></td>
-      <td>
-        <p>Globally enabled compiler plugins</p>
+        required.
       </td>
     </tr>
   </tbody>
 </table>
 
 
-<a name="#_ZincConfiguration"></a>
-## _ZincConfiguration
+## _scala_binary_implementation
 
-Zinc configuration.
+<pre>
+_scala_binary_implementation(<a href="#_scala_binary_implementation-ctx">ctx</a>)
+</pre>
 
-### Fields
+
+
+### Parameters
 
 <table class="params-table">
   <colgroup>
@@ -1126,28 +1114,25 @@ Zinc configuration.
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#_ZincConfiguration_compiler_bridge">
-      <td><code>compiler_bridge</code></td>
+    <tr id="_scala_binary_implementation-ctx>
+      <td><code>ctx</code></td>
       <td>
-        <p>compiled Zinc compiler bridge</p>
-      </td>
-    </tr>
-    <tr id="#_ZincConfiguration_compile_worker">
-      <td><code>compile_worker</code></td>
-      <td>
-        <p>the worker label for compilation with Zinc</p>
+        required.
       </td>
     </tr>
   </tbody>
 </table>
 
 
-<a name="#_ScalaRulePhase"></a>
-## _ScalaRulePhase
+## _scala_library_implementation
 
-A Scala compiler plugin
+<pre>
+_scala_library_implementation(<a href="#_scala_library_implementation-ctx">ctx</a>)
+</pre>
 
-### Fields
+
+
+### Parameters
 
 <table class="params-table">
   <colgroup>
@@ -1155,10 +1140,114 @@ A Scala compiler plugin
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="#_ScalaRulePhase_phases">
-      <td><code>phases</code></td>
+    <tr id="_scala_library_implementation-ctx>
+      <td><code>ctx</code></td>
       <td>
-        <p>the phases to add</p>
+        required.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## _scala_test_implementation
+
+<pre>
+_scala_test_implementation(<a href="#_scala_test_implementation-ctx">ctx</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="_scala_test_implementation-ctx>
+      <td><code>ctx</code></td>
+      <td>
+        required.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## make_scala_binary
+
+<pre>
+make_scala_binary(<a href="#make_scala_binary-extras">extras</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="make_scala_binary-extras>
+      <td><code>extras</code></td>
+      <td>
+        required.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## make_scala_library
+
+<pre>
+make_scala_library(<a href="#make_scala_library-extras">extras</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="make_scala_library-extras>
+      <td><code>extras</code></td>
+      <td>
+        required.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+## make_scala_test
+
+<pre>
+make_scala_test(<a href="#make_scala_test-extras">extras</a>)
+</pre>
+
+
+
+### Parameters
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="make_scala_test-extras>
+      <td><code>extras</code></td>
+      <td>
+        required.
       </td>
     </tr>
   </tbody>
