@@ -99,10 +99,12 @@ for (( i=1; i<=$#; i++ ))
 do
     case "${!i}" in
         -*)
-            echo "$i - ${!i}"
             ;;
         *)
             n=$(($i + 1))
+            (>&2 echo "${@:1:$n}")
+            (>&2 echo $i $n)
+            (>&2 echo "${@:$n}")
             set -- "${@:0:$n}" "${extra_command_args[@]}" "${@:$n}"
             break
             ;;
