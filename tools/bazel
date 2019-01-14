@@ -102,10 +102,7 @@ do
             ;;
         *)
             n=$(($i + 1))
-            (>&2 echo "${@:1:$n}")
-            (>&2 echo $i $n)
-            (>&2 echo "${@:$n}")
-            set -- "${@:0:$n}" "${extra_command_args[@]}" "${@:$n}"
+            set -- "${@:1:$n}" "${extra_command_args[@]}" "${@:$n}"
             break
             ;;
     esac
