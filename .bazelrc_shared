@@ -43,6 +43,7 @@ common:rules_v0.21 --incompatible_string_is_not_iterable
 
 # appease docker
 common:tests_v0.21 --incompatible_remove_native_http_archive=false
+common:tests_v0.21 --incompatible_remove_native_git_repository=false
 
 # route potentially unrouted configs to a terminating noop config
 # it's a noop because we use the default value
