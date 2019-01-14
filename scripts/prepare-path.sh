@@ -8,7 +8,9 @@
 set -o pipefail
 cd "$(dirname "$0")/.."
 
-if ! hash bazel >/dev/null 2>&1; then
+if [[ ! -z "$__ALREADY_PREPARED_BAZEL_PATH" ]]; then
+    echo "prepare-path: bazel already prepared"
+elif ([ "$1" = "--force" ] || ! hash bazel >/dev/null 2>&1); then
     echo 'prepare-path: creating one-off bazel launcher'
     path_entry=$(mktemp -d)
     runner="$path_entry/bazel"
@@ -20,10 +22,11 @@ find_workspace() {
     find_workspace
   fi
 }
-find_workspace
-exec ./tools/bazel "$@"
+workspace=$(find_workspace; pwd)
+exec "$workspace/tools/bazel" "$@"
 EOF
     chmod +x "$runner"
+    export __ALREADY_PREPARED_BAZEL_PATH=1
     export PATH=$path_entry:$PATH
 else
     echo 'prepare-path: using host bazel launcher'

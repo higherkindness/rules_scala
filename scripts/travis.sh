@@ -4,7 +4,10 @@
 # Acts as a front end script for use with Travis CI
 #
 
-. ./scripts/prepare-path.sh
+set -o pipefail
+cd "$(dirname "$0")/.."
+
+. ./scripts/prepare-path.sh --force
 
 case "$1" in
 

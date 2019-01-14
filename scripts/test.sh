@@ -7,6 +7,8 @@
 set -o pipefail
 cd "$(dirname "$0")/.."
 
+. ./scripts/prepare-path.sh --force
+
 find tests -name test -type f | sort | while read f; do
     echo running ${f#"tests/"}...
     output=$($f 2>&1) || ( echo "$output" && exit 1 )
