@@ -9,7 +9,7 @@
 3. Be accessible and maintainable.
 4. Have high-quality documentation.
 
-If the right design principals are kept, implementing additional features should be simple and straightforward.
+If the right design principles are kept, implementing additional features should be simple and straightforward.
 
 ## Features
 
