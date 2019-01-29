@@ -16,7 +16,6 @@ STARTUP_BAZEL_OPTS=(
 BAZEL_OPTS=(
     --disk_cache=../../.bazel_cache
     --experimental_strict_action_env
-    --incompatible_package_name_is_a_function=false
     --incompatible_remove_native_git_repository=false
     --incompatible_remove_native_http_archive=false
 )
@@ -26,7 +25,7 @@ rm -fr external-tools/buildtools
 
 mkdir -p external-tools/buildtools
 echo Downloading buildtools
-curl -L -sS https://github.com/bazelbuild/buildtools/archive/3f6a2256863cb60d56b63b883dc797225b888e15.tar.gz | tar zxf - --strip 1 -C external-tools/buildtools
+curl -L -sS https://github.com/bazelbuild/buildtools/archive/6f2bf0da7e7b7c9dadd652ec7698eabb542bd0d7.tar.gz | tar zxf - --strip 1 -C external-tools/buildtools
 echo Building buildifier
 (cd external-tools/buildtools; bazel "${STARTUP_BAZEL_OPTS}" run "${BAZEL_OPTS[@]}" --script_path=../buildifier.sh buildifier)
 
