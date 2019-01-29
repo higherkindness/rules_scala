@@ -111,30 +111,6 @@ jvm_maven_import_external(
     server_urls = ["http://central.maven.org/maven2"],
 )
 
-# see rules_docker directory
-
-git_repository(
-    name = "io_bazel_rules_docker",
-    remote = "https://github.com/bazelbuild/rules_docker.git",
-    tag = "v0.6.0",
-)
-
-rules_docker_version = "452878d665648ada0aaf816931611fdd9c683a97"
-
-http_archive(
-    name = "io_bazel_rules_docker",
-    strip_prefix = "rules_docker-%s" % rules_docker_version,
-    type = "zip",
-    url = "https://github.com/bazelbuild/rules_docker/archive/%s.zip" % rules_docker_version,
-)
-
-load(
-    "@io_bazel_rules_docker//java:image.bzl",  # https://github.com/bazelbuild/rules_docker/issues/503
-    _scala_image_repos = "repositories",
-)
-
-_scala_image_repos()
-
 jvm_maven_import_external(
     name = "scala_compiler_2_11_12",
     artifact = "org.scala-lang:scala-compiler:2.11.12",
