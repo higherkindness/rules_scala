@@ -1,9 +1,31 @@
 load(
+    "@rules_scala_annex//rules/private:jacoco.bzl",
+    _jacoco_info = "jacoco_info",
+)
+
+load(
     "//rules/common:private/utils.bzl",
     _action_singlejar = "action_singlejar",
     _collect = "collect",
     #_strip_margin = "strip_margin",
     _write_launcher = "write_launcher",
+)
+
+def _instrumented_jars_impl(target, ctx):
+    if JavaInfo not in target:
+        return []
+
+    return [
+        _jacoco_info.merge(
+            getattr(ctx.rule.attr, "deps", []) +
+            getattr(ctx.rule.attr, "exports", []) +
+            getattr(ctx.rule.attr, "runtime_deps", [])
+        )
+    ]
+
+instrumented_jars = aspect(
+    attr_aspects = ["deps", "exports", "runtime_deps"],
+    implementation = _instrumented_jars_impl,
 )
 
 #
@@ -15,7 +37,18 @@ load(
 def phase_test_launcher(ctx, g):
     files = ctx.files._java + [g.compile.zinc_info.apis]
 
+    replacement_jars = {}
+    if ctx.configuration.coverage_enabled:
+        replacement_jars = _jacoco_info.merge(getattr(ctx.attr, "deps", [])).replacements
+
     test_jars = g.javainfo.java_info.transitive_runtime_deps
+    test_jars = depset([
+        replacement_jars[jar] if jar in replacement_jars else jar
+        for jar in test_jars
+    ])
+
+    print(test_jars)
+
     runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps
     all_jars = [test_jars, runner_jars]
 
@@ -41,7 +74,7 @@ def phase_test_launcher(ctx, g):
         files.append(subprocess_executable)
         args.add("--isolation", "process")
         args.add("--subprocess_exec", subprocess_executable.short_path)
-    args.add_all("--", g.javainfo.java_info.transitive_runtime_jars, map_each = _test_launcher_short_path)
+    args.add_all("--", test_jars, map_each = _test_launcher_short_path)
     args.set_param_file_format("multiline")
     args_file = ctx.actions.declare_file("{}/test.params".format(ctx.label.name))
     ctx.actions.write(args_file, args)

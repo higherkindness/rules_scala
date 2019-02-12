@@ -1721,6 +1721,31 @@ def list_dependencies():
         },
         {
             "bind_args": {
+                "actual": "@scala_annex_org_jacoco_org_jacoco_core",
+                "name": "jar/scala_annex_org/jacoco/org_jacoco_core",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@scala_annex_org_ow2_asm_asm",
+                    "@scala_annex_org_ow2_asm_asm_commons",
+                    "@scala_annex_org_ow2_asm_asm_tree",
+                ],
+                "jar_sha256": "0818437bc060a0c7cc798148f22b713702aae2771aba104444407697d578f1ea",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/jacoco/org.jacoco.core/0.8.3/org.jacoco.core-0.8.3.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_jacoco_org_jacoco_core",
+                "srcjar_sha256": "7d8b36f08c23ec9f00e0f3d406385110c788274e2c554f10a5d30bc5842f3a78",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/jacoco/org.jacoco.core/0.8.3/org.jacoco.core-0.8.3-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
                 "actual": "@scala_annex_org_jctools_jctools_core",
                 "name": "jar/scala_annex_org/jctools/jctools_core",
             },
@@ -1735,6 +1760,87 @@ def list_dependencies():
                 "srcjar_sha256": "2865cf812ec2bff6fba558034de0d419475096c1884f3be59a87b2f03277ed6a",
                 "srcjar_urls": [
                     "http://central.maven.org/maven2/org/jctools/jctools-core/2.0.1/jctools-core-2.0.1-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_org_ow2_asm_asm_analysis",
+                "name": "jar/scala_annex_org/ow2/asm/asm_analysis",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "e981f8f650c4d900bb033650b18e122fa6b161eadd5f88978d08751f72ee8474",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-analysis/7.0/asm-analysis-7.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_ow2_asm_asm_analysis",
+                "srcjar_sha256": "57bdf5b407dc122b8f4118e2fbf686719c81f6b7c97598e17ce7a456ea151866",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-analysis/7.0/asm-analysis-7.0-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_org_ow2_asm_asm_commons",
+                "name": "jar/scala_annex_org/ow2/asm/asm_commons",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": ["@scala_annex_org_ow2_asm_asm_analysis"],
+                "jar_sha256": "fed348ef05958e3e846a3ac074a12af5f7936ef3d21ce44a62c4fa08a771927d",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-commons/7.0/asm-commons-7.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_ow2_asm_asm_commons",
+                "srcjar_sha256": "7076b9f1cd3fdae003447b9fd546290b9ab76e34f147b2bf0b981ddae86f7053",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-commons/7.0/asm-commons-7.0-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_org_ow2_asm_asm_tree",
+                "name": "jar/scala_annex_org/ow2/asm/asm_tree",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "cfd7a0874f9de36a999c127feeadfbfe6e04d4a71ee954d7af3d853f0be48a6c",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-tree/7.0/asm-tree-7.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_ow2_asm_asm_tree",
+                "srcjar_sha256": "8888c88a9889b1b413d90e440b6b9c894e8d31632a473bd70e683645aba382dd",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-tree/7.0/asm-tree-7.0-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_org_ow2_asm_asm",
+                "name": "jar/scala_annex_org/ow2/asm/asm",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "b88ef66468b3c978ad0c97fd6e90979e56155b4ac69089ba7a44e9aa7ffe9acf",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm/7.0/asm-7.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_ow2_asm_asm",
+                "srcjar_sha256": "51a538468a788fa543e80e6bccbe05d2a738fa0da553b710a1fd8ed574504982",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm/7.0/asm-7.0-sources.jar",
                 ],
             },
             "lang": "java",

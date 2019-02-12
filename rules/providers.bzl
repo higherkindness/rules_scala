@@ -70,6 +70,13 @@ DepsConfiguration = provider(
     },
 )
 
+CodeCoverageConfiguration = provider(
+    doc = "Code coverage related configuration",
+    fields = {
+        "instrumentation_worker": "the worker used for instrumenting jars",
+    },
+)
+
 ScalaRulePhase = provider(
     doc = "A Scala compiler plugin",
     fields = {

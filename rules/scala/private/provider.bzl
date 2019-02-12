@@ -1,5 +1,6 @@
 load(
     "@rules_scala_annex//rules:providers.bzl",
+    _CodeCoverageConfiguration = "CodeCoverageConfiguration",
     _DepsConfiguration = "DepsConfiguration",
     _ScalaConfiguration = "ScalaConfiguration",
     _ScalaRulePhase = "ScalaRulePhase",
@@ -34,6 +35,9 @@ def configure_zinc_scala_implementation(ctx):
             global_plugins = ctx.attr.global_plugins,
             runtime_classpath = ctx.attr.runtime_classpath,
             version = ctx.attr.version,
+        ),
+        _CodeCoverageConfiguration(
+            instrumentation_worker = ctx.attr._code_coverage_instrumentation_worker,
         ),
         _ZincConfiguration(
             compile_worker = ctx.attr._compile_worker,

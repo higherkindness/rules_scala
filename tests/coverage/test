@@ -1,5 +1,5 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../common.sh
 
-bazel build :a
-bazel coverage :a
+#bazel build :a
+bazel coverage :test-a

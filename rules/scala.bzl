@@ -31,6 +31,10 @@ load(
     _run_phases = "run_phases",
 )
 load(
+    "//rules/private:phases/phase_test_launcher.bzl",
+    _instrumented_jars = "instrumented_jars",
+)
+load(
     "//rules/scala:private/doc.bzl",
     _scaladoc_implementation = "scaladoc_implementation",
     _scaladoc_private_attributes = "scaladoc_private_attributes",
@@ -92,7 +96,7 @@ _compile_attributes = {
         allow_files = True,
     ),
     "deps": attr.label_list(
-        aspects = [_labeled_jars],
+        aspects = [_labeled_jars, _instrumented_jars],
         doc = "The JVM library dependencies.",
         providers = [JavaInfo],
     ),
@@ -182,8 +186,8 @@ def _scala_library_implementation(ctx):
         ("classpaths", _phase_classpaths),
         ("javainfo", _phase_javainfo),
         ("compile", _phase_noop),
-        ("coverage", _phase_coverage_jacoco),
         ("singlejar", _phase_singlejar),
+        ("coverage", _phase_coverage_jacoco),
         ("ijinfo", _phase_ijinfo),
         ("library_defaultinfo", _phase_library_defaultinfo),
         ("coda", _phase_coda),
@@ -195,8 +199,8 @@ def _scala_binary_implementation(ctx):
         ("classpaths", _phase_classpaths),
         ("javainfo", _phase_javainfo),
         ("compile", _phase_noop),
-        ("coverage", _phase_coverage_jacoco),
         ("singlejar", _phase_singlejar),
+        ("coverage", _phase_coverage_jacoco),
         ("ijinfo", _phase_ijinfo),
         ("binary_deployjar", _phase_binary_deployjar),
         ("binary_launcher", _phase_binary_launcher),
@@ -209,8 +213,8 @@ def _scala_test_implementation(ctx):
         ("classpaths", _phase_classpaths),
         ("javainfo", _phase_javainfo),
         ("compile", _phase_noop),
-        ("coverage", _phase_coverage_jacoco),
         ("singlejar", _phase_singlejar),
+        ("coverage", _phase_coverage_jacoco),
         ("ijinfo", _phase_ijinfo),
         ("test_launcher", _phase_test_launcher),
         ("coda", _phase_coda),
@@ -463,6 +467,12 @@ configure_zinc_scala = rule(
         ),
         "_deps_worker": attr.label(
             default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/deps",
+            allow_files = True,
+            executable = True,
+            cfg = "host",
+        ),
+        "_code_coverage_instrumentation_worker": attr.label(
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/jacoco/instrumenter",
             allow_files = True,
             executable = True,
             cfg = "host",
