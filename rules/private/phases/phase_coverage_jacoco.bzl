@@ -3,8 +3,8 @@ load(
     _CodeCoverageConfiguration = "CodeCoverageConfiguration",
 )
 load(
-    "@rules_scala_annex//rules/private:jacoco.bzl",
-    _jacoco_info = "jacoco_info",
+    "@rules_scala_annex//rules/private:coverage_replacements_provider.bzl",
+    _coverage_replacements_provider = "coverage_replacements_provider",
 )
 
 def phase_coverage_jacoco(ctx, g):
@@ -47,15 +47,15 @@ def phase_coverage_jacoco(ctx, g):
     replacements = {i: o for (i, o) in in_out_pairs}
 
     g.out.providers.extend([
-        _jacoco_info.provider(
+        _coverage_replacements_provider.create(
             replacements = replacements,
         ),
     ])
 
     return struct(
         instrumented_files = struct(
-            dependency_attributes = ["deps", "runtime_deps", "exports"],
-            extensions = ["scala"],
+            dependency_attributes = _coverage_replacements_provider.dependency_attributes,
+            extensions = ["scala", "java"],
             source_attributes = ["srcs"],
         ),
         replacements = replacements,

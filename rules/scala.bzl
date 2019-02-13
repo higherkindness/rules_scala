@@ -14,6 +14,10 @@ load(
     _ZincConfiguration = "ZincConfiguration",
 )
 load(
+    "@rules_scala_annex//rules/private:coverage_replacements_provider.bzl",
+    _coverage_replacements_provider = "coverage_replacements_provider",
+)
+load(
     "//rules/private:phases.bzl",
     _adjust_phases = "adjust_phases",
     _phase_binary_deployjar = "phase_binary_deployjar",
@@ -29,10 +33,6 @@ load(
     _phase_singlejar = "phase_singlejar",
     _phase_test_launcher = "phase_test_launcher",
     _run_phases = "run_phases",
-)
-load(
-    "//rules/private:phases/phase_test_launcher.bzl",
-    _instrumented_jars = "instrumented_jars",
 )
 load(
     "//rules/scala:private/doc.bzl",
@@ -96,7 +96,10 @@ _compile_attributes = {
         allow_files = True,
     ),
     "deps": attr.label_list(
-        aspects = [_labeled_jars, _instrumented_jars],
+        aspects = [
+            _labeled_jars,
+            _coverage_replacements_provider.aspect,
+        ],
         doc = "The JVM library dependencies.",
         providers = [JavaInfo],
     ),
@@ -105,6 +108,9 @@ _compile_attributes = {
         providers = [JavaInfo],
     ),
     "exports": attr.label_list(
+        aspects = [
+            _coverage_replacements_provider.aspect,
+        ],
         doc = "The JVM libraries to add as dependencies to any libraries dependent on this one.",
         providers = [JavaInfo],
     ),
@@ -173,8 +179,8 @@ _runtime_private_attributes = {
 }
 
 _testing_private_attributes = {
-    # configured according to the java rules
-    # see https://github.com/bazelbuild/bazel/blob/0.22.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BazelJavaTestRule.java#L69-L76
+    # Mandated by Bazel, with values set according to the java rules
+    # in https://github.com/bazelbuild/bazel/blob/0.22.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BazelJavaTestRule.java#L69-L76
     "_jacocorunner": attr.label(
         default = Label("@bazel_tools//tools/jdk:JacocoCoverage"),
         cfg = "host",

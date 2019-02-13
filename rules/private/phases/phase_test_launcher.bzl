@@ -1,30 +1,12 @@
 load(
-    "@rules_scala_annex//rules/private:jacoco.bzl",
-    _jacoco_info = "jacoco_info",
+    "@rules_scala_annex//rules/private:coverage_replacements_provider.bzl",
+    _coverage_replacements_provider = "coverage_replacements_provider",
 )
 load(
     "//rules/common:private/utils.bzl",
     _action_singlejar = "action_singlejar",
     _collect = "collect",
-    #_strip_margin = "strip_margin",
     _write_launcher = "write_launcher",
-)
-
-def _instrumented_jars_impl(target, ctx):
-    if JavaInfo not in target:
-        return []
-
-    return [
-        _jacoco_info.merge(
-            getattr(ctx.rule.attr, "deps", []) +
-            getattr(ctx.rule.attr, "exports", []) +
-            getattr(ctx.rule.attr, "runtime_deps", []),
-        ),
-    ]
-
-instrumented_jars = aspect(
-    attr_aspects = ["deps", "exports", "runtime_deps"],
-    implementation = _instrumented_jars_impl,
 )
 
 #
@@ -36,23 +18,20 @@ instrumented_jars = aspect(
 def phase_test_launcher(ctx, g):
     files = ctx.files._java + [g.compile.zinc_info.apis]
 
-    replacement_jars = {}
+    coverage_replacements = {}
+    coverage_runner_jars = []
     if ctx.configuration.coverage_enabled:
-        replacement_jars = _jacoco_info.merge(
-            getattr(ctx.attr, "deps", []),
+        coverage_replacements = _coverage_replacements_provider.from_ctx(
+            ctx,
             base = g.coverage.replacements,
         ).replacements
+        coverage_runner_jars = ctx.files._jacocorunner + ctx.files._lcov_merger
 
-    test_jars = g.javainfo.java_info.transitive_runtime_deps
     test_jars = depset([
-        replacement_jars[jar] if jar in replacement_jars else jar
-        for jar in test_jars
+        coverage_replacements[jar] if jar in coverage_replacements else jar
+        for jar in g.javainfo.java_info.transitive_runtime_deps
     ])
-
-    runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps
-
-    runner_jars = runner_jars + ctx.files._jacocorunner + ctx.files._lcov_merger
-
+    runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps + coverage_runner_jars
     all_jars = [test_jars, runner_jars]
 
     args = ctx.actions.args()
