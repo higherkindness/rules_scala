@@ -3,7 +3,7 @@ load("@rules_scala_annex//rules:scala.bzl", "scala_library", "scala_test")
 scala_test(
     name = "test-a",
     srcs = [
-        "TestA.scala",        
+        "TestA.scala",
     ],
     scala = "//scala:2_12",
     runtime_deps = [
@@ -11,10 +11,10 @@ scala_test(
         "@junit_interface//jar",
     ],
     deps = [
-        "@junit//jar",
         ":a",
         ":b",
-    ]
+        "@junit//jar",
+    ],
 )
 
 scala_library(
@@ -24,8 +24,8 @@ scala_library(
     ],
     scala = "//scala:2_12",
     deps = [
-    ":b",
-    ]
+        ":b",
+    ],
 )
 
 scala_library(

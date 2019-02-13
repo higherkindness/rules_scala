@@ -24,7 +24,7 @@ def phase_coverage_jacoco(ctx, g):
     args = ctx.actions.args()
 
     instrumented_output_jar = ctx.actions.declare_file(
-        "{}_instrumented.jar".format(ctx.outputs.jar.basename.split(".")[0]),
+        "{}-offline.jar".format(ctx.outputs.jar.basename.split(".")[0]),
     )
     in_out_pairs = [
         (ctx.outputs.jar, instrumented_output_jar),
@@ -44,11 +44,22 @@ def phase_coverage_jacoco(ctx, g):
         arguments = [args],
     )
 
+    replacements = {i: o for (i, o) in in_out_pairs}
+
     g.out.providers.extend([
         _jacoco_info.provider(
-            replacements = {i: o for (i, o) in in_out_pairs},
+            replacements = replacements,
         ),
     ])
+
+    return struct(
+        instrumented_files = struct(
+            dependency_attributes = ["deps", "runtime_deps", "exports"],
+            extensions = ["scala"],
+            source_attributes = ["srcs"],
+        ),
+        replacements = replacements,
+    )
 
 def _format_in_out_pairs(in_out_pair):
     return (["--jar", "%s=%s" % (in_out_pair[0].path, in_out_pair[1].path)])

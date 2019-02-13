@@ -51,7 +51,7 @@ dependencies:
   org.jacoco:
     org.jacoco.core:
       lang: java
-      version: "0.8.3"
+      version: "0.7.5.201505241946"
 
 replacements:
   org.scala-lang:

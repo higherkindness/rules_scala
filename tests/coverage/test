@@ -1,5 +1,13 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../common.sh
 
-#bazel build :a
-bazel coverage :test-a
+bazel test :test-a
+bazel coverage \
+      --instrument_test_targets \
+      :test-a
+
+diff expected-coverage.dat $(bazel info bazel-testlogs)/coverage/test-a/coverage.dat
+
+# in theory, these should work to build a combined report:
+#--coverage_report_generator="@bazel_tools//tools/test/CoverageOutputGenerator/java/com/google/devtools/coverageoutputgenerator:Main"
+#--combined_report=lcov \

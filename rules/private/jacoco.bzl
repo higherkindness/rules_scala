@@ -12,8 +12,8 @@ _AggregateJacocoInfo = provider(
     },
 )
 
-def merge(entries):
-    return _AggregateJacocoInfo(replacements = _dicts.add(*([
+def merge(entries, base = {}):
+    return _AggregateJacocoInfo(replacements = _dicts.add(base, *([
         entry[_JacocoInfo].replacements
         for entry in entries
         if _JacocoInfo in entry

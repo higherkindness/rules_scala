@@ -4,8 +4,8 @@ load("//rules:scalafmt.bzl", "scala_format_test")
 scala_binary(
     name = "instrumenter",
     srcs = glob(["**/*.scala"]),
-    scala = "//src/main/scala:bootstrap",
     main_class = "higherkindness.rules_scala.workers.jacoco.instrumenter.JacocoInstrumenter",
+    scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",

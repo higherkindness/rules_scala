@@ -172,6 +172,19 @@ _runtime_private_attributes = {
     ),
 }
 
+_testing_private_attributes = {
+    # configured according to the java rules
+    # see https://github.com/bazelbuild/bazel/blob/0.22.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BazelJavaTestRule.java#L69-L76
+    "_jacocorunner": attr.label(
+        default = Label("@bazel_tools//tools/jdk:JacocoCoverage"),
+        cfg = "host",
+    ),
+    "_lcov_merger": attr.label(
+        default = Label("@bazel_tools//tools/test/CoverageOutputGenerator/java/com/google/devtools/coverageoutputgenerator:Main"),
+        cfg = "host",
+    ),
+}
+
 def _extras_attributes(extras):
     return {
         "_phase_providers": attr.label_list(
@@ -277,6 +290,7 @@ def make_scala_test(*extras):
             _compile_private_attributes,
             _runtime_attributes,
             _runtime_private_attributes,
+            _testing_private_attributes,
             {
                 "isolation": attr.string(
                     default = "none",
