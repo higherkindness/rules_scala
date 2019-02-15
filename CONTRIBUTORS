@@ -1,0 +1,24 @@
+# People who have agreed to one of the CLAs and can contribute patches.
+# The AUTHORS file lists the copyright holders; this file
+# lists people.
+#
+# https://developers.google.com/open-source/cla/individual
+# https://developers.google.com/open-source/cla/corporate
+#
+# Names should be added to this file as:
+#     Name <email address>
+
+Andy Scott <andy.g.scott@gmail.com>
+Bor Kae Hwang <borkaehw@lucidchart.com>
+Igal Tabachnik <hmemcpy@gmail.com>
+James Judd <james@lab-y.com>
+James Judd <james@lucidchart.com>
+Jared Neil <jaredneil@lucidchart.com>
+Paul Draper <paul@lucidchart.com>
+Paul Draper <paulddraper@gmail.com>
+borkaehw <borkaehw@lucidchart.com>
+jvican <jorgevc@fastmail.es>
+
+#
+# this was generated with:
+# git log --format='%aN <%aE>' | grep -v 'users.noreply.github.com>$' | sort | uniq                                                                                                                                     rules_scala/git/master +
