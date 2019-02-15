@@ -41,11 +41,19 @@ _dependency_attributes = [
 ]
 
 def _combine(*entriess, base = {}):
-    return _CombinedCoverageReplacements(replacements = _dicts.add(base, *([
-        entry[_CoverageReplacements].replacements if _CoverageReplacements in entry else entry[_CombinedCoverageReplacements].replacements if _CombinedCoverageReplacements in entry else {}
-        for entries in entriess
-        for entry in entries
-    ])))
+    return _CombinedCoverageReplacements(replacements = _dicts.add(base, *(
+        [
+            entry[_CoverageReplacements].replacements
+            for entries in entriess
+            for entry in entries
+            if _CoverageReplacements in entry
+        ] + [
+            entry[_CombinedCoverageReplacements].replacements
+            for entries in entriess
+            for entry in entries
+            if _CombinedCoverageReplacements in entry
+        ]
+    )))
 
 def _from_ctx(ctx, base = {}):
     return _combine(
@@ -56,8 +64,8 @@ def _from_ctx(ctx, base = {}):
 def _aspect_impl(target, ctx):
     if JavaInfo not in target:
         return []
-
-    return [_from_ctx(ctx.rule)]
+    else:
+        return [_from_ctx(ctx.rule)]
 
 _aspect = aspect(
     attr_aspects = _dependency_attributes,

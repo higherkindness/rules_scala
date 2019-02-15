@@ -77,6 +77,8 @@ def write_launcher(
             jar.short_path.replace("../", "external/")
             for jar in jacoco_classpath
         ]))
+        print("metadata will contain:")
+        print("\n".join(jacoco_classpath.to_list()))
         more_outputs = [metadata_file]
         more_substitutions = {
             "%java_start_class%": "com.google.testing.coverage.JacocoCoverageRunner",
@@ -92,6 +94,8 @@ def write_launcher(
             "%set_jacoco_main_class%": "",
             "%set_jacoco_java_runfiles_root%": "",
         }
+
+    print(_dicts.add(base_substitutions, more_substitutions))
 
     ctx.actions.expand_template(
         template = template,

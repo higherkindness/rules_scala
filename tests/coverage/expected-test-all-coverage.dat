@@ -1,0 +1,91 @@
+SF:/A1.scala
+FN:-1,A1$::<clinit> ()V
+FN:1,A1$::<init> ()V
+FN:3,A1$::a1 (Z)LB1$;
+FN:-1,A1::a1 (Z)LB1$;
+FNDA:1,A1$::<clinit> ()V
+FNDA:1,A1$::<init> ()V
+FNDA:1,A1$::a1 (Z)LB1$;
+FNDA:0,A1::a1 (Z)LB1$;
+FNF:4
+FNH:3
+BA:3,2
+BRF:1
+BRH:1
+DA:1,1
+DA:3,4
+DA:4,1
+DA:5,4
+LH:4
+LF:4
+end_of_record
+SF:/A2.scala
+FN:-1,A2$::<clinit> ()V
+FN:1,A2$::<init> ()V
+FN:3,A2$::a2 ()V
+FN:-1,A2::a2 ()V
+FNDA:1,A2$::<clinit> ()V
+FNDA:1,A2$::<init> ()V
+FNDA:1,A2$::a2 ()V
+FNDA:0,A2::a2 ()V
+FNF:4
+FNH:3
+DA:1,1
+DA:3,12
+DA:5,4
+LH:3
+LF:3
+end_of_record
+SF:/B1.scala
+FN:-1,B1$::<clinit> ()V
+FN:1,B1$::<init> ()V
+FN:4,B1$::not_called ()V
+FN:-1,B1::not_called ()V
+FNDA:1,B1$::<clinit> ()V
+FNDA:1,B1$::<init> ()V
+FNDA:0,B1$::not_called ()V
+FNDA:0,B1::not_called ()V
+FNF:4
+FNH:2
+DA:1,1
+DA:4,0
+DA:7,4
+LH:2
+LF:3
+end_of_record
+SF:/C2.scala
+FN:-1,C2$::<clinit> ()V
+FN:1,C2$::<init> ()V
+FN:3,C2$::c2 (Ljava/lang/String;)Ljava/lang/String;
+FN:-1,C2::c2 (Ljava/lang/String;)Ljava/lang/String;
+FNDA:1,C2$::<clinit> ()V
+FNDA:1,C2$::<init> ()V
+FNDA:1,C2$::c2 (Ljava/lang/String;)Ljava/lang/String;
+FNDA:1,C2::c2 (Ljava/lang/String;)Ljava/lang/String;
+FNF:4
+FNH:4
+DA:1,1
+DA:3,9
+DA:5,4
+LH:3
+LF:3
+end_of_record
+SF:/TestAll.scala
+FN:4,TestAll::<init> ()V
+FN:8,TestAll::testA1 ()V
+FN:13,TestAll::testA2 ()V
+FNDA:1,TestAll::<init> ()V
+FNDA:1,TestAll::testA1 ()V
+FNDA:1,TestAll::testA2 ()V
+FNF:3
+FNH:3
+BA:8,2
+BRF:1
+BRH:1
+DA:4,1
+DA:8,15
+DA:13,3
+DA:16,2
+LH:4
+LF:4
+end_of_record
