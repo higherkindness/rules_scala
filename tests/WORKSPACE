@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:jvm.bzl", "jvm_maven_import_external")
 
 http_archive(
@@ -177,4 +177,18 @@ jvm_maven_import_external(
 bind(
     name = "default_scala",
     actual = "//scala:zinc_typelevel_2_12_1",
+)
+
+http_file(
+    name = "shapeless_jar",
+    downloaded_file_path = "shapeless.jar",
+    sha256 = "75926d9dd4688710ca16d852b58746dcfc013a2a1a58d1e817a27f95b2d42303",
+    urls = ["https://repo.maven.apache.org/maven2/com/chuusai/shapeless_2.12/2.3.2/shapeless_2.12-2.3.2.jar"],
+)
+
+http_file(
+    name = "shapeless_srcjar",
+    downloaded_file_path = "shapeless-sources.jar",
+    sha256 = "6c00f4454ee1250fb2385e01e02d5751bdf6594e847befab5dbe417c95dbd2b9",
+    urls = ["https://repo.maven.apache.org/maven2/com/chuusai/shapeless_2.12/2.3.2/shapeless_2.12-2.3.2-sources.jar"],
 )

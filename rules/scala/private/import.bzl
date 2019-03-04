@@ -16,7 +16,16 @@ def scala_import_implementation(ctx):
     )
 
     if ctx.files.jars:
-        output_jar = ctx.files.jars[0]
+        _jar = []
+        _src_jar = []
+        for jar in ctx.files.jars:
+            if jar.basename.endswith("sources.jar") or jar.basename.endswith("src.jar"):
+                _src_jar.append(jar)
+            else:
+                _jar.append(jar)
+        _src_jar += ctx.files.srcjar
+
+        output_jar = _jar[0]
 
         # TODO: maybe eventually we should use this. Right now it produces
         # a warning:
@@ -41,7 +50,7 @@ def scala_import_implementation(ctx):
         source_jar = java_common.pack_sources(
             ctx.actions,
             output_jar = output_jar,
-            source_jars = ctx.files.srcjar or ctx.files.jars,
+            source_jars = _src_jar,
             host_javabase = ctx.attr._host_javabase,
             java_toolchain = ctx.attr._java_toolchain,
         )
