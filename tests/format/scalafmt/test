@@ -44,3 +44,15 @@ cp unformatted.template.scala unformatted.tmp.scala
 bazel run :unformatted-test-copy.format
 bazel run :unformatted-test-copy.format-test
 rm unformatted.tmp.scala
+
+# utf-8 encoding formatting test
+## scala_format_test
+cp utf8-unformatted.template.scala utf8-unformatted.tmp.scala
+bazel run :utf8-encoding-test-default
+diff utf8-unformatted.tmp.scala utf8-formatted.scala
+rm utf8-unformatted.tmp.scala
+## scala_binary (non-default)
+cp utf8-unformatted.template.scala utf8-unformatted.tmp.scala
+bazel run :utf8-encoding-test-non-default.format
+diff utf8-unformatted.tmp.scala utf8-formatted.scala
+rm utf8-unformatted.tmp.scala

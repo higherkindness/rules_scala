@@ -74,3 +74,15 @@ scala_test(
     srcs = ["unformatted.tmp.scala"],
     format = True,
 )
+
+### utf8 encoding test ###
+scala_format_test(
+    name = "utf8-encoding-test-default",
+    srcs = ["utf8-unformatted.tmp.scala"],
+)
+
+scala_binary(
+    name = "utf8-encoding-test-non-default",
+    srcs = ["utf8-unformatted.tmp.scala"],
+    format = True,
+)
