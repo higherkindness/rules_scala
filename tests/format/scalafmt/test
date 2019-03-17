@@ -3,44 +3,56 @@
 
 # scala_format_test
 ## check
-bazel test :formatted || false
-! bazel test :unformatted || false
+bazel test :formatted
+! bazel test :unformatted
 ## copy
 cp unformatted.template.scala unformatted.tmp.scala
-! bazel test :unformatted-copy || false
+! bazel test :unformatted-copy 
 bazel run :unformatted-copy
-bazel test :unformatted-copy || false
+bazel test :unformatted-copy
 rm unformatted.tmp.scala
 
 # non-default output format test: binary
 ## check
-bazel run :formatted-binary.format-test || false
-! bazel run :unformatted-binary.format-test || false
+bazel run :formatted-binary.format-test
+! bazel run :unformatted-binary.format-test
 ## copy
 cp unformatted.template.scala unformatted.tmp.scala
-! bazel run :unformatted-binary-copy.format-test || false
+! bazel run :unformatted-binary-copy.format-test
 bazel run :unformatted-binary-copy.format
-bazel run :unformatted-binary-copy.format-test || false
+bazel run :unformatted-binary-copy.format-test
 rm unformatted.tmp.scala
 
 # non-default output format test: library
 ## check
-bazel run :formatted-library.format-test || false
-! bazel run :unformatted-library.format-test || false
+bazel run :formatted-library.format-test
+! bazel run :unformatted-library.format-test
 ## copy
 cp unformatted.template.scala unformatted.tmp.scala
-! bazel run :unformatted-library-copy.format-test || false
+! bazel run :unformatted-library-copy.format-test
 bazel run :unformatted-library-copy.format
-bazel run :unformatted-library-copy.format-test || false
+bazel run :unformatted-library-copy.format-test
 rm unformatted.tmp.scala
 
 # non-default output format test: test
 ## check
-bazel run :formatted-test.format-test || false
-! bazel run :unformatted-test.format-test || false
+bazel run :formatted-test.format-test
+! bazel run :unformatted-test.format-test
 ## copy
 cp unformatted.template.scala unformatted.tmp.scala
-! bazel run :unformatted-test-copy.format-test || false
+! bazel run :unformatted-test-copy.format-test
 bazel run :unformatted-test-copy.format
-bazel run :unformatted-test-copy.format-test || false
+bazel run :unformatted-test-copy.format-test
 rm unformatted.tmp.scala
+
+# utf-8 encoding formatting test
+## scala_format_test
+cp utf8-unformatted.template.scala utf8-unformatted.tmp.scala
+bazel run :utf8-encoding-test-default
+diff utf8-unformatted.tmp.scala utf8-formatted.scala
+rm utf8-unformatted.tmp.scala
+## scala_binary (non-default)
+cp utf8-unformatted.template.scala utf8-unformatted.tmp.scala
+bazel run :utf8-encoding-test-non-default.format
+diff utf8-unformatted.tmp.scala utf8-formatted.scala
+rm utf8-unformatted.tmp.scala
