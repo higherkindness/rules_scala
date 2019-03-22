@@ -1721,6 +1721,27 @@ def list_dependencies():
         },
         {
             "bind_args": {
+                "actual": "@scala_annex_org_jacoco_org_jacoco_core",
+                "name": "jar/scala_annex_org/jacoco/org_jacoco_core",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": ["@scala_annex_org_ow2_asm_asm_debug_all"],
+                "jar_sha256": "ecf1ad8192926438d0748bfcc3f09bebc7387d2a4184bb3a171a26084677e808",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/jacoco/org.jacoco.core/0.7.5.201505241946/org.jacoco.core-0.7.5.201505241946.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_jacoco_org_jacoco_core",
+                "srcjar_sha256": "4a5ce92a3f3264d74033f43fecb6f644be6342ffe58b1cd322808c84cb47eb26",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/jacoco/org.jacoco.core/0.7.5.201505241946/org.jacoco.core-0.7.5.201505241946-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
                 "actual": "@scala_annex_org_jctools_jctools_core",
                 "name": "jar/scala_annex_org/jctools/jctools_core",
             },
@@ -1735,6 +1756,26 @@ def list_dependencies():
                 "srcjar_sha256": "2865cf812ec2bff6fba558034de0d419475096c1884f3be59a87b2f03277ed6a",
                 "srcjar_urls": [
                     "http://central.maven.org/maven2/org/jctools/jctools-core/2.0.1/jctools-core-2.0.1-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@scala_annex_org_ow2_asm_asm_debug_all",
+                "name": "jar/scala_annex_org/ow2/asm/asm_debug_all",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "4734de5b515a454b0096db6971fb068e5f70e6f10bbee2b3bd2fdfe5d978ed57",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-debug-all/5.0.1/asm-debug-all-5.0.1.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "scala_annex_org_ow2_asm_asm_debug_all",
+                "srcjar_sha256": "4caf5914ce1fc912779bd15f1ab6ce89e2df102cb81230a6a5adaacc047e7e55",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/ow2/asm/asm-debug-all/5.0.1/asm-debug-all-5.0.1-sources.jar",
                 ],
             },
             "lang": "java",

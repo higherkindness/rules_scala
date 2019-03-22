@@ -1,3 +1,5 @@
+load("@bazel_skylib//lib:dicts.bzl", _dicts = "dicts")
+
 #
 # Helper utilities
 #
@@ -36,7 +38,8 @@ def write_launcher(
         runtime_classpath,
         main_class,
         jvm_flags,
-        extra = ""):
+        extra = "",
+        jacoco_classpath = None):
     """Macro that writes out a launcher script shell script.
       Args:
         runtime_classpath: File containing the classpath required to launch this java target.
@@ -57,25 +60,47 @@ def write_launcher(
     template = ctx.file._java_stub_template
     runfiles_enabled = False
 
-    ctx.actions.expand_template(
-        template = template,
-        output = output,
-        substitutions = {
-            "%classpath%": classpath,
+    base_substitutions = {
+        "%classpath%": classpath,
+        "%javabin%": "JAVABIN=\"$JAVA_RUNFILES/{}/{}\"\n{}".format(ctx.workspace_name, ctx.executable._java.short_path, extra),
+        "%jvm_flags%": jvm_flags,
+        "%needs_runfiles%": "1" if runfiles_enabled else "",
+        "%runfiles_manifest_only%": "1" if runfiles_enabled else "",
+        "%workspace_prefix%": ctx.workspace_name + "/",
+    }
+
+    if jacoco_classpath != None:
+        # this file must end in ".txt" to trigger the `isNewImplementation` paths
+        # in com.google.testing.coverage.JacocoCoverageRunner
+        metadata_file = ctx.actions.declare_file("%s.jacoco_metadata.txt" % ctx.attr.name, sibling = output)
+        ctx.actions.write(metadata_file, "\n".join([
+            jar.short_path.replace("../", "external/")
+            for jar in jacoco_classpath
+        ]))
+        more_outputs = [metadata_file]
+        more_substitutions = {
+            "%java_start_class%": "com.google.testing.coverage.JacocoCoverageRunner",
+            "%set_jacoco_metadata%": "export JACOCO_METADATA_JAR=\"$JAVA_RUNFILES/{}/{}\"".format(ctx.workspace_name, metadata_file.short_path),
+            "%set_jacoco_main_class%": """export JACOCO_MAIN_CLASS={}""".format(main_class),
+            "%set_jacoco_java_runfiles_root%": """export JACOCO_JAVA_RUNFILES_ROOT=$JAVA_RUNFILES/{}/""".format(ctx.workspace_name),
+        }
+    else:
+        more_outputs = []
+        more_substitutions = {
             "%java_start_class%": main_class,
-            "%javabin%": "JAVABIN=\"$JAVA_RUNFILES/{}/{}\"\n{}".format(ctx.workspace_name, ctx.executable._java.short_path, extra),
-            "%jvm_flags%": jvm_flags,
-            "%needs_runfiles%": "1" if runfiles_enabled else "",
-            "%runfiles_manifest_only%": "1" if runfiles_enabled else "",
             "%set_jacoco_metadata%": "",
             "%set_jacoco_main_class%": "",
             "%set_jacoco_java_runfiles_root%": "",
-            "%workspace_prefix%": ctx.workspace_name + "/",
-        },
+        }
+
+    ctx.actions.expand_template(
+        template = template,
+        output = output,
+        substitutions = _dicts.add(base_substitutions, more_substitutions),
         is_executable = True,
     )
 
-    return [classpath_file]
+    return more_outputs + [classpath_file]
 
 def safe_name(value):
     return "".join([value[i] if value[i].isalnum() or value[i] == "." else "_" for i in range(len(value))])

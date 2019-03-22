@@ -175,6 +175,33 @@ reconfigure_deps_configuration(<a href="#reconfigure_deps_configuration-name">na
 </table>
 
 
+<a name="#CodeCoverageConfiguration"></a>
+## CodeCoverageConfiguration
+
+<pre>
+CodeCoverageConfiguration(<a href="#CodeCoverageConfiguration-instrumentation_worker">instrumentation_worker</a>)
+</pre>
+
+Code coverage related configuration
+
+### Fields
+
+<table class="params-table">
+  <colgroup>
+    <col class="col-param" />
+    <col class="col-description" />
+  </colgroup>
+  <tbody>
+    <tr id="CodeCoverageConfiguration-instrumentation_worker">
+      <td><code>instrumentation_worker</code></td>
+      <td>
+        <p>the worker used for instrumenting jars</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <a name="#DepsConfiguration"></a>
 ## DepsConfiguration
 

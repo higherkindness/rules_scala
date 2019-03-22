@@ -14,12 +14,17 @@ load(
     _ZincConfiguration = "ZincConfiguration",
 )
 load(
+    "@rules_scala_annex//rules/private:coverage_replacements_provider.bzl",
+    _coverage_replacements_provider = "coverage_replacements_provider",
+)
+load(
     "//rules/private:phases.bzl",
     _adjust_phases = "adjust_phases",
     _phase_binary_deployjar = "phase_binary_deployjar",
     _phase_binary_launcher = "phase_binary_launcher",
     _phase_classpaths = "phase_classpaths",
     _phase_coda = "phase_coda",
+    _phase_coverage_jacoco = "phase_coverage_jacoco",
     _phase_ijinfo = "phase_ijinfo",
     _phase_javainfo = "phase_javainfo",
     _phase_library_defaultinfo = "phase_library_defaultinfo",
@@ -91,7 +96,10 @@ _compile_attributes = {
         allow_files = True,
     ),
     "deps": attr.label_list(
-        aspects = [_labeled_jars],
+        aspects = [
+            _labeled_jars,
+            _coverage_replacements_provider.aspect,
+        ],
         doc = "The JVM library dependencies.",
         providers = [JavaInfo],
     ),
@@ -100,6 +108,9 @@ _compile_attributes = {
         providers = [JavaInfo],
     ),
     "exports": attr.label_list(
+        aspects = [
+            _coverage_replacements_provider.aspect,
+        ],
         doc = "The JVM libraries to add as dependencies to any libraries dependent on this one.",
         providers = [JavaInfo],
     ),
@@ -167,6 +178,19 @@ _runtime_private_attributes = {
     ),
 }
 
+_testing_private_attributes = {
+    # Mandated by Bazel, with values set according to the java rules
+    # in https://github.com/bazelbuild/bazel/blob/0.22.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/BazelJavaTestRule.java#L69-L76
+    "_jacocorunner": attr.label(
+        default = Label("@bazel_tools//tools/jdk:JacocoCoverage"),
+        cfg = "host",
+    ),
+    "_lcov_merger": attr.label(
+        default = Label("@bazel_tools//tools/test/CoverageOutputGenerator/java/com/google/devtools/coverageoutputgenerator:Main"),
+        cfg = "host",
+    ),
+}
+
 def _extras_attributes(extras):
     return {
         "_phase_providers": attr.label_list(
@@ -182,6 +206,7 @@ def _scala_library_implementation(ctx):
         ("javainfo", _phase_javainfo),
         ("compile", _phase_noop),
         ("singlejar", _phase_singlejar),
+        ("coverage", _phase_coverage_jacoco),
         ("ijinfo", _phase_ijinfo),
         ("library_defaultinfo", _phase_library_defaultinfo),
         ("coda", _phase_coda),
@@ -194,6 +219,7 @@ def _scala_binary_implementation(ctx):
         ("javainfo", _phase_javainfo),
         ("compile", _phase_noop),
         ("singlejar", _phase_singlejar),
+        ("coverage", _phase_coverage_jacoco),
         ("ijinfo", _phase_ijinfo),
         ("binary_deployjar", _phase_binary_deployjar),
         ("binary_launcher", _phase_binary_launcher),
@@ -207,6 +233,7 @@ def _scala_test_implementation(ctx):
         ("javainfo", _phase_javainfo),
         ("compile", _phase_noop),
         ("singlejar", _phase_singlejar),
+        ("coverage", _phase_coverage_jacoco),
         ("ijinfo", _phase_ijinfo),
         ("test_launcher", _phase_test_launcher),
         ("coda", _phase_coda),
@@ -269,6 +296,7 @@ def make_scala_test(*extras):
             _compile_private_attributes,
             _runtime_attributes,
             _runtime_private_attributes,
+            _testing_private_attributes,
             {
                 "isolation": attr.string(
                     default = "none",
@@ -459,6 +487,12 @@ configure_zinc_scala = rule(
         ),
         "_deps_worker": attr.label(
             default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/deps",
+            allow_files = True,
+            executable = True,
+            cfg = "host",
+        ),
+        "_code_coverage_instrumentation_worker": attr.label(
+            default = "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/jacoco/instrumenter",
             allow_files = True,
             executable = True,
             cfg = "host",

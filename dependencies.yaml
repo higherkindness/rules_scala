@@ -48,6 +48,11 @@ dependencies:
       lang: scala
       version: "0.6.0"
 
+  org.jacoco:
+    org.jacoco.core:
+      lang: java
+      version: "0.7.5.201505241946"
+
 replacements:
   org.scala-lang:
     scala-library:

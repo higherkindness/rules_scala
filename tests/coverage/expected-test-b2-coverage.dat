@@ -1,0 +1,29 @@
+SF:/B2.java
+FN:1,B2::<init> ()V
+FN:3,B2::b2_a ()Ljava/lang/String;
+FN:7,B2::b2_b ()V
+FNDA:0,B2::<init> ()V
+FNDA:0,B2::b2_a ()Ljava/lang/String;
+FNDA:1,B2::b2_b ()V
+FNF:3
+FNH:1
+DA:1,0
+DA:3,0
+DA:7,3
+DA:8,1
+LH:2
+LF:4
+end_of_record
+SF:/TestB2.java
+FN:4,TestB2::<init> ()V
+FN:8,TestB2::testB2 ()V
+FNDA:1,TestB2::<init> ()V
+FNDA:1,TestB2::testB2 ()V
+FNF:2
+FNH:2
+DA:4,3
+DA:8,1
+DA:9,1
+LH:3
+LF:3
+end_of_record

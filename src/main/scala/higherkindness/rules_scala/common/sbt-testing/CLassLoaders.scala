@@ -15,6 +15,8 @@ object ClassLoaders {
   def sbtTestClassLoader(urls: Seq[URL]) = new URLClassLoader(urls.toArray, null) {
     private[this] val current = getClass.getClassLoader()
     override protected def findClass(className: String): Class[_] =
-      if (className.startsWith("sbt.testing.")) current.loadClass(className) else super.findClass(className)
+      if (className.startsWith("sbt.testing.")) current.loadClass(className)
+      else if (className.startsWith("org.jacoco.agent.rt.")) current.loadClass(className)
+      else super.findClass(className)
   }
 }

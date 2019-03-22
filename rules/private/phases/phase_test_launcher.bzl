@@ -1,8 +1,11 @@
 load(
+    "@rules_scala_annex//rules/private:coverage_replacements_provider.bzl",
+    _coverage_replacements_provider = "coverage_replacements_provider",
+)
+load(
     "//rules/common:private/utils.bzl",
     _action_singlejar = "action_singlejar",
     _collect = "collect",
-    #_strip_margin = "strip_margin",
     _write_launcher = "write_launcher",
 )
 
@@ -15,8 +18,20 @@ load(
 def phase_test_launcher(ctx, g):
     files = ctx.files._java + [g.compile.zinc_info.apis]
 
-    test_jars = g.javainfo.java_info.transitive_runtime_deps
-    runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps
+    coverage_replacements = {}
+    coverage_runner_jars = []
+    if ctx.configuration.coverage_enabled:
+        coverage_replacements = _coverage_replacements_provider.from_ctx(
+            ctx,
+            base = g.coverage.replacements,
+        ).replacements
+        coverage_runner_jars = ctx.files._jacocorunner + ctx.files._lcov_merger
+
+    test_jars = depset([
+        coverage_replacements[jar] if jar in coverage_replacements else jar
+        for jar in g.javainfo.java_info.transitive_runtime_deps
+    ])
+    runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps + coverage_runner_jars
     all_jars = [test_jars, runner_jars]
 
     args = ctx.actions.args()
@@ -41,22 +56,27 @@ def phase_test_launcher(ctx, g):
         files.append(subprocess_executable)
         args.add("--isolation", "process")
         args.add("--subprocess_exec", subprocess_executable.short_path)
-    args.add_all("--", g.javainfo.java_info.transitive_runtime_jars, map_each = _test_launcher_short_path)
+    args.add_all("--", test_jars, map_each = _test_launcher_short_path)
     args.set_param_file_format("multiline")
     args_file = ctx.actions.declare_file("{}/test.params".format(ctx.label.name))
     ctx.actions.write(args_file, args)
     files.append(args_file)
 
+    jacoco_classpath = None
+    if ctx.configuration.coverage_enabled:
+        jacoco_classpath = test_jars
+
     files += _write_launcher(
-        ctx,
-        "{}/".format(ctx.label.name),
-        ctx.outputs.bin,
-        runner_jars,
-        "higherkindness.rules_scala.workers.zinc.test.TestRunner",
-        [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags] + [
+        ctx = ctx,
+        prefix = "{}/".format(ctx.label.name),
+        output = ctx.outputs.bin,
+        runtime_classpath = runner_jars,  # + ctx.files._jacocorunner,
+        main_class = "higherkindness.rules_scala.workers.zinc.test.TestRunner",
+        jvm_flags = [ctx.expand_location(f, ctx.attr.data) for f in ctx.attr.jvm_flags] + [
             "-Dbazel.runPath=$RUNPATH",
             "-DscalaAnnex.test.args=${{RUNPATH}}{}".format(args_file.short_path),
         ],
+        jacoco_classpath = jacoco_classpath,
     )
 
     g.out.providers.append(DefaultInfo(

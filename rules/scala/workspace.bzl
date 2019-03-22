@@ -14,7 +14,7 @@ def scala_repositories():
     for dep in list_dependencies():
         java_import_external(**dep["import_args"])
 
-    BAZEL_JAVA_LAUNCHER_VERSION = "0.11.1"
+    BAZEL_JAVA_LAUNCHER_VERSION = "0.22.0"
     java_stub_template_url = (
         "raw.githubusercontent.com/bazelbuild/bazel/" +
         BAZEL_JAVA_LAUNCHER_VERSION +
@@ -24,7 +24,7 @@ def scala_repositories():
 
     http_file(
         name = "anx_java_stub_template",
-        sha256 = "2cbba7c512e400df0e7d4376e667724a38d1155db5baaa81b72ad785c6d761d1",
+        sha256 = "1483b4ab1a3e8dd6754db50098d9d904533797777e6c3872425b5b1787138935",
         urls = [
             "https://mirror.bazel.build/%s" % java_stub_template_url,
             "https://%s" % java_stub_template_url,
