@@ -65,6 +65,88 @@ def list_dependencies():
             },
             "lang": "java",
         },
+        {
+            "bind_args": {
+                "actual": "@com_google_code_findbugs_jsr305",
+                "name": "jar/com/google/code/findbugs/jsr305",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "905721a0eea90a81534abb7ee6ef4ea2e5e645fa1def0a5cd88402df1b46c9ed",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "com_google_code_findbugs_jsr305",
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@com_google_errorprone_error_prone_annotations",
+                "name": "jar/com/google/errorprone/error_prone_annotations",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "cb4cfad870bf563a07199f3ebea5763f0dec440fcda0b318640b1feaa788656b",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "com_google_errorprone_error_prone_annotations",
+                "srcjar_sha256": "dbe7b49dd0584704d5c306b4ac7273556353ea3c0c6c3e50adeeca8df47047be",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@com_google_guava_guava",
+                "name": "jar/com/google/guava/guava",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "deps": [
+                    "@com_google_code_findbugs_jsr305",
+                    "@com_google_errorprone_error_prone_annotations",
+                    "@com_google_j2objc_j2objc_annotations",
+                    "@org_codehaus_mojo_animal_sniffer_annotations",
+                ],
+                "jar_sha256": "7baa80df284117e5b945b19b98d367a85ea7b7801bd358ff657946c3bd1b6596",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/com/google/guava/guava/23.0/guava-23.0.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "com_google_guava_guava",
+                "srcjar_sha256": "37fe8ba804fb3898c3c8f0cbac319cc9daa58400e5f0226a380ac94fb2c3ca14",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/com/google/guava/guava/23.0/guava-23.0-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@com_google_j2objc_j2objc_annotations",
+                "name": "jar/com/google/j2objc/j2objc_annotations",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "2994a7eb78f2710bd3d3bfb639b2c94e219cedac0d4d084d516e78c16dddecf6",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "com_google_j2objc_j2objc_annotations",
+                "srcjar_sha256": "2cd9022a77151d0b574887635cdfcdf3b78155b602abc89d7f8e62aba55cfb4f",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
         # duplicates in com.google.protobuf:protobuf-java promoted to 3.5.1
         # - com.thesamet.scalapb:scalapb-runtime_2.12:0.7.4 wanted version 3.5.1
         # - com.trueaccord.scalapb:scalapb-runtime_2.12:0.6.0 wanted version 3.3.1
@@ -387,6 +469,26 @@ def list_dependencies():
                 "srcjar_sha256": "efb8bd06659beda231375b72fb38f44d884b7d086f34e050204ffc8efe0cf6c2",
                 "srcjar_urls": [
                     "http://central.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.8.1/log4j-core-2.8.1-sources.jar",
+                ],
+            },
+            "lang": "java",
+        },
+        {
+            "bind_args": {
+                "actual": "@org_codehaus_mojo_animal_sniffer_annotations",
+                "name": "jar/org/codehaus/mojo/animal_sniffer_annotations",
+            },
+            "import_args": {
+                "default_visibility": ["//visibility:public"],
+                "jar_sha256": "2068320bd6bad744c3673ab048f67e30bef8f518996fa380033556600669905d",
+                "jar_urls": [
+                    "http://central.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar",
+                ],
+                "licenses": ["notice"],
+                "name": "org_codehaus_mojo_animal_sniffer_annotations",
+                "srcjar_sha256": "d821ae1f706db2c1b9c88d4b7b0746b01039dac63762745ef3fe5579967dd16b",
+                "srcjar_urls": [
+                    "http://central.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14-sources.jar",
                 ],
             },
             "lang": "java",
