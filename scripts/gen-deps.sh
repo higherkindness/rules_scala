@@ -16,4 +16,4 @@ echo generating dependencies for tests workspace
 rm -fr tests/3rdparty
 external-tools/bazel-deps.sh generate -r "$(pwd)/tests" -s 3rdparty/maven.bzl -d dependencies.yaml
 
-./format.sh
+./scripts/format.sh
