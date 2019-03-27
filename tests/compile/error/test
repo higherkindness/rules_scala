@@ -1,4 +1,4 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
-bazel build :lib 2>&1 | grep -q '\[Error\] compile/error/Example\.scala:'
+bazel build :lib 2>&1 | grep -q $'\[\e\[31mError\e\[0m\] compile/error/Example\.scala:'

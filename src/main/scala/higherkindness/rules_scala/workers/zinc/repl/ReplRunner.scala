@@ -2,10 +2,10 @@ package higherkindness.rules_scala
 package workers.zinc.repl
 
 import common.args.implicits._
-import workers.zinc.common.CommonArguments.LogLevel
-import workers.zinc.common.AnnexLogger
-import workers.zinc.common.AnnexScalaInstance
-import workers.zinc.common.FileUtil
+import workers.common.CommonArguments.LogLevel
+import workers.common.AnnexLogger
+import workers.common.AnnexScalaInstance
+import workers.common.FileUtil
 
 import java.io.File
 import java.nio.file.{Files, Paths}

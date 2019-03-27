@@ -1,12 +1,11 @@
 package annex.scalafmt
 
 import higherkindness.rules_scala.common.worker.WorkerMain
+import higherkindness.rules_scala.workers.common.Color
 import java.io.File
-import java.nio.charset.Charset
 import java.nio.file.Files
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
-import net.sourceforge.argparse4j.inf.Namespace
 import org.scalafmt.Scalafmt
 import org.scalafmt.config.Config
 import org.scalafmt.util.FileOps
@@ -39,8 +38,8 @@ object ScalafmtRunner extends WorkerMain[Unit] {
       format(source)
     } catch {
       case e @ (_: org.scalafmt.Error | _: scala.meta.parsers.ParseException) => {
-        System.err.println(Console.YELLOW + "WARN: " + Console.WHITE + "Unable to format file due to bug in scalafmt")
-        System.err.println(Console.YELLOW + "WARN: " + Console.WHITE + e)
+        System.err.println(Color.Warning("Unable to format file due to bug in scalafmt"))
+        System.err.println(Color.Warning(e.toString))
         source
       }
     }

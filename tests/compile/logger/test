@@ -1,0 +1,11 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel run :lib > output 2>&1
+cat output | grep -q $'\[\e\[32mInfo\e\[0m\] Test Line:100:100 Info Message 1'
+cat output | grep -q $'\[\e\[33mWarn\e\[0m\] Test Line:200:200 Warning Message 2'
+cat output | grep -q $'\[\e\[31mError\e\[0m\] Test Line:300:300 Error Message 3'
+cat output | grep -q $'\[\e\[32mInfo\e\[0m\] This is an info'
+cat output | grep -q $'\[\e\[33mWarn\e\[0m\] This is a warning'
+cat output | grep -q $'\[\e\[31mError\e\[0m\] This is an error'
+rm output

@@ -3,10 +3,10 @@ package workers.zinc.doc
 
 import common.args.implicits._
 import common.worker.WorkerMain
-import workers.zinc.common.AnnexLogger
-import workers.zinc.common.AnnexScalaInstance
-import workers.zinc.common.CommonArguments.LogLevel
-import workers.zinc.common.FileUtil
+import workers.common.AnnexLogger
+import workers.common.AnnexScalaInstance
+import workers.common.CommonArguments.LogLevel
+import workers.common.FileUtil
 
 import java.io.File
 import java.nio.file.{Files, NoSuchFileException}

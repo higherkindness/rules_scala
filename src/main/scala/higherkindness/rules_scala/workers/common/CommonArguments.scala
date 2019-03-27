@@ -1,5 +1,5 @@
 package higherkindness.rules_scala
-package workers.zinc.common
+package workers.common
 
 import net.sourceforge.argparse4j.impl.{Arguments => ArgumentsImpl}
 import net.sourceforge.argparse4j.inf.ArgumentParser

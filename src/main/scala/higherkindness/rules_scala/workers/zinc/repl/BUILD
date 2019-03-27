@@ -8,7 +8,7 @@ scala_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",
-        "//src/main/scala/higherkindness/rules_scala/workers/zinc/common",
+        "//src/main/scala/higherkindness/rules_scala/workers/common",
         "@scala_annex_net_sourceforge_argparse4j_argparse4j",
         "@scala_annex_org_scala_sbt_compiler_interface",
         "@scala_annex_org_scala_sbt_util_interface",
