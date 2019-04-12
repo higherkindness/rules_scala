@@ -18,13 +18,13 @@ alias(
 )
 
 compiler_classpath_2_12_8 = [
-    "@scala_compiler_2_12_8//jar",
-    "@scala_library_2_12_8//jar",
-    "@scala_reflect_2_12_8//jar",
+    "@maven//:org_scala_lang_scala_compiler",
+    "@maven//:org_scala_lang_scala_library",
+    "@maven//:org_scala_lang_scala_reflect",
 ]
 
 runtime_classpath_2_12_8 = [
-    "@scala_library_2_12_8//jar",
+    "@maven//:org_scala_lang_scala_library",
 ]
 
 configure_bootstrap_scala(
@@ -43,8 +43,8 @@ scala_library(
     scala = ":bootstrap_2_12_8",
     visibility = ["//visibility:public"],
     deps = compiler_classpath_2_12_8 + [
-        "@scala_annex_org_scala_sbt_compiler_interface//jar",
-        "@scala_annex_org_scala_sbt_util_interface//jar",
+        "@maven//:org_scala_sbt_compiler_interface",
+        "@maven//:org_scala_sbt_util_interface",
     ],
 )
 

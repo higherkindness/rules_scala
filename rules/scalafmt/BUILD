@@ -22,10 +22,10 @@ scala_binary(
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/worker",
         "//src/main/scala/higherkindness/rules_scala/workers/common",
-        "@scalafmt_com_geirsson_metaconfig_core_2_12",
-        "@scalafmt_com_geirsson_scalafmt_core_2_12",
-        "@scalafmt_net_sourceforge_argparse4j_argparse4j",
-        "@scalafmt_org_scalameta_parsers_2_12",
+        "@maven//:net_sourceforge_argparse4j_argparse4j",
+        "@maven_scalafmt//:com_geirsson_metaconfig_core_2_12",
+        "@maven_scalafmt//:com_geirsson_scalafmt_core_2_12",
+        "@maven_scalafmt//:org_scalameta_parsers_2_12",
     ],
 )
 

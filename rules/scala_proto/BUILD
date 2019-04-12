@@ -21,10 +21,10 @@ scala_binary(
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",
         "//src/main/scala/higherkindness/rules_scala/common/worker",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_proto_com_github_os72_protoc_jar",
-        "@scala_proto_com_thesamet_scalapb_compilerplugin_2_12",
-        "@scala_proto_com_thesamet_scalapb_protoc_bridge_2_12",
+        "@maven//:net_sourceforge_argparse4j_argparse4j",
+        "@maven_proto//:com_github_os72_protoc_jar",
+        "@maven_proto//:com_thesamet_scalapb_compilerplugin_2_12",
+        "@maven_proto//:com_thesamet_scalapb_protoc_bridge_2_12",
     ],
 )
 
