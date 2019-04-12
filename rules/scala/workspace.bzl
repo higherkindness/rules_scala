@@ -1,7 +1,6 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
-load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
 load("@bazel_tools//tools/build_defs/repo:jvm.bzl", "jvm_maven_import_external")
-load("//3rdparty:maven.bzl", "list_dependencies")
+load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 _SRC_FILEGROUP_BUILD_FILE_CONTENT = """
 filegroup(
@@ -11,8 +10,34 @@ filegroup(
 )"""
 
 def scala_repositories():
-    for dep in list_dependencies():
-        java_import_external(**dep["import_args"])
+    maven_install(
+        name = "annex",
+        artifacts = [
+            "org.scala-sbt:compiler-interface:1.2.1",
+            "org.scala-sbt:util-interface:1.2.1",
+            "org.scala-lang:scala-compiler:2.12.8",
+            "org.scala-lang:scala-library:2.12.8",
+            "org.scala-lang:scala-reflect:2.12.8",
+            "net.sourceforge.argparse4j:argparse4j:0.8.1",
+            "org.jacoco:org.jacoco.core:0.7.5.201505241946",
+            "com.lihaoyi:sourcecode_2.12:0.1.4,",
+            "org.scala-sbt:zinc_2.12:1.2.1",
+            "org.scala-sbt:test-interface:1.0",
+            "org.scala-sbt:util-interface:1.2.0",
+            "org.scala-sbt:zinc-compile-core_2.12:1.2.1",
+            "org.scala-sbt:zinc-persist_2.12:1.2.1",
+            "org.scala-sbt:zinc-core_2.12:1.2.1",
+            "org.scala-sbt:zinc-apiinfo_2.12:1.2.1",
+            "org.scala-sbt:zinc-classpath_2.12:1.2.1",
+            "org.scala-sbt:compiler-interface:1.2.1",
+            "ch.epfl.scala:bloop-frontend_2.12:1.0.0",
+            "com.trueaccord.scalapb:scalapb-runtime_2.12:0.6.0",
+            "org.scala-sbt:util-logging_2.12:1.2.0",
+        ],
+        repositories = [
+            "http://central.maven.org/maven2",
+        ],
+    )
 
     BAZEL_JAVA_LAUNCHER_VERSION = "0.22.0"
     java_stub_template_url = (

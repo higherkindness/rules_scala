@@ -13,9 +13,9 @@ scala_test(
     scala = "//scala:2_12",
     deps = [
         ":global",
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
     ],
 )
 
@@ -25,9 +25,9 @@ scala_test(
     isolation = "classloader",
     scala = "//scala:2_12",
     deps = [
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
     ],
 )
 
@@ -39,9 +39,9 @@ scala_test(
     shared_deps = [":global"],
     deps = [
         ":global",
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
     ],
 )
 
@@ -51,9 +51,9 @@ scala_test(
     scala = "//scala:2_12",
     deps = [
         ":global",
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
     ],
 )
 
@@ -63,9 +63,9 @@ scala_test(
     isolation = "none",
     scala = "//scala:2_12",
     deps = [
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
     ],
 )
 
@@ -76,9 +76,9 @@ scala_test(
     scala = "//scala:2_12",
     deps = [
         ":global",
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
     ],
 )
 
@@ -89,9 +89,9 @@ scala_test(
     scala = "//scala:2_11",
     deps = [
         ":global",
-        "@org_specs2_specs2_common_2_11",
-        "@org_specs2_specs2_core_2_11",
-        "@org_specs2_specs2_matcher_2_11",
+        "@annex_test//:org_specs2_specs2_common_2_11",
+        "@annex_test//:org_specs2_specs2_core_2_11",
+        "@annex_test//:org_specs2_specs2_matcher_2_11",
     ],
 )
 
@@ -101,8 +101,8 @@ scala_test(
     isolation = "process",
     scala = "//scala:2_12",
     deps = [
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
     ],
 )

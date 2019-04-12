@@ -7,7 +7,7 @@ scaladoc(
         "B.scala",
     ],
     compiler_deps = [
-        "@org_scala_lang_modules_scala_xml_2_12",
+        "@annex_test//:org_scala_lang_modules_scala_xml_2_12",
     ],
     scala = "//scala:2_12",
 )

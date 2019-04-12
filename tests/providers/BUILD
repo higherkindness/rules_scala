@@ -33,8 +33,8 @@ bootstrap_scala_library(
     srcs = ["@compiler_bridge_2_12//:src"],
     scala = ":provided_scala_configuration",
     deps = [
+        "@annex//:org_scala_sbt_util_interface",
         "@scala_annex_org_scala_sbt_compiler_interface",
-        "@scala_annex_org_scala_sbt_util_interface",
         "@scala_compiler_2_12_6//jar",
         "@scala_library_2_12_6//jar",
         "@scala_reflect_2_12_6//jar",

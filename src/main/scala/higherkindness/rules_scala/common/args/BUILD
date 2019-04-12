@@ -7,7 +7,7 @@ scala_library(
     scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     deps = [
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
+        "@annex//:net_sourceforge_argparse4j_argparse4j",
     ],
 )
 

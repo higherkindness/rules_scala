@@ -1,9 +1,17 @@
-load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
-load("//rules/scalafmt/3rdparty:maven.bzl", "list_dependencies")
+load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 def scalafmt_repositories():
-    for dep in list_dependencies():
-        java_import_external(**dep["import_args"])
+    maven_install(
+        name = "annex_scalafmt",
+        artifacts = [
+            "org.scalameta:parsers_2.12:1.7.0",
+            "com.geirsson:metaconfig-core_2.12:0.4.0",
+            "com.geirsson:scalafmt-core_2.12:1.5.1",
+        ],
+        repositories = [
+            "http://central.maven.org/maven2",
+        ],
+    )
 
 def scalafmt_default_config(path = ".scalafmt.conf"):
     build = []
