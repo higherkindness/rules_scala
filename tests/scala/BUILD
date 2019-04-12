@@ -45,8 +45,8 @@ scala_library(
     scala = ":bootstrap_2_11_12",
     visibility = ["//visibility:public"],
     deps = compiler_classpath_2_11_12 + [
-        "@scala_annex_org_scala_sbt_compiler_interface//jar",
-        "@scala_annex_org_scala_sbt_util_interface//jar",
+        "@maven//:org_scala_sbt_compiler_interface",
+        "@maven//:org_scala_sbt_util_interface",
     ],
 )
 
@@ -87,8 +87,8 @@ scala_library(
     scala = ":bootstrap_2_12_6",
     visibility = ["//visibility:public"],
     deps = compiler_classpath_2_12_6 + [
-        "@scala_annex_org_scala_sbt_compiler_interface//jar",
-        "@scala_annex_org_scala_sbt_util_interface//jar",
+        "@maven//:org_scala_sbt_compiler_interface",
+        "@maven//:org_scala_sbt_util_interface",
     ],
 )
 
@@ -129,8 +129,8 @@ scala_library(
     scala = ":bootstrap_typelevel_2_12_1",
     visibility = ["//visibility:public"],
     deps = compiler_classpath_typelevel_2_12_1 + [
-        "@scala_annex_org_scala_sbt_compiler_interface//jar",
-        "@scala_annex_org_scala_sbt_util_interface//jar",
+        "@maven//:org_scala_sbt_compiler_interface",
+        "@maven//:org_scala_sbt_util_interface",
     ],
 )
 

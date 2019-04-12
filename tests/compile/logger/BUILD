@@ -4,8 +4,8 @@ scala_binary(
     name = "lib",
     srcs = ["Example.scala"],
     deps = [
+        "@maven//:org_scala_sbt_util_interface",
         "@rules_scala_annex//src/main/scala/higherkindness/rules_scala/workers/common",
-        "@scala_annex_org_scala_sbt_util_interface",
         "@scala_annex_org_scala_sbt_util_logging_2_12",
         "@scala_annex_org_scala_sbt_zinc_compile_core_2_12",
     ],
