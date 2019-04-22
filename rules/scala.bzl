@@ -146,7 +146,7 @@ _compile_attributes = {
     ),
     "scala": attr.label(
         default = "//external:default_scala",
-        doc = "The `ScalaConfiguration`.",
+        doc = "The `ScalaConfiguration`. Among other things, this specifies which scala version to use.\n Defaults to the default_scala target specified in the WORKSPACE file.",
         providers = [
             _ScalaConfiguration,
         ],
@@ -274,7 +274,17 @@ def make_scala_binary(*extras):
             _extras_attributes(extras),
             *[extra["attrs"] for extra in extras]
         ),
-        doc = "Compiles and links a Scala JVM executable.",
+        doc = """
+Compiles and links a Scala JVM executable.
+
+Produces the following implicit outputs:
+
+  - `<name>_deploy.jar`: a single jar that contains all the necessary information to run the program
+  - `<name>.jar`: a jar file that contains the class files produced from the sources
+  - `<name>-bin`: the script that's used to run the program in conjunction with the generated runfiles
+
+To run the program: `bazel run <target>`
+""",
         executable = True,
         outputs = _dicts.add(
             {
@@ -328,6 +338,16 @@ def make_scala_test(*extras):
             _extras_attributes(extras),
             *[extra["attrs"] for extra in extras]
         ),
+        doc = """
+Compiles and links a collection of Scala tests.
+
+To buid and run all tests: `bazel test <target>`
+
+To build and run a specific test: `bazel test <target> --test_filter=<filter_expression>`
+<br>(Note: the syntax of the `<filter_expression>` varies by test framework, and not all test frameworks support the `test_filter` option at this time.)
+
+[More Info](/docs/scala.md#tests)
+""",
         executable = True,
         outputs = _dicts.add(
             {
@@ -380,6 +400,11 @@ scala_repl = rule(
             ),
         },
     ),
+    doc = """
+Launches a REPL with all given dependencies available.
+
+To run: `bazel run <target>`
+""",
     executable = True,
     outputs = {
         "bin": "%{name}-bin",

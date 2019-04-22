@@ -50,7 +50,10 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
 
 * The [`shard_count`](https://docs.bazel.build/versions/master/be/common-definitions.html#common-attributes-tests) attribute.
 
-* The [`--test_filter`](https://docs.bazel.build/versions/master/user-manual.html#flag--test_filter) option.
+* The [`--test_filter=<filter_expression>`](https://docs.bazel.build/versions/master/user-manual.html#flag--test_filter) option.
+  * The syntax of the `<filter_expression>` varies by test framework, and not all test frameworks support the `test_filter` option at this time.
+  * For specs2, `<filter_expression>` simply matches full, `.`-separated classnames
+    * example: `my.package.MyTest`
 
 * [java_stub_template](https://github.com/bazelbuild/bazel/blob/0.12.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/java_stub_template.txt) options.
 
@@ -62,10 +65,10 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
 # Run tests
 $ bazel test :mytest
 
-# Run a single test
+# Run a single test (specs2)
 $ bazel test --test_filter=my.test.Example :mytest
 
-# Run all tests with Java/Scala package prefix
+# Run all tests with Java/Scala package prefix (specs2)
 $ bazel test --test_filter='my.test.*' :mytest
 
 # Debug JVM on port 5005
