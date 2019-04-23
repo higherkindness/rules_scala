@@ -60,6 +60,13 @@ http_archive(
     url = "https://github.com/higherkindness/rules_scala/archive/{}.zip".format(rules_scala_annex_commit),
 )
 
+http_archive(
+    name = "rules_jvm_external",
+    sha256 = "55e8d3951647ae3dffde22b4f7f8dee11b3f70f3f89424713debd7076197eaca",
+    strip_prefix = "rules_jvm_external-2.0.1",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.0.1.zip",
+)
+
 load("@rules_scala_annex//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")
 scala_repositories()
 scala_register_toolchains()

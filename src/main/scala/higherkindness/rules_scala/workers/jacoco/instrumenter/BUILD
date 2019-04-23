@@ -10,8 +10,8 @@ scala_binary(
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",
         "//src/main/scala/higherkindness/rules_scala/common/worker",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_annex_org_jacoco_org_jacoco_core",
+        "@annex//:net_sourceforge_argparse4j_argparse4j",
+        "@annex//:org_jacoco_org_jacoco_core",
     ],
 )
 

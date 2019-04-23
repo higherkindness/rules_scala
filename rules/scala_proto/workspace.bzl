@@ -1,9 +1,17 @@
-load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
-load("//rules/scala_proto/3rdparty:maven.bzl", "list_dependencies")
+load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 def scala_proto_register_toolchains():
     native.register_toolchains("@rules_scala_annex//rules/scala_proto:scalapb_scala_proto_toolchain")
 
 def scala_proto_repositories():
-    for dep in list_dependencies():
-        java_import_external(**dep["import_args"])
+    maven_install(
+        name = "annex_proto",
+        artifacts = [
+            "com.github.os72:protoc-jar:3.5.1.1",
+            "com.thesamet.scalapb:compilerplugin_2.12:0.7.4",
+            "com.thesamet.scalapb:protoc-bridge_2.12:0.7.3",
+        ],
+        repositories = [
+            "http://central.maven.org/maven2",
+        ],
+    )

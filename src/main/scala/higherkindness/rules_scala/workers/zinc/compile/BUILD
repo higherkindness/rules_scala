@@ -8,14 +8,14 @@ scala_binary(
     scala = "//src/main/scala:bootstrap",
     visibility = ["//visibility:public"],
     runtime_deps = [
-        "@scala_annex_com_lihaoyi_sourcecode_2_12",
+        "@annex//:com_lihaoyi_sourcecode_2_12",
     ],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/worker",
         "//src/main/scala/higherkindness/rules_scala/workers/common",
         "//third_party/bazel/src/java_tools/buildjar/java/com/google/devtools/build/buildjar/jarhelper",
-        "@scala_annex_org_scala_sbt_test_interface",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
+        "@annex//:org_scala_sbt_test_interface",
+        "@annex//:org_scala_sbt_zinc_2_12",
     ],
 )
 

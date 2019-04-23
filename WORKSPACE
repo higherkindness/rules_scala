@@ -30,6 +30,13 @@ http_archive(
     urls = ["https://github.com/google/protobuf/archive/0038ff49af882463c2af9049356eed7df45c3e8e.zip"],
 )
 
+http_archive(
+    name = "rules_jvm_external",
+    sha256 = "55e8d3951647ae3dffde22b4f7f8dee11b3f70f3f89424713debd7076197eaca",
+    strip_prefix = "rules_jvm_external-2.0.1",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.0.1.zip",
+)
+
 load("//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")
 
 scala_repositories()

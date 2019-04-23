@@ -16,6 +16,6 @@ scala_library(
     srcs = ["scalaimport.scala"],
     deps = [
         ":shapeless",
-        "@org_scala_lang_modules_scala_xml_2_12//jar",
+        "@annex_test//:org_scala_lang_modules_scala_xml_2_12",
     ],
 )

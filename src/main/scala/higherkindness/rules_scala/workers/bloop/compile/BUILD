@@ -8,7 +8,7 @@ scala_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/worker",
-        "@scala_annex_ch_epfl_scala_bloop_frontend_2_12",
+        "@annex//:ch_epfl_scala_bloop_frontend_2_12",
     ],
 )
 

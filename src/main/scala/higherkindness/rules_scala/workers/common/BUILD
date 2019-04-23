@@ -8,8 +8,8 @@ scala_library(
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",
-        "@scala_annex_net_sourceforge_argparse4j_argparse4j",
-        "@scala_annex_org_scala_sbt_zinc_2_12",
+        "@annex//:net_sourceforge_argparse4j_argparse4j",
+        "@annex//:org_scala_sbt_zinc_2_12",
     ],
 )
 

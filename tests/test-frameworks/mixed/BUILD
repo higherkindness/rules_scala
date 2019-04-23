@@ -11,13 +11,13 @@ scala_test(
         "@junit_interface//jar",
     ],
     deps = [
+        "@annex_test//:org_scalacheck_scalacheck_2_12",
+        "@annex_test//:org_scalactic_scalactic_2_12",
+        "@annex_test//:org_scalatest_scalatest_2_12",
+        "@annex_test//:org_specs2_specs2_common_2_12",
+        "@annex_test//:org_specs2_specs2_core_2_12",
+        "@annex_test//:org_specs2_specs2_matcher_2_12",
         "@junit//jar",
-        "@org_scalacheck_scalacheck_2_12",
-        "@org_scalactic_scalactic_2_12",
-        "@org_scalatest_scalatest_2_12",
-        "@org_specs2_specs2_common_2_12",
-        "@org_specs2_specs2_core_2_12",
-        "@org_specs2_specs2_matcher_2_12",
     ],
 )
 
@@ -30,9 +30,9 @@ scala_test(
     scala = "//scala:2_11",
     tags = ["manual"],
     deps = [
-        "@org_scalacheck_scalacheck_2_11//jar",
-        "@org_specs2_specs2_common_2_11",
-        "@org_specs2_specs2_core_2_11",
-        "@org_specs2_specs2_matcher_2_11",
+        "@annex_test//:org_scalacheck_scalacheck_2_11",
+        "@annex_test//:org_specs2_specs2_common_2_11",
+        "@annex_test//:org_specs2_specs2_core_2_11",
+        "@annex_test//:org_specs2_specs2_matcher_2_11",
     ],
 )
