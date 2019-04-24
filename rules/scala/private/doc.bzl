@@ -24,7 +24,7 @@ def scaladoc_implementation(ctx):
     html = ctx.actions.declare_directory("html")
     tmp = ctx.actions.declare_directory("tmp")
 
-    classpath = depset(transitive = [dep[JavaInfo].transitive_compile_time_deps for dep in ctx.attr.deps])
+    classpath = depset(transitive = [dep[JavaInfo].transitive_deps for dep in ctx.attr.deps])
     compiler_classpath = depset(
         transitive =
             [scompiler_classpath.transitive_runtime_deps] +

@@ -1,0 +1,7 @@
+load("@rules_scala_annex//rules:scala.bzl", "scala_library")
+
+scala_library(
+    name = "mocklib",
+    srcs = ["MockLib.scala"],
+    visibility = ["//visibility:public"],
+)

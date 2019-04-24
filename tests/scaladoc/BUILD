@@ -10,4 +10,7 @@ scaladoc(
         "@annex_test//:org_scala_lang_modules_scala_xml_2_12",
     ],
     scala = "//scala:2_12",
+    deps = [
+        "//mockutil:mocklib",
+    ],
 )
