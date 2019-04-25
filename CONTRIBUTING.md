@@ -22,12 +22,29 @@ $ ./format.sh
 
 ## Maven deps
 
-[Bazel-deps](https://github.com/johnynek/bazel-deps) is used to generate maven deps. If you need to change
-dependencies, modify dependencies.yaml and
+[rules_jvm_external](https://github.com/bazelbuild/rules_jvm_external) is used to generate maven deps. If you need to change
+dependencies, modify `maven_install` in the following different `workspace.bzl` files
 
 ```
-$ ./setup-tools.sh # first time
-$ ./gen-deps.sh
+rules/scala/workspace.bzl
+rules/scala_proto/workspace.bzl
+rules/scalafmt/workspace.bzl
+tests/workspace.bzl
+```
+To reference the dependency, use the `name` attribute of the `maven_install` rule as the package and the versionless dependency as the target. E.g. `@<maven_install_name>//:<versionless_dependency>`.
+
+For example, if you'd like to add `org.scala-sbt:compiler-interface:1.2.1` as a dependency, simply add it to the `artifacts` list in `maven_install` with the attribute `name = "annex"`, and then refer to it with `@annex//:org.scala-sbt:compiler-interface`.
+
+```
+maven_install(
+    name = "annex",
+    artifacts = [
+        "org.scala-sbt:compiler-interface:1.2.1",
+    ],
+    repositories = [
+        "http://central.maven.org/maven2",
+    ],
+)
 ```
 
 ## Tests
