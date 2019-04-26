@@ -31,9 +31,9 @@ rules/scala_proto/workspace.bzl
 rules/scalafmt/workspace.bzl
 tests/workspace.bzl
 ```
-To reference the dependency, use the `name` attribute of the `maven_install` rule as the package and the versionless dependency as the target. E.g. `@<maven_install_name>//:<versionless_dependency>`.
+To reference the dependency, use the `name` attribute of the `maven_install` rule as the repository name and the versionless dependency as the target. E.g. `@<maven_install_name>//:<versionless_dependency>`.
 
-For example, if you'd like to add `org.scala-sbt:compiler-interface:1.2.1` as a dependency, simply add it to the `artifacts` list in `maven_install` with the attribute `name = "annex"`, and then refer to it with `@annex//:org.scala-sbt:compiler-interface`.
+For example, if you'd like to add `org.scala-sbt:compiler-interface:1.2.1` as a dependency, simply add it to the `artifacts` list in `maven_install` with the attribute `name = "annex"`, and then refer to it with `@annex//:org_scala_sbt_compiler_interface`.
 
 ```
 maven_install(
