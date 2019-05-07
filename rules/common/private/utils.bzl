@@ -1,4 +1,5 @@
-load("@bazel_skylib//lib:dicts.bzl", _dicts = "dicts")
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 
 #
 # Helper utilities
@@ -60,9 +61,15 @@ def write_launcher(
     template = ctx.file._java_stub_template
     runfiles_enabled = False
 
+    java_path = str(ctx.attr._jdk[java_common.JavaRuntimeInfo].java_executable_runfiles_path)
+    if paths.is_absolute(java_path):
+        javabin = java_path
+    else:
+        javabin = "$JAVA_RUNFILES/{}/{}".format(ctx.workspace_name, ctx.attr._jdk[java_common.JavaRuntimeInfo].java_executable_runfiles_path)
+
     base_substitutions = {
         "%classpath%": classpath,
-        "%javabin%": "JAVABIN=\"$JAVA_RUNFILES/{}/{}\"\n{}".format(ctx.workspace_name, ctx.executable._java.short_path, extra),
+        "%javabin%": "JAVABIN=\"{}\"\n{}".format(javabin, extra),
         "%jvm_flags%": jvm_flags,
         "%needs_runfiles%": "1" if runfiles_enabled else "",
         "%runfiles_manifest_only%": "1" if runfiles_enabled else "",
@@ -96,7 +103,7 @@ def write_launcher(
     ctx.actions.expand_template(
         template = template,
         output = output,
-        substitutions = _dicts.add(base_substitutions, more_substitutions),
+        substitutions = dicts.add(base_substitutions, more_substitutions),
         is_executable = True,
     )
 

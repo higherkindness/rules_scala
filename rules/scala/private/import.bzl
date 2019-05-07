@@ -1,3 +1,8 @@
+load(
+    "@bazel_tools//tools/jdk:toolchain_utils.bzl",
+    "find_java_runtime_toolchain",
+    "find_java_toolchain",
+)
 load("@rules_scala_annex//rules:providers.bzl", _IntellijInfo = "IntellijInfo")
 
 scala_import_private_attributes = {
@@ -51,8 +56,8 @@ def scala_import_implementation(ctx):
             ctx.actions,
             output_jar = output_jar,
             source_jars = _src_jar,
-            host_javabase = ctx.attr._host_javabase,
-            java_toolchain = ctx.attr._java_toolchain,
+            host_javabase = find_java_runtime_toolchain(ctx, ctx.attr._host_javabase),
+            java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
         )
 
         java_info = JavaInfo(

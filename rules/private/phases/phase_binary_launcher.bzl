@@ -34,9 +34,8 @@ def phase_binary_launcher(ctx, g):
         runfiles = ctx.runfiles(
             files = inputs + files,
             transitive_files = depset(
-                direct = [ctx.executable._java],
                 order = "default",
-                transitive = [g.javainfo.java_info.transitive_runtime_deps],
+                transitive = [ctx.attr._jdk[java_common.JavaRuntimeInfo].files, g.javainfo.java_info.transitive_runtime_deps],
             ),
             collect_default = True,
         ),

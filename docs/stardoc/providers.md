@@ -1,4 +1,7 @@
+<!-- Generated with Stardoc: http://skydoc.bazel.build -->
+
 <a name="#declare_scala_configuration"></a>
+
 ## declare_scala_configuration
 
 <pre>
@@ -56,6 +59,7 @@ Creates a `ScalaConfiguration`.
 
 
 <a name="#declare_zinc_configuration"></a>
+
 ## declare_zinc_configuration
 
 <pre>
@@ -92,6 +96,7 @@ Creates a `ZincConfiguration`.
 
 
 <a name="#join_configurations"></a>
+
 ## join_configurations
 
 <pre>
@@ -128,6 +133,7 @@ join_configurations(<a href="#join_configurations-name">name</a>, <a href="#join
 
 
 <a name="#reconfigure_deps_configuration"></a>
+
 ## reconfigure_deps_configuration
 
 <pre>
@@ -176,6 +182,7 @@ reconfigure_deps_configuration(<a href="#reconfigure_deps_configuration-name">na
 
 
 <a name="#CodeCoverageConfiguration"></a>
+
 ## CodeCoverageConfiguration
 
 <pre>
@@ -203,6 +210,7 @@ Code coverage related configuration
 
 
 <a name="#DepsConfiguration"></a>
+
 ## DepsConfiguration
 
 <pre>
@@ -242,6 +250,7 @@ Dependency checking configuration.
 
 
 <a name="#IntellijInfo"></a>
+
 ## IntellijInfo
 
 <pre>
@@ -275,6 +284,7 @@ Provider for IntelliJ.
 
 
 <a name="#LabeledJars"></a>
+
 ## LabeledJars
 
 <pre>
@@ -302,6 +312,7 @@ Exported jars and their labels.
 
 
 <a name="#ScalaConfiguration"></a>
+
 ## ScalaConfiguration
 
 <pre>
@@ -347,6 +358,7 @@ Scala compile-time and runtime configuration
 
 
 <a name="#ScalaInfo"></a>
+
 ## ScalaInfo
 
 <pre>
@@ -380,6 +392,7 @@ Scala library.
 
 
 <a name="#ScalaRulePhase"></a>
+
 ## ScalaRulePhase
 
 <pre>
@@ -407,6 +420,7 @@ A Scala compiler plugin
 
 
 <a name="#ZincConfiguration"></a>
+
 ## ZincConfiguration
 
 <pre>
@@ -440,6 +454,7 @@ Zinc configuration.
 
 
 <a name="#ZincInfo"></a>
+
 ## ZincInfo
 
 <pre>
@@ -484,110 +499,6 @@ Zinc-specific outputs.
       <td><code>relations</code></td>
       <td>
         <p>The relations file.</p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _declare_scala_configuration_implementation
-
-<pre>
-_declare_scala_configuration_implementation(<a href="#_declare_scala_configuration_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_declare_scala_configuration_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _declare_zinc_configuration_implementation
-
-<pre>
-_declare_zinc_configuration_implementation(<a href="#_declare_zinc_configuration_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_declare_zinc_configuration_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _join_configurations_implementation
-
-<pre>
-_join_configurations_implementation(<a href="#_join_configurations_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_join_configurations_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _reconfigure_deps_configuration_implementation
-
-<pre>
-_reconfigure_deps_configuration_implementation(<a href="#_reconfigure_deps_configuration_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_reconfigure_deps_configuration_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
       </td>
     </tr>
   </tbody>

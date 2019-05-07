@@ -1,4 +1,9 @@
 load(
+    "@bazel_tools//tools/jdk:toolchain_utils.bzl",
+    "find_java_runtime_toolchain",
+    "find_java_toolchain",
+)
+load(
     "@rules_scala_annex//rules:providers.bzl",
     _ScalaInfo = "ScalaInfo",
 )
@@ -26,15 +31,15 @@ def phase_javainfo(ctx, g):
             ctx.actions,
             jar = ctx.outputs.jar,
             target_label = ctx.label,
-            java_toolchain = ctx.attr._java_toolchain,
+            java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
         )
 
         source_jar = java_common.pack_sources(
             ctx.actions,
             output_jar = ctx.outputs.jar,
             sources = ctx.files.srcs,
-            host_javabase = ctx.attr._host_javabase,
-            java_toolchain = ctx.attr._java_toolchain,
+            host_javabase = find_java_runtime_toolchain(ctx, ctx.attr._host_javabase),
+            java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
         )
 
         java_info = JavaInfo(

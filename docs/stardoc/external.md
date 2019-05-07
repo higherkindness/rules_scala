@@ -1,3 +1,7 @@
+<!-- Generated with Stardoc: http://skydoc.bazel.build -->
+
+<a name="#scala_import_external"></a>
+
 ## scala_import_external
 
 <pre>
@@ -14,21 +18,23 @@ scala_import_external(<a href="#scala_import_external-rule_load">rule_load</a>, 
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="scala_import_external-rule_load>
+    <tr id="scala_import_external-rule_load">
       <td><code>rule_load</code></td>
       <td>
-        required.
+        optional. default is <code>"load(\"@rules_scala_annex//rules:scala.bzl\", \"scala_import\")"</code>
       </td>
     </tr>
-    <tr id="scala_import_external-kwargs>
+    <tr id="scala_import_external-kwargs">
       <td><code>kwargs</code></td>
       <td>
-        optional. default is <code>"load(\"@rules_scala_annex//rules:scala.bzl\", \"scala_import\")"</code>
+        optional.
       </td>
     </tr>
   </tbody>
 </table>
 
+
+<a name="#scala_maven_import_external"></a>
 
 ## scala_maven_import_external
 
@@ -46,28 +52,28 @@ scala_maven_import_external(<a href="#scala_maven_import_external-artifact">arti
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="scala_maven_import_external-artifact>
+    <tr id="scala_maven_import_external-artifact">
       <td><code>artifact</code></td>
       <td>
         required.
       </td>
     </tr>
-    <tr id="scala_maven_import_external-server_urls>
+    <tr id="scala_maven_import_external-server_urls">
       <td><code>server_urls</code></td>
       <td>
         required.
       </td>
     </tr>
-    <tr id="scala_maven_import_external-rule_load>
+    <tr id="scala_maven_import_external-rule_load">
       <td><code>rule_load</code></td>
       <td>
-        required.
+        optional. default is <code>"load(\"@rules_scala_annex//rules:scala.bzl\", \"scala_import\")"</code>
       </td>
     </tr>
-    <tr id="scala_maven_import_external-kwargs>
+    <tr id="scala_maven_import_external-kwargs">
       <td><code>kwargs</code></td>
       <td>
-        optional. default is <code>"load(\"@rules_scala_annex//rules:scala.bzl\", \"scala_import\")"</code>
+        optional.
       </td>
     </tr>
   </tbody>

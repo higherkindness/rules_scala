@@ -1,4 +1,7 @@
+<!-- Generated with Stardoc: http://skydoc.bazel.build -->
+
 <a name="#scala_proto_library"></a>
+
 ## scala_proto_library
 
 <pre>
@@ -42,6 +45,7 @@ See example use in [/tests/proto/BUILD](/tests/proto/BUILD)
 
 
 <a name="#scala_proto_toolchain"></a>
+
 ## scala_proto_toolchain
 
 <pre>
@@ -111,32 +115,6 @@ toolchain(
       <td><code>compiler_supports_workers</code></td>
       <td>
         Boolean; optional
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _scala_proto_toolchain_implementation
-
-<pre>
-_scala_proto_toolchain_implementation(<a href="#_scala_proto_toolchain_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_scala_proto_toolchain_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
       </td>
     </tr>
   </tbody>
