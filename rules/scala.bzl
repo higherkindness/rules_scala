@@ -70,9 +70,9 @@ _compile_private_attributes = {
 
     # TODO: push java and jar_creator into a provider for the
     # bootstrap compile phase
-    "_java": attr.label(
-        default = Label("@bazel_tools//tools/jdk:java"),
-        executable = True,
+    "_jdk": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
+        providers = [java_common.JavaRuntimeInfo],
         cfg = "host",
     ),
     "_jar_creator": attr.label(
@@ -167,9 +167,9 @@ _runtime_attributes = {
 }
 
 _runtime_private_attributes = {
-    "_java": attr.label(
-        default = Label("@bazel_tools//tools/jdk:java"),
-        executable = True,
+    "_jdk": attr.label(
+        default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
+        providers = [java_common.JavaRuntimeInfo],
         cfg = "host",
     ),
     "_java_stub_template": attr.label(

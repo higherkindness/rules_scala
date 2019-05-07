@@ -50,7 +50,7 @@ def scala_repl_implementation(ctx):
             runfiles = ctx.runfiles(
                 collect_default = True,
                 collect_data = True,
-                files = [ctx.executable._java],
+                files = [ctx.attr._jdk[java_common.JavaRuntimeInfo].java_executable_exec_path],
                 transitive_files = files,
             ),
         ),
