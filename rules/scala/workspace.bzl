@@ -37,6 +37,7 @@ def scala_repositories():
         repositories = [
             "http://central.maven.org/maven2",
         ],
+        fetch_sources = True,
     )
 
     BAZEL_JAVA_LAUNCHER_VERSION = "0.22.0"

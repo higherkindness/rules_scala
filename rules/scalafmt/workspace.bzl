@@ -11,6 +11,7 @@ def scalafmt_repositories():
         repositories = [
             "http://central.maven.org/maven2",
         ],
+        fetch_sources = True,
     )
 
 def scalafmt_default_config(path = ".scalafmt.conf"):
