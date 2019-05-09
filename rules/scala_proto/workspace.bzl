@@ -14,4 +14,5 @@ def scala_proto_repositories():
         repositories = [
             "http://central.maven.org/maven2",
         ],
+        fetch_sources = True,
     )

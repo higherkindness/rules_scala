@@ -23,4 +23,5 @@ def maven_dependencies():
         repositories = [
             "http://central.maven.org/maven2",
         ],
+        fetch_sources = True,
     )
