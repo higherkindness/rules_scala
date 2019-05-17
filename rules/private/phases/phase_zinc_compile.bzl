@@ -1,4 +1,8 @@
 load(
+    "@bazel_tools//tools/jdk:toolchain_utils.bzl",
+    "find_java_toolchain",
+)
+load(
     "@rules_scala_annex//rules:providers.bzl",
     _ZincConfiguration = "ZincConfiguration",
     _ZincInfo = "ZincInfo",
@@ -25,7 +29,9 @@ def phase_zinc_compile(ctx, g):
 
     javacopts = [
         ctx.expand_location(option, ctx.attr.data)
-        for option in ctx.attr.javacopts + java_common.default_javac_opts(ctx, java_toolchain_attr = "_java_toolchain")
+        for option in ctx.attr.javacopts + java_common.default_javac_opts(
+            java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
+        )
     ]
 
     zincs = [dep[_ZincInfo] for dep in ctx.attr.deps if _ZincInfo in dep]

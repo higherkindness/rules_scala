@@ -75,15 +75,18 @@ scala_register_toolchains()
 git_repository(
     name = "bazel_skylib",
     remote = "https://github.com/bazelbuild/bazel-skylib.git",
-    tag = "0.6.0",
+    tag = "0.8.0",
 )
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "2c8f8614fb1be709d68abaab6b4791682aa7db2048012dd4642d3a50b4f67cb3",
-    strip_prefix = "protobuf-0038ff49af882463c2af9049356eed7df45c3e8e",
-    urls = ["https://github.com/google/protobuf/archive/0038ff49af882463c2af9049356eed7df45c3e8e.zip"],
+    sha256 = "0963c6ae20340ce41f225a99cacbcba8422cebe4f82937f3d9fa3f5dd7ae7342",
+    strip_prefix = "protobuf-9f604ac5043e9ab127b99420e957504f2149adbe",
+    urls = ["https://github.com/google/protobuf/archive/9f604ac5043e9ab127b99420e957504f2149adbe.zip"],
 )
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+protobuf_deps()
 
 # Specify the scala compiler we wish to use; in this case, we'll use the default one specified in rules_scala_annex
 bind(

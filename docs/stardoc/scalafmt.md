@@ -1,4 +1,7 @@
+<!-- Generated with Stardoc: http://skydoc.bazel.build -->
+
 <a name="#scala_format_test"></a>
+
 ## scala_format_test
 
 <pre>

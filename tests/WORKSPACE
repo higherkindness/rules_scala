@@ -1,18 +1,51 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:jvm.bzl", "jvm_maven_import_external")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-http_archive(
+git_repository(
     name = "bazel_skylib",
-    sha256 = "c0289fef5237c31e8462042b4cc3bdf831a3d3d135bb4a0d493a5072acecb074",
-    strip_prefix = "bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b",
-    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.zip"],
+    remote = "https://github.com/bazelbuild/bazel-skylib.git",
+    tag = "0.8.0",
 )
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "2c8f8614fb1be709d68abaab6b4791682aa7db2048012dd4642d3a50b4f67cb3",
-    strip_prefix = "protobuf-0038ff49af882463c2af9049356eed7df45c3e8e",
-    urls = ["https://github.com/google/protobuf/archive/0038ff49af882463c2af9049356eed7df45c3e8e.zip"],
+    sha256 = "0963c6ae20340ce41f225a99cacbcba8422cebe4f82937f3d9fa3f5dd7ae7342",
+    strip_prefix = "protobuf-9f604ac5043e9ab127b99420e957504f2149adbe",
+    urls = ["https://github.com/google/protobuf/archive/9f604ac5043e9ab127b99420e957504f2149adbe.zip"],
+)
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+protobuf_deps()
+
+jdk_build_file_content = """
+filegroup(
+    name = "jdk",
+    srcs = glob(["**/*"]),
+    visibility = ["//visibility:public"],
+)
+filegroup(
+    name = "java",
+    srcs = ["bin/java"],
+    visibility = ["//visibility:public"],
+)
+"""
+
+http_archive(
+    name = "jdk8-linux",
+    build_file_content = jdk_build_file_content,
+    sha256 = "dd28d6d2cde2b931caf94ac2422a2ad082ea62f0beee3bf7057317c53093de93",
+    strip_prefix = "jdk8u212-b03",
+    url = "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u212-b03/OpenJDK8U-jdk_x64_linux_hotspot_8u212b03.tar.gz",
+)
+
+http_archive(
+    name = "jdk8-osx",
+    build_file_content = jdk_build_file_content,
+    sha256 = "3d80857e1bb44bf4abe6d70ba3bb2aae412794d335abe46b26eb904ab6226fe0",
+    strip_prefix = "jdk8u212-b03/Contents/Home",
+    url = "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u212-b03/OpenJDK8U-jdk_x64_mac_hotspot_8u212b03.tar.gz",
 )
 
 local_repository(

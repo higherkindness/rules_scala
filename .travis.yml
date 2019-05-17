@@ -1,6 +1,5 @@
-dist: trusty
+dist: xenial
 sudo: required
-language: java
 
 addons:
   apt:
@@ -18,46 +17,45 @@ cache:
 # some could be global, but these are OS-specific and ought not to be included
 # in the UI or the cache key
 _linux: &linux
-  jdk: oraclejdk8
   os: linux
 _osx: &osx
   os: osx
-  osx_image: xcode7.3
+  osx_image: xcode9.3
 
 jobs:
   include:
 # Build
     - stage: build
       <<: *osx
-      env: BAZEL_VERSION=0.21.0
+      env: BAZEL_VERSION=0.24.1
       script: ./scripts/travis.sh build
     - <<: *linux
-      env: BAZEL_VERSION=0.21.0
+      env: BAZEL_VERSION=0.24.1
       script: ./scripts/travis.sh build
     - <<: *osx
-      env: BAZEL_VERSION=0.22.0
+      env: BAZEL_VERSION=0.25.2
       script: ./scripts/travis.sh build
     - <<: *linux
-      env: BAZEL_VERSION=0.22.0
+      env: BAZEL_VERSION=0.25.2
       script: ./scripts/travis.sh build
 # Lint
     - stage: test
       <<: *osx
-      env: BAZEL_VERSION=0.22.0
+      env: BAZEL_VERSION=0.24.1
       script: ./scripts/travis.sh lint
     - <<: *linux
-      env: BAZEL_VERSION=0.22.0
+      env: BAZEL_VERSION=0.25.2
       script: ./scripts/travis.sh lint
 # Test
     - <<: *osx
-      env: BAZEL_VERSION=0.21.0
+      env: BAZEL_VERSION=0.24.1
       script: ./scripts/travis.sh test
     - <<: *linux
-      env: BAZEL_VERSION=0.21.0
+      env: BAZEL_VERSION=0.24.1
       script: ./scripts/travis.sh test
     - <<: *osx
-      env: BAZEL_VERSION=0.22.0
+      env: BAZEL_VERSION=0.25.2
       script: ./scripts/travis.sh test
     - <<: *linux
-      env: BAZEL_VERSION=0.22.0
+      env: BAZEL_VERSION=0.25.2
       script: ./scripts/travis.sh test

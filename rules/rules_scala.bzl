@@ -4,25 +4,34 @@ load(
 )
 
 def _emulate_rules_scala_repository_impl(repository_ctx):
-    repository_ctx.file("WORKSPACE", content = "")
+    print(repository_ctx.path(""))
+    repository_ctx.file("WORKSPACE", content = "workspace(name = \"io_bazel_rules_scala\")")
     repository_ctx.file(
         "scala/scala.bzl",
         content = _strip_margin("""
           |load("@rules_scala_annex//rules/rules_scala:private/compat.bzl",
-          |     "scala_library",
-          |     "scala_macro_library",
-          |     "scala_binary",
-          |     "scala_test",
-          |     "scala_test_suite",
+          |     _scala_library = "scala_library",
+          |     _scala_macro_library = "scala_macro_library",
+          |     _scala_binary = "scala_binary",
+          |     _scala_test = "scala_test",
+          |     _scala_test_suite = "scala_test_suite",
           |)
+          |
+          |scala_library = _scala_library
+          |scala_macro_library = _scala_macro_library
+          |scala_binary = _scala_binary
+          |scala_test = _scala_test
+          |scala_test_suite = _scala_test_suite
           |"""),
     )
     repository_ctx.file(
         "scala/scala_import.bzl",
         content = _strip_margin("""
           |load("@rules_scala_annex//rules:scala.bzl",
-          |     "scala_import",
+          |     _scala_import = "scala_import",
           |)
+          |
+          |scala_import = _scala_import
           |"""),
     )
     extra_deps = ", ".join(["\"{}\"".format(dep) for dep in repository_ctx.attr.extra_deps])

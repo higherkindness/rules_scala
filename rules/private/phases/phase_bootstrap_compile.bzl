@@ -16,8 +16,8 @@ def phase_bootstrap_compile(ctx, g):
         fail("source jars supported for bootstrap_scala rules")
 
     inputs = depset(
-        [ctx.executable._java] + ctx.files.srcs,
-        transitive = [g.classpaths.compile, g.classpaths.compiler],
+        ctx.files.srcs,
+        transitive = [ctx.attr._jdk[java_common.JavaRuntimeInfo].files, g.classpaths.compile, g.classpaths.compiler],
     )
 
     compiler_classpath = ":".join([f.path for f in g.classpaths.compiler.to_list()])
@@ -43,7 +43,7 @@ def phase_bootstrap_compile(ctx, g):
             |
             |{jar_creator} {output_jar} tmp/classes 2> /dev/null
             |""".format(
-                java = ctx.executable._java.path,
+                java = ctx.attr._jdk[java_common.JavaRuntimeInfo].java_executable_exec_path,
                 jar_creator = ctx.executable._jar_creator.path,
                 compiler_classpath = compiler_classpath,
                 compile_classpath = compile_classpath,

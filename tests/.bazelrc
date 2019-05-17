@@ -1,3 +1,8 @@
-common       --config=tests
-common:v0.21 --config=tests_v0.21
+common --config=tests
+
+build --javabase="//:jdk"
+build --java_toolchain="@bazel_tools//tools/jdk:toolchain_hostjdk8"
+build --host_javabase="//:jdk"
+build --host_java_toolchain="@bazel_tools//tools/jdk:toolchain_hostjdk8"
+
 import %workspace%/../.bazelrc_shared

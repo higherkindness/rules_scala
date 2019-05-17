@@ -24,7 +24,7 @@ case "$1" in
         ;;
 
     "lint")
-        ./scripts/setup-tools.sh --skip-deps
+        ./scripts/setup-tools.sh
         ./scripts/format.sh check
         ./scripts/gen-docs.sh && git diff --exit-code
         ;;

@@ -1,4 +1,7 @@
+<!-- Generated with Stardoc: http://skydoc.bazel.build -->
+
 <a name="#configure_bootstrap_scala"></a>
+
 ## configure_bootstrap_scala
 
 <pre>
@@ -56,6 +59,7 @@ configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a
 
 
 <a name="#configure_zinc_scala"></a>
+
 ## configure_zinc_scala
 
 <pre>
@@ -131,6 +135,7 @@ configure_zinc_scala(<a href="#configure_zinc_scala-name">name</a>, <a href="#co
 
 
 <a name="#scala_binary"></a>
+
 ## scala_binary
 
 <pre>
@@ -325,6 +330,7 @@ To run the program: `bazel run <target>`
 
 
 <a name="#scala_import"></a>
+
 ## scala_import
 
 <pre>
@@ -395,6 +401,7 @@ Use this only for libraries with macros. Otherwise, use `java_import`.
 
 
 <a name="#scala_library"></a>
+
 ## scala_library
 
 <pre>
@@ -561,6 +568,7 @@ Compiles a Scala JVM library.
 
 
 <a name="#scala_repl"></a>
+
 ## scala_repl
 
 <pre>
@@ -637,6 +645,7 @@ To run: `bazel run <target>`
 
 
 <a name="#scala_test"></a>
+
 ## scala_test
 
 <pre>
@@ -854,6 +863,7 @@ To build and run a specific test: `bazel test <target> --test_filter=<filter_exp
 
 
 <a name="#scaladoc"></a>
+
 ## scaladoc
 
 <pre>
@@ -921,286 +931,7 @@ Generates Scaladocs.
 </table>
 
 
-<a name="#<unknown name>"></a>
-## <unknown name>
-
-<pre>
-<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-direct">direct</a>, <a href="#<unknown name>-provider">provider</a>, <a href="#<unknown name>-used">used</a>)
-</pre>
-
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="<unknown name>-name">
-      <td><code>name</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="<unknown name>-direct">
-      <td><code>direct</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-    <tr id="<unknown name>-provider">
-      <td><code>provider</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; required
-      </td>
-    </tr>
-    <tr id="<unknown name>-used">
-      <td><code>used</code></td>
-      <td>
-        String; optional
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#<unknown name>"></a>
-## <unknown name>
-
-<pre>
-<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-compiler_classpath">compiler_classpath</a>, <a href="#<unknown name>-global_plugins">global_plugins</a>, <a href="#<unknown name>-runtime_classpath">runtime_classpath</a>, <a href="#<unknown name>-version">version</a>)
-</pre>
-
-Creates a `ScalaConfiguration`.
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="<unknown name>-name">
-      <td><code>name</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="<unknown name>-compiler_classpath">
-      <td><code>compiler_classpath</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
-      </td>
-    </tr>
-    <tr id="<unknown name>-global_plugins">
-      <td><code>global_plugins</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
-        <p>
-          Scalac plugins that will always be enabled.
-        </p>
-      </td>
-    </tr>
-    <tr id="<unknown name>-runtime_classpath">
-      <td><code>runtime_classpath</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
-      </td>
-    </tr>
-    <tr id="<unknown name>-version">
-      <td><code>version</code></td>
-      <td>
-        String; required
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#<unknown name>"></a>
-## <unknown name>
-
-<pre>
-<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-configurations">configurations</a>)
-</pre>
-
-
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="<unknown name>-name">
-      <td><code>name</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="<unknown name>-configurations">
-      <td><code>configurations</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<a name="#<unknown name>"></a>
-## <unknown name>
-
-<pre>
-<unknown name>(<a href="#<unknown name>-name">name</a>, <a href="#<unknown name>-compiler_bridge">compiler_bridge</a>)
-</pre>
-
-Creates a `ZincConfiguration`.
-
-### Attributes
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="<unknown name>-name">
-      <td><code>name</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#name">Name</a>; required
-        <p>
-          A unique name for this target.
-        </p>
-      </td>
-    </tr>
-    <tr id="<unknown name>-compiler_bridge">
-      <td><code>compiler_bridge</code></td>
-      <td>
-        <a href="https://bazel.build/docs/build-ref.html#labels">Label</a>; required
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _extras_attributes
-
-<pre>
-_extras_attributes(<a href="#_extras_attributes-extras">extras</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_extras_attributes-extras>
-      <td><code>extras</code></td>
-      <td>
-        required.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _scala_binary_implementation
-
-<pre>
-_scala_binary_implementation(<a href="#_scala_binary_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_scala_binary_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _scala_library_implementation
-
-<pre>
-_scala_library_implementation(<a href="#_scala_library_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_scala_library_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-## _scala_test_implementation
-
-<pre>
-_scala_test_implementation(<a href="#_scala_test_implementation-ctx">ctx</a>)
-</pre>
-
-
-
-### Parameters
-
-<table class="params-table">
-  <colgroup>
-    <col class="col-param" />
-    <col class="col-description" />
-  </colgroup>
-  <tbody>
-    <tr id="_scala_test_implementation-ctx>
-      <td><code>ctx</code></td>
-      <td>
-        required.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+<a name="#make_scala_binary"></a>
 
 ## make_scala_binary
 
@@ -1218,15 +949,17 @@ make_scala_binary(<a href="#make_scala_binary-extras">extras</a>)
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="make_scala_binary-extras>
+    <tr id="make_scala_binary-extras">
       <td><code>extras</code></td>
       <td>
-        required.
+        optional.
       </td>
     </tr>
   </tbody>
 </table>
 
+
+<a name="#make_scala_library"></a>
 
 ## make_scala_library
 
@@ -1244,15 +977,17 @@ make_scala_library(<a href="#make_scala_library-extras">extras</a>)
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="make_scala_library-extras>
+    <tr id="make_scala_library-extras">
       <td><code>extras</code></td>
       <td>
-        required.
+        optional.
       </td>
     </tr>
   </tbody>
 </table>
 
+
+<a name="#make_scala_test"></a>
 
 ## make_scala_test
 
@@ -1270,10 +1005,10 @@ make_scala_test(<a href="#make_scala_test-extras">extras</a>)
     <col class="col-description" />
   </colgroup>
   <tbody>
-    <tr id="make_scala_test-extras>
+    <tr id="make_scala_test-extras">
       <td><code>extras</code></td>
       <td>
-        required.
+        optional.
       </td>
     </tr>
   </tbody>
