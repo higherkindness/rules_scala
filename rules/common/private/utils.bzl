@@ -90,6 +90,7 @@ def write_launcher(
             "%set_jacoco_metadata%": "export JACOCO_METADATA_JAR=\"$JAVA_RUNFILES/{}/{}\"".format(ctx.workspace_name, metadata_file.short_path),
             "%set_jacoco_main_class%": """export JACOCO_MAIN_CLASS={}""".format(main_class),
             "%set_jacoco_java_runfiles_root%": """export JACOCO_JAVA_RUNFILES_ROOT=$JAVA_RUNFILES/{}/""".format(ctx.workspace_name),
+            "%set_java_coverage_new_implementation%": """export JAVA_COVERAGE_NEW_IMPLEMENTATION=YES""",
         }
     else:
         more_outputs = []
@@ -98,6 +99,7 @@ def write_launcher(
             "%set_jacoco_metadata%": "",
             "%set_jacoco_main_class%": "",
             "%set_jacoco_java_runfiles_root%": "",
+            "%set_java_coverage_new_implementation%": "",
         }
 
     ctx.actions.expand_template(
