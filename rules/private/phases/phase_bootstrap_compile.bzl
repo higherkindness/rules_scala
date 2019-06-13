@@ -2,6 +2,10 @@ load(
     "//rules/common:private/utils.bzl",
     _strip_margin = "strip_margin",
 )
+load(
+    "//rules/common:private/utils.bzl",
+    _resolve_execution_reqs = "resolve_execution_reqs",
+)
 
 #
 # PHASE: bootstrap compile
@@ -51,4 +55,5 @@ def phase_bootstrap_compile(ctx, g):
                 output_jar = g.classpaths.jar.path,
             ),
         ),
+        execution_requirements = _resolve_execution_reqs(ctx, {}),
     )
