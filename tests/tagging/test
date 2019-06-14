@@ -1,0 +1,25 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../common.sh
+
+IFS=$'\n'
+
+function check_execution_info {
+  target=$1
+  all_exec_info=$((bazel aquery $target) | egrep "ExecutionInfo")
+
+  for exec_info in $all_exec_info; do
+    for arg in $@; do
+      if [[ $arg == $1 || "$exec_info" =~ "$arg" ]]; then
+        continue
+      else
+        echo "Failed. $arg not found in tags"
+        exit 1
+      fi
+    done
+  done
+}
+
+check_execution_info "library-no-propagatable"
+check_execution_info "binary-all-propagatable" "no-remote" "no-cache" "no-sandbox" "no-remote-exec" "no-remote-cache"
+check_execution_info "test-no-remote-only" "no-remote"
+echo "SUCCESS"

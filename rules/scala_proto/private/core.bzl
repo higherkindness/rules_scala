@@ -2,6 +2,10 @@ load(
     "//rules/common:private/utils.bzl",
     _safe_name = "safe_name",
 )
+load(
+    "//rules/common:private/utils.bzl",
+    _resolve_execution_reqs = "resolve_execution_reqs",
+)
 
 scala_proto_library_private_attributes = {}
 
@@ -41,7 +45,7 @@ def scala_proto_library_implementation(ctx):
         outputs = [gendir],
         executable = compiler.compiler.files_to_run.executable,
         tools = compiler_inputs,
-        execution_requirements = {"supports-workers": supports_workers},
+        execution_requirements = _resolve_execution_reqs(ctx, {"supports-workers": supports_workers}),
         arguments = [args],
     )
 
@@ -52,4 +56,5 @@ def scala_proto_library_implementation(ctx):
         command = """$1 c $4 META-INF/= $(find -L $2 -type f | while read v; do echo ${v#"${2%$3}"}=$v; done)""",
         progress_message = "Bundling compiled Scala into srcjar",
         tools = [ctx.executable._zipper],
+        execution_requirements = _resolve_execution_reqs(ctx, {}),
     )

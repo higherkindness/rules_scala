@@ -6,6 +6,10 @@ load(
     "@rules_scala_annex//rules/private:coverage_replacements_provider.bzl",
     _coverage_replacements_provider = "coverage_replacements_provider",
 )
+load(
+    "@rules_scala_annex//rules/common:private/utils.bzl",
+    _resolve_execution_reqs = "resolve_execution_reqs",
+)
 
 def phase_coverage_jacoco(ctx, g):
     if not ctx.configuration.coverage_enabled:
@@ -40,7 +44,7 @@ def phase_coverage_jacoco(ctx, g):
         outputs = [in_out_pair[1] for in_out_pair in in_out_pairs],
         executable = code_coverage_configuration.instrumentation_worker.files_to_run.executable,
         input_manifests = worker_input_manifests,
-        execution_requirements = {"supports-workers": "1"},
+        execution_requirements = _resolve_execution_reqs(ctx, {"supports-workers": "1"}),
         arguments = [args],
     )
 

@@ -3,7 +3,14 @@ load(
     _ScalaConfiguration = "ScalaConfiguration",
     _ZincConfiguration = "ZincConfiguration",
 )
-load("//rules/common:private/utils.bzl", _collect = "collect")
+load(
+    "//rules/common:private/utils.bzl",
+    _collect = "collect",
+)
+load(
+    "//rules/common:private/utils.bzl",
+    _resolve_execution_reqs = "resolve_execution_reqs",
+)
 
 scaladoc_private_attributes = {
     "_runner": attr.label(
@@ -53,7 +60,7 @@ def scaladoc_implementation(ctx):
     ctx.actions.run(
         arguments = [args],
         executable = ctx.attr._runner.files_to_run.executable,
-        execution_requirements = {"supports-workers": "1"},
+        execution_requirements = _resolve_execution_reqs(ctx, {"supports-workers": "1"}),
         input_manifests = input_manifests,
         inputs = depset(
             src_jars + srcs + [zinc_configuration.compiler_bridge],

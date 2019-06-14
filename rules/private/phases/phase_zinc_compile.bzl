@@ -7,6 +7,10 @@ load(
     _ZincConfiguration = "ZincConfiguration",
     _ZincInfo = "ZincInfo",
 )
+load(
+    "@rules_scala_annex//rules/common:private/utils.bzl",
+    _resolve_execution_reqs = "resolve_execution_reqs",
+)
 
 #
 # PHASE: compile
@@ -80,7 +84,7 @@ def phase_zinc_compile(ctx, g):
         outputs = outputs,
         executable = worker.files_to_run.executable,
         input_manifests = input_manifests,
-        execution_requirements = {"no-sandbox": "1", "supports-workers": "1"},
+        execution_requirements = _resolve_execution_reqs(ctx, {"no-sandbox": "1", "supports-workers": "1"}),
         arguments = [args],
     )
 
