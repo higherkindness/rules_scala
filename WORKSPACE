@@ -5,9 +5,9 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 http_archive(
     name = "io_bazel",
-    sha256 = "437b3237f15e6ce950ae7f892673f65fc83642847e8c12c4c00b19b00b6e0690",
-    strip_prefix = "bazel-318aebb523b3c91275855e35f0a67814e0d2231f",
-    urls = ["https://github.com/bazelbuild/bazel/archive/318aebb523b3c91275855e35f0a67814e0d2231f.zip"],
+    sha256 = "2d86797a5b96163b7f5e9cbb8f09cc919066e7ee0fe1a614b79680ae36a14ef3",
+    strip_prefix = "bazel-0.27.0",
+    urls = ["https://github.com/bazelbuild/bazel/archive/0.27.0.zip"],
 )
 
 http_archive(
@@ -25,9 +25,9 @@ git_repository(
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "0963c6ae20340ce41f225a99cacbcba8422cebe4f82937f3d9fa3f5dd7ae7342",
-    strip_prefix = "protobuf-9f604ac5043e9ab127b99420e957504f2149adbe",
-    urls = ["https://github.com/google/protobuf/archive/9f604ac5043e9ab127b99420e957504f2149adbe.zip"],
+    sha256 = "1e622ce4b84b88b6d2cdf1db38d1a634fe2392d74f0b7b74ff98f3a51838ee53",
+    strip_prefix = "protobuf-3.8.0",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.8.0.zip"],
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")

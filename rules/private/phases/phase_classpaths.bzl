@@ -16,7 +16,7 @@ def phase_classpaths(ctx, g):
 
     actual_plugins = []
     for plugin in ctx.attr.plugins + g.init.scala_configuration.global_plugins:
-        deps = [dep for dep in plugin[JavaInfo].transitive_runtime_jars if dep not in plugin_skip_jars]
+        deps = [dep for dep in plugin[JavaInfo].transitive_runtime_jars.to_list() if dep not in plugin_skip_jars]
         if len(deps) == 1:
             actual_plugins.extend(deps)
         else:

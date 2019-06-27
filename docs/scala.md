@@ -55,7 +55,7 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
   * For specs2, `<filter_expression>` simply matches full, `.`-separated classnames
     * example: `my.package.MyTest`
 
-* [java_stub_template](https://github.com/bazelbuild/bazel/blob/0.12.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/java_stub_template.txt) options.
+* [java_stub_template](https://github.com/bazelbuild/bazel/blob/0.27.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/java_stub_template.txt) options.
 
 * Additional options: ANSI color codes and verbosity
 
