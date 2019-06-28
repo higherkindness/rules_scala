@@ -19,7 +19,7 @@ fi
 [ "$1" != check ] || BUILDIFIER_ARGS=-mode=check
 
 find $(pwd) -not \( -path $(pwd)/external-tools -prune \) -type f \( -iname BUILD -o -iname BUILD.bazel -o -iname WORKSPACE \) -print0 \
-    | xargs -0 external-tools/buildifier.sh -showlog $BUILDIFIER_ARGS
+    | xargs -0 external-tools/buildifier.sh $BUILDIFIER_ARGS
 
 find $(pwd) -not \( -path $(pwd)/external-tools -prune \) -not \( -path $(pwd)/rules/external -prune \) -not -path $(pwd)/rules/external.bzl -type f -iname "*.bzl" -print0 \
-    | xargs -0 external-tools/buildifier.sh -showlog --type=bzl $BUILDIFIER_ARGS
+    | xargs -0 external-tools/buildifier.sh --type=bzl $BUILDIFIER_ARGS

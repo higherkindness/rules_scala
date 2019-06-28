@@ -40,7 +40,7 @@ def scala_repositories():
         fetch_sources = True,
     )
 
-    BAZEL_JAVA_LAUNCHER_VERSION = "0.25.2"
+    BAZEL_JAVA_LAUNCHER_VERSION = "0.27.0"
     java_stub_template_url = (
         "raw.githubusercontent.com/bazelbuild/bazel/" +
         BAZEL_JAVA_LAUNCHER_VERSION +
@@ -50,7 +50,7 @@ def scala_repositories():
 
     http_file(
         name = "anx_java_stub_template",
-        sha256 = "7c0b4657be1e3fb7680badfcf3917aaeff3418ffab3023e1bd70933adf671549",
+        sha256 = "e6531a6539ec1e38fec5e20523ff4bfc883e1cc0209eb658fe82eb918eb49657",
         urls = [
             "https://mirror.bazel.build/%s" % java_stub_template_url,
             "https://%s" % java_stub_template_url,

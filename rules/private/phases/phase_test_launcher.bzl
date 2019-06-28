@@ -19,19 +19,19 @@ def phase_test_launcher(ctx, g):
     files = ctx.attr._jdk[java_common.JavaRuntimeInfo].files.to_list() + [g.compile.zinc_info.apis]
 
     coverage_replacements = {}
-    coverage_runner_jars = []
+    coverage_runner_jars = depset(direct = [])
     if ctx.configuration.coverage_enabled:
         coverage_replacements = _coverage_replacements_provider.from_ctx(
             ctx,
             base = g.coverage.replacements,
         ).replacements
-        coverage_runner_jars = ctx.files._jacocorunner + ctx.files._lcov_merger
+        coverage_runner_jars = depset(direct = [ctx.files._jacocorunner + ctx.files._lcov_merger])
 
-    test_jars = depset([
+    test_jars = depset(direct = [
         coverage_replacements[jar] if jar in coverage_replacements else jar
-        for jar in g.javainfo.java_info.transitive_runtime_deps
+        for jar in g.javainfo.java_info.transitive_runtime_deps.to_list()
     ])
-    runner_jars = ctx.attr.runner[JavaInfo].transitive_runtime_deps + coverage_runner_jars
+    runner_jars = depset(transitive = [ctx.attr.runner[JavaInfo].transitive_runtime_deps, coverage_runner_jars])
     all_jars = [test_jars, runner_jars]
 
     args = ctx.actions.args()

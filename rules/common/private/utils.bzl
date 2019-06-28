@@ -140,6 +140,7 @@ def action_singlejar(
     # This calls bazels singlejar utility.
     # For a full list of available command line options see:
     # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
+    # The C++ version is being used now, which does not support workers. This is why workers are disabled for SingleJar
 
     if type(inputs) == "list":
         inputs = depset(inputs)
@@ -163,7 +164,7 @@ def action_singlejar(
     ctx.actions.run(
         arguments = [args],
         executable = ctx.executable._singlejar,
-        execution_requirements = resolve_execution_reqs(ctx, {"supports-workers": "1"}),
+        execution_requirements = resolve_execution_reqs(ctx, {"supports-workers": "0"}),
         mnemonic = _SINGLE_JAR_MNEMONIC,
         inputs = all_inputs,
         outputs = [output],
