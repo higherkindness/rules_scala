@@ -6,11 +6,12 @@ if [ -f "$RUNPATH"/%manifest% ]; then
     while read original formatted; do
         if [[ ! -z "$original" ]] && [[ ! -z "$formatted" ]]; then
             if ! cmp -s "$RUNPATH/$original" "$RUNPATH/$formatted"; then
-                echo $original
                 if [ -z "$WORKSPACE_ROOT" ]; then
+                    echo "$original"
                     diff "$RUNPATH/$original" "$RUNPATH/$formatted" || true
                     EXIT=1
                 else
+                    echo "Formatting $original"
                     cp "$RUNPATH/$formatted" "$WORKSPACE_ROOT/$original"
                 fi
             fi
@@ -22,7 +23,7 @@ else
     while read original formatted; do
         if [[ ! -z "$original" ]] && [[ ! -z "$formatted" ]]; then
             if ! cmp -s "$WORKSPACE_ROOT/$original" "$NONDEFAULTPATH/$formatted"; then
-                echo $original
+                echo "Formatting $original"
                 cp "$NONDEFAULTPATH/$formatted" "$WORKSPACE_ROOT/$original"
             fi
         fi
