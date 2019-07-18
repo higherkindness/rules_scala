@@ -31,7 +31,7 @@ def scala_repositories():
             "org.scala-sbt:zinc-classpath_2.12:1.2.1",
             "org.scala-sbt:compiler-interface:1.2.1",
             "ch.epfl.scala:bloop-frontend_2.12:1.0.0",
-            "com.trueaccord.scalapb:scalapb-runtime_2.12:0.6.0",
+            "com.thesamet.scalapb:scalapb-runtime_2.12:0.9.0",
             "org.scala-sbt:util-logging_2.12:1.2.0",
         ],
         repositories = [

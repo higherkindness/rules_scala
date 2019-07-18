@@ -7,9 +7,9 @@ def scala_proto_repositories():
     maven_install(
         name = "annex_proto",
         artifacts = [
-            "com.github.os72:protoc-jar:3.5.1.1",
-            "com.thesamet.scalapb:compilerplugin_2.12:0.7.4",
-            "com.thesamet.scalapb:protoc-bridge_2.12:0.7.3",
+            "com.github.os72:protoc-jar:3.8.0",
+            "com.thesamet.scalapb:compilerplugin_2.12:0.9.0",
+            "com.thesamet.scalapb:protoc-bridge_2.12:0.7.8",
         ],
         repositories = [
             "http://central.maven.org/maven2",
