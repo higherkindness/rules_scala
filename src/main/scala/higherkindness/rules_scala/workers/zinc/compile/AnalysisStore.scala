@@ -79,7 +79,7 @@ class AnxAnalysisStore(files: AnalysisFiles, analyses: AnxAnalyses) extends Anal
         apis = analyses.apis.read(files.apis),
         relations = analyses.relations.read(files.relations),
         infos = analyses.sourceInfos.read(files.sourceInfos),
-        stamps = analyses.stamps.read(files.stamps),
+        stamps = analyses.stamps.read(files.stamps)
       )
       val miniSetup = analyses.miniSetup.read(files.miniSetup)
       Optional.of(AnalysisContents.create(analysis, miniSetup))
@@ -123,7 +123,7 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
 
   def sourceInfos = new Store[SourceInfos](
     stream => reader.fromSourceInfos(format.read(schema.SourceInfos, stream)),
-    (stream, value) => format.write(writer.toSourceInfos(value), stream),
+    (stream, value) => format.write(writer.toSourceInfos(value), stream)
   )
 
   def stamps = new Store[Stamps](
@@ -134,7 +134,7 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
   private[this] val apiFileWrite: Lens[schema.APIs, schema.APIs] => Mutation[schema.APIs] =
     _.update(
       _.internal.foreachValue(_.compilationTimestamp := JarHelper.DEFAULT_TIMESTAMP),
-      _.external.foreachValue(_.compilationTimestamp := JarHelper.DEFAULT_TIMESTAMP),
+      _.external.foreachValue(_.compilationTimestamp := JarHelper.DEFAULT_TIMESTAMP)
     )
 
   // Workaround for https://github.com/sbt/zinc/pull/532
@@ -157,7 +157,7 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
       }),
       _.classes.foreach(_.modify {
         case (source, values) => mapper.mapSourceFile(new File(source)).toString -> values
-      }),
+      })
     )
 }
 
