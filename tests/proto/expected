@@ -3,8 +3,8 @@
 -rw----     1.0 fat        0 b-  0% stor 20100101.000000 anx/
 -rw----     1.0 fat        0 b-  0% stor 20100101.000000 anx/proto/
 -rw----     1.0 fat        0 b-  0% stor 20100101.000000 anx/proto/zero/
--rw----     2.0 fat    14895 b-  0% stor 20100101.000002 anx/proto/zero/Zero$.class
+-rw----     2.0 fat    15074 b-  0% stor 20100101.000002 anx/proto/zero/Zero$.class
 -rw----     2.0 fat     4337 b-  0% stor 20100101.000002 anx/proto/zero/Zero$ZeroLens.class
--rw----     2.0 fat    19364 b-  0% stor 20100101.000002 anx/proto/zero/Zero.class
--rw----     2.0 fat     6429 b-  0% stor 20100101.000002 anx/proto/zero/ZeroProto$.class
--rw----     2.0 fat     1907 b-  0% stor 20100101.000002 anx/proto/zero/ZeroProto.class
+-rw----     2.0 fat    19582 b-  0% stor 20100101.000002 anx/proto/zero/Zero.class
+-rw----     2.0 fat     6648 b-  0% stor 20100101.000002 anx/proto/zero/ZeroProto$.class
+-rw----     2.0 fat     1948 b-  0% stor 20100101.000002 anx/proto/zero/ZeroProto.class

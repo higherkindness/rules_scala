@@ -123,7 +123,7 @@ object ZincRunner extends WorkerMain[Namespace] {
       miniSetup = namespace.get[File]("output_setup").toPath,
       relations = namespace.get[File]("output_relations").toPath,
       sourceInfos = namespace.get[File]("output_infos").toPath,
-      stamps = namespace.get[File]("output_stamps").toPath,
+      stamps = namespace.get[File]("output_stamps").toPath
     )
     val analysesFormat = {
       val debug = namespace.getBoolean("debug")
@@ -182,7 +182,7 @@ object ZincRunner extends WorkerMain[Namespace] {
         .withScalacOptions(
           Array.concat(
             namespace.getList[File]("plugins").asScala.map(p => s"-Xplugin:$p").toArray,
-            Option(namespace.getList[String]("compiler_option")).fold[Seq[String]](Nil)(_.asScala).toArray,
+            Option(namespace.getList[String]("compiler_option")).fold[Seq[String]](Nil)(_.asScala).toArray
           )
         )
 
@@ -206,7 +206,7 @@ object ZincRunner extends WorkerMain[Namespace] {
               Analysis.Empty.copy(
                 apis = analysesFormat.apis.read(files.apis),
                 relations = analysesFormat.relations.read(files.relations)
-            )
+              )
           )
       })
     }

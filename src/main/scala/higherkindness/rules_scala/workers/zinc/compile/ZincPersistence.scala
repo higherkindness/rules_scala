@@ -18,7 +18,7 @@ class FilePersistence(cacheDir: Path, analysisFiles: AnalysisFiles, jar: Path) e
       miniSetup = cacheDir.resolve("setup.gz"),
       relations = cacheDir.resolve("relations.gz"),
       sourceInfos = cacheDir.resolve("infos.gz"),
-      stamps = cacheDir.resolve("stamps.gz"),
+      stamps = cacheDir.resolve("stamps.gz")
     )
   private[this] val cacheJar = cacheDir.resolve("classes.jar")
 

@@ -51,7 +51,7 @@ object JacocoInstrumenter extends WorkerMain[Unit] {
             case Array(in, out) => (Paths.get(in), Paths.get(out))
             case _ =>
               sys.error("expected input=output for argument: " + other)
-        }
+          }
       )
       .toList
 

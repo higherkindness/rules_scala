@@ -4,9 +4,9 @@ def scalafmt_repositories():
     maven_install(
         name = "annex_scalafmt",
         artifacts = [
-            "org.scalameta:parsers_2.12:1.7.0",
-            "com.geirsson:metaconfig-core_2.12:0.4.0",
-            "com.geirsson:scalafmt-core_2.12:1.5.1",
+            "org.scalameta:parsers_2.12:4.2.0",
+            "com.geirsson:metaconfig-core_2.12:0.8.3",
+            "org.scalameta:scalafmt-core_2.12:jar:2.0.0",
         ],
         repositories = [
             "http://central.maven.org/maven2",

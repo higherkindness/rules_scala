@@ -73,7 +73,7 @@ class TestTaskExecutor(logger: Logger) {
             case _ =>
           }
         },
-        Array(new PrefixedTestingLogger(logger, "    ")),
+        Array(new PrefixedTestingLogger(logger, "    "))
       )
       tasks.foreach(execute)
     }
