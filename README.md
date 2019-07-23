@@ -41,6 +41,7 @@ If the right design principles are kept, implementing additional features should
 * [Customizable rules](docs/newdocs/phases.md#customizing-the-core-rules)
 * [Multiple Scala versions in one build](docs/newdocs/scala_versions.md#specifying-the-scala-version-to-use)
 * [Optimal handling of macros and ijars](docs/newdocs/macros.md#macros-and-ijars)
+* [Pass flags to Zinc compiler](docs/newdocs/zinc_flags.md)
 
 ## Usage
 
