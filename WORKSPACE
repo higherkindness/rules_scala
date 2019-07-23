@@ -65,20 +65,28 @@ http_archive(
 
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "515ee5265387b88e4547b34a57393d2bcb1101314bcc5360ec7a482792556f42",
-    strip_prefix = "rules_jvm_external-2.1",
-    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.1.zip",
+    sha256 = "249e8129914be6d987ca57754516be35a14ea866c616041ff0cd32ea94d2f3a1",
+    strip_prefix = "rules_jvm_external-2.5",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.5.zip",
 )
 
 load("//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")
 
 scala_repositories()
 
+load("@annex//:defs.bzl", annex_pinned_maven_install = "pinned_maven_install")
+
+annex_pinned_maven_install()
+
 scala_register_toolchains()
 
 load("//rules/scalafmt:workspace.bzl", "scalafmt_default_config", "scalafmt_repositories")
 
 scalafmt_repositories()
+
+load("@annex_scalafmt//:defs.bzl", annex_scalafmt_pinned_maven_install = "pinned_maven_install")
+
+annex_scalafmt_pinned_maven_install()
 
 scalafmt_default_config(".scalafmt.conf")
 
@@ -91,3 +99,7 @@ load(
 scala_proto_repositories()
 
 scala_proto_register_toolchains()
+
+load("@annex_proto//:defs.bzl", annex_proto_pinned_maven_install = "pinned_maven_install")
+
+annex_proto_pinned_maven_install()

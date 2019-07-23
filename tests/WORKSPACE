@@ -55,9 +55,9 @@ local_repository(
 
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "55e8d3951647ae3dffde22b4f7f8dee11b3f70f3f89424713debd7076197eaca",
-    strip_prefix = "rules_jvm_external-2.0.1",
-    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.0.1.zip",
+    sha256 = "249e8129914be6d987ca57754516be35a14ea866c616041ff0cd32ea94d2f3a1",
+    strip_prefix = "rules_jvm_external-2.5",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.5.zip",
 )
 
 load(
@@ -67,6 +67,10 @@ load(
 )
 
 scala_repositories()
+
+load("@annex//:defs.bzl", annex_pinned_maven_install = "pinned_maven_install")
+
+annex_pinned_maven_install()
 
 scala_register_toolchains()
 
@@ -79,6 +83,10 @@ load(
 scala_proto_repositories()
 
 scala_proto_register_toolchains()
+
+load("@annex_proto//:defs.bzl", annex_proto_pinned_maven_install = "pinned_maven_install")
+
+annex_proto_pinned_maven_install()
 
 load("@rules_scala_annex//rules:rules_scala.bzl", "emulate_rules_scala")
 load("@rules_scala_annex//rules:external.bzl", "scala_import_external")
@@ -103,11 +111,19 @@ load("@rules_scala_annex//rules/scalafmt:workspace.bzl", "scalafmt_default_confi
 
 scalafmt_repositories()
 
+load("@annex_scalafmt//:defs.bzl", annex_scalafmt_pinned_maven_install = "pinned_maven_install")
+
+annex_scalafmt_pinned_maven_install()
+
 scalafmt_default_config()
 
-load(":workspace.bzl", "maven_dependencies")
+load(":workspace.bzl", "test_dependencies")
 
-maven_dependencies()
+test_dependencies()
+
+load("@annex_test//:defs.bzl", annex_test_pinned_maven_install = "pinned_maven_install")
+
+annex_test_pinned_maven_install()
 
 jvm_maven_import_external(
     name = "kind_projector_2_11",

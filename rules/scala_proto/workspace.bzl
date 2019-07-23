@@ -15,4 +15,5 @@ def scala_proto_repositories():
             "http://central.maven.org/maven2",
         ],
         fetch_sources = True,
+        maven_install_json = "@rules_scala_annex//:annex_proto_install.json",
     )
