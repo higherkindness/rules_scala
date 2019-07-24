@@ -38,6 +38,7 @@ def scala_repositories():
             "http://central.maven.org/maven2",
         ],
         fetch_sources = True,
+        maven_install_json = "@rules_scala_annex//:annex_install.json",
     )
 
     BAZEL_JAVA_LAUNCHER_VERSION = "0.27.0"

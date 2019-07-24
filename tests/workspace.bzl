@@ -1,6 +1,6 @@
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
-def maven_dependencies():
+def test_dependencies():
     maven_install(
         name = "annex_test",
         artifacts = [
@@ -24,4 +24,5 @@ def maven_dependencies():
             "http://central.maven.org/maven2",
         ],
         fetch_sources = True,
+        maven_install_json = "//:annex_test_install.json",
     )
