@@ -49,7 +49,7 @@ See example use in [/tests/proto/BUILD](/tests/proto/BUILD)
 ## scala_proto_toolchain
 
 <pre>
-scala_proto_toolchain(<a href="#scala_proto_toolchain-name">name</a>, <a href="#scala_proto_toolchain-compiler">compiler</a>, <a href="#scala_proto_toolchain-compiler_supports_workers">compiler_supports_workers</a>)
+scala_proto_toolchain(<a href="#scala_proto_toolchain-name">name</a>, <a href="#scala_proto_toolchain-compiler">compiler</a>, <a href="#scala_proto_toolchain-compiler_supports_workers">compiler_supports_workers</a>, <a href="#scala_proto_toolchain-generator_params">generator_params</a>)
 </pre>
 
 
@@ -65,6 +65,7 @@ scala_proto_toolchain(
     name = "scalapb_toolchain_example",
     compiler = ":worker",
     compiler_supports_workers = True,
+    generator_params = "grpc,java_conversions",
     visibility = ["//visibility:public"],
 )
 
@@ -115,6 +116,15 @@ toolchain(
       <td><code>compiler_supports_workers</code></td>
       <td>
         Boolean; optional
+      </td>
+    </tr>
+    <tr id="scala_proto_toolchain-generator_params">
+      <td><code>generator_params</code></td>
+      <td>
+        String; optional
+        <p>
+          Generator params to pass to the scala PB compiler (ie java_conversions, flat_package, grpc)
+        </p>
       </td>
     </tr>
   </tbody>

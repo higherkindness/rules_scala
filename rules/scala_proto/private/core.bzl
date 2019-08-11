@@ -32,6 +32,8 @@ def scala_proto_library_implementation(ctx):
 
     args = ctx.actions.args()
     args.add("--output_dir", gendir.path)
+    if compiler.generator_params:
+        args.add("--generator_params", compiler.generator_params)
     args.add_all("--", transitive_sources)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)

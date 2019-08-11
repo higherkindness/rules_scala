@@ -22,6 +22,10 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
       .metavar("output_dir")
       .`type`(Arguments.fileType.verifyCanCreate)
     parser
+      .addArgument("--generator_params")
+      .help("Generator params to pass to scala_out")
+      .metavar("generator_params")
+    parser
       .addArgument("sources")
       .help("Source files")
       .metavar("source")
@@ -40,12 +44,18 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
     val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
 
-    val params = s"--scala_out=$scalaOut" :: sources.map(_.getPath)
+    val generatorParams = namespace.get[String]("generator_params")
+    val params = if (generatorParams == null) {
+      s"--scala_out=$scalaOut" :: sources.map(_.getPath)
+    } else {
+      s"--scala_out=$generatorParams:$scalaOut" :: sources.map(_.getPath)
+    }
 
     ProtocBridge.runWithGenerators(
       protoc = a => com.github.os72.protocjar.Protoc.runProtoc(a.toArray),
       namedGenerators = List("scala" -> ScalaPbCodeGenerator),
-      params = params)
+      params = params
+    )
   }
 
 }
