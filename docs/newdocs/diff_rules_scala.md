@@ -13,10 +13,11 @@ to completely defer expanding transitive dependency lists until execution time.
   * For example, `higherkindness/rules_scala` tools use Scala 2.12, but that doesn't affect any client projects.
 * Robustly supports buildozer recommendations via an aspect.
 * Supports for all Scala test frameworks via sbt [test-interface](https://github.com/sbt/test-interface).
-* Support test sharding, custom test framework arguments (including options to the JVM itself).
+* Supports test sharding, custom test framework arguments (including options to the JVM itself).
 * Supports optional classloader and process-level isolation for tests, similar to sbt's `fork := true`.
 * Supports scalafmt.
 * Has consistently formatted code, via buildifier and scalafmt. See [#74](https://github.com/bazelbuild/rules_scala/issues/474).
 * Reorganized and simplified file and code structure. Less than 8 KLOC excluding tests and dependency resolutions. (`git ls-files | grep -v '^test\|/maven.bzl$\|*.md' | xargs cat | wc -l`)
 * Reorganized Travis CI builds, including better cache reuse.
 * Easy dependency managment of internal tools using [rules_jvm_external](https://github.com/bazelbuild/rules_jvm_external).
+* Supports strict & unused deps simultaneously. See the limitation in `bazelbuild/rules_scala` [here](https://github.com/bazelbuild/rules_scala#experimental-unused-dependency-checking).
