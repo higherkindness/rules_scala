@@ -5,7 +5,7 @@
 ## declare_scala_configuration
 
 <pre>
-declare_scala_configuration(<a href="#declare_scala_configuration-name">name</a>, <a href="#declare_scala_configuration-compiler_classpath">compiler_classpath</a>, <a href="#declare_scala_configuration-global_plugins">global_plugins</a>, <a href="#declare_scala_configuration-runtime_classpath">runtime_classpath</a>, <a href="#declare_scala_configuration-version">version</a>)
+declare_scala_configuration(<a href="#declare_scala_configuration-name">name</a>, <a href="#declare_scala_configuration-compiler_classpath">compiler_classpath</a>, <a href="#declare_scala_configuration-global_plugins">global_plugins</a>, <a href="#declare_scala_configuration-global_scalacopts">global_scalacopts</a>, <a href="#declare_scala_configuration-runtime_classpath">runtime_classpath</a>, <a href="#declare_scala_configuration-version">version</a>)
 </pre>
 
 Creates a `ScalaConfiguration`.
@@ -39,6 +39,15 @@ Creates a `ScalaConfiguration`.
         <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           Scalac plugins that will always be enabled.
+        </p>
+      </td>
+    </tr>
+    <tr id="declare_scala_configuration-global_scalacopts">
+      <td><code>global_scalacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          Scalac options that will always be enabled.
         </p>
       </td>
     </tr>
@@ -316,7 +325,7 @@ Exported jars and their labels.
 ## ScalaConfiguration
 
 <pre>
-ScalaConfiguration(<a href="#ScalaConfiguration-version">version</a>, <a href="#ScalaConfiguration-compiler_classpath">compiler_classpath</a>, <a href="#ScalaConfiguration-runtime_classpath">runtime_classpath</a>, <a href="#ScalaConfiguration-global_plugins">global_plugins</a>)
+ScalaConfiguration(<a href="#ScalaConfiguration-version">version</a>, <a href="#ScalaConfiguration-compiler_classpath">compiler_classpath</a>, <a href="#ScalaConfiguration-runtime_classpath">runtime_classpath</a>, <a href="#ScalaConfiguration-global_plugins">global_plugins</a>, <a href="#ScalaConfiguration-global_scalacopts">global_scalacopts</a>)
 </pre>
 
 Scala compile-time and runtime configuration
@@ -351,6 +360,12 @@ Scala compile-time and runtime configuration
       <td><code>global_plugins</code></td>
       <td>
         <p>Globally enabled compiler plugins</p>
+      </td>
+    </tr>
+    <tr id="ScalaConfiguration-global_scalacopts">
+      <td><code>global_scalacopts</code></td>
+      <td>
+        <p>Globally enabled compiler options</p>
       </td>
     </tr>
   </tbody>

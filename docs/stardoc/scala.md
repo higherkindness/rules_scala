@@ -5,7 +5,7 @@
 ## configure_bootstrap_scala
 
 <pre>
-configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a href="#configure_bootstrap_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_bootstrap_scala-global_plugins">global_plugins</a>, <a href="#configure_bootstrap_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_bootstrap_scala-version">version</a>)
+configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a href="#configure_bootstrap_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_bootstrap_scala-global_plugins">global_plugins</a>, <a href="#configure_bootstrap_scala-global_scalacopts">global_scalacopts</a>, <a href="#configure_bootstrap_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_bootstrap_scala-version">version</a>)
 </pre>
 
 
@@ -42,6 +42,15 @@ configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a
         </p>
       </td>
     </tr>
+    <tr id="configure_bootstrap_scala-global_scalacopts">
+      <td><code>global_scalacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          Scalac options that will always be enabled.
+        </p>
+      </td>
+    </tr>
     <tr id="configure_bootstrap_scala-runtime_classpath">
       <td><code>runtime_classpath</code></td>
       <td>
@@ -63,7 +72,7 @@ configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a
 ## configure_zinc_scala
 
 <pre>
-configure_zinc_scala(<a href="#configure_zinc_scala-name">name</a>, <a href="#configure_zinc_scala-compiler_bridge">compiler_bridge</a>, <a href="#configure_zinc_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_zinc_scala-deps_direct">deps_direct</a>, <a href="#configure_zinc_scala-deps_used">deps_used</a>, <a href="#configure_zinc_scala-global_plugins">global_plugins</a>, <a href="#configure_zinc_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_zinc_scala-version">version</a>)
+configure_zinc_scala(<a href="#configure_zinc_scala-name">name</a>, <a href="#configure_zinc_scala-compiler_bridge">compiler_bridge</a>, <a href="#configure_zinc_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_zinc_scala-deps_direct">deps_direct</a>, <a href="#configure_zinc_scala-deps_used">deps_used</a>, <a href="#configure_zinc_scala-global_plugins">global_plugins</a>, <a href="#configure_zinc_scala-global_scalacopts">global_scalacopts</a>, <a href="#configure_zinc_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_zinc_scala-version">version</a>)
 </pre>
 
 
@@ -115,6 +124,15 @@ configure_zinc_scala(<a href="#configure_zinc_scala-name">name</a>, <a href="#co
         <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; optional
         <p>
           Scalac plugins that will always be enabled.
+        </p>
+      </td>
+    </tr>
+    <tr id="configure_zinc_scala-global_scalacopts">
+      <td><code>global_scalacopts</code></td>
+      <td>
+        List of strings; optional
+        <p>
+          Scalac options that will always be enabled.
         </p>
       </td>
     </tr>

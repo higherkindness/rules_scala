@@ -479,6 +479,9 @@ configure_bootstrap_scala = rule(
             doc = "Scalac plugins that will always be enabled.",
             providers = [JavaInfo],
         ),
+        "global_scalacopts": attr.string_list(
+            doc = "Scalac options that will always be enabled.",
+        ),
     },
     implementation = _configure_bootstrap_scala_implementation,
 )
@@ -501,6 +504,9 @@ configure_zinc_scala = rule(
         "global_plugins": attr.label_list(
             doc = "Scalac plugins that will always be enabled.",
             providers = [JavaInfo],
+        ),
+        "global_scalacopts": attr.string_list(
+            doc = "Scalac options that will always be enabled.",
         ),
         "deps_direct": attr.string(default = "error"),
         "deps_used": attr.string(default = "error"),

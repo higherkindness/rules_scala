@@ -4,6 +4,7 @@ load(
 )
 load(
     "@rules_scala_annex//rules:providers.bzl",
+    _ScalaConfiguration = "ScalaConfiguration",
     _ZincConfiguration = "ZincConfiguration",
     _ZincInfo = "ZincInfo",
 )
@@ -19,6 +20,7 @@ load(
 #
 
 def phase_zinc_compile(ctx, g):
+    scala_configuration = ctx.attr.scala[_ScalaConfiguration]
     zinc_configuration = ctx.attr.scala[_ZincConfiguration]
 
     apis = ctx.actions.declare_file("{}/apis.gz".format(ctx.label.name))
@@ -45,6 +47,7 @@ def phase_zinc_compile(ctx, g):
     args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
     args.add_all("--compiler_classpath", g.classpaths.compiler)
     args.add_all("--classpath", g.classpaths.compile)
+    args.add_all(scala_configuration.global_scalacopts, format_each = "--compiler_option=%s")
     args.add_all(ctx.attr.scalacopts, format_each = "--compiler_option=%s")
     args.add_all(javacopts, format_each = "--java_compiler_option=%s")
     args.add(ctx.label, format = "--label=%s")
