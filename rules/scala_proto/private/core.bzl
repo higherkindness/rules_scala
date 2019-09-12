@@ -16,6 +16,7 @@ def scala_proto_library_implementation(ctx):
 
     protos = [dep.proto for dep in proto_deps]
 
+    direct_sources = depset(direct = [source for proto in protos for source in proto.direct_sources])
     transitive_sources = depset(transitive = [proto.transitive_sources for proto in protos])
     transitive_proto_path = depset(transitive = [proto.transitive_proto_path for proto in protos])
 
@@ -32,7 +33,7 @@ def scala_proto_library_implementation(ctx):
 
     args = ctx.actions.args()
     args.add("--output_dir", gendir.path)
-    args.add_all("--", transitive_sources)
+    args.add_all("--", direct_sources)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
 
@@ -43,7 +44,7 @@ def scala_proto_library_implementation(ctx):
 
     ctx.actions.run(
         mnemonic = "ScalaProtoCompile",
-        inputs = depset(direct = [], transitive = [transitive_sources]),
+        inputs = depset(transitive = [transitive_sources]),
         outputs = [gendir],
         executable = compiler.compiler.files_to_run.executable,
         tools = compiler_inputs,

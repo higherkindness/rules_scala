@@ -27,3 +27,30 @@ scala_library(
         "@annex_test//:com_thesamet_scalapb_scalapb_runtime_2_12",
     ],
 )
+
+proto_library(
+    name = "one_proto",
+    srcs = ["one.proto"],
+    deps = [
+        ":zero_proto",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+scala_proto_library(
+    name = "one_scala_proto",
+    deps = [
+        ":one_proto",
+    ],
+)
+
+scala_library(
+    name = "one_scala",
+    srcs = [":one_scala_proto"],
+    deps = [
+        ":zero_scala",
+        "@annex_test//:com_google_protobuf_protobuf_java",
+        "@annex_test//:com_thesamet_scalapb_lenses_2_12",
+        "@annex_test//:com_thesamet_scalapb_scalapb_runtime_2_12",
+    ],
+)

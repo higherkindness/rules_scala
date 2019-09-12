@@ -4,6 +4,11 @@
 [[ "$(bazel version | head -n1 | cut -d: -f2 | tr -d ' ')" =~ 0.15.*|0.16.* ]] || bazel build :zero_scala_proto
 
 bazel build :zero_scala
-diff expected <(
+diff expected_zero <(
     zipinfo -m -T --h-t "$(bazel info bazel-bin)/proto/zero_scala.jar"
+)
+
+bazel build :one_scala
+diff expected_one <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/proto/one_scala.jar"
 )
