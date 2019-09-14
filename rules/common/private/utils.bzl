@@ -152,7 +152,6 @@ def action_singlejar(
     args.add_all("--sources", inputs)
     args.add_all("--resources", ["{}:{}".format(value.path, key) for key, value in resources.items()])
     args.add("--output", output)
-    args.add("--warn_duplicate_resources")
     if main_class != None:
         args.add("--main_class", main_class)
         args.set_param_file_format("multiline")
