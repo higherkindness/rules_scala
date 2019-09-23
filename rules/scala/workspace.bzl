@@ -9,7 +9,7 @@ filegroup(
     visibility = ["//visibility:public"]
 )"""
 
-def scala_repositories():
+def scala_repositories(java_launcher_version = "0.29.1"):
     maven_install(
         name = "annex",
         artifacts = [
@@ -41,10 +41,9 @@ def scala_repositories():
         maven_install_json = "@rules_scala_annex//:annex_install.json",
     )
 
-    BAZEL_JAVA_LAUNCHER_VERSION = "0.27.0"
     java_stub_template_url = (
         "raw.githubusercontent.com/bazelbuild/bazel/" +
-        BAZEL_JAVA_LAUNCHER_VERSION +
+        java_launcher_version +
         "/src/main/java/com/google/devtools/build/lib/bazel/rules/java/" +
         "java_stub_template.txt"
     )
