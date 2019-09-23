@@ -1,0 +1,12 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :plain_java
+diff expected_plain <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/reference_conf/libplain_java.jar"
+)
+
+bazel build :plain
+diff expected_plain <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/reference_conf/plain.jar"
+)
