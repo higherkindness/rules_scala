@@ -18,12 +18,12 @@ def phase_scalafmt_nondefault_outputs(ctx, g):
         _format_tester(ctx, manifest, files)
     else:
         ctx.actions.write(
-            output = ctx.outputs.runner,
+            output = ctx.outputs.scalafmt_runner,
             content = "",
             is_executable = True,
         )
         ctx.actions.write(
-            output = ctx.outputs.testrunner,
+            output = ctx.outputs.scalafmt_testrunner,
             content = "",
             is_executable = True,
         )
