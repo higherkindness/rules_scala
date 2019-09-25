@@ -10,14 +10,14 @@ object SubprocessTestRunner {
   def main(args: Array[String]): Unit = {
     val input = new ObjectInputStream(System.in)
     val request = input.readObject().asInstanceOf[TestRequest]
-
+    val arguments = Seq.empty[String] //TODO
     val classLoader = ClassLoaders.sbtTestClassLoader(request.classpath.map(path => Paths.get(path).toUri.toURL))
 
     val loader = new TestFrameworkLoader(classLoader, request.logger)
     val framework = loader.load(request.framework).get
 
     val passed = ClassLoaders.withContextClassLoader(classLoader) {
-      TestHelper.withRunner(framework, request.scopeAndTestName, classLoader) { runner =>
+      TestHelper.withRunner(framework, request.scopeAndTestName, classLoader, arguments) { runner =>
         val tasks = runner.tasks(Array(TestHelper.taskDef(request.test, request.scopeAndTestName)))
         tasks.length == 0 || {
           val reporter = new TestReporter(request.logger)

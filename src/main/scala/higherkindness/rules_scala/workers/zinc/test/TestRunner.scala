@@ -13,6 +13,7 @@ import java.net.URLClassLoader
 import java.nio.file.attribute.FileTime
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
 import java.time.Instant
+import java.util.ArrayList
 import java.util.Collections
 import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
@@ -45,6 +46,11 @@ object TestRunner {
       .help("Verbosity")
       .choices("HIGH", "MEDIUM", "LOW")
       .setDefault_("MEDIUM")
+    parser
+      .addArgument("--option")
+      .action(Arguments.append)
+      .help("Additional arguments for testing framework")
+      .setDefault_(new ArrayList[String]())
     parser
   }
 
@@ -171,7 +177,8 @@ object TestRunner {
             new ProcessTestRunner(framework, classpath, new ProcessCommand(executable.toString, arguments), logger)
           case "none" => new BasicTestRunner(framework, classLoader, logger)
         }
-        runner.execute(filteredTests, testScopeAndName.getOrElse(""))
+        val testFrameworkArguments = namespace.getList[String]("option").asScala.flatMap(_.split("\\s+"))
+        runner.execute(filteredTests, testScopeAndName.getOrElse(""), testFrameworkArguments)
       }
     }
     sys.exit(if (passed) 0 else 1)
