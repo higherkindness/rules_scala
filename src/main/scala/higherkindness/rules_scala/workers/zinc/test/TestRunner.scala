@@ -48,7 +48,6 @@ object TestRunner {
     parser
       .addArgument("--options")
       .help("Additional arguments for testing framework")
-      .setDefault_("")
     parser
   }
 
@@ -175,7 +174,7 @@ object TestRunner {
             new ProcessTestRunner(framework, classpath, new ProcessCommand(executable.toString, arguments), logger)
           case "none" => new BasicTestRunner(framework, classLoader, logger)
         }
-        val testFrameworkArguments = namespace.getString("options").split("\\s+")
+        val testFrameworkArguments = Option(namespace.getString("options")).map(_.split("\\s+").toList).getOrElse(Seq.empty[String])
         runner.execute(filteredTests, testScopeAndName.getOrElse(""), testFrameworkArguments)
       }
     }
