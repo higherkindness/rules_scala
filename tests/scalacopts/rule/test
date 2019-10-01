@@ -6,3 +6,5 @@ bazel build :default
 ! bazel build :fatal || false
 
 bazel build :warn
+
+! bazel build :fatal_glob || false
