@@ -18,6 +18,7 @@ def configure_bootstrap_scala_implementation(ctx):
         _ScalaConfiguration(
             compiler_classpath = ctx.attr.compiler_classpath,
             global_plugins = ctx.attr.global_plugins,
+            global_scalacopts = ctx.attr.global_scalacopts,
             runtime_classpath = ctx.attr.runtime_classpath,
             version = ctx.attr.version,
         ),
@@ -33,6 +34,7 @@ def configure_zinc_scala_implementation(ctx):
         _ScalaConfiguration(
             compiler_classpath = ctx.attr.compiler_classpath,
             global_plugins = ctx.attr.global_plugins,
+            global_scalacopts = ctx.attr.global_scalacopts,
             runtime_classpath = ctx.attr.runtime_classpath,
             version = ctx.attr.version,
         ),

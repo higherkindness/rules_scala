@@ -142,3 +142,17 @@ configure_zinc_scala(
     version = "2.12.1",
     visibility = ["//visibility:public"],
 )
+
+# For global scalacoptions test
+configure_zinc_scala(
+    name = "zinc_2_12_6_fatal_deprecation_opt",
+    compiler_bridge = ":compiler_bridge_2_12_6",
+    compiler_classpath = compiler_classpath_2_12_6,
+    global_scalacopts = [
+        "-deprecation",
+        "-Xfatal-warnings",
+    ],
+    runtime_classpath = runtime_classpath_2_12_6,
+    version = "2.12.6",
+    visibility = ["//scalacopts/rule:__subpackages__"],
+)
