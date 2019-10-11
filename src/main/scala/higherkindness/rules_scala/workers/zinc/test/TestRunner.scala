@@ -46,7 +46,7 @@ object TestRunner {
       .choices("HIGH", "MEDIUM", "LOW")
       .setDefault_("MEDIUM")
     parser
-      .addArgument("--options")
+      .addArgument("--framework_args")
       .help("Additional arguments for testing framework")
     parser
   }
@@ -175,7 +175,7 @@ object TestRunner {
           case "none" => new BasicTestRunner(framework, classLoader, logger)
         }
         val testFrameworkArguments =
-          Option(namespace.getString("options")).map(_.split("\\s+").toList).getOrElse(Seq.empty[String])
+          Option(namespace.getString("framework_args")).map(_.split("\\s+").toList).getOrElse(Seq.empty[String])
         runner.execute(filteredTests, testScopeAndName.getOrElse(""), testFrameworkArguments)
       }
     }

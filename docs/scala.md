@@ -72,7 +72,7 @@ $ bazel test --test_filter=my.test.Example :mytest
 $ bazel test --test_filter='my.test.*' :mytest
 
 # Pass arguments to underlying test framework
-$ bazel test --test_arg=--options='-oDF -l org.scalatest.tags.Slow' :mytest
+$ bazel test --test_arg=--framework_args='-oDF -l org.scalatest.tags.Slow' :mytest
 
 # Debug JVM on port 5005
 $ bazel test --test_arg=--debug=5005 :mytest
