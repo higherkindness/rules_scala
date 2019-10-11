@@ -1,0 +1,4 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel run :bin | grep -q Example
