@@ -67,6 +67,7 @@ object ZincRunner extends WorkerMain[Namespace] {
     val parser = ArgumentParsers.newFor("zinc-worker").addHelp(true).build
     parser.addArgument("--persistence_dir", /* deprecated */ "--persistenceDir").metavar("path")
     parser.addArgument("--use_persistence").`type`(Arg.booleanType)
+    // deprecated
     parser.addArgument("--max_errors")
     parser.parseArgsOrFail(args.getOrElse(Array.empty))
   }
@@ -213,12 +214,8 @@ object ZincRunner extends WorkerMain[Namespace] {
     }
 
     val setup = {
-      val maxErrors: Int = worker.getString("max_errors") match {
-        case x: String if x.forall(_.isDigit) => x.toInt
-        case _                                => 10
-      }
       val incOptions = IncOptions.create()
-      val reporter = new LoggedReporter(maxErrors, logger)
+      val reporter = new LoggedReporter(logger)
       val skip = false
       Setup.create(lookup, skip, null, compilerCache, incOptions, reporter, Optional.empty(), Array.empty)
     }

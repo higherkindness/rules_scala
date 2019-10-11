@@ -1,42 +1,11 @@
 package higherkindness.rules_scala
 package workers.common
 
-import xsbti.{Logger, Position, Problem, Reporter, Severity}
-import Severity.{Error, Info, Warn}
-import sbt.util.InterfaceUtil.{toSupplier => spl}
-import scala.collection.mutable.ListBuffer
+import xsbti.{Logger, Problem}
+import sbt.internal.inc.{LoggedReporter => SbtLoggedReporter}
 
-class LoggedReporter(
-  maximumErrors: Int,
-  logger: Logger
-) extends Reporter {
-  private val problemCount = new ListBuffer[Problem]
-  reset
-
-  def reset = problemCount.clear
-  def hasErrors = errorCount > 0
-  def hasWarnings = warningCount > 0
-  def problems = problemCount.toArray
-  def comment(pos: Position, msg: String) = ()
-
-  def printSummary = {
-    if (hasWarnings) logger.warn(spl(Color.Warning(elementCountToString(warningCount, "warning"))))
-    if (hasErrors) logger.error(spl(Color.Error(elementCountToString(errorCount, "error"))))
-  }
-
-  override def log(problem: Problem) = {
-    problemCount += problem
-    val severity = problem.severity
-    if (severity != Error || maximumErrors <= 0 || errorCount <= maximumErrors) {
-      severity match {
-        case Error => logger.error(spl(Color.Error(problem)))
-        case Warn  => logger.warn(spl(Color.Warning(problem)))
-        case Info  => logger.info(spl(Color.Info(problem)))
-      }
-    }
-  }
-
-  private def errorCount = problemCount.count(_.severity == Error)
-  private def warningCount = problemCount.count(_.severity == Warn)
-  private def elementCountToString(num: Int, element: String) = s"${num} ${element}${if (num > 1) "s" else ""} found"
+class LoggedReporter(logger: Logger) extends SbtLoggedReporter(0, logger) {
+  override protected def logError(problem: Problem): Unit = logger.error(() => Color.Error(problem))
+  override protected def logInfo(problem: Problem): Unit = logger.info(() => Color.Info(problem))
+  override protected def logWarning(problem: Problem): Unit = logger.warn(() => Color.Warning(problem))
 }
