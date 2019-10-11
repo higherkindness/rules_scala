@@ -114,7 +114,8 @@ class ProcessTestRunner(
           test,
           scopeAndTestName,
           classpath.map(_.toString),
-          logger
+          logger,
+          arguments
         )
         val out = new ObjectOutputStream(process.getOutputStream)
         try out.writeObject(request)
