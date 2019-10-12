@@ -10,7 +10,7 @@ import xsbti.Severity
 object Example {
     def main(args: Array[String]) {
         val logger = new AnnexLogger(LogLevel.Info)
-        val reporter = new LoggedReporter(10, logger)
+        val reporter = new LoggedReporter(logger)
         val problem1 = problem("", new JavaPosition("Test Line", 100, "", 100), "Info Message 1", Severity.Info)
         val problem2 = problem("", new JavaPosition("Test Line", 200, "", 200), "Warning Message 2", Severity.Warn)
         val problem3 = problem("", new JavaPosition("Test Line", 300, "", 300), "Error Message 3", Severity.Error)
