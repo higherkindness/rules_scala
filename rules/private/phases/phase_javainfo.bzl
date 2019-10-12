@@ -24,7 +24,7 @@ def phase_javainfo(ctx, g):
     sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
     scala_configuration_runtime_deps = _collect(JavaInfo, g.init.scala_configuration.runtime_classpath)
 
-    if len(ctx.attr.srcs) == 0:
+    if len(ctx.attr.srcs) == 0 and len(ctx.attr.resources) == 0:
         java_info = java_common.merge([g.classpaths.sdeps, sexports])
     else:
         compile_jar = java_common.run_ijar(
