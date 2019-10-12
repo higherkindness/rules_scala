@@ -16,7 +16,6 @@ $ ./scripts/gen-docs.sh
 and [Scalafmt](https://scalameta.org/scalafmt/) is used to format Scala files. To run them,
 
 ```
-$ ./scripts/setup-tools.sh # first time
 $ ./scripts/format.sh
 ```
 

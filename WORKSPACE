@@ -17,6 +17,36 @@ http_archive(
     urls = ["https://github.com/bazelbuild/skydoc/archive/b8a32e07ee8297c89ca8020af4fa2163a766706f.zip"],
 )
 
+# com_github_bazelbuild_buildtools
+
+http_archive(
+    name = "com_github_bazelbuild_buildtools",
+    sha256 = "998ccc97f78c4ee959ad7ebb5effed30a6a8afc7891e6be3c2e0355900846c7d",
+    strip_prefix = "buildtools-19db42aa7a206a52b67bc66477c069ca83d092f4",
+    urls = ["https://github.com/bazelbuild/buildtools/archive/19db42aa7a206a52b67bc66477c069ca83d092f4.zip"],
+)
+
+load("@com_github_bazelbuild_buildtools//buildifier:deps.bzl", "buildifier_dependencies")
+
+buildifier_dependencies()
+
+# io_bazel_rules_go
+
+http_archive(
+    name = "io_bazel_rules_go",
+    sha256 = "9fb16af4d4836c8222142e54c9efa0bb5fc562ffc893ce2abeac3e25daead144",
+    urls = [
+        "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/rules_go/releases/download/0.19.0/rules_go-0.19.0.tar.gz",
+        "https://github.com/bazelbuild/rules_go/releases/download/0.19.0/rules_go-0.19.0.tar.gz",
+    ],
+)
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+go_rules_dependencies()
+
+go_register_toolchains()
+
 git_repository(
     name = "bazel_skylib",
     remote = "https://github.com/bazelbuild/bazel-skylib.git",
