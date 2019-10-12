@@ -21,7 +21,7 @@ load(
 
 def phase_javainfo(ctx, g):
     sruntime_deps = java_common.merge(_collect(JavaInfo, ctx.attr.runtime_deps))
-    sexports = java_common.merge(_collect(JavaInfo, ctx.attr.exports))
+    sexports = java_common.merge(_collect(JavaInfo, getattr(ctx.attr, "exports", [])))
     scala_configuration_runtime_deps = _collect(JavaInfo, g.init.scala_configuration.runtime_classpath)
 
     if len(ctx.attr.srcs) == 0 and len(ctx.attr.resources) == 0:
@@ -53,7 +53,7 @@ def phase_javainfo(ctx, g):
         )
 
     scala_info = _ScalaInfo(
-        macro = ctx.attr.macro,
+        macro = getattr(ctx.attr, "macro", False),
         scala_configuration = g.init.scala_configuration,
     )
 

@@ -107,27 +107,12 @@ _compile_attributes = {
         doc = "The JVM library dependencies to always consider used for `scala_deps_used` checks.",
         providers = [JavaInfo],
     ),
-    "exports": attr.label_list(
-        aspects = [
-            _coverage_replacements_provider.aspect,
-        ],
-        doc = "The JVM libraries to add as dependencies to any libraries dependent on this one.",
-        providers = [JavaInfo],
-    ),
     "runtime_deps": attr.label_list(
         doc = "The JVM runtime-only library dependencies.",
         providers = [JavaInfo],
     ),
     "javacopts": attr.string_list(
         doc = "The Javac options.",
-    ),
-    "macro": attr.bool(
-        default = False,
-        doc = "Whether this library provides macros.",
-    ),
-    "neverlink": attr.bool(
-        default = False,
-        doc = "Whether this library should be excluded at runtime.",
     ),
     "plugins": attr.label_list(
         doc = "The Scalac plugins.",
@@ -153,6 +138,24 @@ _compile_attributes = {
     ),
     "scalacopts": attr.string_list(
         doc = "The Scalac options.",
+    ),
+}
+
+_library_attributes = {
+    "exports": attr.label_list(
+        aspects = [
+            _coverage_replacements_provider.aspect,
+        ],
+        doc = "The JVM libraries to add as dependencies to any libraries dependent on this one.",
+        providers = [JavaInfo],
+    ),
+    "macro": attr.bool(
+        default = False,
+        doc = "Whether this library provides macros.",
+    ),
+    "neverlink": attr.bool(
+        default = False,
+        doc = "Whether this library should be excluded at runtime.",
     ),
 }
 
@@ -244,6 +247,7 @@ def make_scala_library(*extras):
         attrs = _dicts.add(
             _compile_attributes,
             _compile_private_attributes,
+            _library_attributes,
             _extras_attributes(extras),
             *[extra["attrs"] for extra in extras]
         ),
