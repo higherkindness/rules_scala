@@ -17,10 +17,10 @@ import sbt.testing.{Event, Framework, Logger}
 import scala.collection.mutable
 
 class BasicTestRunner(framework: Framework, classLoader: ClassLoader, logger: Logger) extends TestFrameworkRunner {
-  def execute(tests: Seq[TestDefinition], scopeAndTestName: String) = {
+  def execute(tests: Seq[TestDefinition], scopeAndTestName: String, arguments: Seq[String]) = {
     var tasksAndEvents = new mutable.ListBuffer[(String, mutable.ListBuffer[Event])]()
     ClassLoaders.withContextClassLoader(classLoader) {
-      TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
+      TestHelper.withRunner(framework, scopeAndTestName, classLoader, arguments) { runner =>
         val reporter = new TestReporter(logger)
         val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)
@@ -43,13 +43,13 @@ class BasicTestRunner(framework: Framework, classLoader: ClassLoader, logger: Lo
 
 class ClassLoaderTestRunner(framework: Framework, classLoaderProvider: () => ClassLoader, logger: Logger)
     extends TestFrameworkRunner {
-  def execute(tests: Seq[TestDefinition], scopeAndTestName: String) = {
+  def execute(tests: Seq[TestDefinition], scopeAndTestName: String, arguments: Seq[String]) = {
     var tasksAndEvents = new mutable.ListBuffer[(String, mutable.ListBuffer[Event])]()
     val reporter = new TestReporter(logger)
 
     val classLoader = framework.getClass.getClassLoader
     ClassLoaders.withContextClassLoader(classLoader) {
-      TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
+      TestHelper.withRunner(framework, scopeAndTestName, classLoader, arguments) { runner =>
         val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)
       }
@@ -60,7 +60,7 @@ class ClassLoaderTestRunner(framework: Framework, classLoaderProvider: () => Cla
     tests.foreach { test =>
       val classLoader = classLoaderProvider()
       val isolatedFramework = new TestFrameworkLoader(classLoader, logger).load(framework.getClass.getName).get
-      TestHelper.withRunner(isolatedFramework, scopeAndTestName, classLoader) { runner =>
+      TestHelper.withRunner(isolatedFramework, scopeAndTestName, classLoader, arguments) { runner =>
         ClassLoaders.withContextClassLoader(classLoader) {
           val tasks = runner.tasks(Array(TestHelper.taskDef(test, scopeAndTestName)))
           tasks.foreach { task =>
@@ -90,12 +90,12 @@ class ProcessTestRunner(
   command: ProcessCommand,
   logger: Logger with Serializable
 ) extends TestFrameworkRunner {
-  def execute(tests: Seq[TestDefinition], scopeAndTestName: String) = {
+  def execute(tests: Seq[TestDefinition], scopeAndTestName: String, arguments: Seq[String]) = {
     val reporter = new TestReporter(logger)
 
     val classLoader = framework.getClass.getClassLoader
     ClassLoaders.withContextClassLoader(classLoader) {
-      TestHelper.withRunner(framework, scopeAndTestName, classLoader) { runner =>
+      TestHelper.withRunner(framework, scopeAndTestName, classLoader, arguments) { runner =>
         val tasks = runner.tasks(tests.map(TestHelper.taskDef(_, scopeAndTestName)).toArray)
         reporter.pre(framework, tasks)
       }
@@ -114,7 +114,8 @@ class ProcessTestRunner(
           test,
           scopeAndTestName,
           classpath.map(_.toString),
-          logger
+          logger,
+          arguments
         )
         val out = new ObjectOutputStream(process.getOutputStream)
         try out.writeObject(request)
@@ -130,5 +131,5 @@ class ProcessTestRunner(
 }
 
 trait TestFrameworkRunner {
-  def execute(tests: Seq[TestDefinition], scopeAndTestName: String): Boolean
+  def execute(tests: Seq[TestDefinition], scopeAndTestName: String, arguments: Seq[String]): Boolean
 }

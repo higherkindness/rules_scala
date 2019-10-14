@@ -59,7 +59,7 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
 
 * Additional options: ANSI color codes and verbosity
 
-* TODO: pass arguments to underlying test frameworks
+* Passing arguments to underlying test frameworks
 
 ```
 # Run tests
@@ -70,6 +70,9 @@ $ bazel test --test_filter=my.test.Example :mytest
 
 # Run all tests with Java/Scala package prefix (specs2)
 $ bazel test --test_filter='my.test.*' :mytest
+
+# Pass arguments to underlying test framework
+$ bazel test --test_arg=--framework_args='-oDF -l org.scalatest.tags.Slow' :mytest
 
 # Debug JVM on port 5005
 $ bazel test --test_arg=--debug=5005 :mytest

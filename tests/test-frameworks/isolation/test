@@ -13,3 +13,9 @@ bazel build :classloader-shared
 ! bazel test :classloader-shared
 
 bazel test :process :process-2_11 :process-jvm
+
+# verify framework args work for each level of isolation
+! (bazel test :none | grep 'be 2.*ms')
+bazel test --test_arg=--framework_args=-showtimes :none | grep 'be 2.*ms'
+bazel test --test_arg=--framework_args=-showtimes :classloader | grep 'be 2.*ms'
+bazel test --test_arg=--framework_args=-showtimes :process | grep 'be 2.*ms'
