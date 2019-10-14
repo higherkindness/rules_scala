@@ -21,7 +21,7 @@ If the right design principles are kept, implementing additional features should
 
 ## Features
 
-* Simple Core API
+* Simple core API modeled after Bazel's Java APIs
   * [scala_library](docs/stardoc/scala.md#scala_library)
   * [scala_binary](docs/stardoc/scala.md#scala_binary)
   * [scala_test](docs/stardoc/scala.md#scala_test)
@@ -33,15 +33,16 @@ If the right design principles are kept, implementing additional features should
   * Buildozer suggestions for dependency errors
 * [Optional Worker strategy](docs/scala.md#workers)
 * [Optional Zinc-based stateful incremental compilation](docs/stateful.md#stateful-compilation)
-* [Scalafmt](docs/scalafmt.md#scalafmt)
-* ScalaPB
+* [Scalafmt](docs/scalafmt.md#scalafmt) integration
+* Protobuf support with ScalaPB
   * [scala_proto_library](docs/stardoc/scala_proto.md#scala_proto_library)
   * [scala_proto_toolchain](docs/stardoc/scala_proto.md#scala_proto_toolchain)
 * Seamless integration with the [Bazel IntelliJ plugin](https://github.com/bazelbuild/intellij)
 * [Customizable rules](docs/newdocs/phases.md#customizing-the-core-rules)
-* [Multiple Scala versions in one build](docs/newdocs/scala_versions.md#specifying-the-scala-version-to-use)
+* [Multiple Scala versions in one build](docs/newdocs/scala_versions.md#specifying-the-scala-version-to-use), including Scala 3 (Dotty).
 * [Optimal handling of macros and ijars](docs/newdocs/macros.md#macros-and-ijars)
 * [Pass flags to Zinc compiler](docs/newdocs/zinc_flags.md)
+* Modern implementation using Bazel's most idiomatic APIs
 
 ## Usage
 
@@ -124,7 +125,5 @@ scala_library(
 ## Further Documentation
 
 See [contributing guidlines](CONTRIBUTING.md) for help on contributing to this project.
-
-* [Differences with bazelbuild/rules_scala](docs/newdocs/diff_rules_scala.md)
 
 For all rules and attributes, see the [Stardoc](docs/stardoc).
