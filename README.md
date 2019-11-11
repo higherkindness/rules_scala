@@ -53,8 +53,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 # Load rules scala annex
-rules_scala_annex_commit = "eeefae00b6e12ffd514f49c399f8d0abff7e4182"
-rules_scala_annex_sha256 = "7d0bfa327d177ae3258483082b5a2c2dff763aca53a20b07b6b2cc5e866ae9fd"
+rules_scala_annex_commit = "0f3fd2734fe1930ed1ca0a3c1876af8f24e94be2"
+rules_scala_annex_sha256 = "4b68b573162e38ec5ca792dfd7c326891e9a28e48afdb30d4bb90d0cba7216ab"
 http_archive(
     name = "rules_scala_annex",
     sha256 = rules_scala_annex_sha256,
