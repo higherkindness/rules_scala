@@ -2,7 +2,14 @@
 
 The scala version used by a buildable target is specified via the `ScalaConfiguration` passed in to the rule's `scala` attribute.
 
-This attribute defaults to using the `default_scala` specified in the the `WORKSPACE` file of the repo.
+This attribute defaults to using the `default_scala` specified via `bind` in the `WORKSPACE` file of the repo. For example, suppose the `ScalaConfiguration` you wish to default to is defined by `//scala:2_11_12`. In your `WORKSPACE`, you would include:
+
+```python
+bind(
+    name = "default_scala",
+    actual = "//scala:2_11_12",
+)
+```
 
 We provide two means of creating the `ScalaConfiguration`: `configure_bootstrap_scala` and `configure_zinc_scala`. The former is required by the latter.
 
@@ -53,7 +60,7 @@ configure_zinc_scala(
 )
 ```
 
-It is possible to use a different `ScalaConfiguration` on different build targets. All you need to do is specify a different one in the `scala` attribute.
+It is possible to use a different `ScalaConfiguration` on different build targets. All you need to do is specify a different one in the `scala` attribute. If no `scala` attribute is specified, the `default_scala` bound to in your `WORKSPACE` is used.
 
 For example:
 
@@ -69,3 +76,10 @@ scala_library(
   srcs = glob(["**/*.scala"])
   scala = "<package>:zinc_2_12_8
 )
+
+# This would use whatever //external:default_scala points to (i.e. what you bind default_scala to in your WORKSPACE)
+scala_library(
+  name = "example_compiled_with_default_scala",
+  srcs = glob(["**/*.scala"])
+)
+```
