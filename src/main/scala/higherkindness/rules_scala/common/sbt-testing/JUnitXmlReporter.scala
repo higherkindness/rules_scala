@@ -5,12 +5,12 @@ import java.io.{PrintWriter, StringWriter}
 import sbt.testing.{Event, Status, TestSelector}
 import Status.{Canceled, Error, Failure, Ignored, Pending, Skipped}
 import scala.collection.mutable.ListBuffer
-import scala.xml.{Elem, XML, Utility}
+import scala.xml.{Elem, Utility, XML}
 
 class JUnitXmlReporter(tasksAndEvents: ListBuffer[(String, ListBuffer[Event])]) {
   private def escape(info: String): String = info match {
     case str: String => Utility.escape(str)
-    case _ => ""
+    case _           => ""
   }
 
   def result: Elem =
