@@ -95,9 +95,9 @@ http_archive(
 
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "249e8129914be6d987ca57754516be35a14ea866c616041ff0cd32ea94d2f3a1",
-    strip_prefix = "rules_jvm_external-2.5",
-    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.5.zip",
+    sha256 = "e5b97a31a3e8feed91636f42e19b11c49487b85e5de2f387c999ea14d77c7f45",
+    strip_prefix = "rules_jvm_external-2.9",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.9.zip",
 )
 
 load("//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")
