@@ -176,7 +176,12 @@ object TestRunner {
         }
         val testFrameworkArguments =
           Option(namespace.getString("framework_args")).map(_.split("\\s+").toList).getOrElse(Seq.empty[String])
-        runner.execute(filteredTests, testScopeAndName.getOrElse(""), testFrameworkArguments)
+        try runner.execute(filteredTests, testScopeAndName.getOrElse(""), testFrameworkArguments)
+        catch {
+          case e: Throwable =>
+            e.printStackTrace()
+            false
+        }
       }
     }
     sys.exit(if (passed) 0 else 1)
