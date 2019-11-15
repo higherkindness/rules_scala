@@ -24,5 +24,5 @@ def test_dependencies():
             "http://central.maven.org/maven2",
         ],
         fetch_sources = True,
-        maven_install_json = "//:annex_test_install.json",
+        maven_install_json = "@rules_scala_annex_test//:annex_test_install.json",
     )
