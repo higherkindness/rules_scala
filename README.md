@@ -53,8 +53,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 # Load rules scala annex
-rules_scala_annex_commit = "0f3fd2734fe1930ed1ca0a3c1876af8f24e94be2"
-rules_scala_annex_sha256 = "4b68b573162e38ec5ca792dfd7c326891e9a28e48afdb30d4bb90d0cba7216ab"
+rules_scala_annex_commit = "ae99fcb08bbddfc24fef00d7b13f6c065e1df8d5"
+rules_scala_annex_sha256 = "1630fc7ecc7a4ffeabcdef73c7600eab9cf3fd2377db1f69b8ce1927560211ff"
 http_archive(
     name = "rules_scala_annex",
     sha256 = rules_scala_annex_sha256,
@@ -62,11 +62,13 @@ http_archive(
     url = "https://github.com/higherkindness/rules_scala/archive/{}.zip".format(rules_scala_annex_commit),
 )
 
+rules_jvm_external_tag = "2.9"
+rules_jvm_external_sha256 = "e5b97a31a3e8feed91636f42e19b11c49487b85e5de2f387c999ea14d77c7f45"
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "249e8129914be6d987ca57754516be35a14ea866c616041ff0cd32ea94d2f3a1",
-    strip_prefix = "rules_jvm_external-2.5",
-    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.5.zip",
+    sha256 = rules_jvm_external_sha256,
+    strip_prefix = "rules_jvm_external-{}".format(rules_jvm_external_version),
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/{}.zip".format(rules_jvm_external_version),
 )
 
 load("@rules_scala_annex//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")
