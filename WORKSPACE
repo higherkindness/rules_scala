@@ -1,29 +1,29 @@
 workspace(name = "rules_scala_annex")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-http_archive(
-    name = "io_bazel",
-    sha256 = "2d86797a5b96163b7f5e9cbb8f09cc919066e7ee0fe1a614b79680ae36a14ef3",
-    strip_prefix = "bazel-0.27.0",
-    urls = ["https://github.com/bazelbuild/bazel/archive/0.27.0.zip"],
-)
+skydoc_tag = "0.3.0"
+
+skydoc_sha256 = "8762a212cff5f81505a1632630edcfe9adce381479a50a03c968bd2fc217972d"
 
 http_archive(
     name = "io_bazel_skydoc",
-    sha256 = "694602137e5d56cfd35622cf58c047549324a0db1522ee944ad86e74420be9db",
-    strip_prefix = "skydoc-b8a32e07ee8297c89ca8020af4fa2163a766706f",
-    urls = ["https://github.com/bazelbuild/skydoc/archive/b8a32e07ee8297c89ca8020af4fa2163a766706f.zip"],
+    sha256 = skydoc_sha256,
+    strip_prefix = "skydoc-{}".format(skydoc_tag),
+    urls = ["https://github.com/bazelbuild/skydoc/archive/{}.zip".format(skydoc_tag)],
 )
 
 # com_github_bazelbuild_buildtools
 
+buildtools_tag = "0.29.0"
+
+buildtools_sha256 = "05eb52437fb250c7591dd6cbcfd1f9b5b61d85d6b20f04b041e0830dd1ab39b3"
+
 http_archive(
     name = "com_github_bazelbuild_buildtools",
-    sha256 = "998ccc97f78c4ee959ad7ebb5effed30a6a8afc7891e6be3c2e0355900846c7d",
-    strip_prefix = "buildtools-19db42aa7a206a52b67bc66477c069ca83d092f4",
-    urls = ["https://github.com/bazelbuild/buildtools/archive/19db42aa7a206a52b67bc66477c069ca83d092f4.zip"],
+    sha256 = buildtools_sha256,
+    strip_prefix = "buildtools-{}".format(buildtools_tag),
+    urls = ["https://github.com/bazelbuild/buildtools/archive/{}.zip".format(buildtools_tag)],
 )
 
 load("@com_github_bazelbuild_buildtools//buildifier:deps.bzl", "buildifier_dependencies")
@@ -32,12 +32,16 @@ buildifier_dependencies()
 
 # io_bazel_rules_go
 
+rules_go_tag = "v0.20.2"
+
+rules_go_sha256 = "b9aa86ec08a292b97ec4591cf578e020b35f98e12173bbd4a921f84f583aebd9"
+
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "9fb16af4d4836c8222142e54c9efa0bb5fc562ffc893ce2abeac3e25daead144",
+    sha256 = rules_go_sha256,
     urls = [
-        "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/rules_go/releases/download/0.19.0/rules_go-0.19.0.tar.gz",
-        "https://github.com/bazelbuild/rules_go/releases/download/0.19.0/rules_go-0.19.0.tar.gz",
+        "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/rules_go/releases/download/{tag}/rules_go-{tag}.tar.gz".format(tag = rules_go_tag),
+        "https://github.com/bazelbuild/rules_go/releases/download/{tag}/rules_go-{tag}.tar.gz".format(tag = rules_go_tag),
     ],
 )
 
@@ -47,17 +51,29 @@ go_rules_dependencies()
 
 go_register_toolchains()
 
-git_repository(
+bazel_skylib_tag = "1.0.2"
+
+bazel_skylib_sha256 = "97e70364e9249702246c0e9444bccdc4b847bed1eb03c5a3ece4f83dfe6abc44"
+
+http_archive(
     name = "bazel_skylib",
-    remote = "https://github.com/bazelbuild/bazel-skylib.git",
-    tag = "0.8.0",
+    sha256 = bazel_skylib_sha256,
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
+    ],
 )
+
+protobuf_tag = "3.10.1"
+
+protobuf_sha256 = "678d91d8a939a1ef9cb268e1f20c14cd55e40361dc397bb5881e4e1e532679b1"
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "8eb5ca331ab8ca0da2baea7fc0607d86c46c80845deca57109a5d637ccb93bb4",
-    strip_prefix = "protobuf-3.9.0",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.9.0.zip"],
+    sha256 = protobuf_sha256,
+    strip_prefix = "protobuf-{}".format(protobuf_tag),
+    type = "zip",
+    url = "https://github.com/protocolbuffers/protobuf/archive/v{}.zip".format(protobuf_tag),
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
@@ -93,11 +109,15 @@ http_archive(
     url = "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u212-b03/OpenJDK8U-jdk_x64_mac_hotspot_8u212b03.tar.gz",
 )
 
+rules_jvm_external_tag = "2.9"
+
+rules_jvm_external_sha256 = "e5b97a31a3e8feed91636f42e19b11c49487b85e5de2f387c999ea14d77c7f45"
+
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "e5b97a31a3e8feed91636f42e19b11c49487b85e5de2f387c999ea14d77c7f45",
-    strip_prefix = "rules_jvm_external-2.9",
-    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.9.zip",
+    sha256 = rules_jvm_external_sha256,
+    strip_prefix = "rules_jvm_external-{}".format(rules_jvm_external_tag),
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/{}.zip".format(rules_jvm_external_tag),
 )
 
 load("//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")

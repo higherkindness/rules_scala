@@ -6,5 +6,5 @@ buildifier(
 
 buildifier(
     name = "buildifier_check",
-    mode = "check"
+    mode = "check",
 )

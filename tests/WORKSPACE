@@ -2,19 +2,30 @@ workspace(name = "rules_scala_annex_test")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:jvm.bzl", "jvm_maven_import_external")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-git_repository(
+bazel_skylib_tag = "1.0.2"
+
+bazel_skylib_sha256 = "97e70364e9249702246c0e9444bccdc4b847bed1eb03c5a3ece4f83dfe6abc44"
+
+http_archive(
     name = "bazel_skylib",
-    remote = "https://github.com/bazelbuild/bazel-skylib.git",
-    tag = "0.8.0",
+    sha256 = bazel_skylib_sha256,
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
+    ],
 )
+
+protobuf_tag = "3.10.1"
+
+protobuf_sha256 = "678d91d8a939a1ef9cb268e1f20c14cd55e40361dc397bb5881e4e1e532679b1"
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "8eb5ca331ab8ca0da2baea7fc0607d86c46c80845deca57109a5d637ccb93bb4",
-    strip_prefix = "protobuf-3.9.0",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.9.0.zip"],
+    sha256 = protobuf_sha256,
+    strip_prefix = "protobuf-{}".format(protobuf_tag),
+    type = "zip",
+    url = "https://github.com/protocolbuffers/protobuf/archive/v{}.zip".format(protobuf_tag),
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
@@ -55,11 +66,15 @@ local_repository(
     path = "../",
 )
 
+rules_jvm_external_tag = "2.9"
+
+rules_jvm_external_sha256 = "e5b97a31a3e8feed91636f42e19b11c49487b85e5de2f387c999ea14d77c7f45"
+
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "e5b97a31a3e8feed91636f42e19b11c49487b85e5de2f387c999ea14d77c7f45",
-    strip_prefix = "rules_jvm_external-2.9",
-    url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.9.zip",
+    sha256 = rules_jvm_external_sha256,
+    strip_prefix = "rules_jvm_external-{}".format(rules_jvm_external_tag),
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/{}.zip".format(rules_jvm_external_tag),
 )
 
 load(
