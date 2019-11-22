@@ -10,7 +10,7 @@ http_archive(
     name = "io_bazel_skydoc",
     sha256 = skydoc_sha256,
     strip_prefix = "skydoc-{}".format(skydoc_tag),
-    urls = ["https://github.com/bazelbuild/skydoc/archive/{}.zip".format(skydoc_tag)],
+    url = "https://github.com/bazelbuild/skydoc/archive/{}.zip".format(skydoc_tag),
 )
 
 # com_github_bazelbuild_buildtools
@@ -23,7 +23,7 @@ http_archive(
     name = "com_github_bazelbuild_buildtools",
     sha256 = buildtools_sha256,
     strip_prefix = "buildtools-{}".format(buildtools_tag),
-    urls = ["https://github.com/bazelbuild/buildtools/archive/{}.zip".format(buildtools_tag)],
+    url = "https://github.com/bazelbuild/buildtools/archive/{}.zip".format(buildtools_tag),
 )
 
 load("@com_github_bazelbuild_buildtools//buildifier:deps.bzl", "buildifier_dependencies")
