@@ -28,36 +28,36 @@ jobs:
 # Build
     - stage: build
       <<: *osx
-      env: BAZEL_VERSION=1.0.0
+      env: BAZEL_VERSION=1.1.0
       script: ./scripts/travis.sh build
     - <<: *linux
-      env: BAZEL_VERSION=1.0.0
+      env: BAZEL_VERSION=1.1.0
       script: ./scripts/travis.sh build
     - <<: *osx
-      env: BAZEL_VERSION=1.1.0
+      env: BAZEL_VERSION=1.2.1
       script: ./scripts/travis.sh build
     - <<: *linux
-      env: BAZEL_VERSION=1.1.0
+      env: BAZEL_VERSION=1.2.1
       script: ./scripts/travis.sh build
 # Lint
     - stage: lint
       <<: *osx
-      env: BAZEL_VERSION=1.0.0
+      env: BAZEL_VERSION=1.1.0
       script: ./scripts/travis.sh lint
     - <<: *linux
-      env: BAZEL_VERSION=1.1.0
+      env: BAZEL_VERSION=1.2.1
       script: ./scripts/travis.sh lint
 # Test
     - stage: test
       <<: *osx
-      env: BAZEL_VERSION=1.0.0
+      env: BAZEL_VERSION=1.1.0
       script: ./scripts/travis.sh test
     - <<: *linux
-      env: BAZEL_VERSION=1.0.0
+      env: BAZEL_VERSION=1.1.0
       script: ./scripts/travis.sh test
     - <<: *osx
-      env: BAZEL_VERSION=1.1.0
+      env: BAZEL_VERSION=1.2.1
       script: ./scripts/travis.sh test
     - <<: *linux
-      env: BAZEL_VERSION=1.1.0
+      env: BAZEL_VERSION=1.2.1
       script: ./scripts/travis.sh test
