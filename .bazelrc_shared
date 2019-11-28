@@ -14,16 +14,16 @@ test  --test_output=all
 build:rules --disk_cache=.bazel_cache
 build:tests --disk_cache=../.bazel_cache
 
-# bazel 1.1.0
-common:rules_v1.0 --config=noop
+# bazel 1.2.1
 common:rules_v1.1 --config=noop
+common:rules_v1.2 --config=noop
 
 # route potentially unrouted configs to a terminating noop config
 # it's a noop because we use the default value
 common:rules --config=noop
 common:tests --config=noop
-common:v1.0 --config=rules_v1.0
 common:v1.1 --config=rules_v1.1
+common:v1.2 --config=rules_v1.2
 
 # pick something trivial as a "noop"
 common:noop --logging=3
