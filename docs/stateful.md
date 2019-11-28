@@ -11,5 +11,5 @@ is higher, because the sharing is (intentionally) aggressive.
 To enable Zinc's stateful compilation, add
 
 ```
---worker_extra_flag=ScalaCompile=--persistent_dir=.bazel-zinc
+--worker_extra_flag=ScalaCompile=--persistence_dir=.bazel-zinc
 ```
