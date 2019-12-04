@@ -71,6 +71,9 @@ $ bazel test --test_filter=my.test.Example :mytest
 # Run all tests with Java/Scala package prefix (specs2)
 $ bazel test --test_filter='my.test.*' :mytest
 
+# Run a single test from a file that contains multiple tests (add the test name to the --test_filter regex using the format "path_to_file#.*unique_part_of_test_name.*")
+$ bazel test --test_filter='my.test.Example#.*remove trailing spaces from string.*' :mytest
+
 # Pass arguments to underlying test framework
 $ bazel test --test_arg=--framework_args='-oDF -l org.scalatest.tags.Slow' :mytest
 
@@ -88,6 +91,15 @@ $ bazel test --test_arg=--verbosity=LOW
 
 # Generate local script to run tests
 $ bazel run --script_path=script :mytest
+
+# Run tests one at a time and see output as the tests run
+$ bazel test --test_output=streamed :mytest
+
+# Stop tests from being cached
+$ bazel test --nocache_test_results :mytest
+
+# Run tests multiple times to test stability
+$ bazel test --runs_per_test=100 :mytest
 ```
 
 The `isolation` parameter determines how tests are isolated from each other.
