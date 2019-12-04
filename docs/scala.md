@@ -3,6 +3,8 @@
 * [Workers](#workers)
 * [Strict & unused deps](#strict--unused-deps)
 * [Tests](#tests)
+  * [Example Commands](#example-commands)
+  * [Isolation](#isolation)
 
 ## Workers
 
@@ -127,6 +129,8 @@ Run tests multiple times to test stability
 ```
 $ bazel test --runs_per_test=100 :mytest
 ```
+
+### Isolation
 
 The `isolation` parameter determines how tests are isolated from each other.
 
