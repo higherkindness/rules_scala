@@ -61,44 +61,70 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
 
 * Passing arguments to underlying test frameworks
 
+### Example Commands
+
+Run tests
 ```
-# Run tests
 $ bazel test :mytest
+```
 
-# Run a single test (specs2)
+Run a single test (specs2)
+```
 $ bazel test --test_filter=my.test.Example :mytest
+```
 
-# Run all tests with Java/Scala package prefix (specs2)
+Run all tests with Java/Scala package prefix (specs2)
+```
 $ bazel test --test_filter='my.test.*' :mytest
+```
 
-# Run a single test from a file that contains multiple tests (add the test name to the --test_filter regex using the format "path_to_file#.*unique_part_of_test_name.*")
+Run a single test from a file that contains multiple tests (add the test name to the --test_filter regex using the format "path_to_file#.*unique_part_of_test_name.*")
+```
 $ bazel test --test_filter='my.test.Example#.*remove trailing spaces from string.*' :mytest
+```
 
-# Pass arguments to underlying test framework
+Pass arguments to underlying test framework
+```
 $ bazel test --test_arg=--framework_args='-oDF -l org.scalatest.tags.Slow' :mytest
+```
 
-# Debug JVM on port 5005
+Debug JVM on port 5005
+```
 $ bazel test --test_arg=--debug=5005 :mytest
+```
 
-# Limit heap space to 1GB
+Limit heap space to 1GB
+```
 $ bazel test --test_arg=--jvm_arg='-Xmx 1G' :mytest
+```
 
-# Don't use ANSI color codes
+Don't use ANSI color codes
+```
 $ bazel test --test_arg=--color=false
+```
 
-# Reduce logs
+Reduce logs
+```
 $ bazel test --test_arg=--verbosity=LOW
+```
 
-# Generate local script to run tests
+Generate local script to run tests
+```
 $ bazel run --script_path=script :mytest
+```
 
-# Run tests one at a time and see output as the tests run
+Run tests one at a time and see output as the tests run
+```
 $ bazel test --test_output=streamed :mytest
+```
 
-# Stop tests from being cached
+Stop tests from being cached
+```
 $ bazel test --nocache_test_results :mytest
+```
 
-# Run tests multiple times to test stability
+Run tests multiple times to test stability
+```
 $ bazel test --runs_per_test=100 :mytest
 ```
 
