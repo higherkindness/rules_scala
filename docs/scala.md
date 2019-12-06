@@ -54,8 +54,9 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
 
 * The [`--test_filter=<filter_expression>`](https://docs.bazel.build/versions/master/user-manual.html#flag--test_filter) option.
   * The syntax of the `<filter_expression>` varies by test framework, and not all test frameworks support the `test_filter` option at this time.
-  * For specs2, `<filter_expression>` simply matches full, `.`-separated classnames
+  * For specs2, `<filter_expression>` simply matches full `.`-separated classnames. Add the test name after the classname to run a single test.
     * example: `my.package.MyTest`
+    * example: `my.package.MyTest#remove trailing spaces from string`
 
 * [java_stub_template](https://github.com/bazelbuild/bazel/blob/0.27.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/java_stub_template.txt) options.
 
@@ -80,7 +81,7 @@ Run all tests with Java/Scala package prefix (specs2)
 $ bazel test --test_filter='my.test.*' :mytest
 ```
 
-Run a single test from a file that contains multiple tests (add the test name to the --test_filter regex using the format "path_to_file#.*unique_part_of_test_name.*")
+Run a single test from a file that contains multiple tests (specs2)
 ```
 $ bazel test --test_filter='my.test.Example#.*remove trailing spaces from string.*' :mytest
 ```
