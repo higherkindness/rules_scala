@@ -3,6 +3,8 @@
 * [Workers](#workers)
 * [Strict & unused deps](#strict--unused-deps)
 * [Tests](#tests)
+  * [Example Commands](#example-commands)
+  * [Isolation](#isolation)
 
 ## Workers
 
@@ -52,8 +54,9 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
 
 * The [`--test_filter=<filter_expression>`](https://docs.bazel.build/versions/master/user-manual.html#flag--test_filter) option.
   * The syntax of the `<filter_expression>` varies by test framework, and not all test frameworks support the `test_filter` option at this time.
-  * For specs2, `<filter_expression>` simply matches full, `.`-separated classnames
+  * For specs2, `<filter_expression>` simply matches full `.`-separated classnames. Add the test name after the classname to run a single test.
     * example: `my.package.MyTest`
+    * example: `my.package.MyTest#some test name here` (remember to escape the whitespace)
 
 * [java_stub_template](https://github.com/bazelbuild/bazel/blob/0.27.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/java_stub_template.txt) options.
 
@@ -61,34 +64,74 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
 
 * Passing arguments to underlying test frameworks
 
+### Example Commands
+
+Run tests
 ```
-# Run tests
 $ bazel test :mytest
+```
 
-# Run a single test (specs2)
+Run a single test (specs2)
+```
 $ bazel test --test_filter=my.test.Example :mytest
+```
 
-# Run all tests with Java/Scala package prefix (specs2)
+Run all tests with Java/Scala package prefix (specs2)
+```
 $ bazel test --test_filter='my.test.*' :mytest
+```
 
-# Pass arguments to underlying test framework
+Run a single test from a file that contains multiple tests (specs2)
+```
+$ bazel test --test_filter='my.test.Example#.*some test name here.*' :mytest
+```
+
+Pass arguments to underlying test framework
+```
 $ bazel test --test_arg=--framework_args='-oDF -l org.scalatest.tags.Slow' :mytest
+```
 
-# Debug JVM on port 5005
+Debug JVM on port 5005
+```
 $ bazel test --test_arg=--debug=5005 :mytest
+```
 
-# Limit heap space to 1GB
+Limit heap space to 1GB
+```
 $ bazel test --test_arg=--jvm_arg='-Xmx 1G' :mytest
+```
 
-# Don't use ANSI color codes
+Don't use ANSI color codes
+```
 $ bazel test --test_arg=--color=false
+```
 
-# Reduce logs
+Reduce logs
+```
 $ bazel test --test_arg=--verbosity=LOW
+```
 
-# Generate local script to run tests
+Generate local script to run tests
+```
 $ bazel run --script_path=script :mytest
 ```
+
+Run tests one at a time and see output as the tests run
+```
+$ bazel test --test_output=streamed :mytest
+```
+
+Stop tests from being cached
+```
+$ bazel test --nocache_test_results :mytest
+```
+
+Run tests multiple times to test stability
+```
+$ bazel test --runs_per_test=100 :mytest
+```
+
+### Isolation
 
 The `isolation` parameter determines how tests are isolated from each other.
 
