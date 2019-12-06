@@ -56,7 +56,7 @@ e.g. ScalaTest, specs2, ScalaCheck, utest.
   * The syntax of the `<filter_expression>` varies by test framework, and not all test frameworks support the `test_filter` option at this time.
   * For specs2, `<filter_expression>` simply matches full `.`-separated classnames. Add the test name after the classname to run a single test.
     * example: `my.package.MyTest`
-    * example: `my.package.MyTest#remove trailing spaces from string`
+    * example: `my.package.MyTest#some test name here` (remember to escape the whitespace)
 
 * [java_stub_template](https://github.com/bazelbuild/bazel/blob/0.27.0/src/main/java/com/google/devtools/build/lib/bazel/rules/java/java_stub_template.txt) options.
 
@@ -83,7 +83,7 @@ $ bazel test --test_filter='my.test.*' :mytest
 
 Run a single test from a file that contains multiple tests (specs2)
 ```
-$ bazel test --test_filter='my.test.Example#.*remove trailing spaces from string.*' :mytest
+$ bazel test --test_filter='my.test.Example#.*some test name here.*' :mytest
 ```
 
 Pass arguments to underlying test framework
