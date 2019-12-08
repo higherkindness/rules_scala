@@ -4,7 +4,6 @@ load(
 )
 
 def _emulate_rules_scala_repository_impl(repository_ctx):
-    print(repository_ctx.path(""))
     repository_ctx.file("WORKSPACE", content = "workspace(name = \"io_bazel_rules_scala\")")
     repository_ctx.file(
         "scala/scala.bzl",
