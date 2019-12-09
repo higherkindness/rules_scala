@@ -3,8 +3,29 @@ load("@rules_scala_annex//rules:providers.bzl", "reconfigure_deps_configuration"
 
 reconfigure_deps_configuration(
     name = "scala",
+    direct = select({
+        ":deps_direct_off": "off",
+        "//conditions:default": "error",
+    }),
     provider = "//scala:2_12",
-    used = "off",
+    used = select({
+        ":deps_used_off": "off",
+        "//conditions:default": "error",
+    }),
+)
+
+config_setting(
+    name = "deps_used_off",
+    define_values = {
+        "scala_deps_used": "off",
+    },
+)
+
+config_setting(
+    name = "deps_direct_off",
+    define_values = {
+        "scala_deps_direct": "off",
+    },
 )
 
 scala_library(
