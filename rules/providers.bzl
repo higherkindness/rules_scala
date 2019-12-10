@@ -63,6 +63,7 @@ ZincConfiguration = provider(
     fields = {
         "compiler_bridge": "compiled Zinc compiler bridge",
         "compile_worker": "the worker label for compilation with Zinc",
+        "log_level": "log level for the Zinc compiler"
     },
 )
 

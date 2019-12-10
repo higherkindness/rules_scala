@@ -59,13 +59,14 @@ trait WorkerMain[S] {
                 1
             }
 
+            out.flush()
+
             WorkerProtocol.WorkResponse.newBuilder
               .setOutput(outStream.toString)
               .setExitCode(code)
               .build
               .writeDelimitedTo(stdout)
 
-            out.flush()
             outStream.reset()
 
             process(ctx)
