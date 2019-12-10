@@ -439,7 +439,7 @@ A Scala compiler plugin
 ## ZincConfiguration
 
 <pre>
-ZincConfiguration(<a href="#ZincConfiguration-compiler_bridge">compiler_bridge</a>, <a href="#ZincConfiguration-compile_worker">compile_worker</a>)
+ZincConfiguration(<a href="#ZincConfiguration-compiler_bridge">compiler_bridge</a>, <a href="#ZincConfiguration-compile_worker">compile_worker</a>, <a href="#ZincConfiguration-log_level">log_level</a>)
 </pre>
 
 Zinc configuration.
@@ -462,6 +462,12 @@ Zinc configuration.
       <td><code>compile_worker</code></td>
       <td>
         <p>the worker label for compilation with Zinc</p>
+      </td>
+    </tr>
+    <tr id="ZincConfiguration-log_level">
+      <td><code>log_level</code></td>
+      <td>
+        <p>log level for the Zinc compiler</p>
       </td>
     </tr>
   </tbody>
