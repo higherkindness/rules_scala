@@ -1,0 +1,5 @@
+#!/bin/bash -e
+bazel build :lib > output 2>&1
+
+cat output | grep "Compiling 1 Scala source"
+rm output
