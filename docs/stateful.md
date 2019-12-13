@@ -13,3 +13,8 @@ To enable Zinc's stateful compilation, add
 ```
 --worker_extra_flag=ScalaCompile=--persistence_dir=.bazel-zinc
 ```
+
+Additionally, intermediate inputs to compilation can be cached, for a significant performance benefit in some cases, by  
+```
+--worker_extra_flag=ScalaCompile=--persistence_dir=.bazel-zinc-outputs
+```
