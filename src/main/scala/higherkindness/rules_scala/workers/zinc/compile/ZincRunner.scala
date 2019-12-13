@@ -7,16 +7,18 @@ import workers.common.CommonArguments
 import workers.common.FileUtil
 import workers.common.LoggedReporter
 import common.worker.WorkerMain
-
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
-import java.util.{List => JList, Optional, Properties}
+import java.text.SimpleDateFormat
+import java.util.{Date, Optional, Properties, List => JList}
+
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.{Arguments => Arg}
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.classpath.ClassLoaderCache
 import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locate, ZincUtil}
+
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.util.control.NonFatal
@@ -67,15 +69,29 @@ object ZincRunner extends WorkerMain[Namespace] {
     val parser = ArgumentParsers.newFor("zinc-worker").addHelp(true).build
     parser.addArgument("--persistence_dir", /* deprecated */ "--persistenceDir").metavar("path")
     parser.addArgument("--use_persistence").`type`(Arg.booleanType)
+    parser.addArgument("--extracted_file_cache").metavar("path")
     // deprecated
     parser.addArgument("--max_errors")
     parser.parseArgsOrFail(args.getOrElse(Array.empty))
   }
 
+  private def pathFrom(args: Namespace, name: String):Option[Path] = Option(args.getString(name)).map { dir =>
+    Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
+  }
+
   protected[this] def work(worker: Namespace, args: Array[String]) = {
+    val usePersistence: Boolean = worker.getBoolean("use_persistence") match {
+      case p: java.lang.Boolean => p
+      case _                    => true
+    }
+
     val parser = ArgumentParsers.newFor("zinc").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
     CommonArguments.add(parser)
     val namespace = parser.parseArgsOrFail(args)
+
+    val persistenceDir = pathFrom(worker, "persistence_dir")
+
+    val depsCache = pathFrom(worker, "extracted_file_cache")
 
     val logger = new AnnexLogger(namespace.getString("log_level"))
 
@@ -90,7 +106,9 @@ object ZincRunner extends WorkerMain[Namespace] {
           .asScala
           .zipWithIndex
           .flatMap {
-            case (jar, i) => FileUtil.extractZip(jar.toPath, sourcesDir.resolve(i.toString))
+            case (jar, i) => {
+              FileUtil.extractZip(jar.toPath, sourcesDir.resolve(i.toString))
+            }
           }
           .map(_.toFile)
     }
@@ -103,7 +121,7 @@ object ZincRunner extends WorkerMain[Namespace] {
       val analyses = Option(
         namespace
           .getList[JList[String]]("analysis")
-      ).fold[Seq[JList[String]]](Nil)(_.asScala)
+      ).filter(_ => usePersistence).fold[Seq[JList[String]]](Nil)(_.asScala)
         .flatMap { value =>
           val prefixedLabel +: apis +: relations +: jars = value.asScala.toList
           val label = prefixedLabel.stripPrefix("_")
@@ -116,8 +134,10 @@ object ZincRunner extends WorkerMain[Namespace] {
         }
         .toMap
       val originalClasspath = namespace.getList[File]("classpath").asScala.map(_.toPath)
-      Dep.create(originalClasspath, analyses)
+      Dep.create(depsCache, originalClasspath, analyses)
     }
+
+
 
     // load persisted files
     val analysisFiles = AnalysisFiles(
@@ -134,8 +154,7 @@ object ZincRunner extends WorkerMain[Namespace] {
     }
     val analysisStore = new AnxAnalysisStore(analysisFiles, analysesFormat)
 
-    val persistence = Option(worker.getString("persistence_dir")).fold[ZincPersistence](NullPersistence) { dir =>
-      val rootDir = Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
+    val persistence = persistenceDir.fold[ZincPersistence](NullPersistence) { rootDir =>
       val path = namespace.getString("label").replaceAll("^/+", "").replaceAll(raw"[^\w/]", "_")
       new FilePersistence(rootDir.resolve(path), analysisFiles, outputJar)
     }
@@ -267,10 +286,6 @@ object ZincRunner extends WorkerMain[Namespace] {
 
     jarCreator.execute()
 
-    val usePersistence: Boolean = worker.getBoolean("use_persistence") match {
-      case p: java.lang.Boolean => p
-      case _                    => true
-    }
     // save persisted files
     if (usePersistence) {
       try persistence.save()
