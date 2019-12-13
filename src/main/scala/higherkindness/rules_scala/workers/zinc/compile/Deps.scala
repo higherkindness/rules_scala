@@ -25,7 +25,7 @@ case class ExternalDep(file: Path, classpath: Path, analysis: DepAnalysisFiles) 
 
 object Dep {
 
-  def sha256(file: Path):String = {
+  def sha256(file: Path): String = {
     val digest = MessageDigest.getInstance("SHA-256")
     new BigInteger(1, digest.digest(Files.readAllBytes(file))).toString(16)
   }

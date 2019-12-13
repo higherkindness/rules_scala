@@ -75,7 +75,7 @@ object ZincRunner extends WorkerMain[Namespace] {
     parser.parseArgsOrFail(args.getOrElse(Array.empty))
   }
 
-  private def pathFrom(args: Namespace, name: String):Option[Path] = Option(args.getString(name)).map { dir =>
+  private def pathFrom(args: Namespace, name: String): Option[Path] = Option(args.getString(name)).map { dir =>
     Paths.get(dir.replace("~", sys.props.getOrElse("user.home", "")))
   }
 
@@ -121,7 +121,8 @@ object ZincRunner extends WorkerMain[Namespace] {
       val analyses = Option(
         namespace
           .getList[JList[String]]("analysis")
-      ).filter(_ => usePersistence).fold[Seq[JList[String]]](Nil)(_.asScala)
+      ).filter(_ => usePersistence)
+        .fold[Seq[JList[String]]](Nil)(_.asScala)
         .flatMap { value =>
           val prefixedLabel +: apis +: relations +: jars = value.asScala.toList
           val label = prefixedLabel.stripPrefix("_")
@@ -136,8 +137,6 @@ object ZincRunner extends WorkerMain[Namespace] {
       val originalClasspath = namespace.getList[File]("classpath").asScala.map(_.toPath)
       Dep.create(depsCache, originalClasspath, analyses)
     }
-
-
 
     // load persisted files
     val analysisFiles = AnalysisFiles(

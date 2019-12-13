@@ -59,21 +59,23 @@ object FileUtil {
     }
   }
 
-  private def lock[A](lockFile: Path)(f: => A):A = {
+  private def lock[A](lockFile: Path)(f: => A): A = {
     Files.createDirectories(lockFile.getParent)
-    try Files.createFile(lockFile) catch { case _: FileAlreadyExistsException => }
+    try Files.createFile(lockFile)
+    catch { case _: FileAlreadyExistsException => }
     val channel = FileChannel.open(lockFile, StandardOpenOption.WRITE)
     try {
       val lock = channel.lock()
-      try f finally lock.release()
+      try f
+      finally lock.release()
     } finally channel.close()
   }
 
-  def extractZipIdempotently(archive: Path, output: Path): Unit = lock(output.getParent.resolve(s".${output.getFileName}.lock")) {
-    if (Files.exists(output)) ()
-    else extractZip(archive, output)
-  }
-
+  def extractZipIdempotently(archive: Path, output: Path): Unit =
+    lock(output.getParent.resolve(s".${output.getFileName}.lock")) {
+      if (Files.exists(output)) ()
+      else extractZip(archive, output)
+    }
 
   def extractZip(archive: Path, output: Path) = {
     val fileStream = Files.newInputStream(archive)
