@@ -3,3 +3,8 @@
 
 ! bazel build --define=scala_deps_used=off :c || false
 bazel build --define=scala_deps_used=off :c |& grep "buildozer 'add deps //dependencies/indirect:a' //dependencies/indirect:c"
+
+! bazel build --define=scala_deps_direct=off :c || false
+bazel build --define=scala_deps_direct=off :c |& grep "buildozer 'remove deps //dependencies/indirect:a' //dependencies/indirect:b"
+
+bazel build --define=scala_deps_used=off --define=scala_deps_direct=off :c
