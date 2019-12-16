@@ -56,3 +56,17 @@ configure_zinc_scala(
     version = "2.12.8",
     visibility = ["//visibility:public"],
 )
+
+config_setting(
+    name = "deps_used_off",
+    define_values = {
+        "scala_deps_used": "off",
+    },
+)
+
+config_setting(
+    name = "deps_direct_off",
+    define_values = {
+        "scala_deps_direct": "off",
+    },
+)

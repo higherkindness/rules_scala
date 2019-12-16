@@ -37,8 +37,7 @@ This feature shares concepts with
 
 Each define may have a value of:
 
-* `error` - Check before creating the jar.
-* `check` - Check when building with --output_group=deps_check. (default)
+* `error` - Check before creating the jar. (default)
 * `off` - Do not check.
 
 Failed checks emit suggested [buildozer](https://github.com/bazelbuild/buildtools/tree/master/buildozer) commands.
