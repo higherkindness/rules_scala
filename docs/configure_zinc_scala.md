@@ -41,12 +41,18 @@ configure_zinc_scala(<a href="#configure_zinc_scala-name">name</a>, <a href="#co
       <td><code>deps_direct</code></td>
       <td>
         String; optional
+        <p>
+          Options are <code>error</code> and <code>off</code>.
+        </p>
       </td>
     </tr>
     <tr id="configure_zinc_scala-deps_used">
       <td><code>deps_used</code></td>
       <td>
         String; optional
+        <p>
+          Options are <code>error</code> and <code>off</code>.
+        </p>
       </td>
     </tr>
     <tr id="configure_zinc_scala-global_plugins">
