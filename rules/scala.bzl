@@ -490,7 +490,7 @@ configure_bootstrap_scala = rule(
     implementation = _configure_bootstrap_scala_implementation,
 )
 
-configure_zinc_scala = rule(
+_configure_zinc_scala = rule(
     attrs = {
         "version": attr.string(mandatory = True),
         "runtime_classpath": attr.label_list(
@@ -535,3 +535,16 @@ configure_zinc_scala = rule(
     },
     implementation = _configure_zinc_scala_implementation,
 )
+
+def configure_zinc_scala(**kwargs):
+    _configure_zinc_scala(
+        deps_direct = select({
+            "@rules_scala_annex//src/main/scala:deps_direct_off": "off",
+            "//conditions:default": "error",
+        }),
+        deps_used = select({
+            "@rules_scala_annex//src/main/scala:deps_used_off": "off",
+            "//conditions:default": "error",
+        }),
+        **kwargs
+    )
