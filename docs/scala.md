@@ -42,7 +42,7 @@ Each define may have a value of:
 
 Failed checks emit suggested [buildozer](https://github.com/bazelbuild/buildtools/tree/master/buildozer) commands.
 
-You may also toggle deps check via [configure_zinc_scala](docs/configure_zinc_scala.md):
+You may also toggle deps check via [configure_zinc_scala](configure_zinc_scala.md):
 
 * `deps_direct` - Work the same as `scala_deps_direct`.
 * `deps_used` - Work the same as `scala_deps_used`.
