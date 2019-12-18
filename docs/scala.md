@@ -32,7 +32,7 @@ workspace. (It is not safe for use by multiple Bazel instances.) Stateful compil
 This feature shares concepts with
 [Java strict and unused deps](https://blog.bazel.build/2017/06/28/sjd-unused_deps.html). The default toolchain uses two defines (`--define=scala_deps_x=y`):
 
-* `scala_deps_direct` - Require that direct usages of libraries come only from immediately declared deps
+* `scala_deps_direct` - Require that direct usages of libraries come only from immediately declared deps.
 * `scala_deps_used` - Require that any immediate deps are deps are directly used.
 
 Each define may have a value of:
@@ -41,6 +41,11 @@ Each define may have a value of:
 * `off` - Do not check.
 
 Failed checks emit suggested [buildozer](https://github.com/bazelbuild/buildtools/tree/master/buildozer) commands.
+
+You may also toggle deps check via [configure_zinc_scala](docs/configure_zinc_scala.md):
+
+* `deps_direct` - Work the same as `scala_deps_direct`.
+* `deps_used` - Work the same as `scala_deps_used`.
 
 ## Tests
 
