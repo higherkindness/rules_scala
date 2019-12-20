@@ -512,6 +512,10 @@ _configure_zinc_scala = rule(
         "global_scalacopts": attr.string_list(
             doc = "Scalac options that will always be enabled.",
         ),
+        "log_level": attr.string(
+            doc = "Compiler log level",
+            default = "warn",
+        ),
         "deps_direct": attr.string(default = "error"),
         "deps_used": attr.string(default = "error"),
         "_compile_worker": attr.label(

@@ -44,6 +44,7 @@ def configure_zinc_scala_implementation(ctx):
         _ZincConfiguration(
             compile_worker = ctx.attr._compile_worker,
             compiler_bridge = ctx.file.compiler_bridge,
+            log_level = ctx.attr.log_level,
         ),
         _DepsConfiguration(
             direct = ctx.attr.deps_direct,

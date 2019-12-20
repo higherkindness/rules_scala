@@ -156,3 +156,14 @@ configure_zinc_scala(
     version = "2.12.6",
     visibility = ["//scalacopts/rule:__subpackages__"],
 )
+
+# for log_level test
+configure_zinc_scala(
+    name = "zinc_2_12_6_log_level_debug",
+    compiler_bridge = ":compiler_bridge_2_12_6",
+    compiler_classpath = compiler_classpath_2_12_6,
+    log_level = "debug",
+    runtime_classpath = runtime_classpath_2_12_6,
+    version = "2.12.6",
+    visibility = ["//visibility:public"],
+)
