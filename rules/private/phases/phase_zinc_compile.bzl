@@ -62,8 +62,7 @@ def phase_zinc_compile(ctx, g):
     args.add_all("--plugins", g.classpaths.plugin)
     args.add_all("--source_jars", g.classpaths.src_jars)
     args.add("--tmp", tmp.path)
-    if zinc_configuration.log_level:
-        args.add("--log_level", zinc_configuration.log_level)
+    args.add("--log_level", zinc_configuration.log_level)
     args.add_all("--", g.classpaths.srcs)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
