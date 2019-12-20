@@ -71,6 +71,15 @@ object FileUtil {
     } finally channel.close()
   }
 
+  /**
+    We call `extractZipIdempotentally` in `Deps` to avoid a potential race condition. `extractZipIdempotentally` guarantees
+    that the zip file will be extracted completely once and only once. If we didn't do this, we would either
+    perform the work every time, mitigating the advatnages of the extracted dependencies cache, or face a race condition.
+
+    The race condition occurs if projects B and C depend on project A; both B and C could begin almost simulatenously. Extracting a zip is not atomic.
+    If B begins extracting first, and C simply checks if the output directory exists, it could begin compiling while B is still extracting the dependency.
+    Alternatives to pessimistic locking include extracting to arbitrary temporary destinations then atomically moving in place, but that presents some other challenges.
+  **/
   def extractZipIdempotently(archive: Path, output: Path): Unit =
     lock(output.getParent.resolve(s".${output.getFileName}.lock")) {
       if (Files.exists(output)) ()
