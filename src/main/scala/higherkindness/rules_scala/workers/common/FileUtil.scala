@@ -2,15 +2,11 @@ package higherkindness.rules_scala
 package workers.common
 
 import scala.annotation.tailrec
-
 import java.io.IOException
-import java.nio.file.FileAlreadyExistsException
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.StandardCopyOption
+import java.nio.channels.FileChannel
+import java.nio.file.{FileAlreadyExistsException, FileVisitResult, Files, OpenOption, Path, SimpleFileVisitor, StandardCopyOption, StandardOpenOption}
 import java.nio.file.attribute.BasicFileAttributes
+import java.security.SecureRandom
 import java.util.zip.{ZipEntry, ZipInputStream, ZipOutputStream}
 
 class CopyFileVisitor(source: Path, target: Path) extends SimpleFileVisitor[Path] {
@@ -49,6 +45,7 @@ class ZipFileVisitor(root: Path, zip: ZipOutputStream) extends SimpleFileVisitor
 }
 
 object FileUtil {
+
   def copy(source: Path, target: Path) = Files.walkFileTree(source, new CopyFileVisitor(source, target))
 
   def delete(path: Path) = Files.walkFileTree(path, new DeleteFileVisitor)
@@ -61,6 +58,33 @@ object FileUtil {
       zip.close()
     }
   }
+
+  private def lock[A](lockFile: Path)(f: => A): A = {
+    Files.createDirectories(lockFile.getParent)
+    try Files.createFile(lockFile)
+    catch { case _: FileAlreadyExistsException => }
+    val channel = FileChannel.open(lockFile, StandardOpenOption.WRITE)
+    try {
+      val lock = channel.lock()
+      try f
+      finally lock.release()
+    } finally channel.close()
+  }
+
+  /**
+    We call `extractZipIdempotentally` in `Deps` to avoid a potential race condition. `extractZipIdempotentally` guarantees
+    that the zip file will be extracted completely once and only once. If we didn't do this, we would either
+    perform the work every time, mitigating the advatnages of the extracted dependencies cache, or face a race condition.
+
+    The race condition occurs if projects B and C depend on project A; both B and C could begin almost simulatenously. Extracting a zip is not atomic.
+    If B begins extracting first, and C simply checks if the output directory exists, it could begin compiling while B is still extracting the dependency.
+    Alternatives to pessimistic locking include extracting to arbitrary temporary destinations then atomically moving in place, but that presents some other challenges.
+  **/
+  def extractZipIdempotently(archive: Path, output: Path): Unit =
+    lock(output.getParent.resolve(s".${output.getFileName}.lock")) {
+      if (Files.exists(output)) ()
+      else extractZip(archive, output)
+    }
 
   def extractZip(archive: Path, output: Path) = {
     val fileStream = Files.newInputStream(archive)

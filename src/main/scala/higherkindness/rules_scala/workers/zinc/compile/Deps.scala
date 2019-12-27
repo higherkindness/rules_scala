@@ -2,12 +2,12 @@ package higherkindness.rules_scala
 package workers.zinc.compile
 
 import workers.common.FileUtil
+import java.math.BigInteger
+import java.nio.file.{Files, Path}
+import java.security.MessageDigest
 
-import java.io.File
-import java.nio.file.{Files, Path, StandardCopyOption}
-import java.util.zip.ZipInputStream
 import sbt.internal.inc.Relations
-import scala.annotation.tailrec
+
 import xsbti.compile.PerClasspathEntryLookup
 
 sealed trait Dep {
@@ -24,14 +24,29 @@ case class DepAnalysisFiles(apis: Path, relations: Path)
 case class ExternalDep(file: Path, classpath: Path, analysis: DepAnalysisFiles) extends Dep
 
 object Dep {
-  def create(classpath: Seq[Path], analyses: Map[Path, (Path, DepAnalysisFiles)]): Seq[Dep] = {
+
+  def sha256(file: Path): String = {
+    val digest = MessageDigest.getInstance("SHA-256")
+    new BigInteger(1, digest.digest(Files.readAllBytes(file))).toString(16)
+  }
+
+  def create(depsCache: Option[Path], classpath: Seq[Path], analyses: Map[Path, (Path, DepAnalysisFiles)]): Seq[Dep] = {
     val roots = scala.collection.mutable.Set[Path]()
     classpath.flatMap { original =>
       analyses.get(original).fold[Option[Dep]](Some(LibraryDep(original))) { analysis =>
         val root = analysis._1
         if (roots.add(root)) {
-          FileUtil.extractZip(original, root)
-          Some(ExternalDep(original, root, analysis._2))
+          depsCache match {
+            case Some(cacheRoot) => {
+              val cachedPath = cacheRoot.resolve(sha256(original))
+              FileUtil.extractZipIdempotently(original, cachedPath)
+              Some(ExternalDep(original, cachedPath, analysis._2))
+            }
+            case _ => {
+              FileUtil.extractZip(original, root)
+              Some(ExternalDep(original, root, analysis._2))
+            }
+          }
         } else {
           None
         }
