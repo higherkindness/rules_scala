@@ -60,11 +60,12 @@ def write_launcher(
     template = ctx.file._java_stub_template
     runfiles_enabled = False
 
-    java_path = str(ctx.attr._jdk[java_common.JavaRuntimeInfo].java_executable_runfiles_path)
+    java_executable = ctx.attr._target_jdk[java_common.JavaRuntimeInfo].java_executable_runfiles_path
+    java_path = str(java_executable)
     if paths.is_absolute(java_path):
         javabin = java_path
     else:
-        javabin = "$JAVA_RUNFILES/{}/{}".format(ctx.workspace_name, ctx.attr._jdk[java_common.JavaRuntimeInfo].java_executable_runfiles_path)
+        javabin = "$JAVA_RUNFILES/{}/{}".format(ctx.workspace_name, java_executable)
 
     base_substitutions = {
         "%classpath%": classpath,

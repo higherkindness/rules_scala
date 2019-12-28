@@ -16,7 +16,7 @@ load(
 #
 
 def phase_test_launcher(ctx, g):
-    files = ctx.attr._jdk[java_common.JavaRuntimeInfo].files.to_list() + [g.compile.zinc_info.apis]
+    files = ctx.attr._target_jdk[java_common.JavaRuntimeInfo].files.to_list() + [g.compile.zinc_info.apis]
 
     coverage_replacements = {}
     coverage_runner_jars = depset(direct = [])

@@ -170,10 +170,9 @@ _runtime_attributes = {
 }
 
 _runtime_private_attributes = {
-    "_jdk": attr.label(
+    "_target_jdk": attr.label(
         default = Label("@bazel_tools//tools/jdk:current_java_runtime"),
         providers = [java_common.JavaRuntimeInfo],
-        cfg = "host",
     ),
     "_java_stub_template": attr.label(
         default = Label("@anx_java_stub_template//file"),
