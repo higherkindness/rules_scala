@@ -9,7 +9,7 @@ def scalafmt_repositories():
             "org.scalameta:scalafmt-core_2.12:jar:2.0.0",
         ],
         repositories = [
-            "http://central.maven.org/maven2",
+            "https://repo.maven.apache.org/maven2",
         ],
         fetch_sources = True,
         maven_install_json = "@rules_scala_annex//:annex_scalafmt_install.json",

@@ -12,7 +12,7 @@ def scala_proto_repositories():
             "com.thesamet.scalapb:protoc-bridge_2.12:0.7.8",
         ],
         repositories = [
-            "http://central.maven.org/maven2",
+            "https://repo.maven.apache.org/maven2",
         ],
         fetch_sources = True,
         maven_install_json = "@rules_scala_annex//:annex_proto_install.json",

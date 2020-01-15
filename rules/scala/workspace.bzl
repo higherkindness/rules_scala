@@ -35,7 +35,7 @@ def scala_repositories(java_launcher_version = "0.29.1"):
             "org.scala-sbt:util-logging_2.12:1.2.0",
         ],
         repositories = [
-            "http://central.maven.org/maven2",
+            "https://repo.maven.apache.org/maven2",
         ],
         fetch_sources = True,
         maven_install_json = "@rules_scala_annex//:annex_install.json",
@@ -61,33 +61,33 @@ def scala_repositories(java_launcher_version = "0.29.1"):
         name = "compiler_bridge_2_11",
         build_file_content = _SRC_FILEGROUP_BUILD_FILE_CONTENT,
         sha256 = "355abdd13ee514a239ed48b6bf8846f2a1d9d78bca8df836028d0156002ea08a",
-        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.2.1/compiler-bridge_2.11-1.2.1-sources.jar",
+        url = "https://repo.maven.apache.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.2.1/compiler-bridge_2.11-1.2.1-sources.jar",
     )
 
     http_archive(
         name = "compiler_bridge_2_12",
         build_file_content = _SRC_FILEGROUP_BUILD_FILE_CONTENT,
         sha256 = "d7a5dbc384c2c86479b30539cef911c256b7b3861ced68699b116e05b9357c9b",
-        url = "http://central.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.1/compiler-bridge_2.12-1.2.1-sources.jar",
+        url = "https://repo.maven.apache.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.1/compiler-bridge_2.12-1.2.1-sources.jar",
     )
 
     jvm_maven_import_external(
         name = "scala_compiler_2_12_8",
         artifact = "org.scala-lang:scala-compiler:2.12.8",
         licenses = ["notice"],
-        server_urls = ["http://central.maven.org/maven2"],
+        server_urls = ["https://repo.maven.apache.org/maven2"],
     )
     jvm_maven_import_external(
         name = "scala_library_2_12_8",
         artifact = "org.scala-lang:scala-library:2.12.8",
         licenses = ["notice"],
-        server_urls = ["http://central.maven.org/maven2"],
+        server_urls = ["https://repo.maven.apache.org/maven2"],
     )
     jvm_maven_import_external(
         name = "scala_reflect_2_12_8",
         artifact = "org.scala-lang:scala-reflect:2.12.8",
         licenses = ["notice"],
-        server_urls = ["http://central.maven.org/maven2"],
+        server_urls = ["https://repo.maven.apache.org/maven2"],
     )
 
 def scala_register_toolchains():

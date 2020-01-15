@@ -21,7 +21,7 @@ def test_dependencies():
             "org.scalactic:scalactic_2.12:3.0.4",
         ],
         repositories = [
-            "http://central.maven.org/maven2",
+            "https://repo.maven.apache.org/maven2",
         ],
         fetch_sources = True,
         maven_install_json = "@rules_scala_annex_test//:annex_test_install.json",
