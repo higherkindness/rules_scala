@@ -9,31 +9,34 @@ filegroup(
     visibility = ["//visibility:public"]
 )"""
 
+def scala_artifacts():
+    return [
+        "org.scala-sbt:compiler-interface:1.2.1",
+        "org.scala-sbt:util-interface:1.2.1",
+        "org.scala-lang:scala-compiler:2.12.8",
+        "org.scala-lang:scala-library:2.12.8",
+        "org.scala-lang:scala-reflect:2.12.8",
+        "net.sourceforge.argparse4j:argparse4j:0.8.1",
+        "org.jacoco:org.jacoco.core:0.7.5.201505241946",
+        "com.lihaoyi:sourcecode_2.12:0.1.4,",
+        "org.scala-sbt:zinc_2.12:1.2.1",
+        "org.scala-sbt:test-interface:1.0",
+        "org.scala-sbt:util-interface:1.2.0",
+        "org.scala-sbt:zinc-compile-core_2.12:1.2.1",
+        "org.scala-sbt:zinc-persist_2.12:1.2.1",
+        "org.scala-sbt:zinc-core_2.12:1.2.1",
+        "org.scala-sbt:zinc-apiinfo_2.12:1.2.1",
+        "org.scala-sbt:zinc-classpath_2.12:1.2.1",
+        "org.scala-sbt:compiler-interface:1.2.1",
+        "ch.epfl.scala:bloop-frontend_2.12:1.0.0",
+        "com.thesamet.scalapb:scalapb-runtime_2.12:0.9.0",
+        "org.scala-sbt:util-logging_2.12:1.2.0",
+    ]
+
 def scala_repositories(java_launcher_version = "0.29.1"):
     maven_install(
         name = "annex",
-        artifacts = [
-            "org.scala-sbt:compiler-interface:1.2.1",
-            "org.scala-sbt:util-interface:1.2.1",
-            "org.scala-lang:scala-compiler:2.12.8",
-            "org.scala-lang:scala-library:2.12.8",
-            "org.scala-lang:scala-reflect:2.12.8",
-            "net.sourceforge.argparse4j:argparse4j:0.8.1",
-            "org.jacoco:org.jacoco.core:0.7.5.201505241946",
-            "com.lihaoyi:sourcecode_2.12:0.1.4,",
-            "org.scala-sbt:zinc_2.12:1.2.1",
-            "org.scala-sbt:test-interface:1.0",
-            "org.scala-sbt:util-interface:1.2.0",
-            "org.scala-sbt:zinc-compile-core_2.12:1.2.1",
-            "org.scala-sbt:zinc-persist_2.12:1.2.1",
-            "org.scala-sbt:zinc-core_2.12:1.2.1",
-            "org.scala-sbt:zinc-apiinfo_2.12:1.2.1",
-            "org.scala-sbt:zinc-classpath_2.12:1.2.1",
-            "org.scala-sbt:compiler-interface:1.2.1",
-            "ch.epfl.scala:bloop-frontend_2.12:1.0.0",
-            "com.thesamet.scalapb:scalapb-runtime_2.12:0.9.0",
-            "org.scala-sbt:util-logging_2.12:1.2.0",
-        ],
+        artifacts = scala_artifacts(),
         repositories = [
             "https://repo.maven.apache.org/maven2",
         ],
