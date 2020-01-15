@@ -41,7 +41,7 @@ maven_install(
         "org.scala-sbt:compiler-interface:1.2.1",
     ],
     repositories = [
-        "http://central.maven.org/maven2",
+        "https://repo.maven.apache.org/maven2",
     ],
 )
 ```
