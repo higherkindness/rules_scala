@@ -49,15 +49,16 @@ trait WorkerMain[S] {
             val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(stdin)
             val args = request.getArgumentsList.toArray(Array.empty[String])
 
-            val code = try {
-              work(ctx, args)
-              0
-            } catch {
-              case ExitTrapped(code) => code
-              case NonFatal(e) =>
-                e.printStackTrace()
-                1
-            }
+            val code =
+              try {
+                work(ctx, args)
+                0
+              } catch {
+                case ExitTrapped(code) => code
+                case NonFatal(e) =>
+                  e.printStackTrace()
+                  1
+              }
 
             WorkerProtocol.WorkResponse.newBuilder
               .setOutput(outStream.toString)

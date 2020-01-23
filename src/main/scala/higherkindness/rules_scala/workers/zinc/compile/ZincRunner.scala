@@ -127,10 +127,9 @@ object ZincRunner extends WorkerMain[Namespace] {
           val prefixedLabel +: apis +: relations +: jars = value.asScala.toList
           val label = prefixedLabel.stripPrefix("_")
           jars
-            .map(
-              jar =>
-                Paths.get(jar) -> (classesDir
-                  .resolve(labelToPath(label)), DepAnalysisFiles(Paths.get(apis), Paths.get(relations)))
+            .map(jar =>
+              Paths.get(jar) -> (classesDir
+                .resolve(labelToPath(label)), DepAnalysisFiles(Paths.get(apis), Paths.get(relations)))
             )
         }
         .toMap
@@ -185,8 +184,8 @@ object ZincRunner extends WorkerMain[Namespace] {
         logger.warn(() => s"Failed to load previous analysis: $e")
         Optional.empty[AnalysisContents]()
       }, identity)
-      .map[PreviousResult](
-        contents => PreviousResult.of(Optional.of(contents.getAnalysis), Optional.of(contents.getMiniSetup))
+      .map[PreviousResult](contents =>
+        PreviousResult.of(Optional.of(contents.getAnalysis), Optional.of(contents.getMiniSetup))
       )
       .orElseGet(() => PreviousResult.of(Optional.empty(), Optional.empty()))
 
@@ -221,12 +220,11 @@ object ZincRunner extends WorkerMain[Namespace] {
       new AnxPerClasspathEntryLookup(file => {
         depMap
           .get(file)
-          .map(
-            files =>
-              Analysis.Empty.copy(
-                apis = analysesFormat.apis.read(files.apis),
-                relations = analysesFormat.relations.read(files.relations)
-              )
+          .map(files =>
+            Analysis.Empty.copy(
+              apis = analysesFormat.apis.read(files.apis),
+              relations = analysesFormat.relations.read(files.relations)
+            )
           )
       })
     }

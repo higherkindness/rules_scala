@@ -65,12 +65,11 @@ object DepsRunner extends WorkerMain[Unit] {
 
     val add = if (namespace.getBoolean("check_direct") == true) {
       (usedPaths -- directLabels.flatMap(labelToPaths))
-        .flatMap(
-          path =>
-            groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
-              System.err.println(s"Warning: There is a reference to $path, but no dependency of $label provides it")
-              None
-            }
+        .flatMap(path =>
+          groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
+            System.err.println(s"Warning: There is a reference to $path, but no dependency of $label provides it")
+            None
+          }
         )
     } else Nil
     add.foreach { depLabel =>

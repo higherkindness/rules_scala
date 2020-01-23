@@ -45,13 +45,12 @@ object JacocoInstrumenter extends WorkerMain[Unit] {
       .getList[JList[String]]("jar")
       .asScala
       .flatMap(_.asScala)
-      .map(
-        other =>
-          other.split("=") match {
-            case Array(in, out) => (Paths.get(in), Paths.get(out))
-            case _ =>
-              sys.error("expected input=output for argument: " + other)
-          }
+      .map(other =>
+        other.split("=") match {
+          case Array(in, out) => (Paths.get(in), Paths.get(out))
+          case _ =>
+            sys.error("expected input=output for argument: " + other)
+        }
       )
       .toList
 

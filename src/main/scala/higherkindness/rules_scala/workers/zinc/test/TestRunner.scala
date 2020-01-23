@@ -127,13 +127,15 @@ object TestRunner {
 
     val apisFile = runPath.resolve(testNamespace.get[File]("apis").toPath)
     val apisStream = Files.newInputStream(apisFile)
-    val apis = try {
-      val raw = try schema.APIs.parseFrom(new GZIPInputStream(apisStream))
-      finally apisStream.close()
-      new ProtobufReaders(ReadMapper.getEmptyMapper).fromApis(raw)
-    } catch {
-      case NonFatal(e) => throw new Exception(s"Failed to load APIs from $apisFile", e)
-    }
+    val apis =
+      try {
+        val raw =
+          try schema.APIs.parseFrom(new GZIPInputStream(apisStream))
+          finally apisStream.close()
+        new ProtobufReaders(ReadMapper.getEmptyMapper).fromApis(raw)
+      } catch {
+        case NonFatal(e) => throw new Exception(s"Failed to load APIs from $apisFile", e)
+      }
 
     val loader = new TestFrameworkLoader(classLoader, logger)
     val frameworks = testNamespace.getList[String]("frameworks").asScala.flatMap(loader.load)
@@ -143,10 +145,9 @@ object TestRunner {
       .map(text => Pattern.compile(if (text contains "#") raw"${text.replaceAll("#.*", "")}" else text))
     val testScopeAndName = sys.env
       .get("TESTBRIDGE_TEST_ONLY")
-      .map(
-        text =>
-          if (text contains "#") text.replaceAll(".*#", "").replaceAll("\\$", "").replace("\\Q", "").replace("\\E", "")
-          else ""
+      .map(text =>
+        if (text contains "#") text.replaceAll(".*#", "").replaceAll("\\$", "").replace("\\Q", "").replace("\\E", "")
+        else ""
       )
 
     var count = 0

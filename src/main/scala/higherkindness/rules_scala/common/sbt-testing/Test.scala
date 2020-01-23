@@ -9,12 +9,13 @@ class TestDefinition(val name: String, val fingerprint: Fingerprint with Seriali
 
 class TestFrameworkLoader(loader: ClassLoader, logger: Logger) {
   def load(className: String) = {
-    val framework = try {
-      Some(Class.forName(className, true, loader).getDeclaredConstructor().newInstance())
-    } catch {
-      case _: ClassNotFoundException => None
-      case NonFatal(e)               => throw new Exception(s"Failed to load framework $className", e)
-    }
+    val framework =
+      try {
+        Some(Class.forName(className, true, loader).getDeclaredConstructor().newInstance())
+      } catch {
+        case _: ClassNotFoundException => None
+        case NonFatal(e)               => throw new Exception(s"Failed to load framework $className", e)
+      }
     framework.map {
       case framework: Framework => framework
       case _                    => throw new Exception(s"$className does not implement ${classOf[Framework].getName}")
