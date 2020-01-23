@@ -2,9 +2,9 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 def scalafmt_artifacts():
     return [
-        "org.scalameta:parsers_2.12:4.2.0",
-        "com.geirsson:metaconfig-core_2.12:0.8.3",
-        "org.scalameta:scalafmt-core_2.12:jar:2.0.0",
+        "org.scalameta:parsers_2.12:4.3.0",
+        "com.geirsson:metaconfig-core_2.12:0.9.4",
+        "org.scalameta:scalafmt-core_2.12:2.3.2",
     ]
 
 def scalafmt_repositories():

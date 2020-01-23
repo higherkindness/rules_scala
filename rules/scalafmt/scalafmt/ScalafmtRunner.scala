@@ -34,15 +34,16 @@ object ScalafmtRunner extends WorkerMain[Unit] {
       if (code == formatted) code else format(formatted)
     }
 
-    val output = try {
-      format(source)
-    } catch {
-      case e @ (_: org.scalafmt.Error | _: scala.meta.parsers.ParseException) => {
-        System.err.println(Color.Warning("Unable to format file due to bug in scalafmt"))
-        System.err.println(Color.Warning(e.toString))
-        source
+    val output =
+      try {
+        format(source)
+      } catch {
+        case e @ (_: org.scalafmt.Error | _: scala.meta.parsers.ParseException) => {
+          System.err.println(Color.Warning("Unable to format file due to bug in scalafmt"))
+          System.err.println(Color.Warning(e.toString))
+          source
+        }
       }
-    }
 
     Files.write(namespace.get[File]("output").toPath, output.getBytes)
   }
