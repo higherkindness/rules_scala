@@ -9,7 +9,9 @@
                 "directDependencies": [],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0.jar"
+                    "https://repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0.jar"
                 ],
                 "sha256": "f566bc4d207d7f255a6ff315f2c225cae12686b9bb3351e14ea252c1fa9da6c4",
                 "url": "https://repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0.jar"
@@ -20,7 +22,9 @@
                 "directDependencies": [],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0-sources.jar"
                 ],
                 "sha256": "86e8b934d8ffeb0bd5483b1f085d4150f11205a9127c8f6483987717746043d2",
                 "url": "https://repo.maven.apache.org/maven2/com/github/os72/protoc-jar/3.8.0/protoc-jar-3.8.0-sources.jar"
@@ -31,7 +35,9 @@
                 "directDependencies": [],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1.jar"
+                    "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1.jar"
                 ],
                 "sha256": "22779eacfe0f33b9e8ceffa3cdef5935cae4e53f736e027d912b707522fea645",
                 "url": "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1.jar"
@@ -42,7 +48,9 @@
                 "directDependencies": [],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1-sources.jar"
+                    "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1-sources.jar"
                 ],
                 "sha256": "4401d00d4774fadb66a5a122b33b412c1bb790fcb5fc6f2ba81eca4eac76294a",
                 "url": "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.7.1/protobuf-java-3.7.1-sources.jar"
@@ -61,7 +69,9 @@
                 ],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0.jar"
+                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0.jar"
                 ],
                 "sha256": "dce6277e9c618d0cee1dd5141f5bd4155eccd221588c7f1658eaa915f3eb8d33",
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0.jar"
@@ -80,7 +90,9 @@
                 ],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0-sources.jar"
                 ],
                 "sha256": "caae59883dca861619ce88b6b53f4d2dac88af32ed27eaec5424c3054f3eca21",
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.9.0/compilerplugin_2.12-0.9.0-sources.jar"
@@ -95,7 +107,9 @@
                 ],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8.jar"
+                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8.jar"
                 ],
                 "sha256": "04116b52f76adc9fac1e83e1a18321c79e332e170e6542953199e3933e5ff375",
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8.jar"
@@ -110,7 +124,9 @@
                 ],
                 "file": "v1/https/repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8-sources.jar"
+                    "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8-sources.jar"
                 ],
                 "sha256": "bfa5e40b1bb1e76fc8bbbf7fc2956a70483c20573f76e0380c5f66f55c526b8c",
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.7.8/protoc-bridge_2.12-0.7.8-sources.jar"
@@ -121,7 +137,9 @@
                 "directDependencies": [],
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8.jar"
                 ],
                 "sha256": "321fb55685635c931eba4bc0d7668349da3f2c09aee2de93a70566066ff25c28",
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8.jar"
@@ -132,7 +150,9 @@
                 "directDependencies": [],
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8-sources.jar"
                 ],
                 "sha256": "11482bcb49b2e47baee89c3b1ae10c6a40b89e2fbb0da2a423e062f444e13492",
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.8/scala-library-2.12.8-sources.jar"

@@ -13,9 +13,9 @@ def scala_artifacts():
     return [
         "org.scala-sbt:compiler-interface:1.2.1",
         "org.scala-sbt:util-interface:1.2.1",
-        "org.scala-lang:scala-compiler:2.12.8",
-        "org.scala-lang:scala-library:2.12.8",
-        "org.scala-lang:scala-reflect:2.12.8",
+        "org.scala-lang:scala-compiler:2.12.10",
+        "org.scala-lang:scala-library:2.12.10",
+        "org.scala-lang:scala-reflect:2.12.10",
         "net.sourceforge.argparse4j:argparse4j:0.8.1",
         "org.jacoco:org.jacoco.core:0.7.5.201505241946",
         "com.lihaoyi:sourcecode_2.12:0.1.4,",
@@ -39,6 +39,8 @@ def scala_repositories(java_launcher_version = "0.29.1"):
         artifacts = scala_artifacts(),
         repositories = [
             "https://repo.maven.apache.org/maven2",
+            "https://maven-central.storage-download.googleapis.com/maven2",
+            "https://mirror.bazel.build/repo1.maven.org/maven2",
         ],
         fetch_sources = True,
         maven_install_json = "@rules_scala_annex//:annex_install.json",
@@ -72,25 +74,6 @@ def scala_repositories(java_launcher_version = "0.29.1"):
         build_file_content = _SRC_FILEGROUP_BUILD_FILE_CONTENT,
         sha256 = "d7a5dbc384c2c86479b30539cef911c256b7b3861ced68699b116e05b9357c9b",
         url = "https://repo.maven.apache.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.1/compiler-bridge_2.12-1.2.1-sources.jar",
-    )
-
-    jvm_maven_import_external(
-        name = "scala_compiler_2_12_8",
-        artifact = "org.scala-lang:scala-compiler:2.12.8",
-        licenses = ["notice"],
-        server_urls = ["https://repo.maven.apache.org/maven2"],
-    )
-    jvm_maven_import_external(
-        name = "scala_library_2_12_8",
-        artifact = "org.scala-lang:scala-library:2.12.8",
-        licenses = ["notice"],
-        server_urls = ["https://repo.maven.apache.org/maven2"],
-    )
-    jvm_maven_import_external(
-        name = "scala_reflect_2_12_8",
-        artifact = "org.scala-lang:scala-reflect:2.12.8",
-        licenses = ["notice"],
-        server_urls = ["https://repo.maven.apache.org/maven2"],
     )
 
 def scala_register_toolchains():
