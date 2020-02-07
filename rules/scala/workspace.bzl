@@ -18,7 +18,7 @@ def scala_artifacts():
         "org.jacoco:org.jacoco.core:0.7.5.201505241946",
         "com.lihaoyi:sourcecode_2.12:0.1.4,",
         "org.scala-sbt:test-interface:1.0",
-        "org.scala-sbt:util-interface:1.2.0",
+        "org.scala-sbt:util-interface:1.3.3",
         "org.scala-sbt:zinc_2.12:1.3.4",
         "org.scala-sbt:zinc-compile-core_2.12:1.3.4",
         "org.scala-sbt:zinc-persist_2.12:1.3.4",
