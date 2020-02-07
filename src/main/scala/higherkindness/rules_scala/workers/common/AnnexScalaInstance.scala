@@ -20,9 +20,8 @@ final class AnnexScalaInstance(val allJars: Array[File]) extends ScalaInstance {
   }
 
   override def compilerJar: File = null
-  override lazy val libraryJar: File = allJars
-    .find(f => new URLClassLoader(Array(f.toURI.toURL)).findResource("library.properties") != null)
-    .get
+  override lazy val libraryJars: Array[File] = allJars
+    .filter(f => new URLClassLoader(Array(f.toURI.toURL)).findResource("library.properties") != null)
 
   override def otherJars: Array[File] = null
   override lazy val loader: ClassLoader =
