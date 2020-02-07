@@ -19,6 +19,7 @@ def scala_artifacts():
         "com.lihaoyi:sourcecode_2.12:0.1.4,",
         "org.scala-sbt:test-interface:1.0",
         "org.scala-sbt:util-interface:1.3.3",
+        "org.scala-sbt:util-logging_2.12:1.3.3",
         "org.scala-sbt:zinc_2.12:1.3.4",
         "org.scala-sbt:zinc-compile-core_2.12:1.3.4",
         "org.scala-sbt:zinc-persist_2.12:1.3.4",
@@ -27,8 +28,7 @@ def scala_artifacts():
         "org.scala-sbt:zinc-classpath_2.12:1.3.4",
         "org.scala-sbt:compiler-interface:1.3.4",
         "ch.epfl.scala:bloop-frontend_2.12:1.0.0",
-        "com.thesamet.scalapb:scalapb-runtime_2.12:0.9.0",
-        "org.scala-sbt:util-logging_2.12:1.2.0",
+        "com.thesamet.scalapb:scalapb-runtime_2.12:0.9.6",
     ]
 
 def scala_repositories(java_launcher_version = "0.29.1"):
