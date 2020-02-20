@@ -102,7 +102,7 @@ class AnxAnalysisStore(files: AnalysisFiles, analyses: AnxAnalyses) extends Anal
 
 class AnxAnalyses(format: AnxAnalysisStore.Format) {
   private[this] val mappers = AnxMapper.mappers(Paths.get(""))
-  private[this] val reader = new ProtobufReaders(mappers.getReadMapper)
+  private[this] val reader = new ProtobufReaders(mappers.getReadMapper, schema.Version.V1)
   private[this] val writer = new ProtobufWriters(mappers.getWriteMapper)
 
   def apis = new Store[APIs](
