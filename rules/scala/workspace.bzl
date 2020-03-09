@@ -18,15 +18,15 @@ def scala_artifacts():
         "org.jacoco:org.jacoco.core:0.7.5.201505241946",
         "com.lihaoyi:sourcecode_2.12:0.1.4,",
         "org.scala-sbt:test-interface:1.0",
-        "org.scala-sbt:util-interface:1.2.2",
-        "org.scala-sbt:util-logging_2.12:1.2.2",
-        "org.scala-sbt:compiler-interface:1.2.5",
-        "org.scala-sbt:zinc-compile-core_2.12:1.2.5",
-        "org.scala-sbt:zinc_2.12:1.2.5",
-        "org.scala-sbt:zinc-persist_2.12:1.2.5",
-        "org.scala-sbt:zinc-core_2.12:1.2.5",
-        "org.scala-sbt:zinc-apiinfo_2.12:1.2.5",
-        "org.scala-sbt:zinc-classpath_2.12:1.2.5",
+        "org.scala-sbt:util-interface:1.3.0",
+        "org.scala-sbt:util-logging_2.12:1.3.0",
+        "org.scala-sbt:compiler-interface:1.3.4",
+        "org.scala-sbt:zinc-compile-core_2.12:1.3.4",
+        "org.scala-sbt:zinc_2.12:1.3.4",
+        "org.scala-sbt:zinc-persist_2.12:1.3.4",
+        "org.scala-sbt:zinc-core_2.12:1.3.4",
+        "org.scala-sbt:zinc-apiinfo_2.12:1.3.4",
+        "org.scala-sbt:zinc-classpath_2.12:1.3.4",
         "ch.epfl.scala:bloop-frontend_2.12:1.0.0",
         "com.thesamet.scalapb:scalapb-runtime_2.12:0.9.0",
     ]
@@ -63,15 +63,15 @@ def scala_repositories(java_launcher_version = "0.29.1"):
     http_archive(
         name = "compiler_bridge_2_11",
         build_file_content = _SRC_FILEGROUP_BUILD_FILE_CONTENT,
-        sha256 = "13c506a2519804ee691ccdd6a7bbe40113ab62fe82fb120eba61614e8be9151d",
-        url = "https://repo.maven.apache.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.2.5/compiler-bridge_2.11-1.2.5-sources.jar",
+        sha256 = "b124911194dfcb850df7cdd5d2d7cc3280a21045832a9a90499e73934fb8504d",
+        url = "https://repo.maven.apache.org/maven2/org/scala-sbt/compiler-bridge_2.11/1.3.4/compiler-bridge_2.11-1.3.4-sources.jar",
     )
 
     http_archive(
         name = "compiler_bridge_2_12",
         build_file_content = _SRC_FILEGROUP_BUILD_FILE_CONTENT,
-        sha256 = "4589d87cc22d0c370bd1708f328d31b98b4baed38d1baa8f595ca1bd5ca528e6",
-        url = "https://repo.maven.apache.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.2.5/compiler-bridge_2.12-1.2.5-sources.jar",
+        sha256 = "24cd30dcb37c2b24f962118f49489c98a66b49600cfd7fbb9eab68475ddd56a2",
+        url = "https://repo.maven.apache.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.3.4/compiler-bridge_2.12-1.3.4-sources.jar",
     )
 
 def scala_register_toolchains():

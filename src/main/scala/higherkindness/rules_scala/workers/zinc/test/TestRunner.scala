@@ -132,7 +132,7 @@ object TestRunner {
         val raw =
           try schema.APIs.parseFrom(new GZIPInputStream(apisStream))
           finally apisStream.close()
-        new ProtobufReaders(ReadMapper.getEmptyMapper, schema.Version.V1).fromApis(raw)
+        new ProtobufReaders(ReadMapper.getEmptyMapper, schema.Version.V1).fromApis(shouldStoreApis = true)(raw)
       } catch {
         case NonFatal(e) => throw new Exception(s"Failed to load APIs from $apisFile", e)
       }

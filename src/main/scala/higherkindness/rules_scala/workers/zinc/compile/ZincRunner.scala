@@ -9,6 +9,7 @@ import workers.common.LoggedReporter
 import common.worker.WorkerMain
 import com.google.devtools.build.buildjar.jarhelper.JarCreator
 import java.io.{File, PrintWriter}
+import java.net.URLClassLoader
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
 import java.text.SimpleDateFormat
 import java.util.{Date, Optional, Properties, List => JList}
@@ -56,7 +57,7 @@ import xsbti.compile.Setup
  */
 object ZincRunner extends WorkerMain[Namespace] {
 
-  private[this] val classloaderCache = new ClassLoaderCache(null)
+  private[this] val classloaderCache = new ClassLoaderCache(new URLClassLoader(Array()))
 
   private[this] val compilerCache = CompilerCache.fresh
 
