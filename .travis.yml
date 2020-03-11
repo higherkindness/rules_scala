@@ -23,6 +23,9 @@ _osx: &osx
   os: osx
   osx_image: xcode10.1
 
+os:
+  - linux
+  - osx
 env:
   - BAZEL_VERSION=2.1.0
   - BAZEL_VERSION=2.2.0
@@ -31,17 +34,12 @@ jobs:
   include:
 # Build
     - stage: build
-      <<: *osx
       script: ./scripts/travis.sh build
-    - <<: *linux
       script: ./scripts/travis.sh build
 # Lint
     - stage: lint
-      <<: *osx
       script: ./scripts/travis.sh lint
 # Test
     - stage: test
-      <<: *osx
       script: ./scripts/travis.sh test
-    - <<: *linux
       script: ./scripts/travis.sh test
