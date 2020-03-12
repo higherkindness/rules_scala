@@ -9,6 +9,7 @@ import workers.common.CommonArguments.LogLevel
 import workers.common.FileUtil
 
 import java.io.File
+import java.net.URLClassLoader
 import java.nio.file.{Files, NoSuchFileException}
 import java.util.{Collections, Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
@@ -21,7 +22,7 @@ import xsbti.Logger
 
 object DocRunner extends WorkerMain[Unit] {
 
-  private[this] val classloaderCache = new ClassLoaderCache(null)
+  private[this] val classloaderCache = new ClassLoaderCache(new URLClassLoader(Array()))
 
   private[this] val parser =
     ArgumentParsers.newFor("doc").addHelp(true).defaultFormatWidth(80).fromFilePrefix("@").build()
