@@ -15,7 +15,7 @@ abs_path() {
 workspace=$(cd $(dirname "$0")/..; pwd)
 root_workspace=$(cd $(dirname $(abs_path "$0"))/..; pwd)
 
-default_bazel_version='2.1.0'
+default_bazel_version='2.2.0'
 
 if [ -z "$BAZEL_VERSION" ]; then
     bazel_version="$default_bazel_version"
@@ -28,13 +28,13 @@ case "$bazel_version" in
         bazel_version=$("$BAZEL_REAL" version | awk '/Build label/ {print $3}' | cut -d '-' -f 1)
         bazel="$BAZEL_REAL"
         ;;
-    '2.0.0')
-        darwin_sha='c675fa27d99a3114d681db10eb03ded547c40f702b2048c99b8f4ea8e89b9356'
-        linux_sha='2fbdc9c0e3d376697caf0ee3673b7c9475214068c55a01b9744891e131f90b87'
-        ;;
     '2.1.0')
         darwin_sha='0be7e8266523922ab63720775a6e4174468bd617e016e89d726a0f3441c46396'
         linux_sha='501c5a48bf6e4d836ecfe27f471bfbab029d2bf0cf62e69a0320f0dc576be56a'
+        ;;
+    '2.2.0')
+        darwin_sha='8a0238c126d086f3641efda177fa8fc1e85ba09c2af10c0977f14b202a9e7a5a'
+        linux_sha='6dfcd3b3d7a8811f53a1776c285cf533bc12c33d1eaf49b6105e9699df26ef57'
         ;;
     *)
         echo "The requested Bazel version '$bazel_version' is not supported"
