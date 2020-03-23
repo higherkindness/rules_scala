@@ -107,6 +107,10 @@ _compile_attributes = {
         doc = "The JVM library dependencies to always consider used for `scala_deps_used` checks.",
         providers = [JavaInfo],
     ),
+    "deps_unused_whitelist": attr.label_list(
+        doc = "The JVM library dependencies to always consider unused for `scala_deps_direct` checks.",
+        providers = [JavaInfo],
+    ),
     "runtime_deps": attr.label_list(
         doc = "The JVM runtime-only library dependencies.",
         providers = [JavaInfo],
