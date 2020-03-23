@@ -30,8 +30,14 @@ object DepsRunner extends WorkerMain[Unit] {
       .nargs("+")
     parser.addArgument("--label").help("Label of current target").metavar("label").required(true)
     parser
-      .addArgument("--whitelist")
+      .addArgument("--used_whitelist")
       .help("Whitelist of labels to ignore for unused deps")
+      .metavar("label")
+      .nargs("*")
+      .setDefault_(Collections.emptyList)
+    parser
+      .addArgument("--unused_whitelist")
+      .help("Whitelist of labels to ignore for direct deps")
       .metavar("label")
       .nargs("*")
       .setDefault_(Collections.emptyList)
@@ -54,8 +60,8 @@ object DepsRunner extends WorkerMain[Unit] {
     val usedPaths = Files.readAllLines(namespace.get[File]("used").toPath).asScala.toSet
 
     val remove = if (namespace.getBoolean("check_used") == true) {
-      val whitelist = namespace.getList[String]("whitelist").asScala.map(_.tail)
-      (directLabels -- whitelist).filterNot(labelToPaths(_).exists(usedPaths))
+      val usedWhitelist = namespace.getList[String]("used_whitelist").asScala.map(_.tail)
+      (directLabels -- usedWhitelist).filterNot(labelToPaths(_).exists(usedPaths))
     } else Nil
     remove.foreach { depLabel =>
       println(s"Target '$depLabel' not used, please remove it from the deps.")
@@ -64,7 +70,8 @@ object DepsRunner extends WorkerMain[Unit] {
     }
 
     val add = if (namespace.getBoolean("check_direct") == true) {
-      (usedPaths -- directLabels.flatMap(labelToPaths))
+      val unusedWhitelist = namespace.getList[String]("unused_whitelist").asScala.map(_.tail)
+      (usedPaths -- (directLabels ++ unusedWhitelist).flatMap(labelToPaths))
         .flatMap(path =>
           groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
             System.err.println(s"Warning: There is a reference to $path, but no dependency of $label provides it")
