@@ -11,8 +11,13 @@ import java.nio.file.attribute.FileTime
 import java.util.zip.{GZIPInputStream, GZIPOutputStream}
 import java.util.Optional
 import sbt.internal.inc.binary.converters.{ProtobufReaders, ProtobufWriters}
+import sbt.internal.inc.schema.Type.{Projection, Structure}
 import sbt.internal.inc.{APIs, Analysis, Relations, SourceInfos, Stamper, Stamps, schema, Stamp => StampImpl}
+import sbt.internal.inc.schema.{AnalyzedClass, Annotation, ClassDependencies, ClassLike, Companions, NameHash, Type, TypeParameter, UsedName, UsedNames, Values}
 import sbt.io.IO
+import scala.math.Ordering
+import scala.collection.mutable.StringBuilder
+import scala.collection.immutable.TreeMap
 import xsbti.compile.analysis.{GenericMapper, ReadMapper, ReadWriteMappers, Stamp, WriteMapper}
 import xsbti.compile.{AnalysisContents, AnalysisStore, MiniSetup}
 
@@ -105,9 +110,83 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
   private[this] val reader = new ProtobufReaders(mappers.getReadMapper, schema.Version.V1)
   private[this] val writer = new ProtobufWriters(mappers.getWriteMapper)
 
+  def sortProjection(value: Projection): Projection = {
+    value.copy(
+      id = value.id,
+      prefix = value.prefix,
+    )
+  }
+
+  // This should be done sometime
+  // But I can't figure out how to sort a Type differently based on which subclass it's a member of
+  def sortType[A <: Type](value: A): Type = {
+    value
+  }
+
+  def sortAnnotation(annotation: Annotation): Annotation = {
+    annotation.copy(
+      arguments = annotation.arguments.sortWith(_.hashCode() > _.hashCode())
+    )
+  }
+
+  def sortTypeParameter(typeParameter: TypeParameter): TypeParameter = {
+    typeParameter.copy(
+      annotations = typeParameter.annotations.map(sortAnnotation).sortWith(_.hashCode() > _.hashCode()),
+      typeParameters = sortTypeParameters(typeParameter.typeParameters),
+    )
+  }
+
+  def sortStructure(structure: Structure): Structure = {
+    structure.copy(
+      parents = structure.parents.sortWith(_.hashCode() < _.hashCode()),
+      declared = structure.declared.sortWith(_.hashCode() < _.hashCode()),
+      inherited = structure.inherited.sortWith(_.hashCode() < _.hashCode()),
+    )
+  }
+
+  def sortTypeParameters(typeParameters: Seq[TypeParameter]): Seq[TypeParameter] = {
+    typeParameters.map(sortTypeParameter).sortWith(_.hashCode() > _.hashCode())
+  }
+
+  def sortClassLike(classLike: ClassLike): ClassLike = {
+    classLike.copy(
+      annotations = classLike.annotations.map(sortAnnotation).sortWith(_.hashCode() > _.hashCode()),
+      structure = classLike.structure.map(sortStructure),
+      savedAnnotations = classLike.savedAnnotations.sorted,
+      childrenOfSealedClass = classLike.childrenOfSealedClass.map(sortType).sortWith(_.hashCode() > _.hashCode()),
+      typeParameters = sortTypeParameters(classLike.typeParameters),
+    )
+  }
+
+  def sortCompanions(companions: Companions): Companions = {
+    Companions(
+      classApi = companions.classApi.map(sortClassLike),
+      objectApi = companions.objectApi.map(sortClassLike),
+    )
+  }
+
+  def sortAnalyzedClassMap(analyzedClassMap: Map[String, AnalyzedClass]): TreeMap[String, AnalyzedClass] = {
+    TreeMap[String, AnalyzedClass]() ++ analyzedClassMap.mapValues { analyzedClass =>
+      analyzedClass.copy(
+        api = analyzedClass.api.map(sortCompanions),
+        nameHashes = analyzedClass.nameHashes.sortWith(_.hashCode() > _.hashCode()),
+      )
+    }
+  }
+
+  def sortApis(apis: schema.APIs): schema.APIs = {
+    apis.copy(
+      internal = sortAnalyzedClassMap(apis.internal),
+      external = sortAnalyzedClassMap(apis.external),
+    )
+  }
+
   def apis = new Store[APIs](
     stream => reader.fromApis(shouldStoreApis = true)(format.read(schema.APIs, stream)),
-    (stream, value) => format.write(writer.toApis(value, shouldStoreApis = true).update(apiFileWrite), stream)
+    (stream, value) => format.write(
+      sortApis(writer.toApis(value, shouldStoreApis = true).update(apiFileWrite)),
+      stream
+    )
   )
 
   def miniSetup = new Store[MiniSetup](
@@ -115,10 +194,56 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
     (stream, value) => format.write(writer.toMiniSetup(value), stream)
   )
 
+  object UsedNameOrdering extends Ordering[UsedName] {
+    def compare(x: UsedName, y: UsedName): Int = {
+      (x.name + x.scopes.toString) compare (y.name + y.scopes.toString)
+    }
+  }
+
+  def sortValuesMap(m: Map[String, Values]): TreeMap[String, Values] = {
+    TreeMap[String, Values]() ++ m.mapValues { value =>
+      value.copy(
+        values = value.values.sorted
+      )
+    }
+  }
+
+  def sortUsedNamesMap(usedNamesMap: Map[String, UsedNames]): TreeMap[String, UsedNames] = {
+    TreeMap[String, UsedNames]() ++ usedNamesMap.mapValues { currentUsedNames =>
+      currentUsedNames.copy(
+        usedNames = currentUsedNames.usedNames.sorted(UsedNameOrdering)
+      )
+    }
+  }
+
+  def sortClassDependencies(classDependencies: ClassDependencies): ClassDependencies = {
+    classDependencies.copy(
+      internal = sortValuesMap(classDependencies.internal),
+      external = sortValuesMap(classDependencies.external)
+    )
+  }
+
+  def sortRelations(relations: schema.Relations): schema.Relations = {
+    relations.copy(
+      srcProd = sortValuesMap(relations.srcProd),
+      libraryDep = sortValuesMap(relations.libraryDep),
+      libraryClassName = sortValuesMap(relations.libraryClassName),
+      classes = sortValuesMap(relations.classes),
+      productClassName = sortValuesMap(relations.productClassName),
+      names = sortUsedNamesMap(relations.names),
+      memberRef = relations.memberRef.map(sortClassDependencies),
+      localInheritance = relations.localInheritance.map(sortClassDependencies),
+      inheritance = relations.inheritance.map(sortClassDependencies)
+    )
+  }
+
   def relations = new Store[Relations](
     stream =>
       reader.fromRelations(format.read(schema.Relations, stream).update(relationsMapper(mappers.getReadMapper))),
-    (stream, value) => format.write(writer.toRelations(value).update(relationsMapper(mappers.getWriteMapper)), stream)
+    (stream, value) => format.write(
+        sortRelations(writer.toRelations(value).update(relationsMapper(mappers.getWriteMapper))),
+        stream
+    )
   )
 
   def sourceInfos = new Store[SourceInfos](
