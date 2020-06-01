@@ -45,6 +45,7 @@ def phase_zinc_depscheck(ctx, g):
             executable = deps_configuration.worker.files_to_run.executable,
             input_manifests = worker_input_manifests,
             execution_requirements = _resolve_execution_reqs(ctx, {"supports-workers": "1"}),
+            use_default_shell_env = True,
             arguments = [deps_args],
         )
         deps_checks[name] = deps_check
