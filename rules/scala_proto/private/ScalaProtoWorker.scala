@@ -29,18 +29,24 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
       .`type`(Arguments.fileType.verifyCanRead.verifyIsFile)
       .setDefault_(Collections.emptyList)
     parser
+      .addArgument("-I", "--proto_path")
+      .help("Proto include paths")
+      .metavar("proto_path")
+      .action(Arguments.append())
+    parser
   }
 
   override def init(args: Option[Array[String]]): Unit = ()
 
   protected[this] def work(ctx: Unit, args: Array[String]): Unit = {
     val namespace = argParser.parseArgs(args)
+    val proto_paths = namespace.getList[String]("proto_path").asScala.map(f => s"--proto_path=$f").toList
     val sources = namespace.getList[File]("sources").asScala.toList
 
     val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
 
-    val params = s"--scala_out=$scalaOut" :: sources.map(_.getPath)
+    val params = s"--scala_out=$scalaOut" :: proto_paths ++ sources.map(_.getPath)
 
     ProtocBridge.runWithGenerators(
       protoc = a => com.github.os72.protocjar.Protoc.runProtoc(a.toArray),
