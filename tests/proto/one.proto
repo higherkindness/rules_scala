@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+option java_package = "anx.proto";
+
+import "proto/zero.proto";
+
+message One {
+  optional Zero zero = 1;
+}
