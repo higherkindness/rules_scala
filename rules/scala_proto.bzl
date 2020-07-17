@@ -33,6 +33,7 @@ def _scala_proto_toolchain_implementation(ctx):
     return [platform_common.ToolchainInfo(
         compiler = ctx.attr.compiler,
         compiler_supports_workers = ctx.attr.compiler_supports_workers,
+        generator_params = ctx.attr.generator_params,
     )]
 
 scala_proto_toolchain = rule(
@@ -44,6 +45,10 @@ scala_proto_toolchain = rule(
             cfg = "host",
         ),
         "compiler_supports_workers": attr.bool(default = False),
+        "generator_params": attr.string(
+            doc = "Generator params to pass to the scala PB compiler (ie java_conversions, flat_package, grpc)",
+            default = "",
+        ),
     },
     doc = """
 Specifies a toolchain of the `@rules_scala_annex//rules/scala_proto:compiler_toolchain_type` toolchain type.
@@ -58,6 +63,7 @@ scala_proto_toolchain(
     name = "scalapb_toolchain_example",
     compiler = ":worker",
     compiler_supports_workers = True,
+    generator_params = "grpc,java_conversions",
     visibility = ["//visibility:public"],
 )
 
