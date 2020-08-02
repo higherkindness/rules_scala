@@ -17,6 +17,13 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
   private[this] val argParser: ArgumentParser = {
     val parser = ArgumentParsers.newFor("proto").addHelp(true).fromFilePrefix("@").build
     parser
+      .addArgument("--proto_path")
+      .help("Proto path")
+      .metavar("proto_path")
+      .nargs("*")
+      .`type`(Arguments.fileType.verifyIsDirectory)
+      .setDefault_(Collections.emptyList)
+    parser
       .addArgument("--output_dir")
       .help("Output dir")
       .metavar("output_dir")
@@ -36,11 +43,12 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
   protected[this] def work(ctx: Unit, args: Array[String]): Unit = {
     val namespace = argParser.parseArgs(args)
     val sources = namespace.getList[File]("sources").asScala.toList
+    val path = namespace.getList[File]("proto_path").asScala.toList
 
     val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
 
-    val params = s"--scala_out=$scalaOut" :: sources.map(_.getPath)
+    val params = s"--scala_out=$scalaOut" :: path.map("--proto_path " ++ _.getPath) ++ sources.map(_.getPath)
 
     ProtocBridge.runWithGenerators(
       protoc = a => com.github.os72.protocjar.Protoc.runProtoc(a.toArray),

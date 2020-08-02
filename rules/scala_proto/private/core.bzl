@@ -32,6 +32,7 @@ def scala_proto_library_implementation(ctx):
 
     args = ctx.actions.args()
     args.add("--output_dir", gendir.path)
+    args.add_all("--proto_path", transitive_proto_path)
     args.add_all("--", transitive_sources)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
