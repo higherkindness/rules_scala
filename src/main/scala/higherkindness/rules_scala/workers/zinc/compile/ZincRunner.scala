@@ -249,6 +249,14 @@ object ZincRunner extends WorkerMain[Namespace] {
           System.err.println(e)
           println("You may be missing a `macro = True` attribute.")
           sys.exit(1)
+        case e: StackOverflowError => {
+          // Downgrade to NonFatal error.
+          // The JVM is not guaranteed to free shared resources correctly when unwinding the stack to catch a StackOverflowError,
+          // but since we don't share resources between work threads, this should be mostly safe for us for now.
+          // If Bazel could better handle the worker shutting down suddenly, we could allow this to be caught by
+          // the UncaughtExceptionHandler in WorkerMain, and exit the entire process to be safe.
+          throw new Error("StackOverflowError", e)
+        }
       }
 
     // create analyses

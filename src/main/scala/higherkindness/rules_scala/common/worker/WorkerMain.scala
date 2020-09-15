@@ -2,19 +2,12 @@ package higherkindness.rules_scala
 package common.worker
 
 import com.google.devtools.build.lib.worker.WorkerProtocol
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.PrintStream
-import java.lang.SecurityManager
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, OutputStream, PrintStream}
 import java.security.Permission
-import java.util.concurrent.Executors
+import java.util.concurrent.ForkJoinPool
 import scala.annotation.tailrec
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.control.NonFatal
-import scala.util.Success
-import scala.util.Failure
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 trait WorkerMain[S] {
 
@@ -29,7 +22,25 @@ trait WorkerMain[S] {
       case "--persistent_worker" :: args =>
         val stdin = System.in
         val stdout = System.out
-        val stderr = System.err
+        val defaultSecurityManager = System.getSecurityManager
+        val exceptionHandler = new Thread.UncaughtExceptionHandler {
+          override def uncaughtException(t: Thread, err: Throwable): Unit = err match {
+            case e: Throwable => {
+              // Future catches all NonFatal errors, and wraps them in a Failure, so only Fatal errors get here.
+              // If any request thread throws a Fatal error (OOM, StackOverflow, etc.), we can't trust the JVM, so log the error and exit.
+              e.printStackTrace(System.err)
+              System.setSecurityManager(defaultSecurityManager)
+              System.exit(1)
+            }
+          }
+        }
+        val fjp = new ForkJoinPool(
+          Runtime.getRuntime().availableProcessors(),
+          ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+          exceptionHandler,
+          false
+        )
+        implicit val ec = ExecutionContext.fromExecutor(fjp)
 
         System.setSecurityManager(new SecurityManager {
           val Exit = raw"exitVM\.(-?\d+)".r
@@ -41,11 +52,20 @@ trait WorkerMain[S] {
           }
         })
 
-        val garbageOut = new PrintStream(new ByteArrayOutputStream)
-
         System.setIn(new ByteArrayInputStream(Array.emptyByteArray))
-        System.setOut(garbageOut)
-        System.setErr(garbageOut)
+        System.setOut(System.err)
+
+        def writeResponse(requestId: Int, outStream: OutputStream, code: Int) = {
+          // Defined here so all writes to stdout are synchronized
+          stdout.synchronized {
+            WorkerProtocol.WorkResponse.newBuilder
+              .setRequestId(requestId)
+              .setOutput(outStream.toString)
+              .setExitCode(code)
+              .build
+              .writeDelimitedTo(stdout)
+          }
+        }
 
         try {
           @tailrec
@@ -63,38 +83,18 @@ trait WorkerMain[S] {
                 0
               } catch {
                 case ExitTrapped(code) => code
-                case NonFatal(e) =>
-                  e.printStackTrace(out)
-                  1
               }
             }
 
             f.onComplete {
-              case Success(code) =>
-                synchronized {
-
-                  WorkerProtocol.WorkResponse.newBuilder
-                    .setRequestId(requestId)
-                    .setOutput(outStream.toString)
-                    .setExitCode(code)
-                    .build
-                    .writeDelimitedTo(stdout)
-
-                  out.flush()
-                  outStream.reset()
-                }
+              case Success(code) => {
+                out.flush()
+                writeResponse(requestId, outStream, code)
+              }
               case Failure(e) => {
                 e.printStackTrace(out)
-
-                WorkerProtocol.WorkResponse.newBuilder
-                  .setRequestId(requestId)
-                  .setOutput(outStream.toString)
-                  .setExitCode(-1)
-                  .build
-                  .writeDelimitedTo(stdout)
-
                 out.flush()
-                outStream.reset()
+                writeResponse(requestId, outStream, -1)
               }
             }
             process(ctx)
@@ -103,7 +103,6 @@ trait WorkerMain[S] {
         } finally {
           System.setIn(stdin)
           System.setOut(stdout)
-          System.setErr(stderr)
         }
 
       case args => {
