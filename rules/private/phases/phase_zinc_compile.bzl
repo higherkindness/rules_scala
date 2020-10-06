@@ -76,7 +76,7 @@ def phase_zinc_compile(ctx, g):
             g.classpaths.plugin,
             g.classpaths.compile,
             g.classpaths.compiler,
-        ] + [zinc.deps_files for zinc in zincs],
+        ],
     )
 
     outputs = [g.classpaths.jar, mains_file, apis, infos, relations, setup, stamps, used, tmp]
