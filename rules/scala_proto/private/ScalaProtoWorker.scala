@@ -3,7 +3,7 @@ package annex.scala.proto
 import higherkindness.rules_scala.common.args.implicits._
 import higherkindness.rules_scala.common.worker.WorkerMain
 import java.io.File
-import java.nio.file.{Files, Paths}
+import java.nio.file.Files
 import java.util.Collections
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
@@ -22,6 +22,13 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
       .metavar("output_dir")
       .`type`(Arguments.fileType.verifyCanCreate)
     parser
+      .addArgument("--proto_paths")
+      .help("Paths to be passed to protoc as --proto_path arguments")
+      .metavar("proto_paths")
+      .nargs("*")
+      .`type`(Arguments.fileType.verifyCanRead.verifyIsDirectory)
+      .setDefault_(Collections.emptyList)
+    parser
       .addArgument("sources")
       .help("Source files")
       .metavar("source")
@@ -36,11 +43,14 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
   protected[this] def work(ctx: Unit, args: Array[String]): Unit = {
     val namespace = argParser.parseArgs(args)
     val sources = namespace.getList[File]("sources").asScala.toList
+    val protoPaths = namespace.getList[File]("proto_paths").asScala.toList
 
     val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
 
-    val params = s"--scala_out=$scalaOut" :: sources.map(_.getPath)
+    val params = s"--scala_out=$scalaOut" ::
+      sources.map(_.getPath) :::
+      protoPaths.map(dir => s"--proto_path=${dir.getPath}")
 
     ProtocBridge.runWithGenerators(
       protoc = a => com.github.os72.protocjar.Protoc.runProtoc(a.toArray),

@@ -10,13 +10,9 @@ load(
 scala_proto_library_private_attributes = {}
 
 def scala_proto_library_implementation(ctx):
-    proto_deps = [dep for dep in ctx.attr.deps if ProtoInfo in dep]
-    if proto_deps != ctx.attr.deps:
-        fail("disallowed non proto deps in %s" % ctx.attr.deps)
+    protos = [dep[ProtoInfo] for dep in ctx.attr.deps]
 
-    protos = [dep[ProtoInfo] for dep in proto_deps]
-
-    transitive_sources = depset(transitive = [proto.transitive_sources for proto in protos])
+    sources = depset(direct = [source for proto in protos for source in proto.direct_sources])
     transitive_proto_path = depset(transitive = [proto.transitive_proto_path for proto in protos])
 
     compiler = ctx.toolchains["@rules_scala_annex//rules/scala_proto:compiler_toolchain_type"]
@@ -32,7 +28,8 @@ def scala_proto_library_implementation(ctx):
 
     args = ctx.actions.args()
     args.add("--output_dir", gendir.path)
-    args.add_all("--", transitive_sources)
+    args.add_all("--proto_paths", transitive_proto_path)
+    args.add_all("--", sources)
     args.set_param_file_format("multiline")
     args.use_param_file("@%s", use_always = True)
 
@@ -43,7 +40,7 @@ def scala_proto_library_implementation(ctx):
 
     ctx.actions.run(
         mnemonic = "ScalaProtoCompile",
-        inputs = depset(direct = [], transitive = [transitive_sources]),
+        inputs = depset(transitive = [proto.transitive_sources for proto in protos]),
         outputs = [gendir],
         executable = compiler.compiler.files_to_run.executable,
         tools = compiler_inputs,
