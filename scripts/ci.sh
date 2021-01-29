@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Acts as a front end script for use with Travis CI
+# Acts as a front end script for use for CI
 #
 
 set -eox pipefail
