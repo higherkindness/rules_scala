@@ -1,0 +1,21 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - lucid-master
+jobs:
+  build-lint-and-test:
+    runs-on: ${{ matrix.os }}
+    env:
+      BAZEL_VERSION: ${{ matrix.bazel_version }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, macos-10.15]
+        bazel_version: [3.2.0, 3.3.0]
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./scripts/ci.sh build
+      - run: ./scripts/ci.sh lint
+      - run: ./scripts/ci.sh test
