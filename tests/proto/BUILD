@@ -31,10 +31,10 @@ scala_library(
 proto_library(
     name = "one_proto",
     srcs = ["one.proto"],
+    visibility = ["//visibility:public"],
     deps = [
         ":zero_proto",
     ],
-    visibility = ["//visibility:public"],
 )
 
 scala_proto_library(
