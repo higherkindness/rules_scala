@@ -69,8 +69,11 @@ trait WorkerMain[S] {
 
         try {
           @tailrec
-          def process(ctx: S): S = {
+          def process(ctx: S): Unit = {
             val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(stdin)
+            if (request == null) {
+              return
+            }
             val args = request.getArgumentsList.toArray(Array.empty[String])
 
             val outStream = new ByteArrayOutputStream
