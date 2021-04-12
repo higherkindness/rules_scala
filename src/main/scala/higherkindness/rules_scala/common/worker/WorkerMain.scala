@@ -69,13 +69,17 @@ trait WorkerMain[S] {
 
         try {
           @tailrec
-          def process(ctx: S): S = {
+          def process(ctx: S): Unit = {
             val request = WorkerProtocol.WorkRequest.parseDelimitedFrom(stdin)
+            if (request == null) {
+              return
+            }
             val args = request.getArgumentsList.toArray(Array.empty[String])
 
             val outStream = new ByteArrayOutputStream
             val out = new PrintStream(outStream)
             val requestId = request.getRequestId()
+            System.out.println(s"WorkRequest $requestId received with args: ${request.getArgumentsList}")
 
             val f: Future[Int] = Future {
               try {
@@ -90,11 +94,14 @@ trait WorkerMain[S] {
               case Success(code) => {
                 out.flush()
                 writeResponse(requestId, outStream, code)
+                System.out.println(s"WorkResponse $requestId sent with code $code")
               }
               case Failure(e) => {
                 e.printStackTrace(out)
                 out.flush()
                 writeResponse(requestId, outStream, -1)
+                System.err.println(s"Uncaught exception in Future while proccessing WorkRequest $requestId:")
+                e.printStackTrace(System.err)
               }
             }
             process(ctx)
