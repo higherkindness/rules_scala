@@ -28,6 +28,10 @@ def phase_bootstrap_compile(ctx, g):
     compile_classpath = ":".join([f.path for f in g.classpaths.compile.to_list()])
     srcs = " ".join([f.path for f in g.classpaths.srcs])
 
+    main_class = "scala.tools.nsc.Main"
+    if int(g.javainfo.scala_info.scala_configuration.version[0]) >= 3:
+        main_class = "dotty.tools.dotc.Main"
+
     ctx.actions.run_shell(
         inputs = inputs,
         tools = [ctx.executable._jar_creator],
@@ -40,7 +44,7 @@ def phase_bootstrap_compile(ctx, g):
             |
             |{java} \\
             |  -cp {compiler_classpath} \\
-            |  scala.tools.nsc.Main \\
+            |  {main_class} \\
             |  -cp {compile_classpath} \\
             |  -d tmp/classes \\
             |  {srcs}
@@ -53,6 +57,7 @@ def phase_bootstrap_compile(ctx, g):
                 compile_classpath = compile_classpath,
                 srcs = srcs,
                 output_jar = g.classpaths.jar.path,
+                main_class = main_class,
             ),
         ),
         execution_requirements = _resolve_execution_reqs(ctx, {}),

@@ -1,20 +1,16 @@
-package annex.specs2
+package annex.scalatest
 
-import org.scalatest._
-import java.util.{EmptyStackException, Stack}
+import org.scalatest.flatspec.AnyFlatSpec
 
-class DummySpec extends FlatSpec with Matchers {
+class SetSpec extends AnyFlatSpec {
 
-  "A Stack" should "pop values in last-in-first-out order" in {
-    val stack = new Stack[Int]
-    stack.push(1)
-    stack.push(2)
-    stack.pop() should be(2)
-    stack.pop() should be(1)
+  "An empty Set" should "have size 0" in {
+    assert(Set.empty.size == 0)
   }
 
-  it should "throw EmptyStackException if an empty stack is popped" in {
-    val emptyStack = new Stack[Int]
-    a[EmptyStackException] should be thrownBy emptyStack.pop()
+  it should "produce NoSuchElementException when head is invoked" in {
+    assertThrows[NoSuchElementException] {
+      Set.empty.head
+    }
   }
 }

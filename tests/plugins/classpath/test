@@ -1,9 +1,11 @@
-#!/bin/bash -e
+# !/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
-bazel build :inefficient-usage 2>&1 | \
-    awk '
-        BEGIN                           {z  = 2}
-        /slightly inefficient/          {z -= 1}
-        /scalac plugin phase success/   {z -= 1}
-        END                             {exit z}'
+# Using a worker here prevents a println this tests needs from making it
+# to the command line, so we use standalone instead.
+bazel build :inefficient-usage --strategy=ScalaCompile=standalone 2>&1 | \
+  awk '
+      BEGIN                           {z  = 2}
+      /slightly inefficient/          {z -= 1}
+      /scalac plugin phase success/   {z -= 1}
+      END                             {exit z}'

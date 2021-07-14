@@ -1,0 +1,7 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel build :example
+bazel build :example-3
+bazel build :example-2
+bazel build :example-1

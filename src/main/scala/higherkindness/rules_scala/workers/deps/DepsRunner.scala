@@ -52,7 +52,7 @@ object DepsRunner extends WorkerMain[Unit] {
     val namespace = argParser.parseArgs(args)
 
     val label = namespace.getString("label").tail
-    val directLabels = namespace.getList[String]("direct").asScala.map(_.tail)
+    val directLabels = namespace.getList[String]("direct").asScala.map(_.tail).toList
     val groups = Option(namespace.getList[java.util.List[String]]("group"))
       .fold[Seq[List[String]]](Nil)(_.asScala.toSeq.map(_.asScala.toList))
       .map { case label +: jars => label.tail -> jars.toSet }
@@ -60,8 +60,8 @@ object DepsRunner extends WorkerMain[Unit] {
     val usedPaths = Files.readAllLines(namespace.get[File]("used").toPath).asScala.toSet
 
     val remove = if (namespace.getBoolean("check_used") == true) {
-      val usedWhitelist = namespace.getList[String]("used_whitelist").asScala.map(_.tail)
-      (directLabels -- usedWhitelist).filterNot(labelToPaths(_).exists(usedPaths))
+      val usedWhitelist = namespace.getList[String]("used_whitelist").asScala.map(_.tail).toList
+      (directLabels.diff(usedWhitelist)).filterNot(labelToPaths(_).exists(usedPaths))
     } else Nil
     remove.foreach { depLabel =>
       out.println(s"Target '$depLabel' not used, please remove it from the deps.")
@@ -70,8 +70,8 @@ object DepsRunner extends WorkerMain[Unit] {
     }
 
     val add = if (namespace.getBoolean("check_direct") == true) {
-      val unusedWhitelist = namespace.getList[String]("unused_whitelist").asScala.map(_.tail)
-      (usedPaths -- (directLabels ++ unusedWhitelist).flatMap(labelToPaths))
+      val unusedWhitelist = namespace.getList[String]("unused_whitelist").asScala.map(_.tail).toList
+      (usedPaths -- (directLabels :++ unusedWhitelist).flatMap(labelToPaths))
         .flatMap(path =>
           groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
             System.err.println(s"Warning: There is a reference to $path, but no dependency of $label provides it")

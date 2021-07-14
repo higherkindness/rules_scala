@@ -1,9 +1,14 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
-out_2_12=$(bazel test :mixed_2_12)
-echo "$out_2_12" | grep 'should pop values in last-in-first-out order'
-echo "$out_2_12" | grep 'JUnit many success'
-bazel test :mixed_2_11 | grep 'Dummy.bar: OK, proved property.'
-bazel test :mixed_2_11 --test_arg=--verbosity=HIGH | grep 'org.scalacheck.ScalaCheckFramework: 1 tests'
-bazel test :mixed_2_11 --test_arg=--verbosity=MEDIUM | grep -v 'org.scalacheck.ScalaCheckFramework: 1 tests'
+function test ()  {
+  out=$(bazel test ":mixed_$1")
+  echo "$out" | grep 'should pop values in last-in-first-out order'
+  echo "$out" | grep 'JUnit  many success'
+  echo "$out" | grep 'Dummy.bar: OK, proved property.'
+  bazel test ":mixed_$1" --test_arg=--verbosity=HIGH | grep 'org.scalacheck.ScalaCheckFramework: 1 tests'
+  bazel test ":mixed_$1" --test_arg=--verbosity=MEDIUM | grep -v 'org.scalacheck.ScalaCheckFramework: 1 tests'
+}
+
+test "2_13"
+test "2_12"

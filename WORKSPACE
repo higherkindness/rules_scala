@@ -2,6 +2,21 @@ workspace(name = "rules_scala_annex")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+# skylib
+
+bazel_skylib_tag = "1.0.3"
+
+bazel_skylib_sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c"
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = bazel_skylib_sha256,
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
+    ],
+)
+
 skydoc_tag = "0.3.0"
 
 skydoc_sha256 = "8762a212cff5f81505a1632630edcfe9adce381479a50a03c968bd2fc217972d"
@@ -32,16 +47,16 @@ buildifier_dependencies()
 
 # io_bazel_rules_go
 
-rules_go_tag = "v0.20.2"
+rules_go_tag = "v0.28.0"
 
-rules_go_sha256 = "b9aa86ec08a292b97ec4591cf578e020b35f98e12173bbd4a921f84f583aebd9"
+rules_go_sha256 = "8e968b5fcea1d2d64071872b12737bbb5514524ee5f0a4f54f5920266c261acb"
 
 http_archive(
     name = "io_bazel_rules_go",
     sha256 = rules_go_sha256,
     urls = [
-        "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/rules_go/releases/download/{tag}/rules_go-{tag}.tar.gz".format(tag = rules_go_tag),
-        "https://github.com/bazelbuild/rules_go/releases/download/{tag}/rules_go-{tag}.tar.gz".format(tag = rules_go_tag),
+        "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/rules_go/releases/download/{tag}/rules_go-{tag}.zip".format(tag = rules_go_tag),
+        "https://github.com/bazelbuild/rules_go/releases/download/{tag}/rules_go-{tag}.zip".format(tag = rules_go_tag),
     ],
 )
 
@@ -49,24 +64,13 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 
 go_rules_dependencies()
 
-go_register_toolchains()
+go_register_toolchains(version = "1.17")
 
-bazel_skylib_tag = "1.0.2"
+# protobuf
 
-bazel_skylib_sha256 = "97e70364e9249702246c0e9444bccdc4b847bed1eb03c5a3ece4f83dfe6abc44"
+protobuf_tag = "3.15.8"
 
-http_archive(
-    name = "bazel_skylib",
-    sha256 = bazel_skylib_sha256,
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
-        "https://github.com/bazelbuild/bazel-skylib/releases/download/{tag}/bazel-skylib-{tag}.tar.gz".format(tag = bazel_skylib_tag),
-    ],
-)
-
-protobuf_tag = "3.10.1"
-
-protobuf_sha256 = "678d91d8a939a1ef9cb268e1f20c14cd55e40361dc397bb5881e4e1e532679b1"
+protobuf_sha256 = "dd513a79c7d7e45cbaeaf7655289f78fd6b806e52dbbd7018ef4e3cf5cff697a"
 
 http_archive(
     name = "com_google_protobuf",
@@ -120,6 +124,7 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_jvm_external/archive/{}.zip".format(rules_jvm_external_tag),
 )
 
+# Scala
 load("//rules/scala:workspace.bzl", "scala_register_toolchains", "scala_repositories")
 
 scala_repositories()
@@ -130,6 +135,28 @@ annex_pinned_maven_install()
 
 scala_register_toolchains()
 
+#  Scala 2.12
+
+load("//rules/scala:workspace_2_12.bzl", "scala_2_12_repositories")
+
+scala_2_12_repositories()
+
+load("@annex_2_12//:defs.bzl", annex_2_12_pinned_maven_install = "pinned_maven_install")
+
+annex_2_12_pinned_maven_install()
+
+# Scala 3
+
+load("//rules/scala:workspace_3.bzl", "scala_3_repositories")
+
+scala_3_repositories()
+
+load("@annex_3//:defs.bzl", annex_3_pinned_maven_install = "pinned_maven_install")
+
+annex_3_pinned_maven_install()
+
+# Scala fmt
+
 load("//rules/scalafmt:workspace.bzl", "scalafmt_default_config", "scalafmt_repositories")
 
 scalafmt_repositories()
@@ -139,6 +166,8 @@ load("@annex_scalafmt//:defs.bzl", annex_scalafmt_pinned_maven_install = "pinned
 annex_scalafmt_pinned_maven_install()
 
 scalafmt_default_config(".scalafmt.conf")
+
+# Scala proto
 
 load(
     "//rules/scala_proto:workspace.bzl",

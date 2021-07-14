@@ -5,9 +5,9 @@ def scala_proto_register_toolchains():
 
 def scala_proto_artifacts():
     return [
-        "com.github.os72:protoc-jar:3.8.0",
-        "com.thesamet.scalapb:compilerplugin_2.12:0.9.0",
-        "com.thesamet.scalapb:protoc-bridge_2.12:0.7.8",
+        "com.github.os72:protoc-jar:3.11.4",
+        "com.thesamet.scalapb:compilerplugin_2.13:0.11.4",
+        "com.thesamet.scalapb:protoc-bridge_2.13:0.9.3",
     ]
 
 def scala_proto_repositories():

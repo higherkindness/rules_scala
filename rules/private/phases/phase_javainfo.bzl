@@ -43,7 +43,9 @@ def phase_javainfo(ctx, g):
         )
 
         java_info = JavaInfo(
-            compile_jar = compile_jar,
+            # TODO: why do ijars break Scala 3?
+            # compile_jar = compile_jar,
+            compile_jar = ctx.outputs.jar,
             neverlink = getattr(ctx.attr, "neverlink", False),
             output_jar = ctx.outputs.jar,
             source_jar = source_jar,

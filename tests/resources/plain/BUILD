@@ -3,7 +3,7 @@ load("@rules_scala_annex//rules:scala.bzl", "scala_library")
 scala_library(
     name = "plain",
     resources = glob(["**/*.txt"]),
-    scala = "//scala:2_11",
+    scala = "//scala:2_13",
 )
 
 scala_library(
@@ -11,5 +11,5 @@ scala_library(
     resource_jars = [":plain"],
     resource_strip_prefix = "resources",
     resources = glob(["**/*.txt"]),
-    scala = "//scala:2_11",
+    scala = "//scala:2_13",
 )

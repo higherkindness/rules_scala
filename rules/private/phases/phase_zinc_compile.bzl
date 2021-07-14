@@ -43,6 +43,9 @@ def phase_zinc_compile(ctx, g):
     zincs = [dep[_ZincInfo] for dep in ctx.attr.deps if _ZincInfo in dep]
 
     args = ctx.actions.args()
+
+    # TODO: remove debug before merge
+    # args.add("--debug", "true")
     args.add_all(depset(transitive = [zinc.deps for zinc in zincs]), map_each = _compile_analysis)
     args.add("--compiler_bridge", zinc_configuration.compiler_bridge)
     args.add_all("--compiler_classpath", g.classpaths.compiler)
@@ -62,6 +65,9 @@ def phase_zinc_compile(ctx, g):
     args.add_all("--plugins", g.classpaths.plugin)
     args.add_all("--source_jars", g.classpaths.src_jars)
     args.add("--tmp", tmp.path)
+
+    # TODO: turn this back to what it was before merging
+    # args.add("--log_level", "debug")
     args.add("--log_level", zinc_configuration.log_level)
     args.add_all("--", g.classpaths.srcs)
     args.set_param_file_format("multiline")

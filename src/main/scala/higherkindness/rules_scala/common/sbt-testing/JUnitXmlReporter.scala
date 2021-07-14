@@ -45,17 +45,23 @@ class JUnitXmlReporter(tasksAndEvents: ListBuffer[(String, ListBuffer[Event])]) 
           e.status match {
             case Status.Error if e.throwable.isDefined =>
               val t = e.throwable.get
-              s"""<error message="${escape(t.getMessage)}" type="${escape(t.getClass.getName)}">${escape(trace)}</error>"""
+              s"""<error message="${escape(t.getMessage)}" type="${escape(t.getClass.getName)}">${escape(
+                trace
+              )}</error>"""
             case Status.Error =>
               s"""<error message="No Exception or message provided"/>"""
             case Status.Failure if e.throwable.isDefined =>
               val t = e.throwable.get
-              s"""<failure message="${escape(t.getMessage)}" type="${escape(t.getClass.getName)}">${escape(trace)}</failure>"""
+              s"""<failure message="${escape(t.getMessage)}" type="${escape(t.getClass.getName)}">${escape(
+                trace
+              )}</failure>"""
             case Status.Failure =>
               s"""<failure message="No Exception or message provided"/>"""
             case Status.Canceled if e.throwable.isDefined =>
               val t = e.throwable.get
-              s"""<skipped message="${escape(t.getMessage)}" type="${escape(t.getClass.getName)}">${escape(trace)}</skipped>"""
+              s"""<skipped message="${escape(t.getMessage)}" type="${escape(t.getClass.getName)}">${escape(
+                trace
+              )}</skipped>"""
             case Status.Canceled =>
               s"""<skipped message="No Exception or message provided"/>"""
             case Status.Ignored | Status.Skipped | Status.Pending =>

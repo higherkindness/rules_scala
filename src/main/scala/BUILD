@@ -7,53 +7,99 @@ load(
 
 alias(
     name = "bootstrap",
-    actual = ":bootstrap_2_12_10",
+    actual = ":bootstrap_2_13_6",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "bootstrap_3",
+    actual = ":bootstrap_3_0_2",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "zinc",
-    actual = ":zinc_2_12_10",
+    actual = ":zinc_2_13_6",
     visibility = ["//visibility:public"],
 )
 
-compiler_classpath_2_12_10 = [
+alias(
+    name = "zinc_3",
+    actual = ":zinc_3_0_2",
+    visibility = ["//visibility:public"],
+)
+
+# Scala 2.13
+compiler_classpath_2_13_6 = [
     "@annex//:org_scala_lang_scala_compiler",
     "@annex//:org_scala_lang_scala_library",
     "@annex//:org_scala_lang_scala_reflect",
 ]
 
-runtime_classpath_2_12_10 = [
+runtime_classpath_2_13_6 = [
     "@annex//:org_scala_lang_scala_library",
 ]
 
 configure_bootstrap_scala(
-    name = "bootstrap_2_12_10",
-    compiler_classpath = compiler_classpath_2_12_10,
-    runtime_classpath = runtime_classpath_2_12_10,
-    version = "2.12.8",
+    name = "bootstrap_2_13_6",
+    compiler_classpath = compiler_classpath_2_13_6,
+    runtime_classpath = runtime_classpath_2_13_6,
+    version = "2.13.6",
     visibility = ["//visibility:public"],
-)
-
-scala_library(
-    name = "compiler_bridge_2_12_10",
-    srcs = [
-        "@compiler_bridge_2_12//:src",
-    ],
-    scala = ":bootstrap_2_12_10",
-    visibility = ["//visibility:public"],
-    deps = compiler_classpath_2_12_10 + [
-        "@annex//:org_scala_sbt_compiler_interface",
-        "@annex//:org_scala_sbt_util_interface",
-    ],
 )
 
 configure_zinc_scala(
-    name = "zinc_2_12_10",
-    compiler_bridge = ":compiler_bridge_2_12_10",
-    compiler_classpath = compiler_classpath_2_12_10,
-    runtime_classpath = runtime_classpath_2_12_10,
-    version = "2.12.8",
+    name = "zinc_2_13_6",
+    compiler_bridge = "@annex//:org_scala_sbt_compiler_bridge_2_13",
+    compiler_classpath = compiler_classpath_2_13_6,
+    global_scalacopts = [
+        "-Ytasty-reader",
+    ],
+    runtime_classpath = runtime_classpath_2_13_6,
+    version = "2.13.6",
+    visibility = ["//visibility:public"],
+)
+
+# Scala 3
+
+# Adding this, so we make sure to have a Scala library in the
+# IntelliJ libraries, so we can get a Scala SDK on sync.
+scala_library(
+    name = "scala-sdk",
+    deps_used_whitelist = [
+        "@annex_3//:org_scala_lang_scala3_library_3_3_0_2",
+    ],
+    scala = ":zinc_3",
+    deps = [
+        "@annex_3//:org_scala_lang_scala3_library_3_3_0_2",
+    ],
+)
+
+compiler_classpath_3_0_2 = [
+    "@annex_3//:org_scala_lang_scala3_compiler_3_3_0_2",
+    "@annex_3//:org_scala_lang_scala3_library_3_3_0_2",
+]
+
+runtime_classpath_3_0_2 = [
+    "@annex_3//:org_scala_lang_scala3_library_3_3_0_2",
+    "@annex_3//:org_scala_lang_scala3_interfaces",
+    "@annex_3//:org_scala_lang_tasty_core_3",
+]
+
+configure_bootstrap_scala(
+    name = "bootstrap_3_0_2",
+    compiler_classpath = compiler_classpath_3_0_2,
+    runtime_classpath = runtime_classpath_3_0_2,
+    version = "3.0.1",
+    visibility = ["//visibility:public"],
+)
+
+configure_zinc_scala(
+    name = "zinc_3_0_2",
+    compiler_bridge = "@annex_3//:org_scala_lang_scala3_sbt_bridge_3_0_2",
+    compiler_classpath = compiler_classpath_3_0_2,
+    runtime_classpath = runtime_classpath_3_0_2,
+    version = "3.0.1",
     visibility = ["//visibility:public"],
 )
 

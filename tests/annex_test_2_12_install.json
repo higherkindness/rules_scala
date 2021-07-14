@@ -1,0 +1,355 @@
+{
+    "dependency_tree": {
+        "conflict_resolution": {},
+        "dependencies": [
+            {
+                "coord": "org.portable-scala:portable-scala-reflect_2.12:1.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1.jar"
+                ],
+                "sha256": "2eb8ee9df8ff1ecb3612552d2f6dbdbc17c149ad78dbeef5ca56bc6ba964a956"
+            },
+            {
+                "coord": "org.portable-scala:portable-scala-reflect_2.12:jar:sources:1.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1-sources.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/portable-scala/portable-scala-reflect_2.12/1.1.1/portable-scala-reflect_2.12-1.1.1-sources.jar"
+                ],
+                "sha256": "da225cd34412a66905e5d9f6bfa03c28933c41bb4ff44b468bdd573009c2758c"
+            },
+            {
+                "coord": "org.scala-lang.modules:scala-parser-combinators_2.12:2.0.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0.jar"
+                ],
+                "sha256": "1e07e98531954e8a4146f601137dc93510c436cf87b7bc4c494d73baf6ec3c4b"
+            },
+            {
+                "coord": "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:2.0.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0-sources.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/2.0.0/scala-parser-combinators_2.12-2.0.0-sources.jar"
+                ],
+                "sha256": "6730c9e310d2bac75db6622aea1da4b8d461824a5a66baaa7750dccf5096b2eb"
+            },
+            {
+                "coord": "org.scala-lang:scala-library:2.12.14",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14.jar",
+                "directDependencies": [],
+                "dependencies": [],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14.jar"
+                ],
+                "sha256": "0451dce8322903a6c2aa7d31232b54daa72a61ced8ade0b4c5022442a3f6cb57"
+            },
+            {
+                "coord": "org.scala-lang:scala-library:jar:sources:2.12.14",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14-sources.jar",
+                "directDependencies": [],
+                "dependencies": [],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.14/scala-library-2.12.14-sources.jar"
+                ],
+                "sha256": "5d3d5e62367e1dc39d6eac1299db6a3a4ead71f6f3bae2394b2d61251461dd26"
+            },
+            {
+                "coord": "org.scala-lang:scala-reflect:2.12.14",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14.jar"
+                ],
+                "sha256": "497f4603e9d19dc4fa591cd467de5e32238d240bbd955d3dac6390b270889522"
+            },
+            {
+                "coord": "org.scala-lang:scala-reflect:jar:sources:2.12.14",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14-sources.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.14/scala-reflect-2.12.14-sources.jar"
+                ],
+                "sha256": "8b2299b758fa07cf8c1cc388b7d1e0d59a4c83dca84bc8fbef0006401c2d7dc3"
+            },
+            {
+                "coord": "org.scala-sbt:test-interface:1.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar",
+                "directDependencies": [],
+                "dependencies": [],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar"
+                ],
+                "sha256": "15f70b38bb95f3002fec9aea54030f19bb4ecfbad64c67424b5e5fea09cd749e"
+            },
+            {
+                "coord": "org.scala-sbt:test-interface:jar:sources:1.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar",
+                "directDependencies": [],
+                "dependencies": [],
+                "url": "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar"
+                ],
+                "sha256": "c314491c9df4f0bd9dd125ef1d51228d70bd466ee57848df1cd1b96aea18a5ad"
+            },
+            {
+                "coord": "org.specs2:specs2-common_2.12:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-reflect:2.12.14",
+                    "org.specs2:specs2-fp_2.12:4.12.3",
+                    "org.scala-lang:scala-library:2.12.14",
+                    "org.scala-sbt:test-interface:1.0",
+                    "org.portable-scala:portable-scala-reflect_2.12:1.1.1",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:2.0.0"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-reflect:2.12.14",
+                    "org.specs2:specs2-fp_2.12:4.12.3",
+                    "org.scala-lang:scala-library:2.12.14",
+                    "org.scala-sbt:test-interface:1.0",
+                    "org.portable-scala:portable-scala-reflect_2.12:1.1.1",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:2.0.0"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3.jar"
+                ],
+                "sha256": "a5aabff0a3c711ba68c9301feb3afa347bc69cb5a5e938a9257d110e8503989c"
+            },
+            {
+                "coord": "org.specs2:specs2-common_2.12:jar:sources:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3-sources.jar",
+                "directDependencies": [
+                    "org.specs2:specs2-fp_2.12:jar:sources:4.12.3",
+                    "org.portable-scala:portable-scala-reflect_2.12:jar:sources:1.1.1",
+                    "org.scala-sbt:test-interface:jar:sources:1.0",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.12.14",
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "dependencies": [
+                    "org.specs2:specs2-fp_2.12:jar:sources:4.12.3",
+                    "org.portable-scala:portable-scala-reflect_2.12:jar:sources:1.1.1",
+                    "org.scala-sbt:test-interface:jar:sources:1.0",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.12.14",
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-common_2.12/4.12.3/specs2-common_2.12-4.12.3-sources.jar"
+                ],
+                "sha256": "9cc1a9a63ce25b58f53fd80ad5b15d59e0f95663cc835b4b756ac500ca950549"
+            },
+            {
+                "coord": "org.specs2:specs2-core_2.12:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:2.12.14",
+                    "org.specs2:specs2-matcher_2.12:4.12.3",
+                    "org.scala-sbt:test-interface:1.0",
+                    "org.portable-scala:portable-scala-reflect_2.12:1.1.1",
+                    "org.specs2:specs2-common_2.12:4.12.3"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-reflect:2.12.14",
+                    "org.specs2:specs2-fp_2.12:4.12.3",
+                    "org.scala-lang:scala-library:2.12.14",
+                    "org.specs2:specs2-matcher_2.12:4.12.3",
+                    "org.scala-sbt:test-interface:1.0",
+                    "org.portable-scala:portable-scala-reflect_2.12:1.1.1",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:2.0.0",
+                    "org.specs2:specs2-common_2.12:4.12.3"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3.jar"
+                ],
+                "sha256": "9ff64ab203b578f0dc4f0b482178d249fedf9a41a02f6bd017bd511e7f3b7d24"
+            },
+            {
+                "coord": "org.specs2:specs2-core_2.12:jar:sources:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3-sources.jar",
+                "directDependencies": [
+                    "org.specs2:specs2-common_2.12:jar:sources:4.12.3",
+                    "org.portable-scala:portable-scala-reflect_2.12:jar:sources:1.1.1",
+                    "org.scala-sbt:test-interface:jar:sources:1.0",
+                    "org.specs2:specs2-matcher_2.12:jar:sources:4.12.3",
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "dependencies": [
+                    "org.specs2:specs2-fp_2.12:jar:sources:4.12.3",
+                    "org.specs2:specs2-common_2.12:jar:sources:4.12.3",
+                    "org.portable-scala:portable-scala-reflect_2.12:jar:sources:1.1.1",
+                    "org.scala-sbt:test-interface:jar:sources:1.0",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.12.14",
+                    "org.specs2:specs2-matcher_2.12:jar:sources:4.12.3",
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-core_2.12/4.12.3/specs2-core_2.12-4.12.3-sources.jar"
+                ],
+                "sha256": "7eff91a3ed7b1394b962629700996e70664c3e5da36e92dd01c7e3d1f649bef7"
+            },
+            {
+                "coord": "org.specs2:specs2-fp_2.12:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3.jar"
+                ],
+                "sha256": "56cbb1e1e11be804a1fd292c375f123c94f4054fd1f25bcca7eda8b671771bb6"
+            },
+            {
+                "coord": "org.specs2:specs2-fp_2.12:jar:sources:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3-sources.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-fp_2.12/4.12.3/specs2-fp_2.12-4.12.3-sources.jar"
+                ],
+                "sha256": "94de88401362ab41c2c04a67ee93f80a9aa06ff99cc6a1829688e8224276e3b5"
+            },
+            {
+                "coord": "org.specs2:specs2-matcher_2.12:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:2.12.14",
+                    "org.specs2:specs2-common_2.12:4.12.3"
+                ],
+                "dependencies": [
+                    "org.scala-lang:scala-reflect:2.12.14",
+                    "org.specs2:specs2-fp_2.12:4.12.3",
+                    "org.scala-lang:scala-library:2.12.14",
+                    "org.scala-sbt:test-interface:1.0",
+                    "org.portable-scala:portable-scala-reflect_2.12:1.1.1",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:2.0.0",
+                    "org.specs2:specs2-common_2.12:4.12.3"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3.jar"
+                ],
+                "sha256": "2984fa09bc769134140c60340b0c449646083622feaf6f4281f93b300e8f3d14"
+            },
+            {
+                "coord": "org.specs2:specs2-matcher_2.12:jar:sources:4.12.3",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3-sources.jar",
+                "directDependencies": [
+                    "org.scala-lang:scala-library:jar:sources:2.12.14",
+                    "org.specs2:specs2-common_2.12:jar:sources:4.12.3"
+                ],
+                "dependencies": [
+                    "org.specs2:specs2-fp_2.12:jar:sources:4.12.3",
+                    "org.specs2:specs2-common_2.12:jar:sources:4.12.3",
+                    "org.portable-scala:portable-scala-reflect_2.12:jar:sources:1.1.1",
+                    "org.scala-sbt:test-interface:jar:sources:1.0",
+                    "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.12.14",
+                    "org.scala-lang:scala-library:jar:sources:2.12.14"
+                ],
+                "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3-sources.jar",
+                "mirror_urls": [
+                    "https://repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/specs2/specs2-matcher_2.12/4.12.3/specs2-matcher_2.12-4.12.3-sources.jar"
+                ],
+                "sha256": "e7cbe383c479f07673ec133e110239a29e437f5515d9ab03c24b7b477198c714"
+            }
+        ],
+        "version": "0.1.0",
+        "__AUTOGENERATED_FILE_DO_NOT_MODIFY_THIS_FILE_MANUALLY": -1534236835
+    }
+}

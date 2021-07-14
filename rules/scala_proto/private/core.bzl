@@ -21,7 +21,7 @@ def scala_proto_library_implementation(ctx):
 
     compiler = ctx.toolchains["@rules_scala_annex//rules/scala_proto:compiler_toolchain_type"]
 
-    compiler_inputs, _, _ = ctx.resolve_command(tools = [compiler.compiler])
+    compiler_inputs, _, input_manifests = ctx.resolve_command(tools = [compiler.compiler])
 
     srcjar = ctx.outputs.srcjar
 
@@ -47,6 +47,8 @@ def scala_proto_library_implementation(ctx):
         outputs = [gendir],
         executable = compiler.compiler.files_to_run.executable,
         tools = compiler_inputs,
+        input_manifests = input_manifests,
+        progress_message = "Compiling %{label} protobuf into Scala source",
         execution_requirements = _resolve_execution_reqs(ctx, {"supports-workers": supports_workers}),
         arguments = [args],
     )
@@ -56,7 +58,7 @@ def scala_proto_library_implementation(ctx):
         outputs = [srcjar],
         arguments = [ctx.executable._zipper.path, gendir.path, gendir.short_path, srcjar.path],
         command = """$1 c $4 META-INF/= $(find -L $2 -type f | while read v; do echo ${v#"${2%$3}"}=$v; done)""",
-        progress_message = "Bundling compiled Scala into srcjar",
+        progress_message = "Bundling compiled Scala into srcjar for %{label}",
         tools = [ctx.executable._zipper],
         execution_requirements = _resolve_execution_reqs(ctx, {}),
     )

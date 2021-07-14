@@ -9,13 +9,13 @@ scala_library(
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",
         "//src/main/scala/higherkindness/rules_scala/common/sbt-testing:common",
-        "@annex//:com_trueaccord_scalapb_scalapb_runtime_2_12",
         "@annex//:net_sourceforge_argparse4j_argparse4j",
         "@annex//:org_scala_sbt_compiler_interface",
         "@annex//:org_scala_sbt_test_interface",
-        "@annex//:org_scala_sbt_zinc_apiinfo_2_12",
-        "@annex//:org_scala_sbt_zinc_core_2_12",
-        "@annex//:org_scala_sbt_zinc_persist_2_12",
+        "@annex//:org_scala_sbt_zinc_apiinfo_2_13",
+        "@annex//:org_scala_sbt_zinc_core_2_13",
+        "@annex//:org_scala_sbt_zinc_persist_2_13",
+        "@annex//:org_scala_sbt_zinc_persist_core_assembly",
     ],
 )
 

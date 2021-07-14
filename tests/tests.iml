@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/coverage" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="java_tools5" level="project" />
+    <orderEntry type="library" name="java_tools4" level="project" />
+    <orderEntry type="library" name="java_tools6" level="project" />
+    <orderEntry type="library" name="java_tools11" level="project" />
+    <orderEntry type="library" name="java_tools7" level="project" />
+    <orderEntry type="library" name="java_tools9" level="project" />
+    <orderEntry type="library" name="java_tools1" level="project" />
+    <orderEntry type="library" name="java_tools3" level="project" />
+    <orderEntry type="library" name="java_tools8" level="project" />
+    <orderEntry type="library" name="java_tools2" level="project" />
+    <orderEntry type="library" name="java_tools" level="project" />
+    <orderEntry type="library" name="java_tools10" level="project" />
+    <orderEntry type="library" name="java_tools12" level="project" />
+  </component>
+</module>
