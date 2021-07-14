@@ -5,9 +5,7 @@ import workers.common.FileUtil
 import java.math.BigInteger
 import java.nio.file.{Files, Path}
 import java.security.MessageDigest
-
-import sbt.internal.inc.Relations
-
+import sbt.internal.inc.{PlainVirtualFile, Relations}
 import xsbti.compile.PerClasspathEntryLookup
 
 sealed trait Dep {
@@ -57,9 +55,13 @@ object Dep {
   def used(deps: Iterable[Dep], relations: Relations, lookup: PerClasspathEntryLookup): Dep => Boolean = {
     val externalDeps = relations.allExternalDeps
     val libraryDeps = relations.allLibraryDeps
+
+    // formatting breaks this code
+    // format: off
     ({
-      case ExternalDep(file, _, _) => externalDeps.exists(lookup.definesClass(file.toFile).apply)
-      case LibraryDep(file)        => libraryDeps(file.toAbsolutePath.toFile)
+      case ExternalDep(file, _, _) => externalDeps.exists(lookup.definesClass(PlainVirtualFile(file)).apply)
+      case LibraryDep(file)        => libraryDeps(PlainVirtualFile(file.toAbsolutePath))
     })
+    // format: on
   }
 }

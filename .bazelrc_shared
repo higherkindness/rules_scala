@@ -6,24 +6,33 @@ build --javacopt="-source 8 -target 8"
 
 build --strategy=ScalaCompile=worker
 build --worker_max_instances=4
-build --worker_sandboxing
+# To re-enable worker sandboxing you will need to revert
+# 037d7440cf3b192b9979ff2f2c1b2c674b433afc
+# But this will cause AnalysisCache files to be included as
+# action inputs. Those files are non-deterministic, so this
+# causes cache misses. We should fix that before reverting
+# that commit.
+#build --worker_sandboxing
 build --verbose_failures
 
 test  --test_output=all
 
-build:rules --disk_cache=.bazel_cache
-build:tests --disk_cache=../.bazel_cache
+# Disabling these in general. Feel free to turn them on during development.
+# Having them on can make testing the rules challenging because, after a clean,
+# you hit the disk cache instead of running actions again.
+#build:rules --disk_cache=.bazel_cache
+#build:tests --disk_cache=../.bazel_cache
 
-# bazel 3.1.0
-common:rules_v3.0 --config=noop
-common:rules_v3.1 --config=noop
+# bazel 4.2.1
+common:rules_v4.1 --config=noop
+common:rules_v4.2 --config=noop
 
 # route potentially unrouted configs to a terminating noop config
 # it's a noop because we use the default value
 common:rules --config=noop
 common:tests --config=noop
-common:v3.0 --config=rules_v3.0
-common:v3.1 --config=rules_v3.1
+common:v4.1 --config=rules_v4.1
+common:v4.2 --config=rules_v4.2
 
 # pick something trivial as a "noop"
 common:noop --logging=3

@@ -5,8 +5,8 @@ trait Functor[F[_]] {
 }
 
 trait EitherInstances {
-  def defaultFunctorForEither[X]: Functor[Either[X, ?]] =
-    new Functor[Either[X, ?]] {
+  def defaultFunctorForEither[X]: Functor[Either[X, *]] =
+    new Functor[Either[X, *]] {
       def map[A, B](fa: Either[X, A])(f: A => B): Either[X, B] =
         fa.map(f)
     }

@@ -12,9 +12,9 @@ scala_binary(
         "@annex//:net_sourceforge_argparse4j_argparse4j",
         "@annex//:org_scala_sbt_compiler_interface",
         "@annex//:org_scala_sbt_util_interface",
-        "@annex//:org_scala_sbt_util_logging_2_12",
-        "@annex//:org_scala_sbt_zinc_2_12",
-        "@annex//:org_scala_sbt_zinc_compile_core_2_12",
+        "@annex//:org_scala_sbt_util_logging_2_13",
+        "@annex//:org_scala_sbt_zinc_2_13",
+        "@annex//:org_scala_sbt_zinc_compile_core_2_13",
     ],
 )
 

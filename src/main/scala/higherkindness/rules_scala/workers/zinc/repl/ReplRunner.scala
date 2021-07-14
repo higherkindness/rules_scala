@@ -6,13 +6,12 @@ import workers.common.CommonArguments.LogLevel
 import workers.common.AnnexLogger
 import workers.common.AnnexScalaInstance
 import workers.common.FileUtil
-
 import java.io.File
 import java.nio.file.{Files, Paths}
 import java.util.Collections
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
-import sbt.internal.inc.ZincUtil
+import sbt.internal.inc.{PlainVirtualFile, PlainVirtualFileConverter, ZincUtil}
 import scala.collection.JavaConverters._
 import xsbti.Logger
 
@@ -87,7 +86,14 @@ object ReplRunner {
       .map(file => runPath.resolve(file.toPath).toFile)
       .toSeq
 
-    val options = Option(replNamespace.getList[String]("compiler_option")).fold[Seq[String]](Nil)(_.asScala).toSeq
-    scalaCompiler.console(compilerClasspath ++ classpath, options, "", "", logger)()
+    val options = Option(replNamespace.getList[String]("compiler_option")).fold[Seq[String]](Nil)(_.asScala.toSeq).toSeq
+    scalaCompiler.console(
+      (compilerClasspath ++ classpath).map(file => PlainVirtualFile(file.toPath)).toSeq,
+      PlainVirtualFileConverter.converter,
+      options,
+      "",
+      "",
+      logger
+    )()
   }
 }

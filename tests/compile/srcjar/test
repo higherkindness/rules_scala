@@ -4,5 +4,5 @@
 zip example.srcjar Example.scala
 bazel build :lib
 diff expected  <(
-    zipinfo -m -T --h-t "$(bazel info bazel-bin)/compile/srcjar/lib.jar"
+   zipinfo -m -T --h-t "$(bazel info bazel-bin)/compile/srcjar/lib.jar"
 )

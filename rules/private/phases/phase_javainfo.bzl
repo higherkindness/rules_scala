@@ -27,12 +27,19 @@ def phase_javainfo(ctx, g):
     if len(ctx.attr.srcs) == 0 and len(ctx.attr.resources) == 0:
         java_info = java_common.merge([g.classpaths.sdeps, sexports])
     else:
-        compile_jar = java_common.run_ijar(
-            ctx.actions,
-            jar = ctx.outputs.jar,
-            target_label = ctx.label,
-            java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
-        )
+        # TODO: why do ijars break Scala 3?
+        # For some yet unknown reason ijars break Scala 3.
+        # Bazel now handles .tasty files, but the Scala 3 test fails to pass
+        # when this ijar is used as the compile jar. My guess is that the
+        # classfile format changed somehow for Scala 3 and Bazel does not yet
+        # handle that.
+        # compile_jar = java_common.run_ijar(
+        #     ctx.actions,
+        #     jar = ctx.outputs.jar,
+        #     target_label = ctx.label,
+        #     java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
+        # )
+        compile_jar = ctx.outputs.jar
 
         source_jar = java_common.pack_sources(
             ctx.actions,

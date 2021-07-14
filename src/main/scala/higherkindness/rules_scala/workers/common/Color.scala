@@ -2,7 +2,7 @@ package higherkindness.rules_scala
 package workers.common
 
 import xsbti.Problem
-import Console.{RED => CR, YELLOW => CY, GREEN => CG, RESET => CRESET}
+import Console.{GREEN => CG, RED => CR, RESET => CRESET, YELLOW => CY}
 
 object Color {
   def Info(problem: Problem): String = colorProblem(problem, CG)

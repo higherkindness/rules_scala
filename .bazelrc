@@ -1,3 +1,3 @@
 common       --config=rules
-common:v3.1 --config=rules_v3.1
+common:v4.2 --config=rules_v4.2
 import %workspace%/.bazelrc_shared
