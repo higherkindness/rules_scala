@@ -136,7 +136,8 @@ def action_singlejar(
         phantom_inputs = depset(),
         main_class = None,
         progress_message = None,
-        resources = {}):
+        resources = {},
+        compression = False):
     # This calls bazels singlejar utility.
     # For a full list of available command line options see:
     # https://github.com/bazelbuild/bazel/blob/master/src/java_tools/singlejar/java/com/google/devtools/build/singlejar/SingleJar.java#L311
@@ -150,6 +151,8 @@ def action_singlejar(
     args = ctx.actions.args()
     args.add("--exclude_build_data")
     args.add("--normalize")
+    if compression:
+        args.add("--compression")
     args.add_all("--sources", inputs)
     args.add_all("--resources", ["{}:{}".format(value.path, key) for key, value in resources.items()])
     args.add("--output", output)

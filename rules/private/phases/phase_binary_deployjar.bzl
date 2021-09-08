@@ -23,4 +23,5 @@ def phase_binary_deployjar(ctx, g):
         main_class = main_class,
         output = ctx.outputs.deploy_jar,
         progress_message = "scala deployable %s" % ctx.label,
+        compression = True,
     )
