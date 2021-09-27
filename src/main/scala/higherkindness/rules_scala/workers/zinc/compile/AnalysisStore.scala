@@ -8,6 +8,7 @@ import java.io.{File, InputStream, OutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
 import java.nio.file.attribute.FileTime
+import java.util.concurrent.ConcurrentHashMap
 import java.util.zip.{GZIPInputStream, GZIPOutputStream}
 import java.util.Optional
 import sbt.internal.inc.binary.converters.{ProtobufReaders, ProtobufWriters}
@@ -289,14 +290,14 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
 object AnxMapper {
   val rootPlaceholder = Paths.get("_ROOT_")
   def mappers(root: Path) = new ReadWriteMappers(new AnxReadMapper(root), new AnxWriteMapper(root))
-  private[this] val stampCache = new scala.collection.mutable.HashMap[Path, (FileTime, Stamp)]
+  private[this] val stampCache = new ConcurrentHashMap[Path, (FileTime, Stamp)]
   def hashStamp(file: Path) = {
     val newTime = Files.getLastModifiedTime(file)
     stampCache.get(file) match {
-      case Some((time, stamp)) if newTime.compareTo(time) <= 0 => stamp
+      case (time, stamp) if newTime.compareTo(time) <= 0 => stamp
       case _ =>
         val stamp = Stamper.forHash(file.toFile)
-        stampCache += (file -> (newTime, stamp))
+        stampCache.put(file, (newTime, stamp))
         stamp
     }
   }
