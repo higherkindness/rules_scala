@@ -325,7 +325,7 @@ Exported jars and their labels.
 ## ScalaConfiguration
 
 <pre>
-ScalaConfiguration(<a href="#ScalaConfiguration-version">version</a>, <a href="#ScalaConfiguration-compiler_classpath">compiler_classpath</a>, <a href="#ScalaConfiguration-runtime_classpath">runtime_classpath</a>, <a href="#ScalaConfiguration-global_plugins">global_plugins</a>, <a href="#ScalaConfiguration-global_scalacopts">global_scalacopts</a>)
+ScalaConfiguration(<a href="#ScalaConfiguration-version">version</a>, <a href="#ScalaConfiguration-compiler_classpath">compiler_classpath</a>, <a href="#ScalaConfiguration-runtime_classpath">runtime_classpath</a>, <a href="#ScalaConfiguration-global_plugins">global_plugins</a>, <a href="#ScalaConfiguration-global_scalacopts">global_scalacopts</a>, <a href="#ScalaConfiguration-use_ijar">use_ijar</a>)
 </pre>
 
 Scala compile-time and runtime configuration
@@ -366,6 +366,12 @@ Scala compile-time and runtime configuration
       <td><code>global_scalacopts</code></td>
       <td>
         <p>Globally enabled compiler options</p>
+      </td>
+    </tr>
+    <tr id="ScalaConfiguration-use_ijar">
+      <td><code>use_ijar</code></td>
+      <td>
+        <p>Whether to use ijars for this Scala compiler</p>
       </td>
     </tr>
   </tbody>

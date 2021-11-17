@@ -40,5 +40,5 @@ scala_library(
 scala_library(
     name = "example-4",
     srcs = ["Example4.scala"],
-    scala = "//scala:3",
+    scala = "//scala:2_13",
 )

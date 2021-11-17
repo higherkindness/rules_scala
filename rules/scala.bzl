@@ -489,6 +489,10 @@ configure_bootstrap_scala = rule(
         "global_scalacopts": attr.string_list(
             doc = "Scalac options that will always be enabled.",
         ),
+        "use_ijar": attr.bool(
+            doc = "Whether to use ijars for this compiler. Scala 3 currently cannot use ijars.",
+            default = True,
+        ),
     },
     implementation = _configure_bootstrap_scala_implementation,
 )
@@ -518,6 +522,10 @@ _configure_zinc_scala = rule(
         "log_level": attr.string(
             doc = "Compiler log level",
             default = "warn",
+        ),
+        "use_ijar": attr.bool(
+            doc = "Whether to use ijars for this compiler. Scala 3 currently cannot use ijars.",
+            default = True,
         ),
         "deps_direct": attr.string(default = "error"),
         "deps_used": attr.string(default = "error"),

@@ -90,6 +90,7 @@ configure_bootstrap_scala(
     name = "bootstrap_3_1_0",
     compiler_classpath = compiler_classpath_3_1_0,
     runtime_classpath = runtime_classpath_3_1_0,
+    use_ijar = False,
     version = "3.1.0",
     visibility = ["//visibility:public"],
 )
@@ -99,6 +100,7 @@ configure_zinc_scala(
     compiler_bridge = "@annex_3//:org_scala_lang_scala3_sbt_bridge_3_1_0",
     compiler_classpath = compiler_classpath_3_1_0,
     runtime_classpath = runtime_classpath_3_1_0,
+    use_ijar = False,
     version = "3.1.0",
     visibility = ["//visibility:public"],
 )
