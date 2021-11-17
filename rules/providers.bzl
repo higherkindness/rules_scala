@@ -12,6 +12,7 @@ ScalaConfiguration = provider(
         "runtime_classpath": "The runtime classpath.",
         "global_plugins": "Globally enabled compiler plugins",
         "global_scalacopts": "Globally enabled compiler options",
+        "use_ijar": "Whether to use ijars for this Scala compiler",
     },
 )
 
@@ -24,6 +25,7 @@ def _declare_scala_configuration_implementation(ctx):
             global_scalacopts = ctx.attr.global_scalacopts,
             runtime_classpath = ctx.attr.runtime_classpath,
             version = ctx.attr.version,
+            use_ijar = ctx.attr.use_ijar,
         ),
     ]
 

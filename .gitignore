@@ -20,3 +20,4 @@ target/
 /.settings
 /.vscode/
 /bazel.iml
+*.iml

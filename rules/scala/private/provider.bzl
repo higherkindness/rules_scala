@@ -21,6 +21,7 @@ def configure_bootstrap_scala_implementation(ctx):
             global_scalacopts = ctx.attr.global_scalacopts,
             runtime_classpath = ctx.attr.runtime_classpath,
             version = ctx.attr.version,
+            use_ijar = ctx.attr.use_ijar,
         ),
         _ScalaRulePhase(
             phases = [
@@ -37,6 +38,7 @@ def configure_zinc_scala_implementation(ctx):
             global_scalacopts = ctx.attr.global_scalacopts,
             runtime_classpath = ctx.attr.runtime_classpath,
             version = ctx.attr.version,
+            use_ijar = ctx.attr.use_ijar,
         ),
         _CodeCoverageConfiguration(
             instrumentation_worker = ctx.attr._code_coverage_instrumentation_worker,

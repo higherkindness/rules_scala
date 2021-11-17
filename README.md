@@ -116,7 +116,7 @@ protobuf_deps()
 # Specify the scala compiler we wish to use; in this case, we'll use the default one specified in rules_scala_annex
 bind(
     name = "default_scala",
-    actual = "@rules_scala_annex//src/main/scala:zinc_2_12_10",
+    actual = "@rules_scala_annex//src/main/scala:zinc_2_13_7",
 )
 ```
 

@@ -23,7 +23,7 @@ scala_library(
     srcs = [":zero_scala_proto"],
     deps = [
         "@annex_test//:com_google_protobuf_protobuf_java",
-        "@annex_test//:com_thesamet_scalapb_lenses_2_12",
-        "@annex_test//:com_thesamet_scalapb_scalapb_runtime_2_12",
+        "@annex_test//:com_thesamet_scalapb_lenses_2_13",
+        "@annex_test//:com_thesamet_scalapb_scalapb_runtime_2_13",
     ],
 )

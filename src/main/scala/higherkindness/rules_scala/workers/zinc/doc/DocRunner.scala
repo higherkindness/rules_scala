@@ -7,7 +7,6 @@ import workers.common.AnnexLogger
 import workers.common.AnnexScalaInstance
 import workers.common.CommonArguments.LogLevel
 import workers.common.FileUtil
-
 import java.io.{File, PrintStream}
 import java.net.URLClassLoader
 import java.nio.file.{Files, NoSuchFileException}
@@ -16,7 +15,7 @@ import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.classpath.ClassLoaderCache
-import sbt.internal.inc.{LoggedReporter, ZincUtil}
+import sbt.internal.inc.{LoggedReporter, PlainVirtualFile, PlainVirtualFileConverter, ZincUtil}
 import scala.collection.JavaConverters._
 import xsbti.Logger
 
@@ -97,8 +96,8 @@ object DocRunner extends WorkerMain[Unit] {
         .getList[File]("source_jars")
         .asScala
         .zipWithIndex
-        .flatMap {
-          case (jar, i) => FileUtil.extractZip(jar.toPath, tmpDir.resolve("src").resolve(i.toString))
+        .flatMap { case (jar, i) =>
+          FileUtil.extractZip(jar.toPath, tmpDir.resolve("src").resolve(i.toString))
         }
         .map(_.toFile)
 
@@ -113,9 +112,17 @@ object DocRunner extends WorkerMain[Unit] {
     val classpath = namespace.getList[File]("classpath").asScala.toSeq
     val output = namespace.get[File]("output_html")
     output.mkdirs()
-    val options = Option(namespace.getList[String]("option")).fold[Seq[String]](Nil)(_.asScala).toSeq
+    val options = Option(namespace.getList[String]("option")).fold[Seq[String]](Nil)(_.asScala.toSeq)
     val reporter = new LoggedReporter(10, logger)
-    scalaCompiler.doc(sources, scalaInstance.libraryJar +: classpath, output, options, logger, reporter)
+    scalaCompiler.doc(
+      sources.map(_.toPath).map(p => new PlainVirtualFile(p)).toSeq,
+      (scalaInstance.libraryJars ++: classpath).map(_.toPath).map(p => new PlainVirtualFile(p)),
+      PlainVirtualFileConverter.converter,
+      output.toPath,
+      options,
+      logger,
+      reporter
+    )
 
     try FileUtil.delete(tmpDir)
     catch { case _: NoSuchFileException => }

@@ -5,7 +5,7 @@
 ## configure_bootstrap_scala
 
 <pre>
-configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a href="#configure_bootstrap_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_bootstrap_scala-global_plugins">global_plugins</a>, <a href="#configure_bootstrap_scala-global_scalacopts">global_scalacopts</a>, <a href="#configure_bootstrap_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_bootstrap_scala-version">version</a>)
+configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a href="#configure_bootstrap_scala-compiler_classpath">compiler_classpath</a>, <a href="#configure_bootstrap_scala-global_plugins">global_plugins</a>, <a href="#configure_bootstrap_scala-global_scalacopts">global_scalacopts</a>, <a href="#configure_bootstrap_scala-runtime_classpath">runtime_classpath</a>, <a href="#configure_bootstrap_scala-use_ijar">use_ijar</a>, <a href="#configure_bootstrap_scala-version">version</a>)
 </pre>
 
 
@@ -55,6 +55,15 @@ configure_bootstrap_scala(<a href="#configure_bootstrap_scala-name">name</a>, <a
       <td><code>runtime_classpath</code></td>
       <td>
         <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a>; required
+      </td>
+    </tr>
+    <tr id="configure_bootstrap_scala-use_ijar">
+      <td><code>use_ijar</code></td>
+      <td>
+        Boolean; optional
+        <p>
+          Whether to use ijars for this compiler. Scala 3 currently cannot use ijars.
+        </p>
       </td>
     </tr>
     <tr id="configure_bootstrap_scala-version">

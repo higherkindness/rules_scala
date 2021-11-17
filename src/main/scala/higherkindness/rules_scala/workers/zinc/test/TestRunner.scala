@@ -20,7 +20,7 @@ import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
 import org.scalatools.testing.Framework
 import sbt.internal.inc.binary.converters.ProtobufReaders
-import sbt.internal.inc.schema
+import sbt.internal.inc.Schema
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
 import xsbti.compile.analysis.ReadMapper
@@ -122,17 +122,18 @@ object TestRunner {
 
     val sharedUrls = classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL)
 
-    val classLoader = ClassLoaders.sbtTestClassLoader(classpath.map(_.toUri.toURL))
-    val sharedClassLoader = ClassLoaders.sbtTestClassLoader(classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL))
+    val classLoader = ClassLoaders.sbtTestClassLoader(classpath.map(_.toUri.toURL).toSeq)
+    val sharedClassLoader =
+      ClassLoaders.sbtTestClassLoader(classpath.filter(sharedClasspath.toSet).map(_.toUri.toURL).toSeq)
 
     val apisFile = runPath.resolve(testNamespace.get[File]("apis").toPath)
     val apisStream = Files.newInputStream(apisFile)
     val apis =
       try {
         val raw =
-          try schema.APIs.parseFrom(new GZIPInputStream(apisStream))
+          try Schema.APIs.parseFrom(new GZIPInputStream(apisStream))
           finally apisStream.close()
-        new ProtobufReaders(ReadMapper.getEmptyMapper, schema.Version.V1).fromApis(shouldStoreApis = true)(raw)
+        new ProtobufReaders(ReadMapper.getEmptyMapper, Schema.Version.V1_1).fromApis(shouldStoreApis = true)(raw)
       } catch {
         case NonFatal(e) => throw new Exception(s"Failed to load APIs from $apisFile", e)
       }
@@ -171,8 +172,13 @@ object TestRunner {
             new ClassLoaderTestRunner(framework, classLoaderProvider, logger)
           case "process" =>
             val executable = runPath.resolve(testNamespace.get[File]("subprocess_exec").toPath)
-            val arguments = Option(namespace.getList[String]("subprocess_arg")).fold[Seq[String]](Nil)(_.asScala)
-            new ProcessTestRunner(framework, classpath, new ProcessCommand(executable.toString, arguments), logger)
+            val arguments = Option(namespace.getList[String]("subprocess_arg")).fold[Seq[String]](Nil)(_.asScala.toSeq)
+            new ProcessTestRunner(
+              framework,
+              classpath.toSeq,
+              new ProcessCommand(executable.toString, arguments),
+              logger
+            )
           case "none" => new BasicTestRunner(framework, classLoader, logger)
         }
         val testFrameworkArguments =

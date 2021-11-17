@@ -5,7 +5,7 @@ scala_test(
     srcs = [
         "TestAll.scala",
     ],
-    scala = "//scala:2_12",
+    scala = "//scala:2_13",
     runtime_deps = [
         "@hamcrest_core//jar",
         "@junit_interface//jar",
@@ -35,7 +35,7 @@ scala_library(
     srcs = [
         "A1.scala",
     ],
-    scala = "//scala:2_12",
+    scala = "//scala:2_13",
     deps = [
         ":b1",
     ],
@@ -46,7 +46,7 @@ scala_library(
     srcs = [
         "B1.scala",
     ],
-    scala = "//scala:2_12",
+    scala = "//scala:2_13",
 )
 
 scala_library(
@@ -54,7 +54,7 @@ scala_library(
     srcs = [
         "A2.scala",
     ],
-    scala = "//scala:2_12",
+    scala = "//scala:2_13",
     deps = [
         ":b2",
     ],
@@ -84,5 +84,5 @@ scala_library(
     srcs = [
         "C2.scala",
     ],
-    scala = "//scala:2_12",
+    scala = "//scala:2_13",
 )

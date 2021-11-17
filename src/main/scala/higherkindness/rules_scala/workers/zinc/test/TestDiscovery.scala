@@ -6,7 +6,7 @@ import common.sbt_testing.TestDefinition
 import common.sbt_testing.TestSubclassFingerprint
 
 import sbt.testing.{AnnotatedFingerprint, Fingerprint, Framework, SubclassFingerprint, SuiteSelector}
-import scala.collection.{breakOut, mutable}
+import scala.collection.mutable
 import xsbt.api.Discovery
 import xsbti.api.{AnalyzedClass, ClassLike, Definition}
 
@@ -29,7 +29,7 @@ class TestDiscovery(framework: Framework) {
   }
 
   private[this] def discover(definitions: Seq[Definition]) =
-    Discovery(subclassPrints.map(_.superclassName)(breakOut), annotatedPrints.map(_.annotationName)(breakOut))(
+    Discovery(subclassPrints.map(_.superclassName), annotatedPrints.map(_.annotationName))(
       definitions
     )
 

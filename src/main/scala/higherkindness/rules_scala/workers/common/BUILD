@@ -9,7 +9,7 @@ scala_library(
     deps = [
         "//src/main/scala/higherkindness/rules_scala/common/args",
         "@annex//:net_sourceforge_argparse4j_argparse4j",
-        "@annex//:org_scala_sbt_zinc_2_12",
+        "@annex//:org_scala_sbt_zinc_2_13",
     ],
 )
 

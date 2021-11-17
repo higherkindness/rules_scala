@@ -8,7 +8,7 @@ import java.util.Collections
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
 import net.sourceforge.argparse4j.inf.ArgumentParser
-import protocbridge.ProtocBridge
+import protocbridge.{ProtocBridge, ProtocRunner}
 import scala.collection.JavaConverters._
 import scalapb.ScalaPbCodeGenerator
 
@@ -40,12 +40,21 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
     val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
 
-    val params = s"--scala_out=$scalaOut" :: sources.map(_.getPath)
+    val params = List(s"--scala_out=$scalaOut")
+      ::: sources.map(source => s"--proto_path=${source.getParent.toString}")
+      ::: sources.map(_.getPath.toString)
+
+    class MyProtocRunner[ExitCode] extends ProtocRunner[Int] {
+      def run(args: Seq[String], extraEnv: Seq[(String, String)]): Int = {
+        com.github.os72.protocjar.Protoc.runProtoc(args.toArray)
+      }
+    }
 
     ProtocBridge.runWithGenerators(
-      protoc = a => com.github.os72.protocjar.Protoc.runProtoc(a.toArray),
+      new MyProtocRunner,
       namedGenerators = List("scala" -> ScalaPbCodeGenerator),
-      params = params)
+      params = params
+    )
   }
 
 }

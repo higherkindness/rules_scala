@@ -3,12 +3,12 @@ package annex.scalafmt
 import higherkindness.rules_scala.common.worker.WorkerMain
 import higherkindness.rules_scala.workers.common.Color
 import java.io.{File, PrintStream}
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.Arguments
 import org.scalafmt.Scalafmt
 import org.scalafmt.config.Config
-import org.scalafmt.util.FileOps
+import org.scalafmt.sysops.FileOps
 import scala.annotation.tailrec
 import scala.io.Codec
 
@@ -25,9 +25,9 @@ object ScalafmtRunner extends WorkerMain[Unit] {
 
     val namespace = parser.parseArgsOrFail(args)
 
-    val source = FileOps.readFile(namespace.get[File]("input"))(Codec.UTF8)
+    val source = FileOps.readFile(namespace.get[File]("input").toPath())(Codec.UTF8)
 
-    val config = Config.fromHoconFile(namespace.get[File]("config")).get
+    val config = Config.fromHoconFile(namespace.get[File]("config").toPath()).get
     @tailrec
     def format(code: String): String = {
       val formatted = Scalafmt.format(code, config).get

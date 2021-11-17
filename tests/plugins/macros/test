@@ -1,6 +1,9 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
-bazel build :bad_compile 2>&1 | grep 'You may be missing a `macro = True` attribute.'
+# TODO: Re-enable this test once Scala 3 works with ijars
+# macro = True makes you use full jars, and we're doing that
+# all the time now because Scala 3 +ijar breaks. So this always passes
+#bazel build :bad_compile 2>&1 | grep 'You may be missing a `macro = True` attribute.'
 [ "$(bazel run :test_macro)" = "hello world!" ]
 [ "$(bazel run :test_macro_only)" = $'hello world!\nworld hello!' ]

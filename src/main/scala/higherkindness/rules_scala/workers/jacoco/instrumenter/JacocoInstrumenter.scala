@@ -3,9 +3,7 @@ package workers.jacoco.instrumenter
 
 import common.args.implicits._
 import common.worker.WorkerMain
-
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
+import java.io.{BufferedInputStream, BufferedOutputStream, PrintStream}
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.FileSystems
@@ -38,7 +36,7 @@ object JacocoInstrumenter extends WorkerMain[Unit] {
 
   override def init(args: Option[Array[String]]): Unit = ()
 
-  override def work(ctx: Unit, args: Array[String]): Unit = {
+  override def work(ctx: Unit, args: Array[String], out: PrintStream): Unit = {
     val namespace = argParser.parseArgs(args)
 
     val pathPairs: List[(Path, Path)] = namespace
@@ -56,35 +54,34 @@ object JacocoInstrumenter extends WorkerMain[Unit] {
 
     val jacoco = new Instrumenter(new OfflineInstrumentationAccessGenerator)
 
-    pathPairs.foreach {
-      case (inPath, outPath) =>
-        val inFS = FileSystems.newFileSystem(inPath, null)
-        val outFS =
-          FileSystems.newFileSystem(URI.create("jar:" + outPath.toUri), Collections.singletonMap("create", "true"))
+    pathPairs.foreach { case (inPath, outPath) =>
+      val inFS = FileSystems.newFileSystem(inPath, null)
+      val outFS =
+        FileSystems.newFileSystem(URI.create("jar:" + outPath.toUri), Collections.singletonMap("create", "true"))
 
-        val roots = inFS.getRootDirectories.asScala.toList
-        val instrumentVisitor = new SimpleFileVisitor[Path] {
-          override def visitFile(inPath: Path, attrs: BasicFileAttributes): FileVisitResult = {
-            val outPath = outFS.getPath(inPath.toString)
-            Files.createDirectories(outPath.getParent)
-            if (inPath.toString.endsWith(".class")) {
-              val inStream = new BufferedInputStream(Files.newInputStream(inPath))
-              val outStream = new BufferedOutputStream(Files.newOutputStream(outPath, StandardOpenOption.CREATE_NEW))
-              jacoco.instrument(inStream, outStream, inPath.toString)
-              inStream.close()
-              outStream.close()
-              Files.copy(inPath, outFS.getPath(outPath.toString + ".uninstrumented"))
-            } else {
-              Files.copy(inPath, outPath)
-            }
-            FileVisitResult.CONTINUE
+      val roots = inFS.getRootDirectories.asScala.toList
+      val instrumentVisitor = new SimpleFileVisitor[Path] {
+        override def visitFile(inPath: Path, attrs: BasicFileAttributes): FileVisitResult = {
+          val outPath = outFS.getPath(inPath.toString)
+          Files.createDirectories(outPath.getParent)
+          if (inPath.toString.endsWith(".class")) {
+            val inStream = new BufferedInputStream(Files.newInputStream(inPath))
+            val outStream = new BufferedOutputStream(Files.newOutputStream(outPath, StandardOpenOption.CREATE_NEW))
+            jacoco.instrument(inStream, outStream, inPath.toString)
+            inStream.close()
+            outStream.close()
+            Files.copy(inPath, outFS.getPath(outPath.toString + ".uninstrumented"))
+          } else {
+            Files.copy(inPath, outPath)
           }
+          FileVisitResult.CONTINUE
         }
+      }
 
-        roots.foreach(Files.walkFileTree(_, instrumentVisitor))
+      roots.foreach(Files.walkFileTree(_, instrumentVisitor))
 
-        inFS.close()
-        outFS.close()
+      inFS.close()
+      outFS.close()
     }
 
   }

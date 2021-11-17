@@ -21,7 +21,6 @@ final class Plugin(override val global: Global) extends NscPlugin {
         val global = Plugin.this.global
         def apply(unit: PluginComponent.global.CompilationUnit): Unit = {
           println("scalac plugin phase success")
-          System.exit(0)
         }
       }
   }
