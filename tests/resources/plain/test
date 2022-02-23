@@ -2,11 +2,11 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :plain
-diff expected_plain <(
-    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/plain.jar"
+diff <(sort expected_plain) <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/plain.jar" | sort
 )
 
 bazel build :merged
-diff expected_merged <(
-    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/merged.jar"
+diff <(sort expected_merged) <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/plain/merged.jar" | sort
 )
