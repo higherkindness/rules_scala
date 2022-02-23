@@ -2,6 +2,6 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :maven
-diff expected <(
-    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/maven/maven.jar"
+diff <(sort expected) <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/maven/maven.jar" | sort
 )

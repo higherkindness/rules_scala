@@ -11,9 +11,10 @@ jobs:
     env:
       BAZEL_VERSION: ${{ matrix.bazel_version }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-18.04, macos-10.15]
-        bazel_version: [4.1.0, 4.2.1]
+        os: [ubuntu-20.04, macos-10.15]
+        bazel_version: [4.1.0, 4.2.1, 5.0.0]
     steps:
       - uses: actions/checkout@v2
       - run: ./scripts/ci.sh build

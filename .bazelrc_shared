@@ -3,6 +3,7 @@ common --color=yes
 
 build --experimental_strict_action_env
 build --javacopt="-source 8 -target 8"
+build --incompatible_java_common_parameters=false
 
 build --strategy=ScalaCompile=worker
 build --worker_max_instances=4
@@ -26,6 +27,7 @@ test  --test_output=all
 # bazel 4.2.1
 common:rules_v4.1 --config=noop
 common:rules_v4.2 --config=noop
+common:rules_v5.0 --config=noop
 
 # route potentially unrouted configs to a terminating noop config
 # it's a noop because we use the default value
@@ -33,6 +35,7 @@ common:rules --config=noop
 common:tests --config=noop
 common:v4.1 --config=rules_v4.1
 common:v4.2 --config=rules_v4.2
+common:v5.0 --config=rules_v5.0
 
 # pick something trivial as a "noop"
 common:noop --logging=3

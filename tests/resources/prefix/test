@@ -2,8 +2,8 @@
 . "$(dirname "$0")"/../../common.sh
 
 bazel build :prefix
-diff expected <(
-    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/prefix/prefix.jar"
+diff <(sort expected) <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/resources/prefix/prefix.jar" | sort
 )
 
 ! bazel build :outside

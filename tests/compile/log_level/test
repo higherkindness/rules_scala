@@ -1,6 +1,7 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
+bazel clean
 bazel build :lib > output 2>&1
 
 cat output | grep "compiling 1 Scala source"

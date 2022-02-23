@@ -3,6 +3,6 @@
 
 bazel build :TestBinary_deploy.jar
 
-diff expected <(
-    zipinfo -m -T --h-t "$(bazel info bazel-bin)/deployjar/TestBinary_deploy.jar"
+diff <(sort expected) <(
+    zipinfo -m -T --h-t "$(bazel info bazel-bin)/deployjar/TestBinary_deploy.jar" | sort
 )

@@ -52,11 +52,13 @@ def scala_import_implementation(ctx):
         #     java_toolchain = ctx.attr._java_toolchain,
         # )
 
+        source_jar_name = output_jar.basename[:-len(output_jar.extension)] + "-src.jar"
+        output_source_jar = ctx.actions.declare_file(source_jar_name)
+
         source_jar = java_common.pack_sources(
             ctx.actions,
-            output_jar = output_jar,
+            output_source_jar = output_source_jar,
             source_jars = _src_jar,
-            host_javabase = find_java_runtime_toolchain(ctx, ctx.attr._host_javabase),
             java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
         )
 
@@ -89,6 +91,6 @@ def create_intellij_info(label, deps, java_info):
         outputs = java_info.outputs,
         transitive_exports = depset(
             [label],
-            transitive = [(dep[_IntellijInfo] if _IntellijInfo in dep else dep[JavaInfo]).transitive_exports for dep in deps],
+            transitive = [dep[_IntellijInfo].transitive_exports for dep in deps if _IntellijInfo in dep],
         ),
     )

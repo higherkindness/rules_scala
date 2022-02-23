@@ -15,7 +15,7 @@ abs_path() {
 workspace=$(cd $(dirname "$0")/..; pwd)
 root_workspace=$(cd $(dirname $(abs_path "$0"))/..; pwd)
 
-default_bazel_version='4.2.1'
+default_bazel_version='5.0.0'
 
 if [ -z "$BAZEL_VERSION" ]; then
     bazel_version="$default_bazel_version"
@@ -35,6 +35,10 @@ case "$bazel_version" in
     '4.2.1')
         darwin_sha='967189ebadd6b65b1dd25464fdd4d2fcff7a00e0b776be425b19e283432d7862'
         linux_sha='35f398ad93af2b5eadd4b6b4fd4d4803b726029e572f40c4e1fe736db3de944b'
+        ;;
+    '5.0.0')
+        darwin_sha='f7e8d1eac85ec125c430f9553e35d522c057895262956201ccea8a27d87054cc'
+        linux_sha='42cfb37d2834d075996b9d02698674be7f322f0acd864b17c3191301329845f9'
         ;;
     *)
         echo "The requested Bazel version '$bazel_version' is not supported"
