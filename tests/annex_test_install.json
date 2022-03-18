@@ -35,12 +35,12 @@
                 "coord": "com.thesamet.scalapb:lenses_2.13:0.11.4",
                 "file": "v1/https/repo.maven.apache.org/maven2/com/thesamet/scalapb/lenses_2.13/0.11.4/lenses_2.13-0.11.4.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.scala-lang.modules:scala-collection-compat_2.13:2.4.4"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-collection-compat_2.13:2.4.4",
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/lenses_2.13/0.11.4/lenses_2.13-0.11.4.jar",
                 "mirror_urls": [
@@ -54,12 +54,12 @@
                 "coord": "com.thesamet.scalapb:lenses_2.13:jar:sources:0.11.4",
                 "file": "v1/https/repo.maven.apache.org/maven2/com/thesamet/scalapb/lenses_2.13/0.11.4/lenses_2.13-0.11.4-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.scala-lang.modules:scala-collection-compat_2.13:jar:sources:2.4.4"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-collection-compat_2.13:jar:sources:2.4.4",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/lenses_2.13/0.11.4/lenses_2.13-0.11.4-sources.jar",
                 "mirror_urls": [
@@ -75,14 +75,14 @@
                 "directDependencies": [
                     "com.google.protobuf:protobuf-java:3.15.8",
                     "com.thesamet.scalapb:lenses_2.13:0.11.4",
-                    "org.scala-lang:scala-library:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.scala-lang.modules:scala-collection-compat_2.13:2.4.4"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-collection-compat_2.13:2.4.4",
                     "com.thesamet.scalapb:lenses_2.13:0.11.4",
-                    "com.google.protobuf:protobuf-java:3.15.8",
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8",
+                    "com.google.protobuf:protobuf-java:3.15.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/scalapb-runtime_2.13/0.11.4/scalapb-runtime_2.13-0.11.4.jar",
                 "mirror_urls": [
@@ -98,14 +98,14 @@
                 "directDependencies": [
                     "com.google.protobuf:protobuf-java:jar:sources:3.15.8",
                     "com.thesamet.scalapb:lenses_2.13:jar:sources:0.11.4",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.scala-lang.modules:scala-collection-compat_2.13:jar:sources:2.4.4"
                 ],
                 "dependencies": [
                     "com.google.protobuf:protobuf-java:jar:sources:3.15.8",
                     "org.scala-lang.modules:scala-collection-compat_2.13:jar:sources:2.4.4",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "com.thesamet.scalapb:lenses_2.13:jar:sources:0.11.4"
+                    "com.thesamet.scalapb:lenses_2.13:jar:sources:0.11.4",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/scalapb-runtime_2.13/0.11.4/scalapb-runtime_2.13-0.11.4-sources.jar",
                 "mirror_urls": [
@@ -116,65 +116,65 @@
                 "sha256": "169a8d68b376b8fc34e6812315c714408894b5c92eea1f0672d68f8479be9719"
             },
             {
-                "coord": "net.java.dev.jna:jna:5.8.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0.jar",
+                "coord": "net.java.dev.jna:jna:5.9.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0.jar",
+                "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0.jar"
+                    "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0.jar"
                 ],
-                "sha256": "930273cc1c492f25661ea62413a6da3fd7f6e01bf1c4dcc0817fc8696a7b07ac"
+                "sha256": "eafcc780b445434d3c5ae7fa2fb6665de1a7560d537d2c408a8e80cd14d27161"
             },
             {
-                "coord": "net.java.dev.jna:jna:jar:sources:5.8.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0-sources.jar",
+                "coord": "net.java.dev.jna:jna:jar:sources:5.9.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0-sources.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/net/java/dev/jna/jna/5.8.0/jna-5.8.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/net/java/dev/jna/jna/5.9.0/jna-5.9.0-sources.jar"
                 ],
-                "sha256": "4616cf507a47462ea5ec04654778d2e41624e21db7f41188cc553e8dce1123da"
+                "sha256": "577ee7ca6f762e38c068ab2989b1e9fc687063b39432d9d4417a17c7f2210ba7"
             },
             {
-                "coord": "org.jline:jline:3.20.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/jline/jline/3.20.0/jline-3.20.0.jar",
+                "coord": "org.jline:jline:3.21.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/jline/jline/3.21.0/jline-3.21.0.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/jline/jline/3.20.0/jline-3.20.0.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/jline/jline/3.21.0/jline-3.21.0.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/jline/jline/3.20.0/jline-3.20.0.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/jline/jline/3.20.0/jline-3.20.0.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/jline/jline/3.20.0/jline-3.20.0.jar"
+                    "https://repo.maven.apache.org/maven2/org/jline/jline/3.21.0/jline-3.21.0.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/jline/jline/3.21.0/jline-3.21.0.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/jline/jline/3.21.0/jline-3.21.0.jar"
                 ],
-                "sha256": "e2ee4b0bd3a2248f9ec6cf33f7d5b97e34ae652aecd3f42e13bded91f0df6bb6"
+                "sha256": "1e7d63a2bd1c26354ca1987e55469ea4327c4a3845c10d7a7790ca9729c49c02"
             },
             {
-                "coord": "org.jline:jline:jar:sources:3.20.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/jline/jline/3.20.0/jline-3.20.0-sources.jar",
+                "coord": "org.jline:jline:jar:sources:3.21.0",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/jline/jline/3.21.0/jline-3.21.0-sources.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/jline/jline/3.20.0/jline-3.20.0-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/jline/jline/3.21.0/jline-3.21.0-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/jline/jline/3.20.0/jline-3.20.0-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/jline/jline/3.20.0/jline-3.20.0-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/jline/jline/3.20.0/jline-3.20.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/jline/jline/3.21.0/jline-3.21.0-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/jline/jline/3.21.0/jline-3.21.0-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/jline/jline/3.21.0/jline-3.21.0-sources.jar"
                 ],
-                "sha256": "a5f4e22980912dbaee4c62f90235250d21e5b692b61cf5e8f6b78e73052ce439"
+                "sha256": "9d1f5958a0cff8f0b1729cd10b3bbe71d2587a0ec9537ece87cca45d21ba3db3"
             },
             {
                 "coord": "org.portable-scala:portable-scala-reflect_2.13:1.1.1",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.13/1.1.1/portable-scala-reflect_2.13-1.1.1.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.13/1.1.1/portable-scala-reflect_2.13-1.1.1.jar",
                 "mirror_urls": [
@@ -188,10 +188,10 @@
                 "coord": "org.portable-scala:portable-scala-reflect_2.13:jar:sources:1.1.1",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.13/1.1.1/portable-scala-reflect_2.13-1.1.1-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/portable-scala/portable-scala-reflect_2.13/1.1.1/portable-scala-reflect_2.13-1.1.1-sources.jar",
                 "mirror_urls": [
@@ -205,10 +205,10 @@
                 "coord": "org.scala-lang.modules:scala-collection-compat_2.13:2.4.4",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-collection-compat_2.13/2.4.4/scala-collection-compat_2.13-2.4.4.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-collection-compat_2.13/2.4.4/scala-collection-compat_2.13-2.4.4.jar",
                 "mirror_urls": [
@@ -222,10 +222,10 @@
                 "coord": "org.scala-lang.modules:scala-collection-compat_2.13:jar:sources:2.4.4",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-collection-compat_2.13/2.4.4/scala-collection-compat_2.13-2.4.4-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-collection-compat_2.13/2.4.4/scala-collection-compat_2.13-2.4.4-sources.jar",
                 "mirror_urls": [
@@ -239,10 +239,10 @@
                 "coord": "org.scala-lang.modules:scala-parser-combinators_2.13:2.0.0",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.13/2.0.0/scala-parser-combinators_2.13-2.0.0.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.13/2.0.0/scala-parser-combinators_2.13-2.0.0.jar",
                 "mirror_urls": [
@@ -256,10 +256,10 @@
                 "coord": "org.scala-lang.modules:scala-parser-combinators_2.13:jar:sources:2.0.0",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.13/2.0.0/scala-parser-combinators_2.13-2.0.0-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.13/2.0.0/scala-parser-combinators_2.13-2.0.0-sources.jar",
                 "mirror_urls": [
@@ -273,10 +273,10 @@
                 "coord": "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.13/2.0.0/scala-xml_2.13-2.0.0.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.13/2.0.0/scala-xml_2.13-2.0.0.jar",
                 "mirror_urls": [
@@ -290,10 +290,10 @@
                 "coord": "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.13/2.0.0/scala-xml_2.13-2.0.0-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.13/2.0.0/scala-xml_2.13-2.0.0-sources.jar",
                 "mirror_urls": [
@@ -304,110 +304,110 @@
                 "sha256": "7b9ad53f7cd785364dc8b4e2be73ec92f5bb6f954411086b24a57c8afde29f1f"
             },
             {
-                "coord": "org.scala-lang:scala-compiler:2.13.7",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7.jar",
+                "coord": "org.scala-lang:scala-compiler:2.13.8",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8.jar",
                 "directDependencies": [
-                    "net.java.dev.jna:jna:5.8.0",
-                    "org.jline:jline:3.20.0",
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "net.java.dev.jna:jna:5.9.0",
+                    "org.jline:jline:3.21.0",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-reflect:2.13.7",
-                    "org.jline:jline:3.20.0",
-                    "org.scala-lang:scala-library:2.13.7",
-                    "net.java.dev.jna:jna:5.8.0"
+                    "net.java.dev.jna:jna:5.9.0",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.jline:jline:3.21.0"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8.jar"
                 ],
-                "sha256": "a450602f03a4686919e60d1aeced549559f1eaffbaf30ffa7987c8d97e3e79a9"
+                "sha256": "b248cb6f390ee8bceb912af3da471146fdf003702a173d750f986b1d4a3362e6"
             },
             {
-                "coord": "org.scala-lang:scala-compiler:jar:sources:2.13.7",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7-sources.jar",
+                "coord": "org.scala-lang:scala-compiler:jar:sources:2.13.8",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8-sources.jar",
                 "directDependencies": [
-                    "net.java.dev.jna:jna:jar:sources:5.8.0",
-                    "org.jline:jline:jar:sources:3.20.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "net.java.dev.jna:jna:jar:sources:5.9.0",
+                    "org.jline:jline:jar:sources:3.21.0",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.jline:jline:jar:sources:3.20.0",
-                    "net.java.dev.jna:jna:jar:sources:5.8.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "net.java.dev.jna:jna:jar:sources:5.9.0",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
+                    "org.jline:jline:jar:sources:3.21.0"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.13.7/scala-compiler-2.13.7-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8-sources.jar"
                 ],
-                "sha256": "82c1d72391586cf7e6e577a5071b0768d175316da3ee3577599c33ceba60c34b"
+                "sha256": "8d34c24b4e620beb0ce4d96ca59c45107b73567a546ac5b758ce28e891526308"
             },
             {
-                "coord": "org.scala-lang:scala-library:2.13.7",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7.jar",
+                "coord": "org.scala-lang:scala-library:2.13.8",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar"
                 ],
-                "sha256": "a8bc08f3b9ff93d0496032bf2677163071b8d212992f41dbf04212e07d91616b"
+                "sha256": "a0882b82514190c2bac7d1a459872a75f005fc0f3e88b2bc0390367146e35db7"
             },
             {
-                "coord": "org.scala-lang:scala-library:jar:sources:2.13.7",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7-sources.jar",
+                "coord": "org.scala-lang:scala-library:jar:sources:2.13.8",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8-sources.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.7/scala-library-2.13.7-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8-sources.jar"
                 ],
-                "sha256": "172c770647995799674e77b658cdea3fe056c6f4e1bd9c9a84e9a8c5c4e12472"
+                "sha256": "fcfbdb5fa409a10c0b0af775382d19cd648663e325a6cd5212f0fed00af31824"
             },
             {
-                "coord": "org.scala-lang:scala-reflect:2.13.7",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7.jar",
+                "coord": "org.scala-lang:scala-reflect:2.13.8",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8.jar"
                 ],
-                "sha256": "a7bc4eca6970083d426a8d081aec313c7b7207d5f83b6724995e34078edc5cbb"
+                "sha256": "fdfbcc92e87f424578b303bcb47e0f55fee990c4b6da0006c9e75879d1e442e4"
             },
             {
-                "coord": "org.scala-lang:scala-reflect:jar:sources:2.13.7",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7-sources.jar",
+                "coord": "org.scala-lang:scala-reflect:jar:sources:2.13.8",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.7/scala-reflect-2.13.7-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8-sources.jar"
                 ],
-                "sha256": "5a328867619b13ef62030f41d98e7737ea4069ae77c113ef328859b30c5246d7"
+                "sha256": "e5c7fb7de045c8b390b89e0a1f74d522b54dcd2268bb4cbe6e18fe75ffca90f2"
             },
             {
                 "coord": "org.scala-sbt:compiler-interface:1.5.7",
@@ -499,12 +499,12 @@
                 "coord": "org.scalacheck:scalacheck_2.13:1.15.4",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalacheck/scalacheck_2.13/1.15.4/scalacheck_2.13-1.15.4.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.scala-sbt:test-interface:1.0"
                 ],
                 "dependencies": [
                     "org.scala-sbt:test-interface:1.0",
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalacheck/scalacheck_2.13/1.15.4/scalacheck_2.13-1.15.4.jar",
                 "mirror_urls": [
@@ -518,12 +518,12 @@
                 "coord": "org.scalacheck:scalacheck_2.13:jar:sources:1.15.4",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalacheck/scalacheck_2.13/1.15.4/scalacheck_2.13-1.15.4-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.scala-sbt:test-interface:jar:sources:1.0"
                 ],
                 "dependencies": [
                     "org.scala-sbt:test-interface:jar:sources:1.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalacheck/scalacheck_2.13/1.15.4/scalacheck_2.13-1.15.4-sources.jar",
                 "mirror_urls": [
@@ -537,12 +537,12 @@
                 "coord": "org.scalactic:scalactic_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalactic/scalactic_2.13/3.2.9/scalactic_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-reflect:2.13.7",
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalactic/scalactic_2.13/3.2.9/scalactic_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -556,12 +556,12 @@
                 "coord": "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalactic/scalactic_2.13/3.2.9/scalactic_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalactic/scalactic_2.13/3.2.9/scalactic_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -601,18 +601,18 @@
                 "coord": "org.scalatest:scalatest-core_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-core_2.13/3.2.9/scalatest-core_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-core_2.13/3.2.9/scalatest-core_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -627,17 +627,17 @@
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-core_2.13/3.2.9/scalatest-core_2.13-3.2.9-sources.jar",
                 "directDependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-core_2.13/3.2.9/scalatest-core_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -651,17 +651,17 @@
                 "coord": "org.scalatest:scalatest-diagrams_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-diagrams_2.13/3.2.9/scalatest-diagrams_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-diagrams_2.13/3.2.9/scalatest-diagrams_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -675,17 +675,17 @@
                 "coord": "org.scalatest:scalatest-diagrams_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-diagrams_2.13/3.2.9/scalatest-diagrams_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-diagrams_2.13/3.2.9/scalatest-diagrams_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -699,17 +699,17 @@
                 "coord": "org.scalatest:scalatest-featurespec_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-featurespec_2.13/3.2.9/scalatest-featurespec_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-featurespec_2.13/3.2.9/scalatest-featurespec_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -723,17 +723,17 @@
                 "coord": "org.scalatest:scalatest-featurespec_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-featurespec_2.13/3.2.9/scalatest-featurespec_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-featurespec_2.13/3.2.9/scalatest-featurespec_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -747,17 +747,17 @@
                 "coord": "org.scalatest:scalatest-flatspec_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-flatspec_2.13/3.2.9/scalatest-flatspec_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-flatspec_2.13/3.2.9/scalatest-flatspec_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -771,17 +771,17 @@
                 "coord": "org.scalatest:scalatest-flatspec_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-flatspec_2.13/3.2.9/scalatest-flatspec_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-flatspec_2.13/3.2.9/scalatest-flatspec_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -795,17 +795,17 @@
                 "coord": "org.scalatest:scalatest-freespec_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-freespec_2.13/3.2.9/scalatest-freespec_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-freespec_2.13/3.2.9/scalatest-freespec_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -819,17 +819,17 @@
                 "coord": "org.scalatest:scalatest-freespec_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-freespec_2.13/3.2.9/scalatest-freespec_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-freespec_2.13/3.2.9/scalatest-freespec_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -843,17 +843,17 @@
                 "coord": "org.scalatest:scalatest-funspec_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-funspec_2.13/3.2.9/scalatest-funspec_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funspec_2.13/3.2.9/scalatest-funspec_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -867,17 +867,17 @@
                 "coord": "org.scalatest:scalatest-funspec_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-funspec_2.13/3.2.9/scalatest-funspec_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funspec_2.13/3.2.9/scalatest-funspec_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -891,17 +891,17 @@
                 "coord": "org.scalatest:scalatest-funsuite_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-funsuite_2.13/3.2.9/scalatest-funsuite_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funsuite_2.13/3.2.9/scalatest-funsuite_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -915,17 +915,17 @@
                 "coord": "org.scalatest:scalatest-funsuite_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-funsuite_2.13/3.2.9/scalatest-funsuite_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funsuite_2.13/3.2.9/scalatest-funsuite_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -939,17 +939,17 @@
                 "coord": "org.scalatest:scalatest-matchers-core_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-matchers-core_2.13/3.2.9/scalatest-matchers-core_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-matchers-core_2.13/3.2.9/scalatest-matchers-core_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -963,17 +963,17 @@
                 "coord": "org.scalatest:scalatest-matchers-core_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-matchers-core_2.13/3.2.9/scalatest-matchers-core_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-matchers-core_2.13/3.2.9/scalatest-matchers-core_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -987,17 +987,17 @@
                 "coord": "org.scalatest:scalatest-mustmatchers_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-mustmatchers_2.13/3.2.9/scalatest-mustmatchers_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-matchers-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.scalatest:scalatest-matchers-core_2.13:3.2.9"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-mustmatchers_2.13/3.2.9/scalatest-mustmatchers_2.13-3.2.9.jar",
@@ -1012,18 +1012,18 @@
                 "coord": "org.scalatest:scalatest-mustmatchers_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-mustmatchers_2.13/3.2.9/scalatest-mustmatchers_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-matchers-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-matchers-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-mustmatchers_2.13/3.2.9/scalatest-mustmatchers_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -1037,17 +1037,17 @@
                 "coord": "org.scalatest:scalatest-propspec_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-propspec_2.13/3.2.9/scalatest-propspec_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-propspec_2.13/3.2.9/scalatest-propspec_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -1061,17 +1061,17 @@
                 "coord": "org.scalatest:scalatest-propspec_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-propspec_2.13/3.2.9/scalatest-propspec_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-propspec_2.13/3.2.9/scalatest-propspec_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -1085,17 +1085,17 @@
                 "coord": "org.scalatest:scalatest-refspec_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-refspec_2.13/3.2.9/scalatest-refspec_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-refspec_2.13/3.2.9/scalatest-refspec_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -1109,17 +1109,17 @@
                 "coord": "org.scalatest:scalatest-refspec_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-refspec_2.13/3.2.9/scalatest-refspec_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-refspec_2.13/3.2.9/scalatest-refspec_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -1133,17 +1133,17 @@
                 "coord": "org.scalatest:scalatest-shouldmatchers_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-shouldmatchers_2.13/3.2.9/scalatest-shouldmatchers_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-matchers-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.scalatest:scalatest-matchers-core_2.13:3.2.9"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-shouldmatchers_2.13/3.2.9/scalatest-shouldmatchers_2.13-3.2.9.jar",
@@ -1158,18 +1158,18 @@
                 "coord": "org.scalatest:scalatest-shouldmatchers_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-shouldmatchers_2.13/3.2.9/scalatest-shouldmatchers_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-matchers-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-matchers-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-shouldmatchers_2.13/3.2.9/scalatest-shouldmatchers_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -1183,17 +1183,17 @@
                 "coord": "org.scalatest:scalatest-wordspec_2.13:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-wordspec_2.13/3.2.9/scalatest-wordspec_2.13-3.2.9.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-reflect:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
                     "org.scalatest:scalatest-core_2.13:3.2.9"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalactic:scalactic_2.13:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:2.0.0",
                     "org.scalatest:scalatest-compatible:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-wordspec_2.13/3.2.9/scalatest-wordspec_2.13-3.2.9.jar",
                 "mirror_urls": [
@@ -1207,17 +1207,17 @@
                 "coord": "org.scalatest:scalatest-wordspec_2.13:jar:sources:3.2.9",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest-wordspec_2.13/3.2.9/scalatest-wordspec_2.13-3.2.9-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-wordspec_2.13/3.2.9/scalatest-wordspec_2.13-3.2.9-sources.jar",
                 "mirror_urls": [
@@ -1232,7 +1232,6 @@
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest_2.13/3.2.9/scalatest_2.13-3.2.9.jar",
                 "directDependencies": [
                     "org.scalatest:scalatest-funsuite_2.13:3.2.9",
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalatest:scalatest-featurespec_2.13:3.2.9",
                     "org.scalatest:scalatest-freespec_2.13:3.2.9",
@@ -1241,15 +1240,15 @@
                     "org.scalatest:scalatest-mustmatchers_2.13:3.2.9",
                     "org.scalatest:scalatest-flatspec_2.13:3.2.9",
                     "org.scalatest:scalatest-wordspec_2.13:3.2.9",
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.scalatest:scalatest-diagrams_2.13:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7",
                     "org.scalatest:scalatest-shouldmatchers_2.13:3.2.9",
                     "org.scalatest:scalatest-funspec_2.13:3.2.9",
                     "org.scalatest:scalatest-matchers-core_2.13:3.2.9"
                 ],
                 "dependencies": [
                     "org.scalatest:scalatest-funsuite_2.13:3.2.9",
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.scalatest:scalatest-core_2.13:3.2.9",
                     "org.scalatest:scalatest-featurespec_2.13:3.2.9",
                     "org.scalatest:scalatest-freespec_2.13:3.2.9",
@@ -1261,8 +1260,9 @@
                     "org.scalatest:scalatest-flatspec_2.13:3.2.9",
                     "org.scalatest:scalatest-wordspec_2.13:3.2.9",
                     "org.scalatest:scalatest-compatible:3.2.9",
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.scalatest:scalatest-diagrams_2.13:3.2.9",
-                    "org.scala-lang:scala-reflect:2.13.7",
                     "org.scalatest:scalatest-shouldmatchers_2.13:3.2.9",
                     "org.scalatest:scalatest-funspec_2.13:3.2.9",
                     "org.scalatest:scalatest-matchers-core_2.13:3.2.9"
@@ -1280,6 +1280,7 @@
                 "file": "v1/https/repo.maven.apache.org/maven2/org/scalatest/scalatest_2.13/3.2.9/scalatest_2.13-3.2.9-sources.jar",
                 "directDependencies": [
                     "org.scalatest:scalatest-wordspec_2.13:jar:sources:3.2.9",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-diagrams_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-mustmatchers_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-refspec_2.13:jar:sources:3.2.9",
@@ -1288,16 +1289,16 @@
                     "org.scalatest:scalatest-shouldmatchers_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-matchers-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-featurespec_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalatest:scalatest-freespec_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-funsuite_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-propspec_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.scalatest:scalatest-funspec_2.13:jar:sources:3.2.9"
                 ],
                 "dependencies": [
                     "org.scalatest:scalatest-wordspec_2.13:jar:sources:3.2.9",
                     "org.scala-lang.modules:scala-xml_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scalatest:scalatest-diagrams_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-mustmatchers_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-refspec_2.13:jar:sources:3.2.9",
@@ -1307,12 +1308,11 @@
                     "org.scalatest:scalatest-matchers-core_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-compatible:jar:sources:3.2.9",
                     "org.scalatest:scalatest-featurespec_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.scalatest:scalatest-freespec_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-funsuite_2.13:jar:sources:3.2.9",
                     "org.scalatest:scalatest-propspec_2.13:jar:sources:3.2.9",
                     "org.scalactic:scalactic_2.13:jar:sources:3.2.9",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.scalatest:scalatest-funspec_2.13:jar:sources:3.2.9"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest_2.13/3.2.9/scalatest_2.13-3.2.9-sources.jar",
@@ -1327,20 +1327,20 @@
                 "coord": "org.specs2:specs2-common_2.13:4.12.3",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-common_2.13/4.12.3/specs2-common_2.13-4.12.3.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.portable-scala:portable-scala-reflect_2.13:1.1.1",
                     "org.scala-lang.modules:scala-parser-combinators_2.13:2.0.0",
                     "org.scala-sbt:test-interface:1.0",
                     "org.specs2:specs2-fp_2.13:4.12.3",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.portable-scala:portable-scala-reflect_2.13:1.1.1",
                     "org.scala-lang.modules:scala-parser-combinators_2.13:2.0.0",
                     "org.scala-sbt:test-interface:1.0",
                     "org.specs2:specs2-fp_2.13:4.12.3",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-common_2.13/4.12.3/specs2-common_2.13-4.12.3.jar",
                 "mirror_urls": [
@@ -1355,18 +1355,18 @@
                 "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-common_2.13/4.12.3/specs2-common_2.13-4.12.3-sources.jar",
                 "directDependencies": [
                     "org.scala-lang.modules:scala-parser-combinators_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scala-sbt:test-interface:jar:sources:1.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.portable-scala:portable-scala-reflect_2.13:jar:sources:1.1.1",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.specs2:specs2-fp_2.13:jar:sources:4.12.3"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-parser-combinators_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scala-sbt:test-interface:jar:sources:1.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.portable-scala:portable-scala-reflect_2.13:jar:sources:1.1.1",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.specs2:specs2-fp_2.13:jar:sources:4.12.3"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-common_2.13/4.12.3/specs2-common_2.13-4.12.3-sources.jar",
@@ -1382,20 +1382,20 @@
                 "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-core_2.13/4.12.3/specs2-core_2.13-4.12.3.jar",
                 "directDependencies": [
                     "org.specs2:specs2-matcher_2.13:4.12.3",
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.specs2:specs2-common_2.13:4.12.3",
                     "org.portable-scala:portable-scala-reflect_2.13:1.1.1",
-                    "org.scala-sbt:test-interface:1.0"
+                    "org.scala-sbt:test-interface:1.0",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
                     "org.specs2:specs2-matcher_2.13:4.12.3",
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.specs2:specs2-common_2.13:4.12.3",
                     "org.portable-scala:portable-scala-reflect_2.13:1.1.1",
                     "org.scala-lang.modules:scala-parser-combinators_2.13:2.0.0",
                     "org.scala-sbt:test-interface:1.0",
                     "org.specs2:specs2-fp_2.13:4.12.3",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-core_2.13/4.12.3/specs2-core_2.13-4.12.3.jar",
                 "mirror_urls": [
@@ -1411,17 +1411,17 @@
                 "directDependencies": [
                     "org.specs2:specs2-matcher_2.13:jar:sources:4.12.3",
                     "org.scala-sbt:test-interface:jar:sources:1.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.portable-scala:portable-scala-reflect_2.13:jar:sources:1.1.1",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.specs2:specs2-common_2.13:jar:sources:4.12.3"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-parser-combinators_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.specs2:specs2-matcher_2.13:jar:sources:4.12.3",
                     "org.scala-sbt:test-interface:jar:sources:1.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.portable-scala:portable-scala-reflect_2.13:jar:sources:1.1.1",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.specs2:specs2-fp_2.13:jar:sources:4.12.3",
                     "org.specs2:specs2-common_2.13:jar:sources:4.12.3"
                 ],
@@ -1437,10 +1437,10 @@
                 "coord": "org.specs2:specs2-fp_2.13:4.12.3",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.13/4.12.3/specs2-fp_2.13-4.12.3.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.13/4.12.3/specs2-fp_2.13-4.12.3.jar",
                 "mirror_urls": [
@@ -1454,10 +1454,10 @@
                 "coord": "org.specs2:specs2-fp_2.13:jar:sources:4.12.3",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.13/4.12.3/specs2-fp_2.13-4.12.3-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-fp_2.13/4.12.3/specs2-fp_2.13-4.12.3-sources.jar",
                 "mirror_urls": [
@@ -1471,17 +1471,17 @@
                 "coord": "org.specs2:specs2-matcher_2.13:4.12.3",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.13/4.12.3/specs2-matcher_2.13-4.12.3.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
+                    "org.scala-lang:scala-library:2.13.8",
                     "org.specs2:specs2-common_2.13:4.12.3"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
                     "org.specs2:specs2-common_2.13:4.12.3",
                     "org.portable-scala:portable-scala-reflect_2.13:1.1.1",
                     "org.scala-lang.modules:scala-parser-combinators_2.13:2.0.0",
                     "org.scala-sbt:test-interface:1.0",
                     "org.specs2:specs2-fp_2.13:4.12.3",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "url": "https://repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.13/4.12.3/specs2-matcher_2.13-4.12.3.jar",
                 "mirror_urls": [
@@ -1495,15 +1495,15 @@
                 "coord": "org.specs2:specs2-matcher_2.13:jar:sources:4.12.3",
                 "file": "v1/https/repo.maven.apache.org/maven2/org/specs2/specs2-matcher_2.13/4.12.3/specs2-matcher_2.13-4.12.3-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.specs2:specs2-common_2.13:jar:sources:4.12.3"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-parser-combinators_2.13:jar:sources:2.0.0",
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
                     "org.scala-sbt:test-interface:jar:sources:1.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
                     "org.portable-scala:portable-scala-reflect_2.13:jar:sources:1.1.1",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
                     "org.specs2:specs2-fp_2.13:jar:sources:4.12.3",
                     "org.specs2:specs2-common_2.13:jar:sources:4.12.3"
                 ],
@@ -1516,51 +1516,51 @@
                 "sha256": "e7cbe383c479f07673ec133e110239a29e437f5515d9ab03c24b7b477198c714"
             },
             {
-                "coord": "org.typelevel:kind-projector_2.13.7:0.13.2",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2.jar",
+                "coord": "org.typelevel:kind-projector_2.13.8:0.13.2",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-compiler:2.13.7",
-                    "org.scala-lang:scala-library:2.13.7"
+                    "org.scala-lang:scala-compiler:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-library:2.13.7",
-                    "org.scala-lang:scala-compiler:2.13.7",
-                    "net.java.dev.jna:jna:5.8.0",
-                    "org.jline:jline:3.20.0",
-                    "org.scala-lang:scala-reflect:2.13.7"
+                    "org.jline:jline:3.21.0",
+                    "net.java.dev.jna:jna:5.9.0",
+                    "org.scala-lang:scala-compiler:2.13.8",
+                    "org.scala-lang:scala-reflect:2.13.8",
+                    "org.scala-lang:scala-library:2.13.8"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2.jar"
+                    "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar"
                 ],
-                "sha256": "54348d1852474fa48f0295c11fb8598caff964badc0c766b3651b95dfacf0a6f"
+                "sha256": "e9e369a1300fcb47e1148c7cb2609d3b9ba50d93bbccac60efc1ae35abc2186c"
             },
             {
-                "coord": "org.typelevel:kind-projector_2.13.7:jar:sources:0.13.2",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2-sources.jar",
+                "coord": "org.typelevel:kind-projector_2.13.8:jar:sources:0.13.2",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala-compiler:jar:sources:2.13.7",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7"
+                    "org.scala-lang:scala-compiler:jar:sources:2.13.8",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala-compiler:jar:sources:2.13.7",
-                    "net.java.dev.jna:jna:jar:sources:5.8.0",
-                    "org.scala-lang:scala-library:jar:sources:2.13.7",
-                    "org.scala-lang:scala-reflect:jar:sources:2.13.7",
-                    "org.jline:jline:jar:sources:3.20.0"
+                    "org.scala-lang:scala-reflect:jar:sources:2.13.8",
+                    "org.jline:jline:jar:sources:3.21.0",
+                    "net.java.dev.jna:jna:jar:sources:5.9.0",
+                    "org.scala-lang:scala-library:jar:sources:2.13.8",
+                    "org.scala-lang:scala-compiler:jar:sources:2.13.8"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.7/0.13.2/kind-projector_2.13.7-0.13.2-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2-sources.jar"
                 ],
-                "sha256": "bf807ad0ccf0ca619cc76034b30e502cafce96892538ccb5a8b54f3ea7fc0466"
+                "sha256": "9a22c0477069663a95adfd80fc8ea918e00b742b63472abc859aff45b7cdb459"
             }
         ],
         "version": "0.1.0",
-        "__AUTOGENERATED_FILE_DO_NOT_MODIFY_THIS_FILE_MANUALLY": -1789112029
+        "__AUTOGENERATED_FILE_DO_NOT_MODIFY_THIS_FILE_MANUALLY": 1537291269
     }
 }
