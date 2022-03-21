@@ -179,194 +179,194 @@
                 "sha256": "8dd2744253f11da9684396f05ae16e7ab87827a971099636ec100fff42dc1ed3"
             },
             {
-                "coord": "org.scala-lang:scala3-compiler_3:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0.jar",
+                "coord": "org.scala-lang:scala3-compiler_3:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1.jar",
                 "directDependencies": [
                     "org.scala-lang.modules:scala-asm:9.1.0-scala-1",
                     "org.jline:jline-reader:3.19.0",
                     "org.scala-sbt:compiler-interface:1.5.7",
+                    "org.scala-lang:scala3-library_3:3.1.1",
                     "org.jline:jline-terminal:3.19.0",
-                    "org.scala-lang:tasty-core_3:3.1.0",
-                    "org.scala-lang:scala3-interfaces:3.1.0",
-                    "org.jline:jline-terminal-jna:3.19.0",
-                    "org.scala-lang:scala3-library_3:3.1.0"
+                    "org.scala-lang:tasty-core_3:3.1.1",
+                    "org.scala-lang:scala3-interfaces:3.1.1",
+                    "org.jline:jline-terminal-jna:3.19.0"
                 ],
                 "dependencies": [
                     "org.scala-lang.modules:scala-asm:9.1.0-scala-1",
                     "org.jline:jline-reader:3.19.0",
                     "org.scala-sbt:compiler-interface:1.5.7",
+                    "org.scala-lang:scala3-library_3:3.1.1",
                     "org.jline:jline-terminal:3.19.0",
                     "org.scala-lang:scala-library:2.13.6",
-                    "org.scala-lang:tasty-core_3:3.1.0",
                     "net.java.dev.jna:jna:5.3.1",
-                    "org.scala-lang:scala3-interfaces:3.1.0",
+                    "org.scala-lang:tasty-core_3:3.1.1",
+                    "org.scala-lang:scala3-interfaces:3.1.1",
                     "org.scala-sbt:util-interface:1.5.0",
-                    "org.jline:jline-terminal-jna:3.19.0",
-                    "org.scala-lang:scala3-library_3:3.1.0"
+                    "org.jline:jline-terminal-jna:3.19.0"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1.jar"
                 ],
-                "sha256": "9a76c166c97db534afb51861d234430a732158bdb413d8e12425e8c72457db60"
+                "sha256": "ec75cf4cb1fd6df93982368cbcfe140d6c5be1fb396ce07d090f1b8342a236f2"
             },
             {
-                "coord": "org.scala-lang:scala3-compiler_3:jar:sources:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0-sources.jar",
+                "coord": "org.scala-lang:scala3-compiler_3:jar:sources:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala3-library_3:jar:sources:3.1.0",
+                    "org.scala-lang:tasty-core_3:jar:sources:3.1.1",
                     "org.scala-lang.modules:scala-asm:jar:sources:9.1.0-scala-1",
                     "org.scala-sbt:compiler-interface:jar:sources:1.5.7",
+                    "org.scala-lang:scala3-interfaces:jar:sources:3.1.1",
                     "org.jline:jline-reader:jar:sources:3.19.0",
-                    "org.scala-lang:scala3-interfaces:jar:sources:3.1.0",
-                    "org.scala-lang:tasty-core_3:jar:sources:3.1.0",
+                    "org.scala-lang:scala3-library_3:jar:sources:3.1.1",
                     "org.jline:jline-terminal-jna:jar:sources:3.19.0",
                     "org.jline:jline-terminal:jar:sources:3.19.0"
                 ],
                 "dependencies": [
                     "org.scala-lang:scala-library:jar:sources:2.13.6",
-                    "org.scala-lang:scala3-library_3:jar:sources:3.1.0",
+                    "org.scala-lang:tasty-core_3:jar:sources:3.1.1",
                     "org.scala-lang.modules:scala-asm:jar:sources:9.1.0-scala-1",
                     "net.java.dev.jna:jna:jar:sources:5.3.1",
                     "org.scala-sbt:compiler-interface:jar:sources:1.5.7",
+                    "org.scala-lang:scala3-interfaces:jar:sources:3.1.1",
                     "org.jline:jline-reader:jar:sources:3.19.0",
-                    "org.scala-lang:scala3-interfaces:jar:sources:3.1.0",
-                    "org.scala-lang:tasty-core_3:jar:sources:3.1.0",
+                    "org.scala-lang:scala3-library_3:jar:sources:3.1.1",
                     "org.jline:jline-terminal-jna:jar:sources:3.19.0",
                     "org.jline:jline-terminal:jar:sources:3.19.0",
                     "org.scala-sbt:util-interface:jar:sources:1.5.0"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.1.0/scala3-compiler_3-3.1.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-compiler_3/3.1.1/scala3-compiler_3-3.1.1-sources.jar"
                 ],
-                "sha256": "b542c2801fe984c2da1c228d6487801d6672ff82d7871f6087294ee852f9aa5c"
+                "sha256": "60b5b5cec6702c435fcb9649048f5ba553270b144bb53880bc1fec3f0db3db36"
             },
             {
-                "coord": "org.scala-lang:scala3-interfaces:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0.jar",
+                "coord": "org.scala-lang:scala3-interfaces:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1.jar"
                 ],
-                "sha256": "0e344029ace7b1a846aa77e5cd452b7c8a28726b12b7c2baec0a70a038a686e9"
+                "sha256": "e9658aaa0667f06993ec3a2a4cc1bbe0c1000a61218a6c152f6efcffc4921a9c"
             },
             {
-                "coord": "org.scala-lang:scala3-interfaces:jar:sources:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0-sources.jar",
+                "coord": "org.scala-lang:scala3-interfaces:jar:sources:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1-sources.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-interfaces/3.1.0/scala3-interfaces-3.1.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-interfaces/3.1.1/scala3-interfaces-3.1.1-sources.jar"
                 ],
-                "sha256": "e6e05f14c0b9b6b3c143215dee502bcc197e30d16e130e91f51c855867724376"
+                "sha256": "73e5f1f60d09fc881ebf5ab37843926b2d730ca256a02b4700c62cdea409438d"
             },
             {
-                "coord": "org.scala-lang:scala3-library_3:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0.jar",
+                "coord": "org.scala-lang:scala3-library_3:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1.jar",
                 "directDependencies": [
                     "org.scala-lang:scala-library:2.13.6"
                 ],
                 "dependencies": [
                     "org.scala-lang:scala-library:2.13.6"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1.jar"
                 ],
-                "sha256": "5b513c97181d22c393cf32a51902fce27b9f698d246c7a92df7775f0bb04bec0"
+                "sha256": "b4531b6618bb264114dddad361800d62c79a4f9ad8494c318b1176b3d592b775"
             },
             {
-                "coord": "org.scala-lang:scala3-library_3:jar:sources:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0-sources.jar",
+                "coord": "org.scala-lang:scala3-library_3:jar:sources:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1-sources.jar",
                 "directDependencies": [
                     "org.scala-lang:scala-library:jar:sources:2.13.6"
                 ],
                 "dependencies": [
                     "org.scala-lang:scala-library:jar:sources:2.13.6"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.1.0/scala3-library_3-3.1.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.1.1/scala3-library_3-3.1.1-sources.jar"
                 ],
-                "sha256": "d86f1256ea36361956d006271872c34458b11457762c856896161ab86fce27c9"
+                "sha256": "466546fa20e856ee4631a2f61e87f05a79eaddf8d08efb920cb2076d1a035b3e"
             },
             {
-                "coord": "org.scala-lang:scala3-sbt-bridge:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0.jar",
+                "coord": "org.scala-lang:scala3-sbt-bridge:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1.jar"
                 ],
-                "sha256": "4f0bfee3d96714a0d1b0998bcf416b23af2312c5b45bd530d94ddded9132dffb"
+                "sha256": "3354ca8233e4c56e1860ef4c600a77d0752727f4d00c90fdb0b0421a2a5a4763"
             },
             {
-                "coord": "org.scala-lang:scala3-sbt-bridge:jar:sources:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0-sources.jar",
+                "coord": "org.scala-lang:scala3-sbt-bridge:jar:sources:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1-sources.jar",
                 "directDependencies": [],
                 "dependencies": [],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.0/scala3-sbt-bridge-3.1.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/scala3-sbt-bridge/3.1.1/scala3-sbt-bridge-3.1.1-sources.jar"
                 ],
-                "sha256": "9280741058f4c032ab9a7ad4a8e7ac6b56ff5947734f88e42606709ae327c202"
+                "sha256": "ecf049ff4910f74e578a83e566576ff24deac990739187dafe1da1d5491480a6"
             },
             {
-                "coord": "org.scala-lang:tasty-core_3:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0.jar",
+                "coord": "org.scala-lang:tasty-core_3:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala3-library_3:3.1.0"
+                    "org.scala-lang:scala3-library_3:3.1.1"
                 ],
                 "dependencies": [
-                    "org.scala-lang:scala3-library_3:3.1.0",
+                    "org.scala-lang:scala3-library_3:3.1.1",
                     "org.scala-lang:scala-library:2.13.6"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1.jar"
                 ],
-                "sha256": "80c9d1ac1630a22b3b62e0d482f91552397be22eac3ea0e61104c5ca67287647"
+                "sha256": "2ec5ce4be6e7668e9bee47456faf52e03a09f45a549b4a4e64efc9405aae2433"
             },
             {
-                "coord": "org.scala-lang:tasty-core_3:jar:sources:3.1.0",
-                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0-sources.jar",
+                "coord": "org.scala-lang:tasty-core_3:jar:sources:3.1.1",
+                "file": "v1/https/repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1-sources.jar",
                 "directDependencies": [
-                    "org.scala-lang:scala3-library_3:jar:sources:3.1.0"
+                    "org.scala-lang:scala3-library_3:jar:sources:3.1.1"
                 ],
                 "dependencies": [
                     "org.scala-lang:scala-library:jar:sources:2.13.6",
-                    "org.scala-lang:scala3-library_3:jar:sources:3.1.0"
+                    "org.scala-lang:scala3-library_3:jar:sources:3.1.1"
                 ],
-                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0-sources.jar",
+                "url": "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1-sources.jar",
                 "mirror_urls": [
-                    "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0-sources.jar",
-                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0-sources.jar",
-                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/tasty-core_3/3.1.0/tasty-core_3-3.1.0-sources.jar"
+                    "https://repo.maven.apache.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1-sources.jar",
+                    "https://maven-central.storage-download.googleapis.com/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1-sources.jar",
+                    "https://mirror.bazel.build/repo1.maven.org/maven2/org/scala-lang/tasty-core_3/3.1.1/tasty-core_3-3.1.1-sources.jar"
                 ],
-                "sha256": "735338bc884ace8f6b695c0d69098544fb64329258ffbf74812a949aa215fb2f"
+                "sha256": "87b5cee30c5f196d3cf83e72f3dbebf09ade4ff88ab5e0ffca4615192f11a0af"
             },
             {
                 "coord": "org.scala-sbt:compiler-interface:1.5.7",
@@ -430,6 +430,6 @@
             }
         ],
         "version": "0.1.0",
-        "__AUTOGENERATED_FILE_DO_NOT_MODIFY_THIS_FILE_MANUALLY": -187633079
+        "__AUTOGENERATED_FILE_DO_NOT_MODIFY_THIS_FILE_MANUALLY": 2001036340
     }
 }
