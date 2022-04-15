@@ -21,7 +21,7 @@ final class AnnexScalaInstance(override val allJars: Array[File]) extends ScalaI
   override val actualVersion: String = {
     val stream = new URLClassLoader(
       compilerJars.map(_.toURI.toURL),
-      null
+      ClassLoader.getPlatformClassLoader()
     ).getResourceAsStream("compiler.properties")
 
     try {
@@ -64,7 +64,7 @@ final class AnnexScalaInstance(override val allJars: Array[File]) extends ScalaI
       // this problem.
       //
       // TODO: Fix this with classloader wizardry and witchcraft
-      if (actualVersion.startsWith("3")) classOf[CompilerInterface2].getClassLoader else null
+      if (actualVersion.startsWith("3")) classOf[CompilerInterface2].getClassLoader else ClassLoader.getPlatformClassLoader()
     )
 
   override val loader: ClassLoader =
