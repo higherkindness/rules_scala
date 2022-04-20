@@ -141,15 +141,9 @@ object TestRunner {
     val loader = new TestFrameworkLoader(classLoader, logger)
     val frameworks = testNamespace.getList[String]("frameworks").asScala.flatMap(loader.load)
 
-    val testClass = sys.env
-      .get("TESTBRIDGE_TEST_ONLY")
-      .map(text => Pattern.compile(if (text contains "#") raw"${text.replaceAll("#.*", "")}" else text))
-    val testScopeAndName = sys.env
-      .get("TESTBRIDGE_TEST_ONLY")
-      .map(text =>
-        if (text contains "#") text.replaceAll(".*#", "").replaceAll("\\$", "").replace("\\Q", "").replace("\\E", "")
-        else ""
-      )
+    val testFilter = sys.env.get("TESTBRIDGE_TEST_ONLY").map(_.split("#", 2))
+    val testClass = testFilter.map(_.head).map(Pattern.compile)
+    val testScopeAndName = testFilter.flatMap(_.lift(1))
 
     var count = 0
     val passed = frameworks.forall { framework =>

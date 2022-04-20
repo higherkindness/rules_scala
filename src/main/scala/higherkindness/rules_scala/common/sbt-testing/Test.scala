@@ -29,7 +29,11 @@ object TestHelper {
     f: Runner => A
   ) = {
     val options =
-      if (framework.name == "specs2") Array("-ex", scopeAndTestName.replaceAll(".*::", "")) else Array.empty[String]
+      if (framework.name == "specs2") {
+        // Get rid of any extra context before the test name (specs2 doesn't recognize it)
+        val testName = scopeAndTestName.replaceAll(raw"(?<=\\Q).*::", "")
+        Array("-ex", testName)
+      } else Array.empty[String]
     val runner = framework.runner(arguments.toArray, options, classLoader)
     try f(runner)
     finally runner.done()
