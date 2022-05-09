@@ -1,0 +1,4 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+bazel test :specs2 "--test_filter=annex.specs2.Specs2TestFilter#\Qscala_test should::properly (escape) [special] characters in the test filter\E$" | grep "1 example"
