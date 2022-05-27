@@ -30,7 +30,7 @@ class JUnitXmlReporter(tasksAndEvents: ListBuffer[(String, ListBuffer[Event])]) 
         yield s"""<testcase
             classname="${escape(name)}"
             name="${e.selector match {
-          case selector: TestSelector => escape(selector.testName.split('.').last)
+          case selector: TestSelector => escape(selector.testName)
           case _                      => "Error occurred outside of a test case."
         }}"
             time="${(e.duration / 1000d).toString}">
