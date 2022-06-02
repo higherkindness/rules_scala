@@ -1,5 +1,12 @@
 #!/bin/bash -e
 . "$(dirname "$0")"/../../common.sh
 
+# properly escape special characters when passed from intellij
 bazel test :specs2 "--test_filter=annex.specs2.Specs2TestFilter#\Qscala_test should::properly (escape) [special] characters in the test filter\E$" | grep "1 example"
-bazel test :specs2 "--test_filter=annex.specs2.Specs2TestFilter#\Qscala_test should\E::" | grep "1 example"
+# handle tests that have :: in the test name
+bazel test :specs2 "--test_filter=annex.specs2.Specs2TestFilter#\Qscala_test should::test with :: in name\E$" | grep "2 examples"
+bazel test :specs2 "--test_filter=annex.specs2.Specs2TestFilter#\Qscala_test should::other test with :: in name\E$" | grep "1 example"
+# properly run all tests when intellij provides only a scope
+bazel test :specs2 "--test_filter=annex.specs2.Specs2TestFilter#\Qscala_test should\E::" | grep "4 examples"
+# still filter based on the test_filter even if it's not in the format provided by intellij
+bazel test :specs2 "--test_filter=annex.specs2.Specs2TestFilter#handle tests without scopes" | grep "1 example"

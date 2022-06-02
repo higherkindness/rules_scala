@@ -29,17 +29,16 @@ object TestHelper {
     f: Runner => A
   ) = {
     val options =
-      if (framework.name == "specs2" && scopeAndTestName.contains("::")) {
+      if (framework.name == "specs2") {
         // scopeAndTestName from intellij has the format '\Q${scope}::${test}\E$' for individual tests,
         // and '\Q${scope}\E::' for scopes (see getTestFilter in com.google.idea.blaze.scala.run.Specs2Utils).
         // specs2 filters only on test, not on scope. If we get just a scope, pass nothing.
-        // If we get a test name, give it to specs2.
-        // (wrapping a portion of a regex in a \Q and a \E escapes everything in between them)
-        val Array(scope, testName): Array[String] = scopeAndTestName.split("::", 2)
+        // If we get a test name (with or without a `${scope}::` prefix), give it to specs2.
+        val testName = scopeAndTestName.replaceFirst(".*?::", "")
         if (testName.nonEmpty) {
           // \Q is the only thing from scope that we _don't_ want to drop (since it's not actually part of the scope,
           // it's part of the overall regex)
-          val prefix = if (scope.startsWith(raw"\Q")) raw"\Q" else ""
+          val prefix = if (scopeAndTestName.startsWith(raw"\Q") && !testName.startsWith(raw"\Q")) raw"\Q" else ""
           Array("-ex", prefix + testName)
         } else {
           Array.empty[String]
