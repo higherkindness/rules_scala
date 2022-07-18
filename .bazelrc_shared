@@ -2,7 +2,7 @@ common --announce_rc
 common --color=yes
 
 build --experimental_strict_action_env
-build --javacopt="-source 8 -target 8"
+build --javacopt="-source 11 -target 11"
 build --incompatible_java_common_parameters=false
 
 build --strategy=ScalaCompile=worker

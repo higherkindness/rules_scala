@@ -64,7 +64,8 @@ final class AnnexScalaInstance(override val allJars: Array[File]) extends ScalaI
       // this problem.
       //
       // TODO: Fix this with classloader wizardry and witchcraft
-      if (actualVersion.startsWith("3")) classOf[CompilerInterface2].getClassLoader else ClassLoader.getPlatformClassLoader()
+      if (actualVersion.startsWith("3")) classOf[CompilerInterface2].getClassLoader
+      else ClassLoader.getPlatformClassLoader()
     )
 
   override val loader: ClassLoader =
