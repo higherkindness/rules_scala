@@ -3,6 +3,8 @@ common --color=yes
 
 build --experimental_strict_action_env
 build --javacopt="-source 11 -target 11"
+build --java_language_version=11
+build --tool_java_language_version=11
 build --incompatible_java_common_parameters=false
 
 build --strategy=ScalaCompile=worker
@@ -16,7 +18,7 @@ build --worker_max_instances=4
 #build --worker_sandboxing
 build --verbose_failures
 
-test  --test_output=all
+test --test_output=all
 
 # Disabling these in general. Feel free to turn them on during development.
 # Having them on can make testing the rules challenging because, after a clean,
