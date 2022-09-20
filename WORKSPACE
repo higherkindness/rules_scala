@@ -98,19 +98,17 @@ filegroup(
 """
 
 http_archive(
-    name = "jdk8-linux",
+    name = "jdk11-linux",
     build_file_content = jdk_build_file_content,
-    sha256 = "dd28d6d2cde2b931caf94ac2422a2ad082ea62f0beee3bf7057317c53093de93",
-    strip_prefix = "jdk8u212-b03",
-    url = "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u212-b03/OpenJDK8U-jdk_x64_linux_hotspot_8u212b03.tar.gz",
+    strip_prefix = "jdk-11.0.11%2B9",
+    url = "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.11%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz",
 )
 
 http_archive(
-    name = "jdk8-osx",
+    name = "jdk11-osx",
     build_file_content = jdk_build_file_content,
-    sha256 = "3d80857e1bb44bf4abe6d70ba3bb2aae412794d335abe46b26eb904ab6226fe0",
-    strip_prefix = "jdk8u212-b03",
-    url = "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u212-b03/OpenJDK8U-jdk_x64_mac_hotspot_8u212b03.tar.gz",
+    strip_prefix = "jdk-11.0.11%2B9",
+    url = "https:/github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.11%2B9/OpenJDK11U-jdk_x64_mac_hotspot_11.0.11_9.tar.gz",
 )
 
 rules_jvm_external_tag = "4.2"

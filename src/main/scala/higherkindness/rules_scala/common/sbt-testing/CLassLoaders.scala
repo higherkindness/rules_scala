@@ -12,7 +12,7 @@ object ClassLoaders {
     finally thread.setContextClassLoader(previous)
   }
 
-  def sbtTestClassLoader(urls: Seq[URL]) = new URLClassLoader(urls.toArray, null) {
+  def sbtTestClassLoader(urls: Seq[URL]) = new URLClassLoader(urls.toArray, ClassLoader.getPlatformClassLoader()) {
     private[this] val current = getClass.getClassLoader()
     override protected def findClass(className: String): Class[_] =
       if (className.startsWith("sbt.testing.")) current.loadClass(className)

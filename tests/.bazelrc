@@ -1,8 +1,10 @@
 common --config=tests
 
 build --javabase="//:jdk"
-build --java_toolchain="@bazel_tools//tools/jdk:toolchain_hostjdk8"
 build --host_javabase="//:jdk"
-build --host_java_toolchain="@bazel_tools//tools/jdk:toolchain_hostjdk8"
+build --java_language_version="11"
+build --java_runtime_version="remotejdk_11"
+build --tool_java_language_version="11"
+build --tool_java_runtime_version="remotejdk_11"
 
 import %workspace%/../.bazelrc_shared

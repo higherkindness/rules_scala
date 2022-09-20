@@ -11,7 +11,7 @@ import scala.util.{Failure, Success}
 
 trait WorkerMain[S] {
 
-  private[this] final case class ExitTrapped(code: Int) extends Throwable
+  private[this] case class ExitTrapped(code: Int) extends Throwable
 
   protected[this] def init(args: Option[Array[String]]): S
 
