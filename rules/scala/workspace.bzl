@@ -38,7 +38,9 @@ def scala_artifacts():
         maven.artifact("org.scala-sbt", "compiler-bridge_2.13", "1.5.7", neverlink = True),
     ]
 
-def scala_repositories(java_launcher_version = "0.29.1"):
+def scala_repositories(
+        java_launcher_version = "5.0.0",
+        java_launcher_template_sha = "ab1370fd990a8bff61a83c7bd94746a3401a6d5d2299e54b1b6bc02db4f87f68"):
     maven_install(
         name = "annex",
         artifacts = scala_artifacts(),
@@ -60,7 +62,7 @@ def scala_repositories(java_launcher_version = "0.29.1"):
 
     http_file(
         name = "anx_java_stub_template",
-        sha256 = "e6531a6539ec1e38fec5e20523ff4bfc883e1cc0209eb658fe82eb918eb49657",
+        sha256 = java_launcher_template_sha,
         urls = [
             "https://mirror.bazel.build/%s" % java_stub_template_url,
             "https://%s" % java_stub_template_url,
