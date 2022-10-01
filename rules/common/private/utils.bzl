@@ -74,6 +74,7 @@ def write_launcher(
         "%needs_runfiles%": "1" if runfiles_enabled else "",
         "%runfiles_manifest_only%": "1" if runfiles_enabled else "",
         "%workspace_prefix%": ctx.workspace_name + "/",
+        "%test_runtime_classpath_file%": "",
     }
 
     if jacoco_classpath != None:
