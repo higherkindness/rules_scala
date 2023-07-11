@@ -22,6 +22,11 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
       .metavar("output_dir")
       .`type`(Arguments.fileType.verifyCanCreate)
     parser
+      .addArgument("--proto_paths")
+      .nargs("*")
+      .`type`(Arguments.fileType.verifyIsDirectory)
+      .setDefault_(Collections.emptyList)
+    parser
       .addArgument("sources")
       .help("Source files")
       .metavar("source")
@@ -36,12 +41,13 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
   protected[this] def work(ctx: Unit, args: Array[String], out: PrintStream): Unit = {
     val namespace = argParser.parseArgs(args)
     val sources = namespace.getList[File]("sources").asScala.toList
+    val protoPaths = namespace.getList[File]("proto_paths").asScala.toList
 
     val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
 
     val params = List(s"--scala_out=$scalaOut")
-      ::: sources.map(source => s"--proto_path=${source.getParent.toString}")
+      ::: protoPaths.map(dir => s"--proto_path=${dir.toString}")
       ::: sources.map(_.getPath.toString)
 
     class MyProtocRunner[ExitCode] extends ProtocRunner[Int] {
@@ -50,11 +56,14 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
       }
     }
 
-    ProtocBridge.runWithGenerators(
+    val exit = ProtocBridge.runWithGenerators(
       new MyProtocRunner,
       namedGenerators = List("scala" -> ScalaPbCodeGenerator),
       params = params
     )
+    if (exit != 0) {
+      sys.exit(exit)
+    }
   }
 
 }
