@@ -132,7 +132,7 @@ scala_import_external(
 
 emulate_rules_scala(
     extra_deps = [
-        "@annex//:org_scala_lang_scala_reflect_2_13_8",
+        "@annex//:org_scala_lang_scala_reflect_2_13_11",
         "@annex_test//:org_scala_lang_modules_scala_xml_2_13",
     ],
     scala = "//scala:2_13",
@@ -193,7 +193,7 @@ jvm_maven_import_external(
 
 bind(
     name = "default_scala",
-    actual = "//scala:zinc_2_13_8",
+    actual = "//scala:zinc_2_13_11",
 )
 
 http_file(

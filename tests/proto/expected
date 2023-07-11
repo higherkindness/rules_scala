@@ -1,10 +1,10 @@
 -rw----     2.0 fat        0 bx  0% stor 20100101.000000 META-INF/
--rw----     2.0 fat       48 b-  0% stor 20100101.000000 META-INF/MANIFEST.MF
 -rw----     1.0 fat        0 b-  0% stor 20100101.000000 anx/
 -rw----     1.0 fat        0 b-  0% stor 20100101.000000 anx/proto/
 -rw----     1.0 fat        0 b-  0% stor 20100101.000000 anx/proto/zero/
--rw----     2.0 fat    15505 b-  0% stor 20100101.000002 anx/proto/zero/Zero$.class
+-rw----     2.0 fat    15456 b-  0% stor 20100101.000002 anx/proto/zero/Zero$.class
 -rw----     2.0 fat     4453 b-  0% stor 20100101.000002 anx/proto/zero/Zero$ZeroLens.class
--rw----     2.0 fat    20711 b-  0% stor 20100101.000002 anx/proto/zero/Zero.class
--rw----     2.0 fat     6676 b-  0% stor 20100101.000002 anx/proto/zero/ZeroProto$.class
+-rw----     2.0 fat    20635 b-  0% stor 20100101.000002 anx/proto/zero/Zero.class
+-rw----     2.0 fat     6292 b-  0% stor 20100101.000002 anx/proto/zero/ZeroProto$.class
 -rw----     2.0 fat     2017 b-  0% stor 20100101.000002 anx/proto/zero/ZeroProto.class
+-rw----     2.0 fat       48 b-  0% stor 20100101.000000 META-INF/MANIFEST.MF
