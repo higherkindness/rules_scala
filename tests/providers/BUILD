@@ -18,14 +18,14 @@ load(
 declare_scala_configuration(
     name = "provided_scala_configuration",
     compiler_classpath = [
-        "@annex//:org_scala_lang_scala_compiler_2_13_8",
-        "@annex//:org_scala_lang_scala_library_2_13_8",
-        "@annex//:org_scala_lang_scala_reflect_2_13_8",
+        "@annex//:org_scala_lang_scala_compiler_2_13_11",
+        "@annex//:org_scala_lang_scala_library_2_13_11",
+        "@annex//:org_scala_lang_scala_reflect_2_13_11",
     ],
     runtime_classpath = [
-        "@annex//:org_scala_lang_scala_library_2_13_8",
+        "@annex//:org_scala_lang_scala_library_2_13_11",
     ],
-    version = "2.13.8",
+    version = "2.13.11",
 )
 
 bootstrap_scala_library(
@@ -33,9 +33,9 @@ bootstrap_scala_library(
     srcs = ["@compiler_bridge_2_13//:src"],
     scala = ":provided_scala_configuration",
     deps = [
-        "@annex//:org_scala_lang_scala_compiler_2_13_8",
-        "@annex//:org_scala_lang_scala_library_2_13_8",
-        "@annex//:org_scala_lang_scala_reflect_2_13_8",
+        "@annex//:org_scala_lang_scala_compiler_2_13_11",
+        "@annex//:org_scala_lang_scala_library_2_13_11",
+        "@annex//:org_scala_lang_scala_reflect_2_13_11",
         "@annex//:org_scala_sbt_compiler_interface",
         "@annex//:org_scala_sbt_util_interface",
     ],

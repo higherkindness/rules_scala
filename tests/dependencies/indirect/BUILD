@@ -59,19 +59,19 @@ scala_library(
 scala_library(
     name = "define_a",
     srcs = ["A.scala"],
-    scala = "@rules_scala_annex//src/main/scala:zinc_2_13_8",
+    scala = "@rules_scala_annex//src/main/scala:zinc_2_13_11",
 )
 
 scala_library(
     name = "define_b",
     srcs = ["B.scala"],
-    scala = "@rules_scala_annex//src/main/scala:zinc_2_13_8",
+    scala = "@rules_scala_annex//src/main/scala:zinc_2_13_11",
     deps = [":define_a"],
 )
 
 scala_library(
     name = "define_c",
     srcs = ["C.scala"],
-    scala = "@rules_scala_annex//src/main/scala:zinc_2_13_8",
+    scala = "@rules_scala_annex//src/main/scala:zinc_2_13_11",
     deps = [":define_b"],
 )

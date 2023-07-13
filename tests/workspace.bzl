@@ -13,7 +13,7 @@ def test_artifacts():
         "org.specs2:specs2-common_2.13:4.12.3",
         "org.specs2:specs2-core_2.13:4.12.3",
         "org.specs2:specs2-matcher_2.13:4.12.3",
-        "org.typelevel:kind-projector_2.13.8:0.13.2",
+        "org.typelevel:kind-projector_2.13.11:0.13.2",
     ]
 
 def test_dependencies():
