@@ -65,3 +65,7 @@ def scala_proto_library_implementation(ctx):
         tools = [ctx.executable._zipper],
         execution_requirements = _resolve_execution_reqs(ctx, {}),
     )
+
+    return [OutputGroupInfo(
+        sources_dir = depset([gendir]),
+    )]
