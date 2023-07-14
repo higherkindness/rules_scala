@@ -12,6 +12,7 @@ scala_proto_library = rule(
             "deps": attr.label_list(
                 doc = "The proto_library targets you wish to generate Scala from",
             ),
+            "grpc": attr.bool(),
             "_zipper": attr.label(cfg = "host", default = "@bazel_tools//tools/zip:zipper", executable = True),
         },
     ),

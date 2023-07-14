@@ -27,6 +27,9 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
       .`type`(Arguments.fileType.verifyIsDirectory)
       .setDefault_(Collections.emptyList)
     parser
+      .addArgument("--grpc")
+      .action(Arguments.storeTrue)
+    parser
       .addArgument("sources")
       .help("Source files")
       .metavar("source")
@@ -45,8 +48,12 @@ object ScalaProtoWorker extends WorkerMain[Unit] {
 
     val scalaOut = namespace.get[File]("output_dir").toPath
     Files.createDirectories(scalaOut)
-
-    val params = List(s"--scala_out=$scalaOut")
+    val outOptions = if (namespace.getBoolean("grpc")) {
+      "grpc:"
+    } else {
+      ""
+    }
+    val params = List(s"--scala_out=${outOptions}${scalaOut}")
       ::: protoPaths.map(dir => s"--proto_path=${dir.toString}")
       ::: sources.map(_.getPath.toString)
 

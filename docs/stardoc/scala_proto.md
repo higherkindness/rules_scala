@@ -5,7 +5,7 @@
 ## scala_proto_library
 
 <pre>
-scala_proto_library(<a href="#scala_proto_library-name">name</a>, <a href="#scala_proto_library-deps">deps</a>)
+scala_proto_library(<a href="#scala_proto_library-name">name</a>, <a href="#scala_proto_library-deps">deps</a>, <a href="#scala_proto_library-grpc">grpc</a>)
 </pre>
 
 
@@ -38,6 +38,12 @@ See example use in [/tests/proto/BUILD](/tests/proto/BUILD)
         <p>
           The proto_library targets you wish to generate Scala from
         </p>
+      </td>
+    </tr>
+    <tr id="scala_proto_library-grpc">
+      <td><code>grpc</code></td>
+      <td>
+        Boolean; optional
       </td>
     </tr>
   </tbody>
