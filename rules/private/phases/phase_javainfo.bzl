@@ -29,7 +29,7 @@ def phase_javainfo(ctx, g):
     scala_configuration_runtime_deps = _collect(JavaInfo, g.init.scala_configuration.runtime_classpath)
 
     if len(ctx.attr.srcs) == 0 and len(ctx.attr.resources) == 0:
-        java_info = java_common.merge([g.classpaths.sdeps, sexports])
+        java_info = java_common.merge([g.classpaths.sdeps, sexports, sruntime_deps])
     else:
         # TODO: why do ijars break Scala 3?
         # For some yet unknown reason ijars break Scala 3.
