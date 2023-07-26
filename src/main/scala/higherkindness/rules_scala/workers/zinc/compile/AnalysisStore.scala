@@ -12,7 +12,7 @@ import java.util.Optional
 import sbt.internal.inc.binary.converters.{ProtobufReaders, ProtobufWriters}
 import sbt.internal.inc.Schema.Type.{Projection, Structure}
 import sbt.internal.inc.{APIs, Analysis, PlainVirtualFile, PlainVirtualFileConverter, Relations, Schema, SourceInfos, Stamp => StampImpl, Stamper, Stamps}
-import sbt.internal.inc.Schema.{AnalyzedClass, Annotation, ClassDependencies, ClassLike, Companions, NameHash, Type, TypeParameter, UsedName, UsedNames, Values}
+import sbt.internal.inc.Schema.{Access, AnalyzedClass, Annotation, AnnotationArgument, ClassDefinition, ClassDependencies, ClassLike, Companions, MethodParameter, NameHash, ParameterList, Path => SchemaPath, Qualifier, Type, TypeParameter, UsedName, UsedNames, Values}
 import sbt.internal.shaded.com.google.protobuf.GeneratedMessageV3
 import sbt.io.IO
 import scala.math.Ordering
@@ -22,6 +22,7 @@ import xsbti.compile.analysis.{GenericMapper, ReadMapper, ReadWriteMappers, Stam
 import xsbti.compile.{AnalysisContents, AnalysisStore, MiniSetup}
 import scala.collection.JavaConverters._
 import xsbti.VirtualFileRef
+import java.util.Objects
 
 case class AnalysisFiles(apis: Path, miniSetup: Path, relations: Path, sourceInfos: Path, stamps: Path)
 
@@ -135,14 +136,209 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
       .build()
   }
 
-  // This should be done sometime
-  // But I can't figure out how to sort a Type differently based on which subclass it's a member of
-  def sortType[A <: Type](value: A): Type = {
-    value
+  /*
+   * Important note: The following functions should only be called _after_ the internals of the classes have been sorted
+   * We can use hashCode() on strings, bools, and ints, which hash independently of memory location, but not any other objects, which can vary
+   */
+  def hashAnnotationArgument(annotationArgument: AnnotationArgument): Int =
+    Objects.hash(annotationArgument.getName(), annotationArgument.getValue())
+  def hashNameHash(nameHash: NameHash): Int = Objects.hash(nameHash.getName(), nameHash.getHash())
+  def hashPath(path: SchemaPath): Int = Objects.hash(
+    path
+      .getComponentsList()
+      .asScala
+      .map(pathComponent =>
+        if (pathComponent.hasId()) {
+          Objects.hash(
+            1,
+            pathComponent.getId().getId()
+          )
+        } else if (pathComponent.hasThis()) {
+          Objects.hash(
+            2
+          )
+        } else if (pathComponent.hasSuper()) {
+          Objects.hash(
+            3,
+            hashPath(pathComponent.getSuper().getQualifier())
+          )
+        } else {
+          throw new Error("Unrecognized pathComponent type")
+        }
+      )
+      .toSeq: _*
+  )
+  def hashType(t: Type): Int = if (t.hasParameterRef()) {
+    Objects.hash(
+      1,
+      t.getParameterRef().getId()
+    )
+  } else if (t.hasParameterized()) {
+    Objects.hash(
+      2,
+      hashType(t.getParameterized().getBaseType()),
+      Objects.hash(t.getParameterized().getTypeArgumentsList().asScala.map(hashType).toSeq: _*)
+    )
+  } else if (t.hasStructure()) {
+    Objects.hash(
+      3,
+      Objects.hash(t.getStructure().getParentsList().asScala.map(hashType).toSeq: _*),
+      Objects.hash(t.getStructure().getDeclaredList().asScala.map(hashClassDefinition).toSeq: _*),
+      Objects.hash(t.getStructure().getInheritedList().asScala.map(hashClassDefinition).toSeq: _*)
+    )
+  } else if (t.hasPolymorphic()) {
+    Objects.hash(
+      4,
+      hashType(t.getPolymorphic().getBaseType()),
+      Objects.hash(t.getPolymorphic().getTypeParametersList().asScala.map(hashTypeParameter).toSeq: _*)
+    )
+  } else if (t.hasConstant()) {
+    Objects.hash(
+      5,
+      hashType(t.getConstant().getBaseType()),
+      t.getConstant().getValue()
+    )
+  } else if (t.hasExistential()) {
+    Objects.hash(
+      6,
+      hashType(t.getExistential().getBaseType()),
+      Objects.hash(t.getExistential().getClauseList().asScala.map(hashTypeParameter).toSeq: _*)
+    )
+  } else if (t.hasSingleton()) {
+    Objects.hash(
+      7,
+      hashPath(t.getSingleton().getPath())
+    )
+  } else if (t.hasProjection()) {
+    Objects.hash(
+      8,
+      t.getProjection().getId(),
+      hashType(t.getProjection().getPrefix())
+    )
+  } else if (t.hasAnnotated()) {
+    Objects.hash(
+      9,
+      hashType(t.getAnnotated().getBaseType()),
+      Objects.hash(t.getAnnotated().getAnnotationsList().asScala.map(hashAnnotation).toSeq: _*)
+    )
+  } else if (t.hasEmptyType()) {
+    Objects.hash(
+      10
+    )
+  } else {
+    throw new Error("Unrecognized type type")
   }
+  def hashQualifier(qualifier: Qualifier): Int = if (qualifier.hasThisQualifier()) {
+    1
+  } else if (qualifier.hasIdQualifier()) {
+    2
+  } else if (qualifier.hasUnqualified()) {
+    3
+  } else {
+    throw new Error("Unrecognized qualifier type")
+  }
+  def hashAccess(access: Access): Int = if (access.hasPublic()) {
+    Objects.hash(1)
+  } else if (access.hasProtected()) {
+    Objects.hash(
+      2,
+      hashQualifier(access.getProtected().getQualifier())
+    )
+  } else if (access.hasPrivate()) {
+    Objects.hash(
+      3,
+      hashQualifier(access.getPrivate().getQualifier())
+    )
+  } else {
+    throw new Error("Unrecognized access type")
+  }
+  def hashMethodParameter(methodParameter: MethodParameter): Int = Objects.hash(
+    methodParameter.getName(),
+    hashType(methodParameter.getType()),
+    methodParameter.getHasDefault(),
+    methodParameter.getModifier().ordinal()
+  )
+  def hashParameterList(parameterList: ParameterList): Int = Objects.hash(
+    Objects.hash(parameterList.getParametersList().asScala.map(hashMethodParameter).toSeq: _*),
+    parameterList.getIsImplicit()
+  )
+  def hashAnnotation(annotation: Annotation): Int = Objects.hash(
+    hashType(annotation.getBase()),
+    Objects.hash(annotation.getArgumentsList().asScala.map(hashAnnotationArgument).toSeq: _*)
+  )
+  def hashClassDefinition(classDefinition: ClassDefinition): Int = {
+    val extraHash = if (classDefinition.hasClassLikeDef()) {
+      Objects.hash(
+        1,
+        Objects.hash(
+          classDefinition.getClassLikeDef().getTypeParametersList().asScala.map(hashTypeParameter).toSeq: _*
+        ),
+        classDefinition.getClassLikeDef().getDefinitionType().ordinal()
+      )
+    } else if (classDefinition.hasDefDef()) {
+      Objects.hash(
+        2,
+        Objects.hash(classDefinition.getDefDef().getTypeParametersList().asScala.map(hashTypeParameter).toSeq: _*),
+        Objects.hash(classDefinition.getDefDef().getValueParametersList().asScala.map(hashParameterList).toSeq: _*),
+        hashType(classDefinition.getDefDef().getReturnType())
+      )
+    } else if (classDefinition.hasValDef()) {
+      Objects.hash(
+        3,
+        hashType(classDefinition.getValDef().getType())
+      )
+    } else if (classDefinition.hasVarDef()) {
+      Objects.hash(
+        4,
+        hashType(classDefinition.getVarDef().getType())
+      )
+    } else if (classDefinition.hasTypeAlias()) {
+      Objects.hash(
+        5,
+        Objects.hash(classDefinition.getTypeAlias().getTypeParametersList().asScala.map(hashTypeParameter).toSeq: _*),
+        hashType(classDefinition.getTypeAlias().getType())
+      )
+    } else if (classDefinition.hasTypeDeclaration()) {
+      Objects.hash(
+        6,
+        Objects.hash(
+          classDefinition.getTypeDeclaration().getTypeParametersList().asScala.map(hashTypeParameter).toSeq: _*
+        ),
+        hashType(classDefinition.getTypeDeclaration().getLowerBound()),
+        hashType(classDefinition.getTypeDeclaration().getUpperBound())
+      )
+    } else {
+      throw new Error("Unrecognized extra type")
+    }
+
+    Objects.hash(
+      classDefinition.getName(),
+      hashAccess(classDefinition.getAccess()),
+      classDefinition.getModifiers().getFlags(),
+      Objects.hash(classDefinition.getAnnotationsList().asScala.map(hashAnnotation).toSeq: _*),
+      extraHash
+    )
+  }
+  def hashTypeParameter(typeParameter: TypeParameter): Int = Objects.hash(
+    typeParameter.getId(),
+    Objects.hash(typeParameter.getAnnotationsList().asScala.map(hashAnnotation).toSeq: _*),
+    Objects.hash(typeParameter.getTypeParametersList().asScala.map(hashTypeParameter).toSeq: _*),
+    typeParameter.getVariance().ordinal(),
+    hashType(typeParameter.getLowerBound()),
+    hashType(typeParameter.getUpperBound())
+  )
+
+  def sortTypeParameters(typeParameters: Seq[TypeParameter]): Seq[TypeParameter] = {
+    // TODO: Ensure that we're internally sorting the type parameters here
+    typeParameters.map(sortTypeParameter).sortWith(hashTypeParameter(_) > hashTypeParameter(_))
+  }
+  def sortType(t: Type): Type = t // TODO: Actually sort internals here
+  def sortClassDefinition(classDefinition: ClassDefinition): ClassDefinition =
+    classDefinition // TODO: Actually sort internals here
 
   def sortAnnotation(annotation: Annotation): Annotation = {
-    val sortedArguments = annotation.getArgumentsList.asScala.sortWith(_.hashCode() > _.hashCode()).asJava
+    val sortedArguments =
+      annotation.getArgumentsList.asScala.sortWith(hashAnnotationArgument(_) > hashAnnotationArgument(_)).asJava
     Annotation
       .newBuilder(annotation)
       .clearArguments()
@@ -152,8 +348,12 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
 
   def sortTypeParameter(typeParameter: TypeParameter): TypeParameter = {
     val sortedAnnotations =
-      typeParameter.getAnnotationsList.asScala.map(sortAnnotation).sortWith(_.hashCode() > _.hashCode()).asJava
+      typeParameter.getAnnotationsList.asScala
+        .map(sortAnnotation)
+        .sortWith(hashAnnotation(_) > hashAnnotation(_))
+        .asJava
     val sortedTypeParameters = sortTypeParameters(typeParameter.getTypeParametersList.asScala.toSeq).asJava
+    // TODO: Sort lower/upper bound field on this
 
     TypeParameter
       .newBuilder(typeParameter)
@@ -165,9 +365,15 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
   }
 
   def sortStructure(structure: Structure): Structure = {
-    val sortedParents = structure.getParentsList.asScala.sortWith(_.hashCode() < _.hashCode()).asJava
-    val sortedDeclared = structure.getDeclaredList.asScala.sortWith(_.hashCode() < _.hashCode()).asJava
-    val sortedInherited = structure.getInheritedList.asScala.sortWith(_.hashCode() < _.hashCode()).asJava
+    val sortedParents = structure.getParentsList.asScala.map(sortType).sortWith(hashType(_) < hashType(_)).asJava
+    val sortedDeclared = structure.getDeclaredList.asScala
+      .map(sortClassDefinition)
+      .sortWith(hashClassDefinition(_) < hashClassDefinition(_))
+      .asJava
+    val sortedInherited = structure.getInheritedList.asScala
+      .map(sortClassDefinition)
+      .sortWith(hashClassDefinition(_) < hashClassDefinition(_))
+      .asJava
 
     Structure
       .newBuilder(structure)
@@ -180,17 +386,13 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
       .build()
   }
 
-  def sortTypeParameters(typeParameters: Seq[TypeParameter]): Seq[TypeParameter] = {
-    typeParameters.map(sortTypeParameter).sortWith(_.hashCode() > _.hashCode())
-  }
-
   def sortClassLike(classLike: ClassLike): ClassLike = {
     val sortedAnnotations =
-      classLike.getAnnotationsList.asScala.map(sortAnnotation).sortWith(_.hashCode() > _.hashCode()).asJava
+      classLike.getAnnotationsList.asScala.map(sortAnnotation).sortWith(hashAnnotation(_) > hashAnnotation(_)).asJava
     val sortedStructure = sortStructure(classLike.getStructure)
     val sortedSavedAnnotations = classLike.getSavedAnnotationsList.asScala.sorted.asJava
     val sortedChildrenOfSealedClass =
-      classLike.getChildrenOfSealedClassList.asScala.map(sortType).sortWith(_.hashCode() > _.hashCode()).asJava
+      classLike.getChildrenOfSealedClassList.asScala.map(sortType).sortWith(hashType(_) < hashType(_)).asJava
     val sortedTypeParameters = sortTypeParameters(classLike.getTypeParametersList.asScala.toSeq).asJava
     ClassLike
       .newBuilder(classLike)
@@ -223,7 +425,7 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
   def sortAnalyzedClassMap(analyzedClassMap: Map[String, AnalyzedClass]): TreeMap[String, AnalyzedClass] = {
     TreeMap[String, AnalyzedClass]() ++ analyzedClassMap.mapValues { analyzedClass =>
       val sortedApi = sortCompanions(analyzedClass.getApi)
-      val sortedNameHashes = analyzedClass.getNameHashesList.asScala.sortWith(_.hashCode() > _.hashCode()).asJava
+      val sortedNameHashes = analyzedClass.getNameHashesList.asScala.sortWith(hashNameHash(_) > hashNameHash(_)).asJava
 
       AnalyzedClass
         .newBuilder(analyzedClass)
