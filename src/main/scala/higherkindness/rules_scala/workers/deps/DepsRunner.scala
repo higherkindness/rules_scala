@@ -55,7 +55,10 @@ object DepsRunner extends WorkerMain[Unit] {
     val directLabels = namespace.getList[String]("direct").asScala.map(_.tail).toList
     val groups = Option(namespace.getList[java.util.List[String]]("group"))
       .fold[Seq[List[String]]](Nil)(_.asScala.toSeq.map(_.asScala.toList))
-      .map { case label +: jars => label.tail -> jars.toSet }
+      .map {
+        case label +: jars => label.tail -> jars.toSet
+        case _             => throw new Exception(s"Unexpected case in DepsRunner")
+      }
     val labelToPaths = groups.toMap
     val usedPaths = Files.readAllLines(namespace.get[File]("used").toPath).asScala.toSet
 
