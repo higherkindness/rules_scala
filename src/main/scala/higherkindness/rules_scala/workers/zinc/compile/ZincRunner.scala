@@ -12,17 +12,19 @@ import java.io.{File, PrintStream, PrintWriter}
 import java.net.URLClassLoader
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
 import java.text.SimpleDateFormat
+import java.util
 import java.util.{Date, List => JList, Optional, Properties}
 import net.sourceforge.argparse4j.ArgumentParsers
 import net.sourceforge.argparse4j.impl.{Arguments => Arg}
 import net.sourceforge.argparse4j.inf.Namespace
 import sbt.internal.inc.classpath.ClassLoaderCache
+import sbt.internal.inc.caching.ClasspathCache
 import sbt.internal.inc.{Analysis, CompileFailed, IncrementalCompilerImpl, Locate, PlainVirtualFile, PlainVirtualFileConverter, ZincUtil}
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.util.control.NonFatal
-import xsbti.{Logger, T2, VirtualFile}
-import xsbti.compile.{AnalysisContents, ClasspathOptionsUtil, CompileAnalysis, CompileOptions, CompileProgress, CompilerCache, DefinesClass, IncOptions, Inputs, MiniSetup, PerClasspathEntryLookup, PreviousResult, Setup, TastyFiles}
+import xsbti.{Logger, T2, VirtualFile, VirtualFileRef}
+import xsbti.compile.{AnalysisContents, Changes, ClasspathOptionsUtil, CompileAnalysis, CompileOptions, CompileProgress, CompilerCache, DefaultExternalHooks, DefinesClass, ExternalHooks, FileHash, IncOptions, Inputs, MiniSetup, PerClasspathEntryLookup, PreviousResult, Setup, TastyFiles}
 
 // The list in this docstring gets clobbered by the formatter, unfortunately.
 //format: off
@@ -221,10 +223,16 @@ object ZincRunner extends WorkerMain[Namespace] {
       })
     }
 
+    val externalHooks = new DefaultExternalHooks(
+      Optional.of(new DeterministicDirectoryHashExternalHooks()),
+      Optional.empty()
+    )
+
     val setup = {
       val incOptions = IncOptions
         .create()
         .withAuxiliaryClassFiles(Array(TastyFiles.instance()))
+        .withExternalHooks(externalHooks)
       val reporter = new LoggedReporter(logger, scalaInstance.actualVersion)
       val skip = false
       val file: Path = null
@@ -314,4 +322,54 @@ final class AnxPerClasspathEntryLookup(analyses: Path => Option[CompileAnalysis]
       .fold(Optional.empty[CompileAnalysis])(Optional.of(_))
   override def definesClass(classpathEntry: VirtualFile): DefinesClass =
     Locate.definesClass(classpathEntry)
+}
+
+/**
+ * We create this to deterministically set the hash code of directories otherwise they get set to the
+ * System.identityHashCode() of an object created during compilation. That results in non-determinism.
+ */
+final class DeterministicDirectoryHashExternalHooks extends ExternalHooks.Lookup {
+  // My understanding is that setting all these to None is the same as the
+  // default behavior for external hooks, which provides an Optional.empty for
+  // the external hooks.
+  // The documentation for the getXYZ methods includes:
+  // "None if is unable to determine what was changed, changes otherwise"
+  // So I figure None is a safe bet here.
+  override def getChangedSources(previousAnalysis: CompileAnalysis): Optional[Changes[VirtualFileRef]] =
+    Optional.empty()
+  override def getChangedBinaries(previousAnalysis: CompileAnalysis): Optional[util.Set[VirtualFileRef]] =
+    Optional.empty()
+  override def getRemovedProducts(previousAnalysis: CompileAnalysis): Optional[util.Set[VirtualFileRef]] =
+    Optional.empty()
+
+  // True here should be a safe default value, based on what I understand.
+  // Here's why:
+  //
+  // There's a guard against this function returning an true incorrectly, so
+  // I believe incremental compilation should still function correctly.
+  // https://github.com/sbt/zinc/blob/f55b5b5abfba2dfcec0082b6fa8d329286803d2d/internal/zinc-core/src/main/scala/sbt/internal/inc/IncrementalCommon.scala#L186
+  //
+  // The only other place it's used is linked below. The default is an empty
+  // Option, so forall will return true if an ExternalHooks.Lookup is not provided.
+  // So this should be the same as default.
+  // https://github.com/sbt/zinc/blob/f55b5b5abfba2dfcec0082b6fa8d329286803d2d/internal/zinc-core/src/main/scala/sbt/internal/inc/IncrementalCommon.scala#L429
+  override def shouldDoIncrementalCompilation(
+    changedClasses: util.Set[String],
+    previousAnalysis: CompileAnalysis
+  ): Boolean = true
+
+  // We set the hash code of the directories to 0. By default they get set
+  // to the System.identityHashCode(), which is dependent on the current execution
+  // of the JVM, so it is not deterministic.
+  // If Zinc ever changes that behavior, we can get rid of this whole class.
+  override def hashClasspath(classpath: Array[VirtualFile]): Optional[Array[FileHash]] = {
+    val classpathArrayAsPaths = classpath.map(virtualFile => PlainVirtualFile.extractPath(virtualFile))
+    val (directories, files) = classpathArrayAsPaths.partition(path => Files.isDirectory(path))
+    val directoryFileHashes = directories.map { path =>
+      FileHash.of(path, 0)
+    }
+    val fileHashes = ClasspathCache.hashClasspath(files)
+
+    Optional.of(directoryFileHashes ++ fileHashes)
+  }
 }

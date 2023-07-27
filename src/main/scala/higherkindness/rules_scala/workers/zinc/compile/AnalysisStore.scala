@@ -99,7 +99,7 @@ class AnxAnalysisStore(files: AnalysisFiles, analyses: AnxAnalyses) extends Anal
         infos = analyses.sourceInfos.read(files.sourceInfos),
         stamps = analyses.stamps.read(files.stamps)
       )
-      val miniSetup = analyses.miniSetup.read(files.miniSetup)
+      val miniSetup = analyses.miniSetup().read(files.miniSetup)
       Optional.of(AnalysisContents.create(analysis, miniSetup))
     } catch {
       case e: NoSuchFileException => Optional.empty()
@@ -117,7 +117,7 @@ class AnxAnalysisStore(files: AnalysisFiles, analyses: AnxAnalyses) extends Anal
     analyses.sourceInfos.write(files.sourceInfos, analysis.infos)
     analyses.stamps.write(files.stamps, analysis.stamps)
     val miniSetup = analysisContents.getMiniSetup
-    analyses.miniSetup.write(files.miniSetup, miniSetup)
+    analyses.miniSetup().write(files.miniSetup, miniSetup)
   }
 
 }
@@ -491,10 +491,45 @@ class AnxAnalyses(format: AnxAnalysisStore.Format) {
       .build()
   }
 
-  def miniSetup = new Store[MiniSetup](
-    stream => reader.fromMiniSetup(format.read(Schema.MiniSetup.getDefaultInstance, stream)),
-    (stream, value) => format.write(writer.toMiniSetup(value), stream)
-  )
+  def sortMiniSetup(miniSetup: Schema.MiniSetup): Schema.MiniSetup = {
+    val sortedMiniOptions = sortMiniOptions(miniSetup.getMiniOptions)
+    val sortedExtra = miniSetup.getExtraList.asScala.sortBy(_.getFirst).asJava
+
+    Schema.MiniSetup
+      .newBuilder(miniSetup)
+      .clearMiniOptions()
+      .setMiniOptions(sortedMiniOptions)
+      .clearExtra()
+      .addAllExtra(sortedExtra)
+      .build()
+  }
+
+  def sortMiniOptions(miniOptions: Schema.MiniOptions): Schema.MiniOptions = {
+    val sortedClasspathHash = miniOptions.getClasspathHashList.asScala.sortBy(_.getPath).asJava
+    val sortedScalacOptions = miniOptions.getScalacOptionsList.asScala.sorted.asJava
+    val sortedJavacOptions = miniOptions.getJavacOptionsList.asScala.sorted.asJava
+
+    Schema.MiniOptions
+      .newBuilder(miniOptions)
+      .clearClasspathHash()
+      .addAllClasspathHash(sortedClasspathHash)
+      .clearScalacOptions()
+      .addAllScalacOptions(sortedScalacOptions)
+      .clearJavacOptions()
+      .addAllJavacOptions(sortedJavacOptions)
+      .build()
+  }
+
+  def miniSetup(): Store[MiniSetup] = {
+    new Store[MiniSetup](
+      stream => reader.fromMiniSetup(format.read(Schema.MiniSetup.getDefaultInstance, stream)),
+      (stream, value) =>
+        format.write(
+          sortMiniSetup(writer.toMiniSetup(value)),
+          stream
+        )
+    )
+  }
 
   object UsedNameOrdering extends Ordering[UsedName] {
     def compare(x: UsedName, y: UsedName): Int = {
