@@ -113,7 +113,8 @@ object ZincRunner extends WorkerMain[Namespace] {
       val analyses = Option(
         namespace
           .getList[JList[String]]("analysis")
-      ).fold[Seq[JList[String]]](Nil)(_.asScala.toSeq)
+      ).filter(_ => usePersistence)
+        .fold[Seq[JList[String]]](Nil)(_.asScala.toSeq)
         .flatMap { value =>
           val prefixedLabel +: apis +: relations +: jars = value.asScala.toList
           val label = prefixedLabel.stripPrefix("_")
