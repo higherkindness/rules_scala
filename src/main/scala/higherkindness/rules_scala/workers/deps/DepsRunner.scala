@@ -64,7 +64,9 @@ object DepsRunner extends WorkerMain[Unit] {
 
     val remove = if (namespace.getBoolean("check_used") == true) {
       val usedWhitelist = namespace.getList[String]("used_whitelist").asScala.map(_.tail).toList
-      (directLabels.diff(usedWhitelist)).filterNot(labelToPaths(_).exists(usedPaths))
+      directLabels
+        .diff(usedWhitelist)
+        .filterNot(label => labelToPaths.getOrElse(label, labelToPaths(s"@$label")).exists(usedPaths))
     } else Nil
     remove.foreach { depLabel =>
       out.println(s"Target '$depLabel' not used, please remove it from the deps.")
@@ -74,13 +76,15 @@ object DepsRunner extends WorkerMain[Unit] {
 
     val add = if (namespace.getBoolean("check_direct") == true) {
       val unusedWhitelist = namespace.getList[String]("unused_whitelist").asScala.map(_.tail).toList
-      (usedPaths -- (directLabels :++ unusedWhitelist).flatMap(labelToPaths))
-        .flatMap(path =>
+      (usedPaths -- (directLabels :++ unusedWhitelist).flatMap { label =>
+        labelToPaths.getOrElse(label, labelToPaths(s"@$label"))
+      })
+        .flatMap { path =>
           groups.collectFirst { case (label, paths) if paths(path) => label }.orElse {
             System.err.println(s"Warning: There is a reference to $path, but no dependency of $label provides it")
             None
           }
-        )
+        }
     } else Nil
     add.foreach { depLabel =>
       out.println(s"Target '$depLabel' is used but isn't explicitly declared, please add it to the deps.")
