@@ -15,7 +15,7 @@ abs_path() {
 workspace=$(cd $(dirname "$0")/..; pwd)
 root_workspace=$(cd $(dirname $(abs_path "$0"))/..; pwd)
 
-default_bazel_version='5.0.0'
+default_bazel_version='6.3.2'
 
 if [ -z "$BAZEL_VERSION" ]; then
     bazel_version="$default_bazel_version"
@@ -23,22 +23,17 @@ else
     bazel_version="$BAZEL_VERSION"
 fi
 
+# SHA comes from `bazel-<version>-installer-<platform>-x86_64.sh.sha256` on https://github.com/bazelbuild/bazel/releases
 case "$bazel_version" in
     'host')
         bazel_version=$("$BAZEL_REAL" version | awk '/Build label/ {print $3}' | cut -d '-' -f 1)
         bazel="$BAZEL_REAL"
         ;;
-    '4.1.0')
-        darwin_sha='fddad9367ed8e2687e8b52f5d8de29798de4cc2860d1c70e91128dcbc515d8ca'
-        linux_sha='e3f08054165be0a5e90779654b0e5c68d262ae794407d6347cdc6e8d05fafaaf'
-        ;;
-    '4.2.1')
-        darwin_sha='967189ebadd6b65b1dd25464fdd4d2fcff7a00e0b776be425b19e283432d7862'
-        linux_sha='35f398ad93af2b5eadd4b6b4fd4d4803b726029e572f40c4e1fe736db3de944b'
-        ;;
     '5.0.0')
-        darwin_sha='f7e8d1eac85ec125c430f9553e35d522c057895262956201ccea8a27d87054cc'
         linux_sha='42cfb37d2834d075996b9d02698674be7f322f0acd864b17c3191301329845f9'
+        ;;
+    '6.3.2')
+        linux_sha='f117506267ed148d5f4f9844bcf187c4f111dad7ff4f1a9eb1f4e45331f3f9f0'
         ;;
     *)
         echo "The requested Bazel version '$bazel_version' is not supported"
@@ -54,10 +49,6 @@ fi
 
 if ! [ -f "$bazel" ]; then
     case $(uname -s) in
-        Darwin)
-            platform='darwin'
-            sha=$darwin_sha
-            ;;
         Linux)
             platform='linux'
             sha=$linux_sha

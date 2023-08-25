@@ -3,7 +3,7 @@
 
 # used_deps off
 ! bazel build :used_deps_off_c || false
-bazel build :used_deps_off_c |& grep "buildozer 'add deps //dependencies/indirect:used_deps_off_a' //dependencies/indirect:used_deps_off_c"
+bazel build :used_deps_off_c |& grep "buildozer 'add deps @\?//dependencies/indirect:used_deps_off_a' //dependencies/indirect:used_deps_off_c"
 
 # direct_deps off
 ! bazel build :direct_deps_off_c || false
@@ -11,7 +11,7 @@ bazel build :direct_deps_off_c |& grep "buildozer 'remove deps //dependencies/in
 
 # toggle used_deps and direct_deps via --define
 ! bazel build --define=scala_deps_used=off :define_c || false
-bazel build --define=scala_deps_used=off :define_c |& grep "buildozer 'add deps //dependencies/indirect:define_a' //dependencies/indirect:define_c"
+bazel build --define=scala_deps_used=off :define_c |& grep "buildozer 'add deps @\?//dependencies/indirect:define_a' //dependencies/indirect:define_c"
 
 ! bazel build --define=scala_deps_direct=off :define_c || false
 bazel build --define=scala_deps_direct=off :define_c |& grep "buildozer 'remove deps //dependencies/indirect:define_a' //dependencies/indirect:define_b"
