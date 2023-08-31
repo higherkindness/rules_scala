@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-20.04]
         bazel_version: [5.0.0, 6.3.2]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: ./scripts/ci.sh build
       - run: ./scripts/ci.sh lint
       - run: ./scripts/ci.sh test
