@@ -1,0 +1,9 @@
+#!/bin/bash -e
+. "$(dirname "$0")"/../../common.sh
+
+# `bazel test :testrunnertest`` will fail because BadTestThatIsFilteredOut fails
+# This test makes sure that we can filter a target to just a specific test
+
+bazel test --test_arg=-s --test_arg=TestRunnerSpec -- :testrunnertest
+
+

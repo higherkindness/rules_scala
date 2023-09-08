@@ -49,6 +49,9 @@ object TestRunner {
       .addArgument("--framework_args")
       .help("Additional arguments for testing framework")
     parser
+      .addArgument("-s")
+      .help("Test class selector flag")
+    parser
   }
 
   private[this] val testArgParser = {
@@ -142,7 +145,10 @@ object TestRunner {
     val frameworks = testNamespace.getList[String]("frameworks").asScala.flatMap(loader.load)
 
     val testFilter = sys.env.get("TESTBRIDGE_TEST_ONLY").map(_.split("#", 2))
-    val testClass = testFilter.map(_.head).map(Pattern.compile)
+    val testClass = testFilter
+      .map(_.head)
+      .orElse(Option(namespace.getString("s")))
+      .map(Pattern.compile)
     val testScopeAndName = testFilter.flatMap(_.lift(1))
 
     var count = 0
