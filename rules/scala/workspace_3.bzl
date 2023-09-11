@@ -5,7 +5,7 @@ def scala_3_artifacts():
     return [
         "org.scala-lang:scala3-compiler_3:3.3.0",
         "org.scala-lang:scala3-library_3:3.3.0",
-        "org.scala-sbt:compiler-interface:1.5.7",
+        "org.scala-sbt:compiler-interface:1.9.3",
         # The compiler bridge has a dependency on compiler-interface, which has a dependency on the Scala 2
         # library. We need to set this to neverlink = True to avoid this the Scala 2 library being pulled
         # onto the Scala 3, and other Scala versions like 2.12, compiler classpath during runtime.
