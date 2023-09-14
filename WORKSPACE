@@ -111,11 +111,11 @@ http_archive(
     url = "https:/github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.11%2B9/OpenJDK11U-jdk_x64_mac_hotspot_11.0.11_9.tar.gz",
 )
 
-rules_jvm_external_tag = "4.2"
+rules_jvm_external_tag = "5.3"
 
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "cd1a77b7b02e8e008439ca76fd34f5b07aecb8c752961f9640dea15e9e5ba1ca",
+    sha256 = "6cc8444b20307113a62b676846c29ff018402fd4c7097fcd6d0a0fd5f2e86429",
     strip_prefix = "rules_jvm_external-{}".format(rules_jvm_external_tag),
     url = "https://github.com/bazelbuild/rules_jvm_external/archive/{}.zip".format(rules_jvm_external_tag),
 )
