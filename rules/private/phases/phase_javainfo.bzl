@@ -51,10 +51,9 @@ def phase_javainfo(ctx, g):
 
         source_jar = java_common.pack_sources(
             ctx.actions,
-            output_jar = ctx.outputs.jar,
+            output_source_jar = ctx.outputs.jar,
             sources = ctx.files.srcs,
-            host_javabase = find_java_runtime_toolchain(ctx, ctx.attr._host_javabase),
-            java_toolchain = find_java_toolchain(ctx, ctx.attr._java_toolchain),
+            host_javabase = find_java_runtime_toolchain(ctx, ctx.attr._host_javabase)
         )
 
         java_info = JavaInfo(
